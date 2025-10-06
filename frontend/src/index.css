@@ -1,0 +1,224 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply bg-gray-900 text-white antialiased;
+  }
+  
+  * {
+    @apply border-gray-700;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply px-6 py-3 bg-gradient-to-r from-primary-500 to-accent-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-gray-900;
+  }
+  
+  .btn-secondary {
+    @apply px-6 py-3 border-2 border-primary-400 text-primary-400 font-semibold rounded-lg hover:bg-primary-400 hover:text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-gray-900;
+  }
+  
+  .btn-ghost {
+    @apply px-6 py-3 text-gray-300 hover:text-white hover:bg-gray-800 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-900;
+  }
+  
+  .card {
+    @apply bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl shadow-xl;
+  }
+  
+  .input-field {
+    @apply w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:outline-none transition-colors;
+  }
+  
+  .privacy-badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-900/20 text-green-400 border border-green-500/30;
+  }
+  
+  .feature-icon {
+    @apply w-12 h-12 p-3 bg-primary-500/20 text-primary-400 rounded-xl;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary-400 to-accent-400 bg-clip-text text-transparent;
+  }
+  
+  .glass {
+    @apply bg-white/5 backdrop-blur-md border border-white/10;
+  }
+  
+  .hero-glow {
+    box-shadow: 0 0 200px rgba(59, 130, 246, 0.15);
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-900;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-600 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-500;
+}
+
+/* Loading animations */
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  background-size: 200px 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Focus indicators for accessibility */
+.focus-visible {
+  @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-gray-900;
+}
+
+/* Privacy-focused styling */
+.privacy-first {
+  position: relative;
+}
+
+.privacy-first::before {
+  content: "🔐";
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+/* Animated Stars Background */
+.stars-background {
+  position: relative;
+  overflow: hidden;
+}
+
+.stars-background::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(1px 1px at 13px 17px, rgba(255,255,255,0.9), transparent),
+    radial-gradient(2px 2px at 67px 43px, rgba(255,255,255,0.7), transparent),
+    radial-gradient(1px 1px at 121px 89px, rgba(255,255,255,0.8), transparent),
+    radial-gradient(1px 1px at 178px 25px, rgba(255,255,255,0.6), transparent),
+    radial-gradient(2px 2px at 234px 67px, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 45px 134px, rgba(255,255,255,0.7), transparent),
+    radial-gradient(1px 1px at 289px 156px, rgba(255,255,255,0.4), transparent),
+    radial-gradient(2px 2px at 156px 203px, rgba(255,255,255,0.6), transparent);
+  background-repeat: repeat;
+  background-size: 300px 250px;
+  animation: stars-move 25s linear infinite;
+  opacity: 0.5;
+  z-index: 0;
+}
+
+.stars-background::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(1px 1px at 78px 34px, rgba(138, 180, 248, 0.6), transparent),
+    radial-gradient(1px 1px at 167px 123px, rgba(196, 181, 253, 0.5), transparent),
+    radial-gradient(2px 2px at 234px 78px, rgba(167, 243, 208, 0.4), transparent),
+    radial-gradient(1px 1px at 45px 189px, rgba(254, 240, 138, 0.6), transparent),
+    radial-gradient(1px 1px at 312px 167px, rgba(251, 146, 60, 0.4), transparent),
+    radial-gradient(2px 2px at 123px 245px, rgba(249, 168, 212, 0.3), transparent);
+  background-repeat: repeat;
+  background-size: 350px 280px;
+  animation: stars-move-slow 35s linear infinite reverse;
+  opacity: 0.3;
+  z-index: 0;
+}
+
+@keyframes stars-move {
+  0% {
+    transform: translateX(0) translateY(0);
+  }
+  100% {
+    transform: translateX(-200px) translateY(-100px);
+  }
+}
+
+@keyframes stars-move-slow {
+  0% {
+    transform: translateX(0) translateY(0);
+  }
+  100% {
+    transform: translateX(-250px) translateY(-120px);
+  }
+}
+
+/* Twinkling stars effect */
+.stars-background .twinkle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: white;
+  border-radius: 50%;
+  animation: twinkle 3s infinite;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
+/* Large shooting star */
+@keyframes shooting-star {
+  0% {
+    transform: translateX(-100px) translateY(-100px) rotate(-45deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(calc(100vw + 100px)) translateY(calc(100vh + 100px)) rotate(-45deg);
+    opacity: 0;
+  }
+}
+
+.shooting-star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: linear-gradient(-45deg, rgba(255,255,255,1), rgba(255,255,255,0.3), transparent);
+  border-radius: 50%;
+  animation: shooting-star 8s linear infinite;
+  animation-delay: var(--delay, 0s);
+}
