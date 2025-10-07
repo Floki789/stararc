@@ -17,12 +17,47 @@ const WelcomeDashboard: React.FC = () => {
 
   const loadSubscription = async () => {
     try {
+      // Check if this is a Stripe success redirect
+      const urlParams = new URLSearchParams(window.location.search);
+      const isStripeSuccess = urlParams.get('success') === 'true';
+      
+      if (isStripeSuccess) {
+        console.log('Stripe success detected, checking webhook processing...');
+        // Try multiple times with increasing delay for webhook processing
+        for (let attempt = 1; attempt <= 5; attempt++) {
+          const status = await StripeAPIService.getSubscriptionStatus();
+          console.log(`Attempt ${attempt}: Subscription status:`, status);
+          
+          if (status.hasSubscription) {
+            console.log('Subscription found! Webhook processed successfully.');
+            setSubscription(status);
+            return;
+          }
+          
+          console.log(`Attempt ${attempt}: No subscription yet, waiting ${attempt * 2} seconds...`);
+          await new Promise(resolve => setTimeout(resolve, attempt * 2000)); // 2s, 4s, 6s, 8s, 10s
+        }
+        
+        console.log('Webhook still not processed after 30 seconds. Showing temp success message.');
+        // Show a temporary success state even if webhook hasn't processed yet
+        setSubscription({
+          hasSubscription: true,
+          plan: 'basic', // Assume basic since they just paid
+          status: 'processing',
+          expiresAt: null
+        });
+        return;
+      }
+      
       const status = await StripeAPIService.getSubscriptionStatus();
+      console.log('Normal load - Subscription status:', status);
+      
       if (!status.hasSubscription) {
-        // No subscription, redirect to selection
+        // No subscription and not from Stripe success, redirect to selection
         navigate('/subscription-selection');
         return;
       }
+      
       setSubscription(status);
     } catch (error) {
       console.error('Failed to load subscription:', error);
@@ -41,11 +76,12 @@ const WelcomeDashboard: React.FC = () => {
   };
 
   const getPlanName = (plan: string) => {
+    console.log('getPlanName called with plan:', plan, 'type:', typeof plan);
     switch (plan) {
       case 'free': return 'Free Plan';
       case 'basic': return 'Basic Plan';
       case 'pro': return 'Pro Plan';
-      default: return 'Unknown Plan';
+      default: return plan ? `Unknown Plan (${plan})` : 'Loading...';
     }
   };
 
@@ -111,7 +147,11 @@ const WelcomeDashboard: React.FC = () => {
               {getPlanName(subscription?.plan)}
             </h2>
             <p className="text-slate-400 mb-6">
-              Status: <span className="text-green-400 font-semibold">Aktiv</span>
+              Status: <span className={`font-semibold ${
+                subscription?.status === 'processing' ? 'text-yellow-400' : 'text-green-400'
+              }`}>
+                {subscription?.status === 'processing' ? 'Wird aktiviert...' : 'Aktiv'}
+              </span>
             </p>
             
             {/* Plan Benefits */}

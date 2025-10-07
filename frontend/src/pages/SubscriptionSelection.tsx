@@ -12,6 +12,7 @@ const SubscriptionSelection: React.FC = () => {
   const [loading, setLoading] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
+    console.log('SubscriptionSelection mounted, user:', user);
     // Check if user already has subscription
     checkSubscriptionStatus();
     loadPlans();
@@ -32,13 +33,50 @@ const SubscriptionSelection: React.FC = () => {
   const loadPlans = async () => {
     try {
       const availablePlans = await StripeAPIService.getPlans();
+      console.log('Loaded plans:', availablePlans);
       setPlans(availablePlans);
     } catch (error) {
       console.error('Failed to load plans:', error);
+      // Fallback: Use hardcoded plans for testing
+      console.log('Using fallback hardcoded plans');
+      const fallbackPlans = [
+        {
+          id: 'free',
+          name: 'Free Plan',
+          price: 0,
+          currency: 'chf',
+          interval: 'month' as const,
+          features: [
+            'Basis Portfolio-Tracking',
+            'Bitcoin Self-Custody',
+            '1 Portfolio',
+            '5 Assets pro Kategorie',
+            'Zero-Knowledge Sicherheit'
+          ]
+        },
+        {
+          id: 'basic',
+          stripeId: 'price_1SFYAcD1Ykg9qG9IDLFZ9YYl',
+          name: 'Basic Plan',
+          price: 1200,
+          currency: 'chf',
+          interval: 'month' as const,
+          features: [
+            'Alle Free Features',
+            'Alle Asset-Klassen',
+            'Erweiterte Analysen',
+            '5 Portfolios',
+            'Monatliche Reports'
+          ]
+        }
+      ];
+      setPlans(fallbackPlans);
     }
   };
 
   const handlePlanSelection = async (planId: string) => {
+    console.log('handlePlanSelection called with planId:', planId);
+    
     if (!user) {
       alert('Sie müssen eingeloggt sein, um einen Plan auszuwählen.');
       return;
@@ -52,8 +90,10 @@ const SubscriptionSelection: React.FC = () => {
         await StripeAPIService.activateFreePlan();
         navigate('/welcome');
       } else if (planId === 'basic') {
-        // Handle Basic plan upgrade
+        // Handle Basic plan upgrade - redirect to Stripe Checkout
+        console.log('Creating checkout session for basic plan...');
         const { sessionId } = await StripeAPIService.createCheckoutSession(planId);
+        console.log('Checkout session created, sessionId:', sessionId);
         await StripeAPIService.redirectToCheckout(sessionId);
       } else if (planId === 'pro') {
         alert('Pro Plan kommt bald!');
@@ -86,19 +126,8 @@ const SubscriptionSelection: React.FC = () => {
           className="text-center mb-16"
         >
           <h1 className="text-5xl font-bold text-white mb-6">
-            Willkommen bei Stararc! 👋
+            Willkommen bei Stararc
           </h1>
-          <p className="text-xl text-slate-300 mb-8 max-w-3xl mx-auto">
-            Bevor Sie beginnen, wählen Sie Ihren Plan. Sie können jederzeit kostenlos mit unserem Free Plan starten oder direkt zu einem Premium-Plan upgraden.
-          </p>
-          <div className="bg-blue-500/10 backdrop-blur-sm border border-blue-400/20 rounded-xl p-6 max-w-2xl mx-auto">
-            <h3 className="text-lg font-semibold text-blue-300 mb-2">
-              🔒 Ihre Privatsphäre ist garantiert
-            </h3>
-            <p className="text-slate-300">
-              Egal welchen Plan Sie wählen - Ihre Daten bleiben verschlüsselt und privat. Wir können sie niemals lesen oder weitergeben.
-            </p>
-          </div>
         </motion.div>
 
         {/* Plans Selection */}
@@ -183,40 +212,12 @@ const SubscriptionSelection: React.FC = () => {
                   {loading[plan.id] ? 'Lädt...' : 
                    plan.id === 'pro' ? 'Bald verfügbar' :
                    plan.id === 'free' ? 'Free Plan aktivieren' :
-                   'Jetzt upgraden'}
+                   'Jetzt kaufen - CHF 12/Monat'}
                 </button>
               </motion.div>
             );
           })}
         </div>
-
-        {/* Bottom Info */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.8 }}
-          className="text-center mt-16"
-        >
-          <div className="bg-slate-800/40 backdrop-blur-sm border border-slate-600/50 rounded-xl p-8 max-w-4xl mx-auto">
-            <h3 className="text-xl font-semibold text-white mb-4">
-              💡 Warum einen Plan wählen?
-            </h3>
-            <div className="grid md:grid-cols-3 gap-6 text-slate-300">
-              <div>
-                <div className="text-green-400 mb-2">🆓 Free Plan</div>
-                <p className="text-sm">Perfekt zum Ausprobieren und für grundlegende Portfolio-Verwaltung</p>
-              </div>
-              <div>
-                <div className="text-blue-400 mb-2">⭐ Basic Plan</div>
-                <p className="text-sm">Für ernsthafte Investoren mit allen Asset-Klassen und Analytics</p>
-              </div>
-              <div>
-                <div className="text-purple-400 mb-2">👑 Pro Plan</div>
-                <p className="text-sm">Für Family Offices mit unbegrenzten Accounts und White-Label</p>
-              </div>
-            </div>
-          </div>
-        </motion.div>
       </div>
     </div>
   );

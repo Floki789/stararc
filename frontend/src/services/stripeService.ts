@@ -12,6 +12,7 @@ const getStripe = () => {
 
 export interface SubscriptionPlan {
   id: string;
+  stripeId?: string; // Optional Stripe price ID for paid plans
   name: string;
   price: number;
   currency: string;

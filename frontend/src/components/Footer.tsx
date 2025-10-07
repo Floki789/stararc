@@ -11,10 +11,7 @@ const Footer: React.FC = () => {
               <span className="text-2xl">🚀</span>
               <span className="text-xl font-bold text-gradient">Stararc.one</span>
             </div>
-            <p className="text-gray-400 mb-4 max-w-md">
-              Privacy-by-design portfolio management with zero-knowledge authentication. 
-              Your financial data stays encrypted and private.
-            </p>
+
           </div>
 
           <div>

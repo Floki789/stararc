@@ -6,6 +6,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 export interface SubscriptionPlan {
   id: string;
+  stripeId?: string; // Optional Stripe price ID for paid plans
   name: string;
   price: number;
   currency: string;
@@ -29,7 +30,8 @@ export const SUBSCRIPTION_PLANS: Record<string, SubscriptionPlan> = {
     ]
   },
   basic: {
-    id: 'price_1SFYAcD1Ykg9qG9IDLFZ9YYl', // Test mode Stripe price ID
+    id: 'basic',
+    stripeId: 'price_1SFYAcD1Ykg9qG9IDLFZ9YYl', // Test mode Stripe price ID
     name: 'Basic Plan', 
     price: 1200, // CHF 12.00 in cents
     currency: 'chf',
