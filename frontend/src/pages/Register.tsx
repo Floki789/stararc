@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { StripeAPIService } from '../services/stripeService';
 
 interface RegisterFormData {
   email: string;
@@ -97,8 +98,22 @@ const Register: React.FC = () => {
           // Update AuthContext with real token from backend
           login(data.user, data.token);
           
-          // Redirect to dashboard
-          navigate('/dashboard');
+          // Check subscription status before redirecting
+          try {
+            const subscriptionData = await StripeAPIService.getSubscriptionStatus();
+            
+            if (subscriptionData.hasSubscription) {
+              // User has subscription, redirect to dashboard
+              navigate('/dashboard');
+            } else {
+              // User needs to select a subscription plan
+              navigate('/subscription-selection');
+            }
+          } catch (error) {
+            console.error('Error checking subscription status:', error);
+            // Fallback to subscription selection on error
+            navigate('/subscription-selection');
+          }
         } else {
           setSuccessMessage('Registrierung erfolgreich! Sie können sich jetzt anmelden.');
         }

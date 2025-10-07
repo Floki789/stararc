@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Check, Crown, Users, Shield, Star } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 import StripeAPIService, { SubscriptionPlan } from '../services/stripeService';
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [currentPlan, setCurrentPlan] = useState<string>('free');
   const [plans] = useState<SubscriptionPlan[]>([
     {
@@ -40,15 +42,23 @@ const Dashboard: React.FC = () => {
   const [loading, setLoading] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
-    loadCurrentSubscription();
+    checkSubscriptionAndRedirect();
   }, []);
 
-  const loadCurrentSubscription = async () => {
+  const checkSubscriptionAndRedirect = async () => {
     try {
-      const subscription = await StripeAPIService.getCurrentSubscription();
-      setCurrentPlan(subscription.plan);
+      const status = await StripeAPIService.getSubscriptionStatus();
+      
+      if (!status.hasSubscription) {
+        // No subscription - redirect to selection
+        navigate('/subscription-selection');
+        return;
+      }
+      
+      // Has subscription - load dashboard content
+      setCurrentPlan(status.plan);
     } catch (error) {
-      console.error('Failed to load subscription:', error);
+      console.error('Failed to check subscription:', error);
     }
   };
 

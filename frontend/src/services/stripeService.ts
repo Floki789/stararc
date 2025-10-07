@@ -63,6 +63,35 @@ export class StripeAPIService {
     return response.json();
   }
 
+  static async getSubscriptionStatus() {
+    const response = await this.fetchWithAuth('/subscription');
+    
+    if (!response.ok) {
+      throw new Error('Failed to get subscription status');
+    }
+
+    const data = await response.json();
+    return {
+      hasSubscription: data.hasSubscription,
+      plan: data.plan,
+      status: data.status,
+      expiresAt: data.expiresAt
+    };
+  }
+
+  static async activateFreePlan() {
+    const response = await this.fetchWithAuth('/activate-free-plan', {
+      method: 'POST',
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to activate free plan');
+    }
+
+    return response.json();
+  }
+
   static async redirectToCheckout(sessionId: string) {
     const stripe = await getStripe();
     

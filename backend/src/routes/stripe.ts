@@ -17,6 +17,56 @@ router.get('/plans', authMiddleware, async (req, res) => {
   }
 });
 
+// Activate Free Plan (protected route)
+router.post('/activate-free-plan', authMiddleware, async (req, res): Promise<any> => {
+  try {
+    const userId = (req as any).user.id;
+    
+    // Check if user already has a subscription
+    const userResult = await pool.query(
+      'SELECT subscription_plan, subscription_status FROM users WHERE id = $1',
+      [userId]
+    );
+
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const user = userResult.rows[0];
+    
+    // If user already has any subscription, don't allow activation
+    if (user.subscription_plan && user.subscription_status) {
+      return res.status(400).json({ 
+        error: 'User already has an active subscription',
+        currentPlan: user.subscription_plan 
+      });
+    }
+
+    // Activate Free Plan
+    await pool.query(
+      `UPDATE users SET 
+       subscription_plan = 'free', 
+       subscription_status = 'active',
+       updated_at = CURRENT_TIMESTAMP
+       WHERE id = $1`,
+      [userId]
+    );
+
+    console.log(`✅ Free plan activated for user ${userId}`);
+
+    res.json({ 
+      success: true, 
+      message: 'Free Plan erfolgreich aktiviert!',
+      plan: 'free',
+      status: 'active'
+    });
+
+  } catch (error) {
+    console.error('Free plan activation error:', error);
+    res.status(500).json({ error: 'Failed to activate free plan' });
+  }
+});
+
 // Create checkout session (protected route)
 router.post('/create-checkout-session', authMiddleware, async (req, res): Promise<any> => {
   try {
@@ -95,10 +145,13 @@ router.get('/subscription', authMiddleware, async (req, res): Promise<any> => {
     }
 
     const user = result.rows[0];
+    
+    // Return null for plan/status if user has no subscription
     res.json({
-      plan: user.subscription_plan || 'free',
-      status: user.subscription_status || 'active',
-      expiresAt: user.subscription_expires_at
+      plan: user.subscription_plan,
+      status: user.subscription_status,
+      expiresAt: user.subscription_expires_at,
+      hasSubscription: !!(user.subscription_plan && user.subscription_status)
     });
 
   } catch (error) {

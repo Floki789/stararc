@@ -9,6 +9,8 @@ import Register from './pages/Register';
 import ForgotPassword from './pages/ForgotPassword';
 import VerifyEmail from './pages/VerifyEmail';
 import Dashboard from './pages/Dashboard';
+import SubscriptionSelection from './pages/SubscriptionSelection';
+import WelcomeDashboard from './pages/WelcomeDashboard';
 import { AuthProvider } from './hooks/useAuth';
 
 function App() {
@@ -37,6 +39,20 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/verify-email" element={<VerifyEmail />} />
+            
+            {/* New subscription flow */}
+            <Route path="/subscription-selection" element={
+              <ProtectedRoute>
+                <SubscriptionSelection />
+              </ProtectedRoute>
+            } />
+            
+            <Route path="/welcome" element={
+              <ProtectedRoute>
+                <WelcomeDashboard />
+              </ProtectedRoute>
+            } />
+            
             <Route path="/dashboard" element={
               <ProtectedRoute>
                 <Dashboard />
