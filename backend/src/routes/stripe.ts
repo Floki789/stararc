@@ -18,7 +18,7 @@ router.get('/plans', authMiddleware, async (req, res) => {
 });
 
 // Create checkout session (protected route)
-router.post('/create-checkout-session', authMiddleware, async (req, res) => {
+router.post('/create-checkout-session', authMiddleware, async (req, res): Promise<any> => {
   try {
     const { planId } = req.body;
     const userId = (req as any).user.id;
@@ -70,12 +70,18 @@ router.post('/create-checkout-session', authMiddleware, async (req, res) => {
 
   } catch (error) {
     console.error('Create checkout session error:', error);
+    console.error('Error details:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      planId: req.body.planId,
+      user: { id: (req as any).user?.id, email: (req as any).user?.email }
+    });
     res.status(500).json({ error: 'Failed to create checkout session' });
   }
 });
 
 // Get current subscription (protected route)
-router.get('/subscription', authMiddleware, async (req, res) => {
+router.get('/subscription', authMiddleware, async (req, res): Promise<any> => {
   try {
     const userId = (req as any).user.id;
     

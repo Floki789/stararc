@@ -29,7 +29,7 @@ export const SUBSCRIPTION_PLANS: Record<string, SubscriptionPlan> = {
     ]
   },
   basic: {
-    id: 'price_basic_monthly_chf', // Will be created in Stripe Dashboard
+    id: 'price_1SFYAcD1Ykg9qG9IDLFZ9YYl', // Test mode Stripe price ID
     name: 'Basic Plan', 
     price: 1200, // CHF 12.00 in cents
     currency: 'chf',
