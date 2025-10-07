@@ -19,7 +19,6 @@ const Header: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <Link to="/" className="flex items-center space-x-2">
-            <span className="text-2xl">⭐</span>
             <span className="text-xl font-bold text-gradient">Stararc</span>
           </Link>
 
@@ -63,7 +62,7 @@ const Header: React.FC = () => {
               </div>
             ) : (
               <div className="flex items-center space-x-4">
-                <Link to="/login" className="text-gray-300 hover:text-white transition-colors">
+                <Link to="/login" className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
                   Anmelden
                 </Link>
                 <Link to="/register" className="btn-primary">
@@ -143,7 +142,7 @@ const Header: React.FC = () => {
                   </a>
                   <Link
                     to="/login"
-                    className="text-gray-300 hover:text-white transition-colors"
+                    className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 inline-block text-center"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Anmelden

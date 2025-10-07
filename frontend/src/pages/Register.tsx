@@ -8,8 +8,6 @@ interface RegisterFormData {
   email: string;
   password: string;
   confirmPassword: string;
-  firstName: string;
-  lastName: string;
 }
 
 const Register: React.FC = () => {
@@ -18,9 +16,7 @@ const Register: React.FC = () => {
   const [formData, setFormData] = useState<RegisterFormData>({
     email: '',
     password: '',
-    confirmPassword: '',
-    firstName: '',
-    lastName: ''
+    confirmPassword: ''
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -46,13 +42,7 @@ const Register: React.FC = () => {
   const validateForm = (): boolean => {
     const newErrors: { [key: string]: string } = {};
 
-    if (!formData.firstName.trim()) {
-      newErrors.firstName = 'Vorname ist erforderlich';
-    }
 
-    if (!formData.lastName.trim()) {
-      newErrors.lastName = 'Nachname ist erforderlich';
-    }
 
     if (!formData.email.trim()) {
       newErrors.email = 'E-Mail ist erforderlich';
@@ -91,9 +81,7 @@ const Register: React.FC = () => {
         },
         body: JSON.stringify({
           email: formData.email,
-          password: formData.password,
-          firstName: formData.firstName,
-          lastName: formData.lastName
+          password: formData.password
         }),
       });
 
@@ -163,11 +151,8 @@ const Register: React.FC = () => {
         transition={{ duration: 0.5 }}
         className="max-w-md w-full space-y-8 relative z-10"
       >
-        <div>
-          <div className="mx-auto h-12 w-12 flex items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-purple-600">
-            <span className="text-white font-bold text-xl">S</span>
-          </div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-white">
+        <div className="-mt-4">
+          <h2 className="text-center text-3xl font-extrabold text-white">
             Konto erstellen
           </h2>
           <p className="mt-2 text-center text-sm text-gray-300">
@@ -200,49 +185,7 @@ const Register: React.FC = () => {
             </div>
           )}
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="firstName" className="sr-only">
-                Vorname
-              </label>
-              <input
-                id="firstName"
-                name="firstName"
-                type="text"
-                required
-                className={`appearance-none rounded-lg relative block w-full px-3 py-3 border ${
-                  errors.firstName ? 'border-red-500' : 'border-gray-600'
-                } placeholder-gray-400 text-white bg-gray-800/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
-                placeholder="Vorname"
-                value={formData.firstName}
-                onChange={handleInputChange}
-              />
-              {errors.firstName && (
-                <p className="mt-1 text-sm text-red-400">{errors.firstName}</p>
-              )}
-            </div>
 
-            <div>
-              <label htmlFor="lastName" className="sr-only">
-                Nachname
-              </label>
-              <input
-                id="lastName"
-                name="lastName"
-                type="text"
-                required
-                className={`appearance-none rounded-lg relative block w-full px-3 py-3 border ${
-                  errors.lastName ? 'border-red-500' : 'border-gray-600'
-                } placeholder-gray-400 text-white bg-gray-800/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
-                placeholder="Nachname"
-                value={formData.lastName}
-                onChange={handleInputChange}
-              />
-              {errors.lastName && (
-                <p className="mt-1 text-sm text-red-400">{errors.lastName}</p>
-              )}
-            </div>
-          </div>
 
           <div>
             <label htmlFor="email" className="sr-only">

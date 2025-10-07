@@ -57,7 +57,7 @@ export class AuthService {
   }
 
   // Register user
-  async registerUser(email: string, password: string, firstName: string, lastName: string): Promise<User> {
+  async registerUser(email: string, password: string, firstName: string = '', lastName: string = ''): Promise<User> {
     const client = await this.pool.connect();
     
     try {

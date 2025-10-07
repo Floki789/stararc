@@ -20,7 +20,7 @@ import { notFound } from './middleware/notFound';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3004;
 
 // Trust proxy for rate limiting behind reverse proxies
 app.set('trust proxy', 1);

@@ -222,3 +222,40 @@
   animation: shooting-star 8s linear infinite;
   animation-delay: var(--delay, 0s);
 }
+
+/* Intensive Shooting Star Animation */
+@keyframes shootingStar {
+  0% { 
+    transform: translateX(-100px) translateY(0px) rotate(45deg); 
+    opacity: 0; 
+  }
+  10% { 
+    opacity: 1; 
+  }
+  90% { 
+    opacity: 1; 
+  }
+  100% { 
+    transform: translateX(800px) translateY(-200px) rotate(45deg); 
+    opacity: 0; 
+  }
+}
+
+/* Asteroid Float Animation */
+@keyframes float {
+  0% { 
+    transform: translateX(0px) translateY(0px); 
+  }
+  25% { 
+    transform: translateX(20px) translateY(-15px); 
+  }
+  50% { 
+    transform: translateX(-10px) translateY(-25px); 
+  }
+  75% { 
+    transform: translateX(-20px) translateY(-10px); 
+  }
+  100% { 
+    transform: translateX(0px) translateY(0px); 
+  }
+}

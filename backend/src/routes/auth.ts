@@ -39,13 +39,15 @@ const registerValidation = [
     .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/)
     .withMessage('Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'),
   body('firstName')
+    .optional()
     .trim()
-    .isLength({ min: 1, max: 50 })
-    .withMessage('First name is required (max 50 characters)'),
+    .isLength({ max: 50 })
+    .withMessage('First name must be max 50 characters'),
   body('lastName')
+    .optional()
     .trim()
-    .isLength({ min: 1, max: 50 })
-    .withMessage('Last name is required (max 50 characters)'),
+    .isLength({ max: 50 })
+    .withMessage('Last name must be max 50 characters'),
 ];
 
 const loginValidation = [
@@ -88,7 +90,7 @@ router.post('/register', registerLimiter, registerValidation, async (req: Reques
       });
     }
 
-    const { email, password, firstName, lastName } = req.body;
+    const { email, password, firstName = '', lastName = '' } = req.body;
 
     // Register user
     const user = await authService.registerUser(email, password, firstName, lastName);

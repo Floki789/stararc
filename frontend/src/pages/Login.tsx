@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 
 interface LoginFormData {
@@ -11,7 +11,11 @@ interface LoginFormData {
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useAuth();
+  
+  // Get the intended destination from the location state, default to dashboard
+  const from = location.state?.from?.pathname || '/dashboard';
   const [formData, setFormData] = useState<LoginFormData>({
     email: '',
     password: ''
@@ -79,8 +83,8 @@ const Login: React.FC = () => {
         // Update AuthContext immediately
         login(data.user, data.token);
         
-        // Redirect to dashboard
-        navigate('/dashboard');
+        // Redirect to intended destination or dashboard
+        navigate(from, { replace: true });
       } else {
         if (data.errors && Array.isArray(data.errors)) {
           // Handle validation errors from backend
@@ -130,11 +134,8 @@ const Login: React.FC = () => {
         transition={{ duration: 0.5 }}
         className="max-w-md w-full space-y-8 relative z-10"
       >
-        <div>
-          <div className="mx-auto h-12 w-12 flex items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-purple-600">
-            <span className="text-white font-bold text-xl">S</span>
-          </div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-white">
+        <div className="-mt-4">
+          <h2 className="text-center text-3xl font-extrabold text-white">
             Anmelden
           </h2>
           <p className="mt-2 text-center text-sm text-gray-300">
