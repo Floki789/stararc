@@ -86,9 +86,9 @@ const SubscriptionSelection: React.FC = () => {
 
     try {
       if (planId === 'free') {
-        // Activate Free Plan
+        // Activate Free Plan and redirect to dashboard with new subscription flag
         await StripeAPIService.activateFreePlan();
-        navigate('/dashboard');
+        navigate('/dashboard?new=true');
       } else if (planId === 'basic') {
         // Handle Basic plan upgrade - redirect to Stripe Checkout
         console.log('Creating checkout session for basic plan...');

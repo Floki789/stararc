@@ -42,7 +42,7 @@ router.post('/activate-free-plan', authMiddleware, async (req, res): Promise<any
       });
     }
 
-    // Activate Free Plan
+    // Activate Free Plan (no password/hash generation)
     await pool.query(
       `UPDATE users SET 
        subscription_plan = 'free', 
@@ -109,7 +109,7 @@ router.post('/create-checkout-session', authMiddleware, async (req, res): Promis
       stripeCustomerId,
       plan.stripeId || plan.id, // Use stripeId if available, fallback to id
       userId,
-      `http://localhost:3003/dashboard?success=true`,
+      `http://localhost:3003/dashboard?new=true`,
       `http://localhost:3003/subscription-selection?canceled=true`
     );
 
@@ -172,15 +172,18 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
         const session = event.data.object as any;
         const userId = parseInt(session.metadata.userId);
         
-        // Update user subscription
+        // Update user subscription (no password/hash generation)
         await pool.query(
           `UPDATE users SET 
            subscription_plan = $1, 
            subscription_status = 'active',
-           stripe_subscription_id = $2
+           stripe_subscription_id = $2,
+           updated_at = CURRENT_TIMESTAMP
            WHERE id = $3`,
           ['basic', session.subscription, userId]
         );
+        
+        console.log(`✅ Basic plan activated for user ${userId}`);
         break;
 
       case 'invoice.payment_succeeded':
