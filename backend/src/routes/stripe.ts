@@ -52,8 +52,6 @@ router.post('/activate-free-plan', authMiddleware, async (req, res): Promise<any
       [userId]
     );
 
-    console.log(`✅ Free plan activated for user ${userId}`);
-
     res.json({ 
       success: true, 
       message: 'Free Plan erfolgreich aktiviert!',
@@ -107,10 +105,6 @@ router.post('/create-checkout-session', authMiddleware, async (req, res): Promis
     // Create checkout session
     const successUrl = `${process.env.FRONTEND_URL || 'http://localhost:3003'}/dashboard?new=true`;
     const cancelUrl = `${process.env.FRONTEND_URL || 'http://localhost:3003'}/subscription-selection?canceled=true`;
-    
-    console.log('📍 Creating Stripe checkout session with URLs:');
-    console.log('   Success URL:', successUrl);
-    console.log('   Cancel URL:', cancelUrl);
 
     const session = await StripeService.createCheckoutSession(
       stripeCustomerId,
@@ -120,11 +114,6 @@ router.post('/create-checkout-session', authMiddleware, async (req, res): Promis
       cancelUrl
     );
 
-    console.log('✅ Stripe session created successfully:');
-    console.log('   Session ID:', session.id);
-    console.log('   Actual Success URL:', session.success_url);
-    console.log('   Actual Cancel URL:', session.cancel_url);
-
     res.json({ 
       sessionId: session.id,
       url: session.url 
@@ -132,12 +121,6 @@ router.post('/create-checkout-session', authMiddleware, async (req, res): Promis
 
   } catch (error) {
     console.error('Create checkout session error:', error);
-    console.error('Error details:', {
-      message: error instanceof Error ? error.message : 'Unknown error',
-      stack: error instanceof Error ? error.stack : undefined,
-      planId: req.body.planId,
-      user: { id: (req as any).user?.id, email: (req as any).user?.email }
-    });
     res.status(500).json({ error: 'Failed to create checkout session' });
   }
 });
@@ -194,18 +177,14 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
            WHERE id = $3`,
           ['basic', session.subscription, userId]
         );
-        
-        console.log(`✅ Basic plan activated for user ${userId}`);
         break;
 
       case 'invoice.payment_succeeded':
         // Handle successful payment
-        console.log('Payment succeeded for subscription');
         break;
 
       case 'invoice.payment_failed':
         // Handle failed payment
-        console.log('Payment failed for subscription');
         break;
 
       case 'customer.subscription.deleted':
@@ -223,7 +202,7 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
         break;
 
       default:
-        console.log(`Unhandled event type ${event.type}`);
+        break;
     }
 
     res.json({ received: true });

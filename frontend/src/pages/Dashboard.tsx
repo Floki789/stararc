@@ -24,28 +24,17 @@ const Dashboard: React.FC = () => {
   const [copiedHash, setCopiedHash] = useState(false);
   const [hashSent, setHashSent] = useState(false);
   const [sendingHash, setSendingHash] = useState(false);
+  const [pollingError, setPollingError] = useState(false);
 
   useEffect(() => {
-    console.log('🌐 Dashboard mounted, current URL:', window.location.href);
-    
     const params = new URLSearchParams(window.location.search);
     const isNew = params.get('new') === 'true';
     
-    console.log('🔍 URL Parameters:', {
-      new: params.get('new'),
-      isNew: isNew,
-      allParams: Array.from(params.entries())
-    });
-    
     if (isNew) {
-      console.log('✅ New subscription flag detected!');
       setIsNewSubscription(true);
       window.history.replaceState({}, '', '/dashboard');
-    } else {
-      console.log('ℹ️ No new subscription flag - normal dashboard load');
     }
     
-    // Load data with knowledge of new subscription status
     loadDashboardDataWithDelay(isNew);
   }, []);
 
@@ -53,8 +42,6 @@ const Dashboard: React.FC = () => {
     try {
       // If this is a new subscription from Stripe, poll for webhook completion
       if (isNew) {
-        console.log('New subscription detected, polling for webhook completion...');
-        
         let attempts = 0;
         const maxAttempts = 20; // Poll for up to 20 seconds
         
@@ -63,7 +50,6 @@ const Dashboard: React.FC = () => {
           
           // Check if subscription is activated
           if (subData.hasSubscription && (subData.plan === 'basic' || subData.plan === 'free')) {
-            console.log(`✅ Subscription activated after ${attempts + 1} attempts!`);
             setSubscription({
               plan: subData.plan,
               status: subData.status,
@@ -74,7 +60,6 @@ const Dashboard: React.FC = () => {
           }
           
           attempts++;
-          console.log(`⏳ Polling attempt ${attempts}/${maxAttempts}... (subscription not active yet)`);
           
           if (attempts < maxAttempts) {
             await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second between attempts
@@ -82,8 +67,8 @@ const Dashboard: React.FC = () => {
         }
         
         // Timeout - webhook might have failed
-        console.error('❌ Webhook timeout - subscription not activated after 20 seconds');
-        alert('Die Subscription konnte nicht aktiviert werden. Bitte laden Sie die Seite neu oder kontaktieren Sie den Support.');
+        console.error('Webhook timeout - subscription not activated after 20 seconds');
+        setPollingError(true);
         setLoading(false);
         return;
       }
@@ -114,10 +99,7 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     if (isNewSubscription && subscription && !generatedPassword) {
-      console.log('🔐 Generating password with plan:', subscription.plan);
       PasswordGenerator.generatePassword(subscription.plan).then(generated => {
-        console.log('🔐 Generated password:', generated.password);
-        console.log('🔐 Generated hash:', generated.hash);
         setGeneratedPassword(generated.password);
         setPasswordHash(generated.hash);
       });
@@ -196,6 +178,27 @@ const Dashboard: React.FC = () => {
               Bitte warten, dies kann bis zu 20 Sekunden dauern
             </p>
           )}
+        </div>
+      </div>
+    );
+  }
+
+  if (pollingError) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 flex items-center justify-center">
+        <div className="max-w-md bg-red-900/20 border border-red-500 rounded-lg p-6 text-center">
+          <div className="text-red-400 text-xl font-semibold mb-4">
+            Aktivierung fehlgeschlagen
+          </div>
+          <p className="text-slate-300 mb-6">
+            Die Subscription konnte nicht aktiviert werden. Bitte versuchen Sie es erneut oder kontaktieren Sie den Support.
+          </p>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+          >
+            Seite neu laden
+          </button>
         </div>
       </div>
     );
