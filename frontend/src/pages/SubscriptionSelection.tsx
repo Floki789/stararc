@@ -22,8 +22,8 @@ const SubscriptionSelection: React.FC = () => {
     try {
       const status = await StripeAPIService.getSubscriptionStatus();
       if (status.hasSubscription) {
-        // User already has subscription, redirect to welcome
-        navigate('/welcome');
+        // User already has subscription, redirect to dashboard
+        navigate('/dashboard');
       }
     } catch (error) {
       console.error('Failed to check subscription status:', error);
@@ -88,7 +88,7 @@ const SubscriptionSelection: React.FC = () => {
       if (planId === 'free') {
         // Activate Free Plan
         await StripeAPIService.activateFreePlan();
-        navigate('/welcome');
+        navigate('/dashboard');
       } else if (planId === 'basic') {
         // Handle Basic plan upgrade - redirect to Stripe Checkout
         console.log('Creating checkout session for basic plan...');

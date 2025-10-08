@@ -109,7 +109,7 @@ router.post('/create-checkout-session', authMiddleware, async (req, res): Promis
       stripeCustomerId,
       plan.stripeId || plan.id, // Use stripeId if available, fallback to id
       userId,
-      `http://localhost:3003/welcome?success=true`,
+      `http://localhost:3003/dashboard?success=true`,
       `http://localhost:3003/subscription-selection?canceled=true`
     );
 

@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Shield, Star, Crown } from 'lucide-react';
+import { Shield, Star, Crown, Copy, CheckCircle, RefreshCw } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import StripeAPIService from '../services/stripeService';
+import { PasswordGenerator, GeneratedPassword } from '../utils/passwordGenerator';
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [subscription, setSubscription] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [credentials, setCredentials] = useState<GeneratedPassword | null>(null);
+  const [copiedPassword, setCopiedPassword] = useState(false);
+  const [copiedHash, setCopiedHash] = useState(false);
 
   useEffect(() => {
     loadSubscriptionStatus();
@@ -17,6 +21,16 @@ const Dashboard: React.FC = () => {
 
   const loadSubscriptionStatus = async () => {
     try {
+      // Check if this is a Stripe success redirect
+      const urlParams = new URLSearchParams(window.location.search);
+      const isStripeSuccess = urlParams.get('success') === 'true';
+      
+      if (isStripeSuccess) {
+        console.log('Stripe success detected, waiting for webhook processing...');
+        // Wait a bit for webhook to process
+        await new Promise(resolve => setTimeout(resolve, 2000));
+      }
+      
       const status = await StripeAPIService.getSubscriptionStatus();
       
       if (!status.hasSubscription) {
@@ -25,8 +39,17 @@ const Dashboard: React.FC = () => {
         return;
       }
       
-      // Has subscription - show dashboard
+      // Has subscription - show dashboard and generate credentials
       setSubscription(status);
+      
+      // Generate password and hash
+      const generated = await PasswordGenerator.generatePassword(status.plan);
+      setCredentials(generated);
+      
+      // Clean up URL if it was a success redirect
+      if (isStripeSuccess) {
+        window.history.replaceState({}, document.title, '/dashboard');
+      }
     } catch (error) {
       console.error('Failed to load subscription:', error);
     } finally {
@@ -49,6 +72,28 @@ const Dashboard: React.FC = () => {
       case 'basic': return 'Basic Plan';
       case 'pro': return 'Pro Plan';
       default: return 'Unknown Plan';
+    }
+  };
+
+  const copyToClipboard = async (text: string, type: 'password' | 'hash') => {
+    try {
+      await navigator.clipboard.writeText(text);
+      if (type === 'password') {
+        setCopiedPassword(true);
+        setTimeout(() => setCopiedPassword(false), 2000);
+      } else {
+        setCopiedHash(true);
+        setTimeout(() => setCopiedHash(false), 2000);
+      }
+    } catch (error) {
+      console.error('Failed to copy:', error);
+    }
+  };
+
+  const handleRegeneratePassword = async () => {
+    if (subscription) {
+      const generated = await PasswordGenerator.regeneratePassword(subscription.plan);
+      setCredentials(generated);
     }
   };
 
@@ -95,7 +140,7 @@ const Dashboard: React.FC = () => {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="bg-slate-800/40 backdrop-blur-sm border border-slate-600/50 rounded-2xl p-8 mb-8"
         >
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between mb-6">
             <div className="flex items-center space-x-4">
               <div className={`p-4 rounded-full ${
                 subscription.plan === 'free' ? 'bg-green-500/20' :
@@ -125,6 +170,68 @@ const Dashboard: React.FC = () => {
               </button>
             )}
           </div>
+
+          {/* Credentials Section */}
+          {credentials && (
+            <div className="border-t border-slate-600/50 pt-6 space-y-6">
+              {/* Password Display */}
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <label className="text-sm font-semibold text-slate-300">Ihr Passwort</label>
+                  <button
+                    onClick={handleRegeneratePassword}
+                    className="text-blue-400 hover:text-blue-300 flex items-center text-sm transition-colors"
+                  >
+                    <RefreshCw className="w-4 h-4 mr-1" />
+                    Neu generieren
+                  </button>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="flex-1 bg-slate-900/50 border border-slate-600/30 rounded-lg p-4 font-mono text-lg text-white">
+                    {credentials.password}
+                  </div>
+                  <button
+                    onClick={() => copyToClipboard(credentials.password, 'password')}
+                    className="bg-slate-700 hover:bg-slate-600 text-white p-4 rounded-lg transition-all"
+                    title="Passwort kopieren"
+                  >
+                    {copiedPassword ? (
+                      <CheckCircle className="w-5 h-5 text-green-400" />
+                    ) : (
+                      <Copy className="w-5 h-5" />
+                    )}
+                  </button>
+                </div>
+                <p className="text-xs text-slate-500 mt-2">
+                  Format: {subscription.plan === 'free' ? 'F-' : 'B-'}XXXX-XXXX-XXXX-XXXX (Base58)
+                </p>
+              </div>
+
+              {/* Hash Display */}
+              <div>
+                <label className="text-sm font-semibold text-slate-300 block mb-2">SHA-256 Hash</label>
+                <div className="flex items-center space-x-2">
+                  <div className="flex-1 bg-slate-900/50 border border-slate-600/30 rounded-lg p-4 font-mono text-sm text-slate-300 overflow-x-auto">
+                    {credentials.hash}
+                  </div>
+                  <button
+                    onClick={() => copyToClipboard(credentials.hash, 'hash')}
+                    className="bg-slate-700 hover:bg-slate-600 text-white p-4 rounded-lg transition-all"
+                    title="Hash kopieren"
+                  >
+                    {copiedHash ? (
+                      <CheckCircle className="w-5 h-5 text-green-400" />
+                    ) : (
+                      <Copy className="w-5 h-5" />
+                    )}
+                  </button>
+                </div>
+                <p className="text-xs text-slate-500 mt-2">
+                  Hash-Algorithmus: SHA-256 (Web Crypto API)
+                </p>
+              </div>
+            </div>
+          )}
         </motion.div>
 
         {/* Features/Actions */}
