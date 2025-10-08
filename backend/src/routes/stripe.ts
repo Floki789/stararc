@@ -105,13 +105,25 @@ router.post('/create-checkout-session', authMiddleware, async (req, res): Promis
     }
 
     // Create checkout session
+    const successUrl = `${process.env.FRONTEND_URL || 'http://localhost:3003'}/dashboard?new=true`;
+    const cancelUrl = `${process.env.FRONTEND_URL || 'http://localhost:3003'}/subscription-selection?canceled=true`;
+    
+    console.log('📍 Creating Stripe checkout session with URLs:');
+    console.log('   Success URL:', successUrl);
+    console.log('   Cancel URL:', cancelUrl);
+
     const session = await StripeService.createCheckoutSession(
       stripeCustomerId,
-      plan.stripeId || plan.id, // Use stripeId if available, fallback to id
+      plan.stripeId || plan.id,
       userId,
-      `http://localhost:3003/dashboard?new=true`,
-      `http://localhost:3003/subscription-selection?canceled=true`
+      successUrl,
+      cancelUrl
     );
+
+    console.log('✅ Stripe session created successfully:');
+    console.log('   Session ID:', session.id);
+    console.log('   Actual Success URL:', session.success_url);
+    console.log('   Actual Cancel URL:', session.cancel_url);
 
     res.json({ 
       sessionId: session.id,

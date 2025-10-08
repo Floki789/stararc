@@ -26,12 +26,23 @@ const Dashboard: React.FC = () => {
   const [sendingHash, setSendingHash] = useState(false);
 
   useEffect(() => {
+    console.log('🌐 Dashboard mounted, current URL:', window.location.href);
+    
     const params = new URLSearchParams(window.location.search);
     const isNew = params.get('new') === 'true';
     
+    console.log('🔍 URL Parameters:', {
+      new: params.get('new'),
+      isNew: isNew,
+      allParams: Array.from(params.entries())
+    });
+    
     if (isNew) {
+      console.log('✅ New subscription flag detected!');
       setIsNewSubscription(true);
       window.history.replaceState({}, '', '/dashboard');
+    } else {
+      console.log('ℹ️ No new subscription flag - normal dashboard load');
     }
     
     // Load data with knowledge of new subscription status
@@ -40,19 +51,48 @@ const Dashboard: React.FC = () => {
 
   const loadDashboardDataWithDelay = async (isNew: boolean) => {
     try {
-      // If this is a new subscription from Stripe, wait for webhook to complete
+      // If this is a new subscription from Stripe, poll for webhook completion
       if (isNew) {
-        console.log('New subscription detected, waiting for webhook...');
-        await new Promise(resolve => setTimeout(resolve, 3000)); // Wait 3 seconds
+        console.log('New subscription detected, polling for webhook completion...');
+        
+        let attempts = 0;
+        const maxAttempts = 20; // Poll for up to 20 seconds
+        
+        while (attempts < maxAttempts) {
+          const subData = await StripeAPIService.getSubscriptionStatus();
+          
+          // Check if subscription is activated
+          if (subData.hasSubscription && (subData.plan === 'basic' || subData.plan === 'free')) {
+            console.log(`✅ Subscription activated after ${attempts + 1} attempts!`);
+            setSubscription({
+              plan: subData.plan,
+              status: subData.status,
+              expiresAt: subData.expiresAt
+            });
+            setLoading(false);
+            return;
+          }
+          
+          attempts++;
+          console.log(`⏳ Polling attempt ${attempts}/${maxAttempts}... (subscription not active yet)`);
+          
+          if (attempts < maxAttempts) {
+            await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second between attempts
+          }
+        }
+        
+        // Timeout - webhook might have failed
+        console.error('❌ Webhook timeout - subscription not activated after 20 seconds');
+        alert('Die Subscription konnte nicht aktiviert werden. Bitte laden Sie die Seite neu oder kontaktieren Sie den Support.');
+        setLoading(false);
+        return;
       }
       
+      // Normal load (not new subscription)
       const subData = await StripeAPIService.getSubscriptionStatus();
       
       if (!subData.hasSubscription) {
-        // Only redirect if not a new subscription (to avoid race condition)
-        if (!isNew) {
-          navigate('/subscription-selection');
-        }
+        navigate('/subscription-selection');
         return;
       }
       
@@ -61,8 +101,12 @@ const Dashboard: React.FC = () => {
         status: subData.status,
         expiresAt: subData.expiresAt
       });
+      
     } catch (error) {
       console.error('Failed to load dashboard data:', error);
+      if (!isNew) {
+        navigate('/subscription-selection');
+      }
     } finally {
       setLoading(false);
     }
@@ -70,8 +114,10 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     if (isNewSubscription && subscription && !generatedPassword) {
-      const prefix = subscription.plan === 'free' ? 'F' : 'B';
-      PasswordGenerator.generatePassword(prefix).then(generated => {
+      console.log('🔐 Generating password with plan:', subscription.plan);
+      PasswordGenerator.generatePassword(subscription.plan).then(generated => {
+        console.log('🔐 Generated password:', generated.password);
+        console.log('🔐 Generated hash:', generated.hash);
         setGeneratedPassword(generated.password);
         setPasswordHash(generated.hash);
       });
@@ -140,7 +186,17 @@ const Dashboard: React.FC = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 flex items-center justify-center">
-        <div className="text-white text-xl">Lädt...</div>
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <div className="text-white text-xl mb-2">
+            {isNewSubscription ? 'Aktiviere Subscription...' : 'Lädt...'}
+          </div>
+          {isNewSubscription && (
+            <p className="text-slate-400 text-sm">
+              Bitte warten, dies kann bis zu 20 Sekunden dauern
+            </p>
+          )}
+        </div>
       </div>
     );
   }

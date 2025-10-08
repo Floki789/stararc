@@ -65,7 +65,14 @@ export class StripeService {
     successUrl: string,
     cancelUrl: string
   ): Promise<Stripe.Checkout.Session> {
-    return await stripe.checkout.sessions.create({
+    console.log('🔹 StripeService.createCheckoutSession called with:');
+    console.log('   Customer ID:', customerId);
+    console.log('   Price ID:', priceId);
+    console.log('   User ID:', userId);
+    console.log('   Success URL:', successUrl);
+    console.log('   Cancel URL:', cancelUrl);
+
+    const session = await stripe.checkout.sessions.create({
       customer: customerId,
       payment_method_types: ['card'],
       line_items: [
@@ -82,6 +89,14 @@ export class StripeService {
       },
       allow_promotion_codes: true,
     });
+
+    console.log('🔹 Stripe API returned session:');
+    console.log('   Session ID:', session.id);
+    console.log('   Success URL from Stripe:', session.success_url);
+    console.log('   Cancel URL from Stripe:', session.cancel_url);
+    console.log('   Checkout URL:', session.url);
+
+    return session;
   }
 
   // Get subscription status
