@@ -4,135 +4,68 @@ import { useNavigate } from 'react-router-dom';
 import { 
   BarChart3, 
   Shield, 
-  FileText, 
   Coins, 
-  Gem, 
-  Building2, 
-  Eye, 
-  X, 
-  Lock, 
-  Crown
+  Vault,
+  TrendingUp,
+  Users
 } from 'lucide-react';
 
 const HeroSection: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 min-h-screen">
-      {/* Intensiver Sternenhimmel mit Sternbildern und Asteroiden */}
+    <div className="relative overflow-hidden min-h-screen" style={{ backgroundColor: '#020617' }}>
+      {/* Subtiler Sternenhimmel im Company Website Stil */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Rotierender Sternenhimmel Container */}
-        <div className="absolute inset-0 animate-spin" style={{ animationDuration: '300s', transformOrigin: 'center center' }}>
-        {/* Hintergrundsterne - Kleine Punkte */}
-        {[...Array(200)].map((_, i) => (
+        {/* Gradient Overlays wie in der Company Website */}
+        <div className="absolute inset-0" style={{ 
+          background: 'radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.1) 0%, transparent 50%)'
+        }}></div>
+      </div>
+      
+      {/* Stars Background wie in der Company Website */}
+      <div className="absolute inset-0">
+        {/* Subtile Sterne wie in der Company Website */}
+        <div 
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `
+              radial-gradient(2px 2px at 20% 30%, white, transparent),
+              radial-gradient(2px 2px at 60% 70%, white, transparent),
+              radial-gradient(1px 1px at 50% 50%, white, transparent),
+              radial-gradient(1px 1px at 80% 10%, white, transparent),
+              radial-gradient(2px 2px at 90% 60%, white, transparent),
+              radial-gradient(1px 1px at 33% 90%, white, transparent)
+            `,
+            backgroundSize: '200% 200%',
+            backgroundPosition: '0% 0%',
+            animation: 'stars 60s linear infinite',
+            opacity: 0.5
+          }}
+        />
+        
+        {/* Zusätzliche animierte Sterne */}
+        {[...Array(50)].map((_, i) => (
           <div
-            key={`bg-star-${i}`}
-            className={`absolute rounded-full ${
-              ['bg-white', 'bg-blue-200'][i % 2]
-            }`}
+            key={`star-${i}`}
+            className="absolute rounded-full bg-white animate-pulse"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
-              width: `${Math.random() * 1.5 + 0.5}px`,
-              height: `${Math.random() * 1.5 + 0.5}px`,
-              opacity: Math.random() * 0.6 + 0.3
+              width: `${Math.random() * 2 + 1}px`,
+              height: `${Math.random() * 2 + 1}px`,
+              opacity: Math.random() * 0.6 + 0.2,
+              animationDelay: `${Math.random() * 3}s`,
+              animationDuration: `${Math.random() * 3 + 2}s`
             }}
           />
         ))}
-
-        {/* Helle Hauptsterne */}
-        {[...Array(80)].map((_, i) => (
-          <div
-            key={`main-star-${i}`}
-            className={`absolute ${
-              ['text-white', 'text-blue-100'][i % 2]
-            }`}
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              fontSize: `${Math.random() * 3 + 1.5}px`,
-              filter: `brightness(${Math.random() * 0.3 + 0.7})`,
-              textShadow: '0 0 4px currentColor'
-            }}
-          >
-            ✦
-          </div>
-        ))}
-
-        {/* Sternbild Großer Wagen (Big Dipper) */}
-        <div className="absolute" style={{ left: '15%', top: '20%' }}>
-          {/* Verbindungslinien */}
-          <svg width="200" height="120" className="absolute opacity-30">
-            <defs>
-              <linearGradient id="starGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#60a5fa" stopOpacity="0.8"/>
-                <stop offset="100%" stopColor="#a78bfa" stopOpacity="0.4"/>
-              </linearGradient>
-            </defs>
-            <path d="M20,100 L50,80 L80,85 L110,70 L140,75 L170,60 L190,45" 
-                  stroke="url(#starGradient)" strokeWidth="1" fill="none"/>
-          </svg>
-
-        </div>
-
-        {/* Sternbild Orion */}
-        <div className="absolute" style={{ right: '10%', top: '30%' }}>
-          {/* Orion Verbindungslinien */}
-          <svg width="150" height="180" className="absolute opacity-25">
-            <path d="M75,20 L60,60 L90,60 L75,100 L45,140 L105,140 L75,100 L30,80 L120,80" 
-                  stroke="url(#starGradient)" strokeWidth="1" fill="none"/>
-          </svg>
-
-        </div>
-
-        {/* Kassiopeia (W-Form) */}
-        <div className="absolute" style={{ right: '25%', top: '15%' }}>
-          <svg width="120" height="60" className="absolute opacity-30">
-            <path d="M10,45 L30,15 L50,35 L70,10 L90,40" 
-                  stroke="url(#starGradient)" strokeWidth="1" fill="none"/>
-          </svg>
-
-        </div>
-
-
-
-        {/* Asteroiden - Sehr subtile bewegende Punkte */}
-        {[...Array(6)].map((_, i) => (
-          <div
-            key={`asteroid-${i}`}
-            className="absolute w-1 h-1 bg-gray-400 rounded-full opacity-40"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animation: `float ${20 + Math.random() * 30}s linear infinite`,
-              animationDelay: `${Math.random() * 15}s`
-            }}
-          />
-        ))}
-
-        {/* Nebel-Effekt */}
-        <div 
-          className="absolute inset-0 opacity-20"
-          style={{
-            background: 'radial-gradient(ellipse 800px 600px at 30% 40%, rgba(59, 130, 246, 0.15) 0%, transparent 50%), radial-gradient(ellipse 600px 400px at 70% 60%, rgba(147, 51, 234, 0.1) 0%, transparent 50%)',
-          }}
-        />
-
-        {/* Milchstraße-Effekt */}
-        <div 
-          className="absolute inset-0 opacity-30"
-          style={{
-            background: 'linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, 0.05) 40%, rgba(167, 139, 250, 0.08) 50%, rgba(59, 130, 246, 0.05) 60%, transparent 70%)',
-            transform: 'rotate(-20deg) scale(1.5)',
-          }}
-        />
-        </div>
       </div>
 
 
 
       {/* Hero Content */}
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16">
         <div className="text-center">
           {/* Main Title */}
           <motion.div
@@ -142,7 +75,7 @@ const HeroSection: React.FC = () => {
           >
             <h1 className="text-6xl md:text-8xl font-bold text-white mb-6">
               <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-blue-300 bg-clip-text text-transparent">
-                Stararc
+                Stararc Sovereignty
               </span>
             </h1>
             
@@ -150,88 +83,157 @@ const HeroSection: React.FC = () => {
               Ihr ganzes Anlageuniversum unter einem Dach
             </h2>
             
-            <p className="text-lg md:text-xl text-slate-300 mb-12 max-w-3xl mx-auto">
-              Ganzheitliches Asset Management mit maximaler Privatsphäre und Kontrolle
-            </p>
           </motion.div>
 
-          {/* Key Features Grid */}
+          {/* Feature Categories Grid */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-12"
+            className="max-w-6xl mx-auto mb-12"
           >
-            {/* Ganzheitliches Asset Management */}
-            <div className="bg-slate-800/40 backdrop-blur-sm border border-slate-600/50 rounded-2xl p-8 text-left">
-              <div className="flex items-center mb-4">
-                <BarChart3 className="w-8 h-8 text-blue-400 mr-3" />
-                <h3 className="text-xl font-semibold text-white">Ganzheitliches Asset Management</h3>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {/* Asset Management */}
+              <div className="bg-slate-800/40 backdrop-blur-sm border border-slate-600/50 rounded-xl p-6">
+                <div className="flex items-center mb-4">
+                  <BarChart3 className="w-7 h-7 text-blue-400 mr-3" />
+                  <h3 className="text-xl font-semibold text-white">Asset Management</h3>
+                </div>
+                <div className="space-y-3 text-slate-300">
+                  <div className="flex items-start">
+                    <span className="text-blue-400 mr-2 mt-1">•</span>
+                    <span>Übersicht aller Vermögensklassen</span>
+                  </div>
+                  <div className="flex items-start">
+                    <span className="text-blue-400 mr-2 mt-1">•</span>
+                    <span>Wertschriftendepots</span>
+                  </div>
+                  <div className="flex items-start">
+                    <span className="text-blue-400 mr-2 mt-1">•</span>
+                    <span>Echtzeit-Kurse & Performance</span>
+                  </div>
+                  <div className="flex items-start">
+                    <span className="text-blue-400 mr-2 mt-1">•</span>
+                    <span>Datenimport Depots (BETA)</span>
+                  </div>
+                </div>
               </div>
-              <div className="space-y-3 text-slate-300">
-                <div className="flex items-center">
-                  <FileText className="w-5 h-5 text-slate-400 mr-2" />
-                  <span>Wertschriften (Aktien, ETFs, Obligationen)</span>
-                </div>
-                <div className="flex items-center">
-                  <Coins className="w-5 h-5 text-slate-400 mr-2" />
-                  <span>Bitcoin Self-Custody</span>
-                </div>
-                <div className="flex items-center">
-                  <Gem className="w-5 h-5 text-slate-400 mr-2" />
-                  <span>Alternative Assets (Krypto, Edelmetalle, Kunst)</span>
-                </div>
-                <div className="flex items-center">
-                  <Building2 className="w-5 h-5 text-slate-400 mr-2" />
-                  <span>Immobilien & REITs</span>
-                </div>
-              </div>
-            </div>
 
-            {/* Privacy Focus */}
-            <div className="bg-slate-800/40 backdrop-blur-sm border border-slate-600/50 rounded-2xl p-8 text-left">
-              <div className="flex items-center mb-4">
-                <Shield className="w-8 h-8 text-purple-400 mr-3" />
-                <h3 className="text-xl font-semibold text-white">Privacy-by-Design</h3>
+              {/* Bitcoin Custody */}
+              <div className="bg-slate-800/40 backdrop-blur-sm border border-slate-600/50 rounded-xl p-6">
+                <div className="flex items-center mb-4">
+                  <Coins className="w-7 h-7 text-orange-400 mr-3" />
+                  <h3 className="text-xl font-semibold text-white">Bitcoin Custody</h3>
+                </div>
+                <div className="space-y-3 text-slate-300">
+                  <div className="flex items-start">
+                    <span className="text-orange-400 mr-2 mt-1">•</span>
+                    <span>Professionelles Key-Management</span>
+                  </div>
+                  <div className="flex items-start">
+                    <span className="text-orange-400 mr-2 mt-1">•</span>
+                    <span>SingleSig & MultiSig Setups</span>
+                  </div>
+                  <div className="flex items-start">
+                    <span className="text-orange-400 mr-2 mt-1">•</span>
+                    <span>Backup-Strategien für Seeds</span>
+                  </div>
+                  <div className="flex items-start">
+                    <span className="text-orange-400 mr-2 mt-1">•</span>
+                    <span>Sicherheitsüberprüfungen</span>
+                  </div>
+                </div>
               </div>
-              <div className="space-y-3 text-slate-300">
-                <div className="flex items-center">
-                  <Eye className="w-5 h-5 text-slate-400 mr-2" />
-                  <span>Zero-Knowledge Architektur</span>
-                </div>
-                <div className="flex items-center">
-                  <X className="w-5 h-5 text-slate-400 mr-2" />
-                  <span>Keine Datenspeicherung oder Verkauf</span>
-                </div>
-                <div className="flex items-center">
-                  <Lock className="w-5 h-5 text-slate-400 mr-2" />
-                  <span>Client-seitige Verschlüsselung</span>
-                </div>
-                <div className="flex items-center">
-                  <Crown className="w-5 h-5 text-slate-400 mr-2" />
-                  <span>Maximale digitale Souveränität</span>
-                </div>
-              </div>
-            </div>
-          </motion.div>
 
-          {/* Pricing Information */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            className="mb-8 max-w-3xl mx-auto"
-          >
-            <div className="bg-slate-800/30 backdrop-blur-sm border border-slate-600/40 rounded-xl p-6">
-              <div className="flex flex-col sm:flex-row gap-6 justify-center items-center text-base">
-                <div className="flex items-center gap-3 text-slate-300">
-                  <span className="text-green-400 text-lg">✓</span>
-                  <span>Free Version mit Basis-Features</span>
+              {/* Security Features */}
+              <div className="bg-slate-800/40 backdrop-blur-sm border border-slate-600/50 rounded-xl p-6">
+                <div className="flex items-center mb-4">
+                  <Shield className="w-7 h-7 text-purple-400 mr-3" />
+                  <h3 className="text-xl font-semibold text-white">Security Features</h3>
                 </div>
-                <div className="hidden sm:block text-slate-500">•</div>
-                <div className="flex items-center gap-3 text-slate-300">
-                  <span className="text-purple-400 text-lg">⭐</span>
-                  <span>Premium für alle Asset-Klassen</span>
+                <div className="space-y-3 text-slate-300">
+                  <div className="flex items-start">
+                    <span className="text-purple-400 mr-2 mt-1">•</span>
+                    <span>Anonymes Login mit Private Key</span>
+                  </div>
+                  <div className="flex items-start">
+                    <span className="text-purple-400 mr-2 mt-1">•</span>
+                    <span>Verschlüsselte Daten</span>
+                  </div>
+                  <div className="flex items-start">
+                    <span className="text-purple-400 mr-2 mt-1">•</span>
+                    <span>Anonymisierte Daten</span>
+                  </div>
+                  <div className="flex items-start">
+                    <span className="text-purple-400 mr-2 mt-1">•</span>
+                    <span>Zero-Knowledge Architektur</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Verwahrungsstrategie */}
+              <div className="bg-slate-800/40 backdrop-blur-sm border border-slate-600/50 rounded-xl p-6">
+                <div className="flex items-center mb-4">
+                  <Vault className="w-7 h-7 text-green-400 mr-3" />
+                  <h3 className="text-xl font-semibold text-white">Verwahrungsstrategie</h3>
+                </div>
+                <div className="space-y-3 text-slate-300">
+                  <div className="flex items-start">
+                    <span className="text-green-400 mr-2 mt-1">•</span>
+                    <span>Verwaltung physischer/digitaler Vaults</span>
+                  </div>
+                  <div className="flex items-start">
+                    <span className="text-green-400 mr-2 mt-1">•</span>
+                    <span>Sicherheitsbewertung der Vaults</span>
+                  </div>
+                  <div className="flex items-start">
+                    <span className="text-green-400 mr-2 mt-1">•</span>
+                    <span>Selbst- vs. Fremdverwahrung</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Dienstleistungen */}
+              <div className="bg-slate-800/40 backdrop-blur-sm border border-slate-600/50 rounded-xl p-6">
+                <div className="flex items-center mb-4">
+                  <Users className="w-7 h-7 text-cyan-400 mr-3" />
+                  <h3 className="text-xl font-semibold text-white">Dienstleistungen</h3>
+                </div>
+                <div className="space-y-3 text-slate-300">
+                  <div className="flex items-start">
+                    <span className="text-cyan-400 mr-2 mt-1">•</span>
+                    <span>Persönliche Vermögensberatung</span>
+                  </div>
+                  <div className="flex items-start">
+                    <span className="text-cyan-400 mr-2 mt-1">•</span>
+                    <span>Bitcoin Advisory</span>
+                  </div>
+                  <div className="flex items-start">
+                    <span className="text-cyan-400 mr-2 mt-1">•</span>
+                    <span>Individuelle Strategien</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Investment Trends */}
+              <div className="bg-slate-800/40 backdrop-blur-sm border border-slate-600/50 rounded-xl p-6">
+                <div className="flex items-center mb-4">
+                  <TrendingUp className="w-7 h-7 text-yellow-400 mr-3" />
+                  <h3 className="text-xl font-semibold text-white">Investment Trends</h3>
+                </div>
+                <div className="space-y-3 text-slate-300">
+                  <div className="flex items-start">
+                    <span className="text-yellow-400 mr-2 mt-1">•</span>
+                    <span>AI & Machine Learning</span>
+                  </div>
+                  <div className="flex items-start">
+                    <span className="text-yellow-400 mr-2 mt-1">•</span>
+                    <span>Robotics & Automation</span>
+                  </div>
+                  <div className="flex items-start">
+                    <span className="text-yellow-400 mr-2 mt-1">•</span>
+                    <span>Space Technology</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -262,3 +264,16 @@ const HeroSection: React.FC = () => {
 };
 
 export default HeroSection;
+
+// Add CSS for stars animation
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes stars {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 100% 100%; }
+  }
+`;
+if (!document.head.querySelector('style[data-stars]')) {
+  style.setAttribute('data-stars', 'true');
+  document.head.appendChild(style);
+}
