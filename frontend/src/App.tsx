@@ -11,6 +11,7 @@ import VerifyEmail from './pages/VerifyEmail';
 import Dashboard from './pages/Dashboard';
 import SubscriptionSelection from './pages/SubscriptionSelection';
 import { AuthProvider } from './hooks/useAuth';
+import { LanguageProvider } from './contexts/LanguageContext';
 
 function App() {
   const [mounted, setMounted] = useState(false);
@@ -28,34 +29,36 @@ function App() {
   }
 
   return (
-    <AuthProvider>
-      <div className="min-h-screen bg-gray-900 text-white">
-        <Header />
-        <main className="flex-1">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/verify-email" element={<VerifyEmail />} />
-            
-            {/* New subscription flow */}
-            <Route path="/subscription-selection" element={
-              <ProtectedRoute>
-                <SubscriptionSelection />
-              </ProtectedRoute>
-            } />
-            
-            <Route path="/dashboard" element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            } />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
-    </AuthProvider>
+    <LanguageProvider>
+      <AuthProvider>
+        <div className="min-h-screen bg-gray-900 text-white">
+          <Header />
+          <main className="flex-1">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/verify-email" element={<VerifyEmail />} />
+              
+              {/* New subscription flow */}
+              <Route path="/subscription-selection" element={
+                <ProtectedRoute>
+                  <SubscriptionSelection />
+                </ProtectedRoute>
+              } />
+              
+              <Route path="/dashboard" element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              } />
+            </Routes>
+          </main>
+          <Footer />
+        </div>
+      </AuthProvider>
+    </LanguageProvider>
   );
 }
 

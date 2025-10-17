@@ -1,0 +1,110 @@
+{
+  "nav": {
+    "home": "Home",
+    "pricing": "Pricing",
+    "dashboard": "Dashboard",
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout"
+  },
+  "hero": {
+    "title": "Your entire investment universe under one roof",
+    "subtitle": "Privacy-First Portfolio Management with Zero-Knowledge Architecture",
+    "cta": "Start for free"
+  },
+  "features": {
+    "assetManagement": "Asset Management",
+    "bitcoinCustody": "Bitcoin Custody",
+    "security": "Security Features",
+    "custody": "Custody Strategy",
+    "services": "Services",
+    "investmentTrends": "Investment Trends"
+  },
+  "featuresDetails": {
+    "assetManagement": {
+      "realtime": "Real-time prices & performance",
+      "import": "Data import portfolios (BETA)"
+    },
+    "bitcoinCustody": {
+      "keyManagement": "Professional key management",
+      "setups": "SingleSig & MultiSig setups",
+      "backup": "Backup strategies for seeds",
+      "security": "Security audits"
+    },
+    "security": {
+      "anonymousLogin": "Anonymous login with private key",
+      "encryptedData": "Encrypted data",
+      "anonymizedData": "Anonymized data",
+      "zeroKnowledge": "Zero-knowledge architecture"
+    },
+    "custody": {
+      "vaultManagement": "Physical/digital vault management",
+      "securityAssessment": "Security assessment of vaults",
+      "selfVsForeign": "Self vs. third-party custody"
+    },
+    "services": {
+      "advisory": "Personal wealth advisory",
+      "bitcoinAdvisory": "Bitcoin Advisory"
+    },
+    "investmentTrends": {
+      "marketAnalysis": "Market analysis & trends",
+      "assetAllocation": "Asset allocation recommendations"
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "subscriptionStatus": "Subscription Status",
+    "activationSuccess": "Subscription successfully activated!",
+    "activationSuccessText": "Your subscription has been successfully activated. You can now use all features.",
+    "activationFailed": "Subscription activation failed",
+    "activationFailedText": "The subscription could not be activated. Please try again or contact support.",
+    "credentials": "Starship Credentials",
+    "username": "Username",
+    "password": "Password",
+    "credentialsGenerated": "Credentials successfully generated!",
+    "credentialsGeneratedText": "Your Starship credentials have been successfully generated and transferred.",
+    "starshipSyncFailed": "Starship synchronization failed",
+    "starshipSyncFailedText": "Your credentials were generated, but the transfer to Starship failed. Please contact support."
+  },
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "forgotPassword": "Forgot Password?",
+    "hasAccount": "Already have an account?",
+    "verifyEmail": "Verify Email",
+    "emailRequired": "Email is required",
+    "emailInvalid": "Invalid email address",
+    "passwordRequired": "Password is required",
+    "passwordMinLength": "Password must be at least 8 characters",
+    "passwordsNotMatch": "Passwords do not match",
+    "passwordPlaceholder": "Password (min. 8 characters)",
+    "registering": "Registering...",
+    "or": "Or",
+    "agreementText": "By registering, you agree to our",
+    "privacyPolicy": "Privacy Policy",
+    "and": "and",
+    "termsConditions": "Terms & Conditions",
+    "agreementEnd": ".",
+    "createAccount": "create a new account",
+    "loginToExisting": "sign in to your existing account"
+  },
+  "subscription": {
+    "title": "Choose Your Plan",
+    "free": "Free",
+    "basic": "Basic",
+    "premium": "Premium",
+    "selectPlan": "Select Plan"
+  },
+  "common": {
+    "back": "Back",
+    "next": "Next",
+    "cancel": "Cancel",
+    "save": "Save",
+    "close": "Close",
+    "error": "Error",
+    "success": "Success"
+  }
+}

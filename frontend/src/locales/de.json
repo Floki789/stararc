@@ -1,0 +1,110 @@
+{
+  "nav": {
+    "home": "Startseite",
+    "pricing": "Preise",
+    "dashboard": "Dashboard",
+    "login": "Anmelden",
+    "register": "Registrieren",
+    "logout": "Abmelden"
+  },
+  "hero": {
+    "title": "Ihr ganzes Anlageuniversum unter einem Dach",
+    "subtitle": "Privacy-First Portfolio Management mit Zero-Knowledge Architektur",
+    "cta": "Kostenlos starten"
+  },
+  "features": {
+    "assetManagement": "Asset Management",
+    "bitcoinCustody": "Bitcoin Custody",
+    "security": "Security Features",
+    "custody": "Custody Strategie",
+    "services": "Services",
+    "investmentTrends": "Investment Trends"
+  },
+  "featuresDetails": {
+    "assetManagement": {
+      "realtime": "Echtzeit-Kurse & Performance",
+      "import": "Datenimport Depots (BETA)"
+    },
+    "bitcoinCustody": {
+      "keyManagement": "Professionelles Key Management",
+      "setups": "SingleSig & MultiSig Setups",
+      "backup": "Backup-Strategien für Seeds",
+      "security": "Security Audits"
+    },
+    "security": {
+      "anonymousLogin": "Anonymer Login mit Private Key",
+      "encryptedData": "Verschlüsselte Daten",
+      "anonymizedData": "Anonymisierte Daten",
+      "zeroKnowledge": "Zero-Knowledge Architektur"
+    },
+    "custody": {
+      "vaultManagement": "Physisches/digitales Vault Management",
+      "securityAssessment": "Sicherheitsbewertung von Vaults",
+      "selfVsForeign": "Selbst- vs. Fremdverwahrung"
+    },
+    "services": {
+      "advisory": "Persönliche Vermögensberatung",
+      "bitcoinAdvisory": "Bitcoin Advisory"
+    },
+    "investmentTrends": {
+      "marketAnalysis": "Marktanalyse & Trends",
+      "assetAllocation": "Asset Allocation Empfehlungen"
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "subscriptionStatus": "Subscription Status",
+    "activationSuccess": "Subscription erfolgreich aktiviert!",
+    "activationSuccessText": "Ihre Subscription wurde erfolgreich aktiviert. Sie können jetzt alle Features nutzen.",
+    "activationFailed": "Subscription-Aktivierung fehlgeschlagen",
+    "activationFailedText": "Die Subscription konnte nicht aktiviert werden. Bitte versuchen Sie es erneut oder kontaktieren Sie den Support.",
+    "credentials": "Starship Credentials",
+    "username": "Username",
+    "password": "Passwort",
+    "credentialsGenerated": "Credentials erfolgreich generiert!",
+    "credentialsGeneratedText": "Ihre Starship-Credentials wurden erfolgreich generiert und übertragen.",
+    "starshipSyncFailed": "Starship-Synchronisierung fehlgeschlagen",
+    "starshipSyncFailedText": "Ihre Credentials wurden generiert, aber die Übertragung zu Starship ist fehlgeschlagen. Bitte kontaktieren Sie den Support."
+  },
+  "auth": {
+    "login": "Anmelden",
+    "register": "Registrieren",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "confirmPassword": "Passwort bestätigen",
+    "forgotPassword": "Passwort vergessen?",
+    "hasAccount": "Bereits ein Konto?",
+    "verifyEmail": "E-Mail verifizieren",
+    "emailRequired": "E-Mail ist erforderlich",
+    "emailInvalid": "Ungültige E-Mail-Adresse",
+    "passwordRequired": "Passwort ist erforderlich",
+    "passwordMinLength": "Passwort muss mindestens 8 Zeichen lang sein",
+    "passwordsNotMatch": "Passwörter stimmen nicht überein",
+    "passwordPlaceholder": "Passwort (min. 8 Zeichen)",
+    "registering": "Registrierung läuft...",
+    "or": "Oder",
+    "agreementText": "Durch die Registrierung stimmen Sie unseren",
+    "privacyPolicy": "Datenschutzbestimmungen",
+    "and": "und",
+    "termsConditions": "Nutzungsbedingungen",
+    "agreementEnd": "zu.",
+    "createAccount": "erstellen Sie ein neues Konto",
+    "loginToExisting": "melden Sie sich in Ihr bestehendes Konto an"
+  },
+  "subscription": {
+    "title": "Plan auswählen",
+    "free": "Kostenlos",
+    "basic": "Basic",
+    "premium": "Premium",
+    "selectPlan": "Plan wählen"
+  },
+  "common": {
+    "back": "Zurück",
+    "next": "Weiter",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "close": "Schließen",
+    "error": "Fehler",
+    "success": "Erfolg"
+  }
+}
