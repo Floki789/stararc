@@ -1,11 +1,31 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
 import AssetOrganizationAnimation from './AssetOrganizationAnimation';
+import BitcoinSelfCustodyAnimation from './BitcoinSelfCustodyAnimation';
 
 const HeroSection: React.FC = () => {
-  const navigate = useNavigate();
+  const [currentAnimation, setCurrentAnimation] = useState(0); // 0: AssetOrganization, 1: BitcoinSelfCustody
+
+  // Content für verschiedene Animationen
+  const animationContent = [
+    {
+      title: "Holistic Wealth and Security Management",
+      subtitle: "Manage your wealth and your security with a privacy-first approach."
+    },
+    {
+      title: "Make your Self-Custody Setup bulletproof", 
+      subtitle: "Your private Keys stay in your secure dezentralized vaults"
+    }
+  ];
+
+  useEffect(() => {
+    // Asset Organization Animation: Phase 4 startet bei ~6s, geben wir 3s mehr Zeit
+    const timer = setTimeout(() => {
+      setCurrentAnimation(1);
+    }, 9000); // 9 Sekunden für ersten Wechsel - Phase 4 hat Zeit zu erscheinen
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div className="relative overflow-hidden bg-gray-950 min-h-screen flex items-center justify-center">
@@ -25,25 +45,58 @@ const HeroSection: React.FC = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="mb-8 pt-16"
+            className="mb-8 pt-24"
           >
-            <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
-              Holistic Wealth and Security Management
-            </h1>
-            <p className="text-xl text-gray-300 leading-relaxed mb-24">
-              Manage your wealth and your security with a privacy-first approach.
-            </p>
-            
-            {/* Asset Organization Animation */}
-            <AssetOrganizationAnimation className="mb-8" />
-
-            <button
-              onClick={() => navigate('/register')}
-              className="group bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-4 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-blue-500/25 flex items-center mx-auto"
+            <motion.h1 
+              key={currentAnimation} // Key für Re-Animation bei Wechsel
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight"
             >
-              Start Your Journey
-              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </button>
+              {animationContent[currentAnimation].title}
+            </motion.h1>
+            <motion.p 
+              key={`subtitle-${currentAnimation}`} // Key für Re-Animation bei Wechsel
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+              className="text-xl text-gray-300 leading-relaxed mb-24"
+            >
+              {animationContent[currentAnimation].subtitle}
+            </motion.p>
+            
+            {/* Animation Slideshow */}
+            <div className="relative mb-8 overflow-hidden mt-12">
+              {/* Asset Organization Animation */}
+              <motion.div
+                initial={{ x: 0 }}
+                animate={{ 
+                  x: currentAnimation === 0 ? 0 : -1200,
+                  opacity: currentAnimation === 0 ? 1 : 0
+                }}
+                transition={{ duration: 1, ease: "easeInOut" }}
+                className="absolute inset-0"
+              >
+                <AssetOrganizationAnimation />
+              </motion.div>
+
+              {/* Bitcoin Self-Custody Animation */}
+              <motion.div
+                initial={{ x: 1200 }}
+                animate={{ 
+                  x: currentAnimation === 1 ? 0 : 1200,
+                  opacity: currentAnimation === 1 ? 1 : 0
+                }}
+                transition={{ duration: 1, ease: "easeInOut" }}
+                className="absolute inset-0"
+              >
+                <BitcoinSelfCustodyAnimation isActive={currentAnimation === 1} />
+              </motion.div>
+
+              {/* Spacer for proper height */}
+              <div className="h-[580px] w-full"></div>
+            </div>
           </motion.div>
         </div>
       </div>

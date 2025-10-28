@@ -99,7 +99,7 @@ const AssetOrganizationAnimation: React.FC<AssetOrganizationAnimationProps> = ({
   };
 
   return (
-    <div className={`relative h-[400px] overflow-visible pt-8 pb-4 ${className}`}>
+    <div className={`relative h-[580px] overflow-visible py-8 ${className}`}>
       <div className="absolute inset-0 flex items-center justify-center">
         
         {/* Phase 0: Black Screen - No assets visible */}
@@ -235,7 +235,7 @@ const AssetOrganizationAnimation: React.FC<AssetOrganizationAnimationProps> = ({
           animate={{ 
             opacity: animationPhase >= 3 ? 1 : 0,
             x: -110, // Zentriert über Wealth Icons: (-140 + -80) / 2 = -110
-            y: -160 // Deutlich über den Icons: -90 - 70 (mehr Abstand)
+            y: -160 // Zurück zur ursprünglichen Position
           }}
           transition={{ duration: 0.8, delay: 0.5 }}
         >
@@ -251,7 +251,7 @@ const AssetOrganizationAnimation: React.FC<AssetOrganizationAnimationProps> = ({
           animate={{ 
             opacity: animationPhase >= 3 ? 1 : 0,
             x: 170, // Zentriert über Security Icons: (140 + 200) / 2 = 170
-            y: -160 // Deutlich über den Icons: -90 - 70 (mehr Abstand)
+            y: -160 // Zurück zur ursprünglichen Position
           }}
           transition={{ duration: 0.8, delay: 0.7 }}
         >
@@ -269,7 +269,7 @@ const AssetOrganizationAnimation: React.FC<AssetOrganizationAnimationProps> = ({
             scale: animationPhase === 4 ? 1 : 0,
             rotate: animationPhase === 4 ? 0 : -180,
             x: 320, // Noch weiter nach rechts verschoben
-            y: -235 // Zurück zu einer mittleren Position
+            y: -235 // Zurück zur ursprünglichen Position
           }}
           transition={{ duration: 1.2, delay: 1.5, type: "spring", stiffness: 100 }}
         >
