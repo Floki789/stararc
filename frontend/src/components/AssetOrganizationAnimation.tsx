@@ -20,12 +20,21 @@ import {
 
 interface AssetOrganizationAnimationProps {
   className?: string;
+  isActive?: boolean;
 }
 
-const AssetOrganizationAnimation: React.FC<AssetOrganizationAnimationProps> = ({ className = "" }) => {
+const AssetOrganizationAnimation: React.FC<AssetOrganizationAnimationProps> = ({ className = "", isActive = true }) => {
   const [animationPhase, setAnimationPhase] = useState(0); // 0: black screen, 1: assets appearing, 2: organizing1, 3: organizing2, 4: organized
 
+  // Reset and start animation when becoming active
   useEffect(() => {
+    if (isActive) {
+      setAnimationPhase(0); // Start from beginning when activated
+    }
+  }, [isActive]);
+
+  useEffect(() => {
+    if (!isActive) return; // Only run animation when active
     // Animation sequence: black -> assets appearing -> organizing1 -> organizing2 -> organized (STOP)
     const animationSequence = setTimeout(() => {
       if (animationPhase === 0) {
@@ -41,7 +50,7 @@ const AssetOrganizationAnimation: React.FC<AssetOrganizationAnimationProps> = ({
       // Phase 4: Animation stops here - no further transitions
     }, animationPhase === 0 ? 500 : animationPhase === 1 ? 2500 : 1500);
     return () => clearTimeout(animationSequence);
-  }, [animationPhase]);
+  }, [animationPhase, isActive]);
 
   // Asset definitions with icons and colors
   const wealthAssets = [
@@ -117,7 +126,7 @@ const AssetOrganizationAnimation: React.FC<AssetOrganizationAnimationProps> = ({
               className={`absolute ${asset.color} z-20`}
               initial={{ opacity: 0, scale: 0 }}
               animate={{ 
-                opacity: animationPhase === 0 ? 0 : 1, // Invisible in phase 0, visible from phase 1
+                opacity: animationPhase === 0 ? 0 : 1,
                 scale: animationPhase === 0 ? 0 : 1,
                 x: position.x,
                 y: position.y,
@@ -126,7 +135,7 @@ const AssetOrganizationAnimation: React.FC<AssetOrganizationAnimationProps> = ({
               transition={{ 
                 opacity: { 
                   duration: animationPhase === 1 ? 1.5 : 0.8,
-                  delay: animationPhase === 1 ? index * 0.3 : 0, // Staggered appearance in phase 1
+                  delay: animationPhase === 1 ? index * 0.3 : 0,
                   ease: "easeInOut"
                 },
                 scale: { 
@@ -156,7 +165,6 @@ const AssetOrganizationAnimation: React.FC<AssetOrganizationAnimationProps> = ({
                 }
               }}
             >
-              {/* Starship-style wealth asset container */}
               <div className="relative">
                 <div className="w-12 h-12 bg-gray-800/90 backdrop-blur-sm border border-gray-700/50 rounded-xl flex items-center justify-center shadow-lg hover:bg-gray-750/90 transition-all duration-300">
                   <Icon className={`w-5 h-5 ${asset.color}`} />
@@ -218,7 +226,6 @@ const AssetOrganizationAnimation: React.FC<AssetOrganizationAnimationProps> = ({
                 }
               }}
             >
-              {/* Starship-style security asset container */}
               <div className="relative">
                 <div className="w-12 h-12 bg-gray-800/90 backdrop-blur-sm border border-gray-700/50 rounded-xl flex items-center justify-center shadow-lg hover:bg-gray-750/90 transition-all duration-300">
                   <Icon className={`w-5 h-5 ${asset.color}`} />
@@ -228,7 +235,7 @@ const AssetOrganizationAnimation: React.FC<AssetOrganizationAnimationProps> = ({
           );
         })}
         
-        {/* Phase 3: Wealth Assets Überschrift */}
+        {/* Phase 3+: Wealth Assets Überschrift */}
         <motion.div
           className="absolute z-10"
           initial={{ opacity: 0, y: -10 }}
@@ -244,7 +251,7 @@ const AssetOrganizationAnimation: React.FC<AssetOrganizationAnimationProps> = ({
           </h3>
         </motion.div>
         
-        {/* Phase 3: Security Assets Überschrift */}
+        {/* Phase 3+: Security Assets Überschrift */}
         <motion.div
           className="absolute z-10"
           initial={{ opacity: 0, y: -10 }}
@@ -278,22 +285,24 @@ const AssetOrganizationAnimation: React.FC<AssetOrganizationAnimationProps> = ({
           </div>
         </motion.div>
 
-        {/* Phase 4: Organized State - StarArc Container (nur Border) */}
+        {/* Phase 4: Final Organized State - StarArc Container */}
         <motion.div
           className="absolute flex items-center justify-center"
           initial={{ opacity: 0, scale: 0 }}
           animate={{ 
-            opacity: animationPhase === 4 ? 1 : 0, 
-            scale: animationPhase === 4 ? 1 : 0.9,
-            x: 20, // Nach rechts verschoben für bessere Zentrierung
-            y: -40 // Höher verschoben auf der Y-Achse
+            opacity: animationPhase >= 4 ? 1 : 0, 
+            scale: animationPhase >= 4 ? 1 : 0.9,
+            x: 20,
+            y: -40
           }}
-          transition={{ duration: 1.5, delay: 1 }}
+          transition={{ duration: 1.5, delay: animationPhase === 4 ? 1 : 0 }}
         >
           <div className="w-[580px] h-[380px] bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl shadow-xl relative z-0">
             {/* Card-Stil wie in SubscriptionPlans */}
           </div>
         </motion.div>
+
+
 
       </div>
     </div>

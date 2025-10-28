@@ -24,7 +24,7 @@ const BitcoinSelfCustodyAnimation: React.FC<BitcoinSelfCustodyAnimationProps> = 
       if (animationPhase < 4) {
         setAnimationPhase(prev => prev + 1);
       }
-    }, animationPhase === 0 ? 1000 : 3000); // First phase 1s, others 3s each
+    }, animationPhase === 0 ? 1000 : animationPhase === 1 ? 2500 : animationPhase === 2 ? 2500 : 3000); // Phase timings: 1s, 2.5s, 2.5s, 3s
     
     return () => clearTimeout(animationSequence);
   }, [animationPhase, isActive]);
@@ -52,14 +52,15 @@ const BitcoinSelfCustodyAnimation: React.FC<BitcoinSelfCustodyAnimationProps> = 
   ];
 
   const getColumnHighlight = (columnName: string) => {
-    if (animationPhase === 2 && ['setupName', 'scriptType', 'type', 'passphrase'].includes(columnName)) {
-      return 'bg-blue-500/20 border-blue-400/50';
+    // Persistent highlighting with dedicated colors for each section
+    if (animationPhase >= 2 && ['setupName', 'scriptType', 'type', 'passphrase'].includes(columnName)) {
+      return 'bg-orange-500/15 border-orange-400/30';
     }
-    if (animationPhase === 3 && columnName === 'hardwareWallet') {
-      return 'bg-green-500/20 border-green-400/50';
+    if (animationPhase >= 3 && columnName === 'hardwareWallet') {
+      return 'bg-green-500/15 border-green-400/30';
     }
-    if (animationPhase === 4 && columnName === 'backups') {
-      return 'bg-purple-500/20 border-purple-400/50';
+    if (animationPhase >= 4 && columnName === 'backups') {
+      return 'bg-blue-500/15 border-blue-400/30';
     }
     return 'border-gray-600';
   };
@@ -196,53 +197,47 @@ const BitcoinSelfCustodyAnimation: React.FC<BitcoinSelfCustodyAnimationProps> = 
           </div>
         </motion.div>
 
-        {/* Phase 2: Setup Management Highlight */}
-        {animationPhase === 2 && (
-          <motion.div
-            initial={{ opacity: 0, y: 0 }}
-            animate={{ opacity: 1, y: 20 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.8 }}
-            className="absolute left-20 top-0 z-20"
-          >
-            <div className="bg-blue-500/90 text-white px-6 py-3 rounded-lg shadow-2xl border border-blue-400">
-              <div className="text-lg font-semibold">Manage Setup Metadata</div>
-              <div className="text-blue-100 text-sm">Track wallet configurations & script types</div>
-            </div>
-          </motion.div>
-        )}
+        {/* Labels Container - gleichmäßig zentriert verteilt */}
+        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 flex justify-center gap-8 z-20 w-full max-w-4xl px-8">
+          {/* Phase 2+: Setup Highlight - stays visible once appeared */}
+          {animationPhase >= 2 && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <div className="bg-orange-500/20 text-orange-100 px-4 py-2 rounded-md shadow-lg border border-orange-400/40 backdrop-blur-sm">
+                <div className="text-sm font-medium">Manage Setup Metadata</div>
+              </div>
+            </motion.div>
+          )}
 
-        {/* Phase 3: Hardware Wallet Highlight */}
-        {animationPhase === 3 && (
-          <motion.div
-            initial={{ opacity: 0, y: 0 }}
-            animate={{ opacity: 1, y: 20 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.8 }}
-            className="absolute left-2/5 transform -translate-x-1/2 top-0 z-20"
-          >
-            <div className="bg-green-500/90 text-white px-6 py-3 rounded-lg shadow-2xl border border-green-400">
-              <div className="text-lg font-semibold">Track Hardware Wallets</div>
-              <div className="text-green-100 text-sm">Monitor which devices are used (no keys stored)</div>
-            </div>
-          </motion.div>
-        )}
+          {/* Phase 3+: Hardware Wallet Highlight - stays visible once appeared */}
+          {animationPhase >= 3 && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <div className="bg-green-500/20 text-green-100 px-4 py-2 rounded-md shadow-lg border border-green-400/40 backdrop-blur-sm">
+                <div className="text-sm font-medium">Track Hardware Wallets</div>
+              </div>
+            </motion.div>
+          )}
 
-        {/* Phase 4: Backups Highlight */}
-        {animationPhase === 4 && (
-          <motion.div
-            initial={{ opacity: 0, y: 0 }}
-            animate={{ opacity: 1, y: 20 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.8 }}
-            className="absolute right-20 top-0 z-20"
-          >
-            <div className="bg-purple-500/90 text-white px-6 py-3 rounded-lg shadow-2xl border border-purple-400">
-              <div className="text-lg font-semibold">Track Backup Status</div>
-              <div className="text-purple-100 text-sm">Monitor backup completeness </div>
-            </div>
-          </motion.div>
-        )}
+          {/* Phase 4+: Backups Highlight - stays visible once appeared */}
+          {animationPhase >= 4 && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <div className="bg-blue-500/20 text-blue-100 px-4 py-2 rounded-md shadow-lg border border-blue-400/40 backdrop-blur-sm">
+                <div className="text-sm font-medium">Track Backup Status</div>
+              </div>
+            </motion.div>
+          )}
+        </div>
       </div>
     </div>
   );
