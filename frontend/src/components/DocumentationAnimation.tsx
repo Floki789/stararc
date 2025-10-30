@@ -185,7 +185,7 @@ const DocumentationAnimation: React.FC<DocumentationAnimationProps> = ({
 
 
   return (
-    <div className={`relative h-[580px] overflow-visible py-8 ${className}`}>
+    <div className={`relative h-[540px] overflow-visible py-4 border border-gray-600/30 ${className}`}>
       <div className="absolute inset-0 flex items-center justify-center">
         
 

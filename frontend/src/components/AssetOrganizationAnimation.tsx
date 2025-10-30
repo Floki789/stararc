@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useLanguage } from '../contexts/LanguageContext';
 import { 
   Bitcoin,
   Gem,
@@ -24,12 +25,16 @@ interface AssetOrganizationAnimationProps {
 }
 
 const AssetOrganizationAnimation: React.FC<AssetOrganizationAnimationProps> = ({ className = "", isActive = true }) => {
+  const { t } = useLanguage();
   const [animationPhase, setAnimationPhase] = useState(0); // 0: black screen, 1: assets appearing, 2: organizing1, 3: organizing2, 4: organized
 
   // Reset and start animation when becoming active
   useEffect(() => {
     if (isActive) {
       setAnimationPhase(0); // Start from beginning when activated
+    } else {
+      // When not active, reset to initial state to prevent lingering elements
+      setAnimationPhase(0);
     }
   }, [isActive]);
 
@@ -54,25 +59,25 @@ const AssetOrganizationAnimation: React.FC<AssetOrganizationAnimationProps> = ({
 
   // Asset definitions with icons and colors
   const wealthAssets = [
-    { icon: Bitcoin, name: 'Bitcoin', color: 'text-orange-500' },
-    { icon: Gem, name: 'Edelmetalle', color: 'text-yellow-500' },
-    { icon: Palette, name: 'Kunst', color: 'text-purple-500' },
-    { icon: Droplets, name: 'Liquidität', color: 'text-blue-500' },
-    { icon: TrendingUp, name: 'Wertschriften', color: 'text-green-500' },
-    { icon: Shield, name: 'Vorsorge', color: 'text-indigo-500' },
-    { icon: Home, name: 'Immobilien', color: 'text-emerald-500' },
-    { icon: Umbrella, name: 'Versicherungen', color: 'text-cyan-500' }
+    { icon: Bitcoin, name: t('assetOrganization.wealthAssets.bitcoin'), color: 'text-orange-500' },
+    { icon: Gem, name: t('assetOrganization.wealthAssets.preciousMetals'), color: 'text-yellow-500' },
+    { icon: Palette, name: t('assetOrganization.wealthAssets.art'), color: 'text-purple-500' },
+    { icon: Droplets, name: t('assetOrganization.wealthAssets.liquidity'), color: 'text-blue-500' },
+    { icon: TrendingUp, name: t('assetOrganization.wealthAssets.securities'), color: 'text-green-500' },
+    { icon: Shield, name: t('assetOrganization.wealthAssets.retirement'), color: 'text-indigo-500' },
+    { icon: Home, name: t('assetOrganization.wealthAssets.realEstate'), color: 'text-emerald-500' },
+    { icon: Umbrella, name: t('assetOrganization.wealthAssets.insurance'), color: 'text-cyan-500' }
   ];
 
   const securityAssets = [
-    { icon: Building2, name: 'Finanzinstitute', color: 'text-slate-400' },
-    { icon: Vault, name: 'Physische Vaults', color: 'text-gray-400' },
-    { icon: HardDrive, name: 'Digitale Vaults', color: 'text-blue-400' },
-    { icon: FileText, name: 'Seeds', color: 'text-green-400' },
-    { icon: FileText, name: 'Descriptoren', color: 'text-purple-400' },
-    { icon: Lock, name: 'Passwortmanager', color: 'text-red-400' },
-    { icon: Key, name: 'Encryption Keys', color: 'text-yellow-400' },
-    { icon: MessageSquare, name: 'Passphrasen', color: 'text-pink-400' }
+    { icon: Building2, name: t('assetOrganization.securityAssets.financialInstitutes'), color: 'text-slate-400' },
+    { icon: Vault, name: t('assetOrganization.securityAssets.physicalVaults'), color: 'text-gray-400' },
+    { icon: HardDrive, name: t('assetOrganization.securityAssets.digitalVaults'), color: 'text-blue-400' },
+    { icon: FileText, name: t('assetOrganization.securityAssets.seeds'), color: 'text-green-400' },
+    { icon: FileText, name: t('assetOrganization.securityAssets.descriptors'), color: 'text-purple-400' },
+    { icon: Lock, name: t('assetOrganization.securityAssets.passwordManager'), color: 'text-red-400' },
+    { icon: Key, name: t('assetOrganization.securityAssets.encryptionKeys'), color: 'text-yellow-400' },
+    { icon: MessageSquare, name: t('assetOrganization.securityAssets.passphrases'), color: 'text-pink-400' }
   ];
 
   // Generate random positions for chaotic state (using index as seed for consistent randomness)
@@ -108,8 +113,8 @@ const AssetOrganizationAnimation: React.FC<AssetOrganizationAnimationProps> = ({
   };
 
   return (
-    <div className={`relative h-[580px] overflow-visible py-8 ${className}`}>
-      <div className="absolute inset-0 flex items-center justify-center">
+    <div className={`relative h-[540px] overflow-visible py-4 border border-gray-600/30 ${className}`}>
+      <div className="absolute inset-0 flex items-center justify-center transform translate-y-[30px]">
         
         {/* Phase 0: Black Screen - No assets visible */}
         {/* Phase 1: Assets appearing gradually with gradient effect */}
@@ -247,7 +252,7 @@ const AssetOrganizationAnimation: React.FC<AssetOrganizationAnimationProps> = ({
           transition={{ duration: 0.8, delay: 0.5 }}
         >
           <h3 className="text-orange-400 text-lg font-bold bg-gray-800/80 px-4 py-2 rounded-lg border border-orange-500/30 shadow-lg backdrop-blur-sm">
-            Wealth Assets
+            {t('assetOrganization.wealthAssetsTitle')}
           </h3>
         </motion.div>
         
@@ -263,7 +268,7 @@ const AssetOrganizationAnimation: React.FC<AssetOrganizationAnimationProps> = ({
           transition={{ duration: 0.8, delay: 0.7 }}
         >
           <h3 className="text-gray-400 text-lg font-bold bg-gray-800/80 px-4 py-2 rounded-lg border border-gray-500/30 shadow-lg backdrop-blur-sm">
-            Security Elements
+            {t('assetOrganization.securityElementsTitle')}
           </h3>
         </motion.div>
 
@@ -272,17 +277,61 @@ const AssetOrganizationAnimation: React.FC<AssetOrganizationAnimationProps> = ({
           className="absolute z-40"
           initial={{ opacity: 0, scale: 0, rotate: -180 }}
           animate={{ 
-            opacity: animationPhase === 4 ? 1 : 0,
-            scale: animationPhase === 4 ? 1 : 0,
-            rotate: animationPhase === 4 ? 0 : -180,
-            x: 320, // Noch weiter nach rechts verschoben
-            y: -235 // Zurück zur ursprünglichen Position
+            opacity: (isActive && animationPhase === 4) ? 1 : 0,
+            scale: (isActive && animationPhase === 4) ? 1 : 0,
+            rotate: (isActive && animationPhase === 4) ? 0 : -180,
+            x: 32, // Adjust for shield width (64px / 2)
+            y: -32 // Adjust for shield height (64px / 2) 
           }}
           transition={{ duration: 1.2, delay: 1.5, type: "spring", stiffness: 100 }}
         >
-          <div className="w-16 h-16 bg-slate-800/90 backdrop-blur-md rounded-xl flex items-center justify-center shadow-2xl border border-slate-600/50">
-            <Shield className="w-8 h-8 text-blue-400" />
-          </div>
+          {/* Glowing background effect */}
+          <motion.div
+            className="absolute inset-0 w-16 h-16 bg-blue-400/30 rounded-xl blur-md"
+            initial={{ opacity: 0, scale: 1 }}
+            animate={{ 
+              opacity: (isActive && animationPhase === 4) ? [0, 0.3, 0.8] : 0,
+              scale: (isActive && animationPhase === 4) ? [1, 1.1, 1.3] : 1
+            }}
+            transition={{ 
+              duration: 2, 
+              delay: 2,
+              ease: "easeInOut"
+            }}
+          />
+          
+          <motion.div 
+            className="relative w-16 h-16 bg-slate-800/90 backdrop-blur-md rounded-xl flex items-center justify-center shadow-2xl border border-slate-600/50"
+            animate={{
+              boxShadow: (isActive && animationPhase === 4) ? [
+                "0 0 0 rgba(59, 130, 246, 0)",
+                "0 0 10px rgba(59, 130, 246, 0.3), 0 0 20px rgba(59, 130, 246, 0.2)",
+                "0 0 30px rgba(59, 130, 246, 0.6), 0 0 60px rgba(59, 130, 246, 0.4)"
+              ] : "0 0 0 rgba(59, 130, 246, 0)"
+            }}
+            transition={{ 
+              duration: 2, 
+              delay: 2,
+              ease: "easeInOut"
+            }}
+          >
+            <motion.div
+              animate={{
+                filter: (isActive && animationPhase === 4) ? [
+                  "brightness(1)",
+                  "brightness(1.2) drop-shadow(0 0 5px rgba(59, 130, 246, 0.4))",
+                  "brightness(1.5) drop-shadow(0 0 10px rgba(59, 130, 246, 0.8))"
+                ] : "brightness(1)"
+              }}
+              transition={{ 
+                duration: 2, 
+                delay: 2,
+                ease: "easeInOut"
+              }}
+            >
+              <Shield className="w-8 h-8 text-blue-400" />
+            </motion.div>
+          </motion.div>
         </motion.div>
 
         {/* Phase 4: Final Organized State - StarArc Container */}
@@ -290,8 +339,8 @@ const AssetOrganizationAnimation: React.FC<AssetOrganizationAnimationProps> = ({
           className="absolute flex items-center justify-center"
           initial={{ opacity: 0, scale: 0 }}
           animate={{ 
-            opacity: animationPhase >= 4 ? 1 : 0, 
-            scale: animationPhase >= 4 ? 1 : 0.9,
+            opacity: (isActive && animationPhase >= 4) ? 1 : 0, 
+            scale: (isActive && animationPhase >= 4) ? 1 : 0.9,
             x: 20,
             y: -40
           }}

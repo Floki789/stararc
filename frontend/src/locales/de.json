@@ -106,5 +106,93 @@
     "close": "Schließen",
     "error": "Fehler",
     "success": "Erfolg"
+  },
+  "assetOrganization": {
+    "wealthAssetsTitle": "Vermögenswerte",
+    "securityElementsTitle": "Sicherheitselemente",
+    "wealthAssets": {
+      "bitcoin": "Bitcoin",
+      "preciousMetals": "Edelmetalle",
+      "art": "Kunst",
+      "liquidity": "Liquidität",
+      "securities": "Wertschriften",
+      "retirement": "Vorsorge",
+      "realEstate": "Immobilien",
+      "insurance": "Versicherungen"
+    },
+    "securityAssets": {
+      "financialInstitutes": "Finanzinstitute",
+      "physicalVaults": "Physische Vaults",
+      "digitalVaults": "Digitale Vaults",
+      "seeds": "Seeds",
+      "descriptors": "Descriptoren",
+      "passwordManager": "Passwortmanager",
+      "encryptionKeys": "Encryption Keys",
+      "passphrases": "Passphrasen"
+    }
+  },
+  "heroSection": {
+    "animations": {
+      "assetOrganization": {
+        "title": "Ordnung statt Entropie",
+        "subtitle": "Von verstreuten Vermögenswerten und fehlender Dokumentation zu einem perfekt organisierten Portfolio mit Privacy-First-Ansatz."
+      },
+      "assetsOverview": {
+        "title": "Komplette Vermögensübersicht",
+        "subtitle": "Umfassende Ansicht aller Ihrer Vermögenswerte und Sicherheitselemente in einer organisierten Oberfläche."
+      },
+      "bitcoinCustody": {
+        "title": "Der neue Standard: Self Custody",
+        "subtitle": "Neue Konzepte für eine sich verändernde Welt"
+      },
+      "portfolioManagement": {
+        "title": "Professionelles Portfolio-Management",
+        "subtitle": "Verfolgen und verwalten Sie Ihre Aktien, ETFs, Anleihen und Krypto-Assets mit institutionellen Tools."
+      },
+      "privacy": {
+        "title": "Das neue Gold: Privacy",
+        "subtitle": "Alle Ihre Daten sind verschlüsselt und werden anonym gehalten. Komplette Privatsphäre by Design."
+      },
+      "wholeEnchilada": {
+        "title": "Ganzheitliches Vermögens- und Sicherheitsmanagement",
+        "subtitle": "Entwickle einen Blick auf das Ganze."
+      }
+    }
+  },
+  "wholeEnchilada": {
+    "centerTitle": "Ganzheitliches Vermögens- und Sicherheitsmanagement",
+    "centerSubtitle": "Komplette Vermögensökosystem-Übersicht mit totaler Kontrolle und Transparenz",
+    "categories": {
+      "selfManaged": {
+        "title": "Selbstverwaltete Vermögenswerte",
+        "coldStorage": "Cold Storage",
+        "privateKeys": "Private Keys",
+        "hardwareWallets": "Hardware Wallets"
+      },
+      "thirdParty": {
+        "title": "Fremdverwaltete Vermögenswerte",
+        "banks": "Banken & Institute",
+        "brokers": "Broker & Börsen",
+        "advisors": "Finanzberater"
+      },
+      "retirement": {
+        "title": "Vorsorgekapital",
+        "pensionFunds": "Pensionskassen",
+        "retirement401k": "Säule 3a & Pensionskasse",
+        "investments": "Langfristige Anlagen"
+      },
+      "realEstate": {
+        "title": "Immobilien-Portfolio",
+        "residential": "Wohnimmobilien",
+        "commercial": "Gewerbeimmobilien",
+        "international": "Internationale Objekte"
+      },
+      "securityPrivacy": {
+        "title": "Sicherheit & Datenschutz"
+      },
+      "documentation": {
+        "title": "Dokumentation"
+      }
+    }
   }
 }

@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useLanguage } from '../contexts/LanguageContext';
 import { 
   Bitcoin,
   Gem,
@@ -24,45 +25,38 @@ interface AssetsOverviewProps {
 }
 
 const AssetsOverview: React.FC<AssetsOverviewProps> = ({ className = "", isActive = true }) => {
-  const [isAnimating, setIsAnimating] = useState(false);
+  const { t } = useLanguage();
 
   // Reset and start animation when becoming active
   useEffect(() => {
-    if (isActive) {
-      setIsAnimating(false);
-      // Start animation after a brief delay
-      const timer = setTimeout(() => {
-        setIsAnimating(true);
-      }, 200);
-      return () => clearTimeout(timer);
-    }
+    // No additional logic needed - animations are handled by framer-motion
   }, [isActive]);
 
   // Asset definitions with icons and colors
   const wealthAssets = [
-    { icon: Bitcoin, name: 'Bitcoin', color: 'text-orange-500' },
-    { icon: Gem, name: 'Edelmetalle', color: 'text-yellow-500' },
-    { icon: Palette, name: 'Kunst', color: 'text-purple-500' },
-    { icon: Droplets, name: 'Liquidität', color: 'text-blue-500' },
-    { icon: TrendingUp, name: 'Wertschriften', color: 'text-green-500' },
-    { icon: Shield, name: 'Vorsorge', color: 'text-indigo-500' },
-    { icon: Home, name: 'Immobilien', color: 'text-emerald-500' },
-    { icon: Umbrella, name: 'Versicherungen', color: 'text-cyan-500' }
+    { icon: Bitcoin, name: t('assetOrganization.wealthAssets.bitcoin'), color: 'text-orange-500' },
+    { icon: Gem, name: t('assetOrganization.wealthAssets.preciousMetals'), color: 'text-yellow-500' },
+    { icon: Palette, name: t('assetOrganization.wealthAssets.art'), color: 'text-purple-500' },
+    { icon: Droplets, name: t('assetOrganization.wealthAssets.liquidity'), color: 'text-blue-500' },
+    { icon: TrendingUp, name: t('assetOrganization.wealthAssets.securities'), color: 'text-green-500' },
+    { icon: Shield, name: t('assetOrganization.wealthAssets.retirement'), color: 'text-indigo-500' },
+    { icon: Home, name: t('assetOrganization.wealthAssets.realEstate'), color: 'text-emerald-500' },
+    { icon: Umbrella, name: t('assetOrganization.wealthAssets.insurance'), color: 'text-cyan-500' }
   ];
 
   const securityAssets = [
-    { icon: Building2, name: 'Finanzinstitute', color: 'text-slate-400' },
-    { icon: Vault, name: 'Physische Vaults', color: 'text-gray-400' },
-    { icon: HardDrive, name: 'Digitale Vaults', color: 'text-blue-400' },
-    { icon: FileText, name: 'Seeds', color: 'text-green-400' },
-    { icon: FileText, name: 'Descriptoren', color: 'text-purple-400' },
-    { icon: Lock, name: 'Passwortmanager', color: 'text-red-400' },
-    { icon: Key, name: 'Encryption Keys', color: 'text-yellow-400' },
-    { icon: MessageSquare, name: 'Passphrasen', color: 'text-pink-400' }
+    { icon: Building2, name: t('assetOrganization.securityAssets.financialInstitutes'), color: 'text-slate-400' },
+    { icon: Vault, name: t('assetOrganization.securityAssets.physicalVaults'), color: 'text-gray-400' },
+    { icon: HardDrive, name: t('assetOrganization.securityAssets.digitalVaults'), color: 'text-blue-400' },
+    { icon: FileText, name: t('assetOrganization.securityAssets.seeds'), color: 'text-green-400' },
+    { icon: FileText, name: t('assetOrganization.securityAssets.descriptors'), color: 'text-purple-400' },
+    { icon: Lock, name: t('assetOrganization.securityAssets.passwordManager'), color: 'text-red-400' },
+    { icon: Key, name: t('assetOrganization.securityAssets.encryptionKeys'), color: 'text-yellow-400' },
+    { icon: MessageSquare, name: t('assetOrganization.securityAssets.passphrases'), color: 'text-pink-400' }
   ];
 
   return (
-    <div className={`relative h-[600px] overflow-visible py-12 ${className}`}>
+    <div className={`relative h-[600px] overflow-visible py-12 border border-gray-600/30 ${className}`}>
       <div className="absolute inset-0 flex items-center justify-center">
         
         {/* Main Container with subtle background */}
@@ -89,7 +83,7 @@ const AssetsOverview: React.FC<AssetsOverviewProps> = ({ className = "", isActiv
               }}
               transition={{ duration: 0.8, delay: 0.5, ease: "easeInOut" }}
             >
-              Wealth Assets
+              {t('assetOrganization.wealthAssetsTitle')}
             </motion.h2>
             
             {/* Wealth Assets Grid */}
@@ -134,7 +128,7 @@ const AssetsOverview: React.FC<AssetsOverviewProps> = ({ className = "", isActiv
               }}
               transition={{ duration: 0.8, delay: 0.6, ease: "easeInOut" }}
             >
-              Security Elements
+              {t('assetOrganization.securityElementsTitle')}
             </motion.h2>
             
             {/* Security Assets Grid */}

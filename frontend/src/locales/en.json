@@ -106,5 +106,93 @@
     "close": "Close",
     "error": "Error",
     "success": "Success"
+  },
+  "assetOrganization": {
+    "wealthAssetsTitle": "Wealth Assets",
+    "securityElementsTitle": "Security Elements",
+    "wealthAssets": {
+      "bitcoin": "Bitcoin",
+      "preciousMetals": "Precious Metals",
+      "art": "Art",
+      "liquidity": "Liquidity",
+      "securities": "Securities",
+      "retirement": "Retirement",
+      "realEstate": "Real Estate",
+      "insurance": "Insurance"
+    },
+    "securityAssets": {
+      "financialInstitutes": "Financial Institutes",
+      "physicalVaults": "Physical Vaults",
+      "digitalVaults": "Digital Vaults",
+      "seeds": "Seeds",
+      "descriptors": "Descriptors",
+      "passwordManager": "Password Manager",
+      "encryptionKeys": "Encryption Keys",
+      "passphrases": "Passphrases"
+    }
+  },
+  "heroSection": {
+    "animations": {
+      "assetOrganization": {
+        "title": "Order over Entropy",
+        "subtitle": "From scattered assets and missing documentation to a perfectly organized portfolio with a privacy-first approach."
+      },
+      "assetsOverview": {
+        "title": "Complete Assets Overview",
+        "subtitle": "Comprehensive view of all your wealth assets and security elements in one organized interface."
+      },
+      "bitcoinCustody": {
+        "title": "Self Custody is Mandatory",
+        "subtitle": "New concepts for a changing world"
+      },
+      "portfolioManagement": {
+        "title": "Professional Portfolio Management",
+        "subtitle": "Track and manage your stocks, ETFs, bonds, and crypto assets with institutional-grade tools."
+      },
+      "privacy": {
+        "title": "The New Gold: Privacy",
+        "subtitle": "All your data is encrypted and kept anonymous. Complete privacy by design."
+      },
+      "wholeEnchilada": {
+        "title": "Holistic Wealth and Security Management",
+        "subtitle": "Complete ecosystem overview: self-managed & third-party assets, retirement capital, real estate, security architecture, and privacy documentation."
+      }
+    }
+  },
+  "wholeEnchilada": {
+    "centerTitle": "Holistic Wealth and Security Management",
+    "centerSubtitle": "Complete wealth ecosystem overview with total control and transparency",
+    "categories": {
+      "selfManaged": {
+        "title": "Self-Managed Assets",
+        "coldStorage": "Cold Storage",
+        "privateKeys": "Private Keys",
+        "hardwareWallets": "Hardware Wallets"
+      },
+      "thirdParty": {
+        "title": "Third-Party Managed",
+        "banks": "Banks & Institutions",
+        "brokers": "Brokers & Exchanges",
+        "advisors": "Financial Advisors"
+      },
+      "retirement": {
+        "title": "Retirement Capital",
+        "pensionFunds": "Pension Funds",
+        "retirement401k": "401k & IRA",
+        "investments": "Long-term Investments"
+      },
+      "realEstate": {
+        "title": "Real Estate Portfolio",
+        "residential": "Residential Properties",
+        "commercial": "Commercial Assets",
+        "international": "International Holdings"
+      },
+      "securityPrivacy": {
+        "title": "Security & Privacy"
+      },
+      "documentation": {
+        "title": "Documentation"
+      }
+    }
   }
 }

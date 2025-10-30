@@ -46,7 +46,7 @@ const PrivacyAnimation: React.FC<PrivacyAnimationProps> = ({ className = "", isA
   }, [animationPhase, isActive]);
 
   return (
-    <div className={`relative h-[580px] overflow-visible py-8 ${className}`}>
+    <div className={`relative h-[540px] overflow-visible py-4 border border-gray-600/30 ${className}`}>
       <div className="absolute inset-0 flex items-start justify-center pt-8">
         {/* Main Visualization Container */}
         <motion.div
