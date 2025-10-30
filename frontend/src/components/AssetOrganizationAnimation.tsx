@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useLanguage } from '../contexts/LanguageContext';
+import AnimationTimer from './AnimationTimer';
 import { 
   Bitcoin,
   Gem,
@@ -113,7 +114,10 @@ const AssetOrganizationAnimation: React.FC<AssetOrganizationAnimationProps> = ({
   };
 
   return (
-    <div className={`relative h-[540px] overflow-visible py-4 border border-gray-600/30 ${className}`}>
+    <div className={`relative h-[540px] overflow-visible py-4 ${className}`}>
+      {/* Animation Timer */}
+      <AnimationTimer duration={12} isActive={isActive} />
+      
       <div className="absolute inset-0 flex items-center justify-center transform translate-y-[30px]">
         
         {/* Phase 0: Black Screen - No assets visible */}

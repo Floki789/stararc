@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useLanguage } from '../contexts/LanguageContext';
+import AnimationTimer from './AnimationTimer';
 import { 
   Shield,
   Eye,
@@ -98,7 +99,10 @@ const WholeEnchilada: React.FC<WholeEnchiladaProps> = ({ className = "", isActiv
   ];
 
   return (
-    <div className={`relative h-[540px] overflow-visible py-4 border border-gray-600/30 ${className}`}>
+    <div className={`relative h-[540px] overflow-visible py-4 ${className}`}>
+      {/* Animation Timer */}
+      <AnimationTimer duration={10} isActive={isActive} />
+      
       {/* Concentric Rings Background */}
       <div className="absolute inset-0 flex items-center justify-center">
         

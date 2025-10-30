@@ -3,44 +3,43 @@ import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import AssetOrganizationAnimation from './AssetOrganizationAnimation';
-import AssetsOverview from './AssetsOverview';
 import WholeEnchilada from './WholeEnchilada';
-import DocumentationAnimation from './DocumentationAnimation';
-import BitcoinSelfCustodyAnimation from './BitcoinSelfCustodyAnimation';
-import StocksManagementAnimation from './StocksManagementAnimation';
-import PrivacyAnimation from './PrivacyAnimation';
+import PlansAnimation from './PlansAnimation';
+
+// Animation configuration - easily add, remove, or reorder animations here
+const animationsConfig = [
+  { 
+    component: WholeEnchilada, 
+    key: 'wholeEnchilada',
+    name: 'WholeEnchilada'
+  },
+  { 
+    component: AssetOrganizationAnimation, 
+    key: 'assetOrganization',
+    name: 'AssetOrganization'
+  },
+  { 
+    component: PlansAnimation, 
+    key: 'plans',
+    name: 'Plans'
+  }
+];
 
 const HeroSection: React.FC = () => {
   const { t } = useLanguage();
-  const [currentAnimation, setCurrentAnimation] = useState(0); // 0: WholeEnchilada, 1: AssetOrganization, 2: AssetsOverview, 3: BitcoinSelfCustody, 4: StocksManagement, 5: Privacy
+  const [currentAnimation, setCurrentAnimation] = useState(0);
 
-  // Content für verschiedene Animationen - WholeEnchilada zuerst für umfassendsten Ansatz
-  const animationContent = [
-    {
-      title: t('heroSection.animations.wholeEnchilada.title'),
-      subtitle: t('heroSection.animations.wholeEnchilada.subtitle')
-    },
-    {
-      title: t('heroSection.animations.assetOrganization.title'),
-      subtitle: t('heroSection.animations.assetOrganization.subtitle')
-    },
-    {
-      title: t('heroSection.animations.assetsOverview.title'),
-      subtitle: t('heroSection.animations.assetsOverview.subtitle')
-    },
-    {
-      title: t('heroSection.animations.bitcoinCustody.title'), 
-      subtitle: t('heroSection.animations.bitcoinCustody.subtitle')
-    },
-    {
-      title: t('heroSection.animations.portfolioManagement.title'),
-      subtitle: t('heroSection.animations.portfolioManagement.subtitle')
-    },
-    {
-      title: t('heroSection.animations.privacy.title'), 
-      subtitle: t('heroSection.animations.privacy.subtitle')
-    }
-  ];
+  // Animation durations for auto-advance
+  const getAnimationDuration = (animationIndex: number) => {
+    const durations = [10000, 15000, 10000]; // WholeEnchilada, AssetOrg, Plans
+    return durations[animationIndex] || 10000;
+  };
+
+  // Generate animation content dynamically from config
+  const animationContent = animationsConfig.map(animation => ({
+    title: t(`heroSection.animations.${animation.key}.title`),
+    subtitle: t(`heroSection.animations.${animation.key}.subtitle`)
+  }));
 
   // Navigation functions
   const goToPrevAnimation = () => {
@@ -51,36 +50,16 @@ const HeroSection: React.FC = () => {
     setCurrentAnimation(prev => prev < animationContent.length - 1 ? prev + 1 : 0);
   };
 
+  // Auto-advance to next animation after current animation duration
   useEffect(() => {
-    // Animation sequence timing - 6 animations (WholeEnchilada first for comprehensive overview)
-    const timer1 = setTimeout(() => {
-      setCurrentAnimation(1); // Switch to AssetOrganization animation
-    }, 15000); // 15 seconds for WholeEnchilada to complete fully with more time
+    const currentDuration = getAnimationDuration(currentAnimation);
+    
+    const timer = setTimeout(() => {
+      setCurrentAnimation(prev => prev < animationContent.length - 1 ? prev + 1 : 0);
+    }, currentDuration);
 
-    const timer2 = setTimeout(() => {
-      setCurrentAnimation(2); // Switch to AssetsOverview animation
-    }, 27000); // 27 seconds total (15s + 12s for AssetOrganization - longer to let it stand)
-
-    const timer3 = setTimeout(() => {
-      setCurrentAnimation(3); // Switch to Bitcoin animation
-    }, 30000); // 30 seconds total (15s + 12s + 3s for AssetsOverview)
-
-    const timer4 = setTimeout(() => {
-      setCurrentAnimation(4); // Switch to Stocks animation
-    }, 45000); // 45 seconds total (15s + 12s + 3s + 15s for Bitcoin)
-
-    const timer5 = setTimeout(() => {
-      setCurrentAnimation(5); // Switch to Privacy animation
-    }, 60000); // 60 seconds total (15s + 12s + 3s + 15s + 15s for Stocks)
-
-    return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
-      clearTimeout(timer3);
-      clearTimeout(timer4);
-      clearTimeout(timer5);
-    };
-  }, []);
+    return () => clearTimeout(timer);
+  }, [currentAnimation, animationContent.length]);
 
   return (
     <div className="relative overflow-hidden bg-gray-950 min-h-screen flex items-center justify-center">
@@ -122,87 +101,41 @@ const HeroSection: React.FC = () => {
             </motion.p>
             
             {/* Animation Slideshow */}
-            <div className="relative mb-8 overflow-hidden mt-4">
-              {/* Whole Enchilada Animation - FIRST (comprehensive overview) */}
-              <motion.div
-                initial={{ x: 0 }}
-                animate={{ 
-                  x: currentAnimation === 0 ? 0 : -1200,
-                  opacity: currentAnimation === 0 ? 1 : 0
-                }}
-                transition={{ duration: 1, ease: "easeInOut" }}
-                className="absolute inset-0"
-              >
-                <WholeEnchilada isActive={currentAnimation === 0} />
-              </motion.div>
-
-              {/* Asset Organization Animation - SECOND */}
-              <motion.div
-                initial={{ x: 1200 }}
-                animate={{ 
-                  x: currentAnimation === 1 ? 0 : currentAnimation < 1 ? 1200 : -1200,
-                  opacity: currentAnimation === 1 ? 1 : 0
-                }}
-                transition={{ duration: 1, ease: "easeInOut" }}
-                className="absolute inset-0"
-              >
-                <AssetOrganizationAnimation isActive={currentAnimation === 1} />
-              </motion.div>
-
-              {/* Assets Overview Animation - THIRD */}
-              <motion.div
-                initial={{ x: 1200 }}
-                animate={{ 
-                  x: currentAnimation === 2 ? 0 : currentAnimation < 2 ? 1200 : -1200,
-                  opacity: currentAnimation === 2 ? 1 : 0
-                }}
-                transition={{ duration: 1, ease: "easeInOut" }}
-                className="absolute inset-0"
-              >
-                <AssetsOverview isActive={currentAnimation === 2} />
-              </motion.div>
-
-              {/* Bitcoin Self-Custody Animation - FOURTH */}
-              <motion.div
-                initial={{ x: 1200 }}
-                animate={{ 
-                  x: currentAnimation === 3 ? 0 : currentAnimation < 3 ? 1200 : -1200,
-                  opacity: currentAnimation === 3 ? 1 : 0
-                }}
-                transition={{ duration: 1, ease: "easeInOut" }}
-                className="absolute inset-0"
-              >
-                <BitcoinSelfCustodyAnimation isActive={currentAnimation === 3} />
-              </motion.div>
-
-              {/* Stocks Management Animation - FIFTH */}
-              <motion.div
-                initial={{ x: 1200 }}
-                animate={{ 
-                  x: currentAnimation === 4 ? 0 : currentAnimation < 4 ? 1200 : -1200,
-                  opacity: currentAnimation === 4 ? 1 : 0
-                }}
-                transition={{ duration: 1, ease: "easeInOut" }}
-                className="absolute inset-0"
-              >
-                <StocksManagementAnimation isActive={currentAnimation === 4} />
-              </motion.div>
-
-              {/* Privacy Animation - SIXTH */}
-              <motion.div
-                initial={{ x: 1200 }}
-                animate={{ 
-                  x: currentAnimation === 5 ? 0 : 1200,
-                  opacity: currentAnimation === 5 ? 1 : 0
-                }}
-                transition={{ duration: 1, ease: "easeInOut" }}
-                className="absolute inset-0"
-              >
-                <PrivacyAnimation isActive={currentAnimation === 5} />
-              </motion.div>
+            <div className="relative mb-8 overflow-hidden mt-4 w-full min-w-[1000px]">
+              {/* Dynamic Animation Rendering */}
+              {animationsConfig.map((animation, index) => {
+                const AnimationComponent = animation.component;
+                return (
+                  <motion.div
+                    key={animation.key}
+                    initial={{ x: index === 0 ? 0 : 1200 }}
+                    animate={{ 
+                      x: currentAnimation === index ? 0 : currentAnimation < index ? 1200 : -1200,
+                      opacity: currentAnimation === index ? 1 : 0
+                    }}
+                    transition={{ duration: 1, ease: "easeInOut" }}
+                    className="absolute inset-0"
+                  >
+                    <AnimationComponent isActive={currentAnimation === index} />
+                  </motion.div>
+                );
+              })}
 
               {/* Spacer for proper height */}
-              <div className="h-[600px] w-full"></div>
+              <div className="h-[600px] w-full min-w-[1000px]"></div>
+            </div>
+
+            {/* Call-to-Action Button */}
+            <div className="absolute left-1/2 transform -translate-x-1/2" style={{bottom: '90px'}}>
+              <motion.button
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 1 }}
+                onClick={() => window.location.href = '/register'}
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-4 px-8 rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl backdrop-blur-sm border border-blue-400/30"
+              >
+                {t('hero.cta')}
+              </motion.button>
             </div>
 
             {/* Navigation Arrows */}

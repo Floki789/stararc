@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import AnimationTimer from './AnimationTimer';
 import { useLanguage } from '../contexts/LanguageContext';
 import { 
   Bitcoin,
@@ -57,6 +58,9 @@ const AssetsOverview: React.FC<AssetsOverviewProps> = ({ className = "", isActiv
 
   return (
     <div className={`relative h-[600px] overflow-visible py-12 border border-gray-600/30 ${className}`}>
+      {/* Animation Timer */}
+      <AnimationTimer duration={3} isActive={isActive} />
+      
       <div className="absolute inset-0 flex items-center justify-center">
         
         {/* Main Container with subtle background */}

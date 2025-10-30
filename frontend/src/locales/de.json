@@ -151,11 +151,24 @@
       },
       "privacy": {
         "title": "Das neue Gold: Privacy",
-        "subtitle": "Alle Ihre Daten sind verschlüsselt und werden anonym gehalten. Komplette Privatsphäre by Design."
+        "subtitle": "Alle Ihre Daten sind verschlüsselt und werden anonym gehalten. Komplette Privatsphäre by Design.",
+        "step9": {
+          "title": "Komplette Privacy-Trennung",
+          "description": "Es besteht keine Verbindung zwischen Ihren persönlichen Login-Daten und Ihren verschlüsselten Daten in der StarArc Spaceship App"
+        },
+        "step10": {
+          "title": "Ultimativer Datenschutz",
+          "description": "Niemand kann Ihre Daten lesen, nicht einmal wir",
+          "subtitle": "Bewahren Sie Ihren privaten Schlüssel sicher für den Login auf. Wir können Ihr Passwort nicht wiederherstellen."
+        }
       },
       "wholeEnchilada": {
         "title": "Ganzheitliches Vermögens- und Sicherheitsmanagement",
-        "subtitle": "Entwickle einen Blick auf das Ganze."
+        "subtitle": "Alle Vermögenswerte unter einem Dach."
+      },
+      "plans": {
+        "title": "Flexible Preispläne",
+        "subtitle": "Von kostenlos bis professionell - für jeden das Richtige."
       }
     }
   },
@@ -193,6 +206,34 @@
       "documentation": {
         "title": "Dokumentation"
       }
+    }
+  },
+  "plans": {
+    "title": "Pläne & Preise",
+    "subtitle": "Wählen Sie den perfekten Plan für Ihre Bedürfnisse",
+    "free": {
+      "name": "Free",
+      "description": "Zum Kennenlernen"
+    },
+    "spark": {
+      "name": "Spark",
+      "description": "Komplette Suite für kleine und mittlere Portfolios"
+    },
+    "nakamoto": {
+      "name": "Nakamoto",
+      "description": "So viele Bitcoin Setups wie Sie wollen"
+    },
+    "core": {
+      "name": "Core",
+      "description": "Komplette Suite für grosse Portfolios"
+    },
+    "apex": {
+      "name": "Apex",
+      "description": "Für Vermögensberater und Family Offices"
+    },
+    "sathosi": {
+      "name": "Sathosi",
+      "description": "Bitcoin only. Because there is no second best."
     }
   }
 }

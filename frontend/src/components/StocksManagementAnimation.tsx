@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import AnimationTimer from './AnimationTimer';
 import { TrendingUp, Edit, Trash2 } from 'lucide-react';
 
 interface StocksManagementAnimationProps {
@@ -81,6 +82,9 @@ const StocksManagementAnimation: React.FC<StocksManagementAnimationProps> = ({
 
   return (
     <div className={`relative h-[540px] overflow-visible py-4 border border-gray-600/30 ${className}`}>
+      {/* Animation Timer */}
+      <AnimationTimer duration={15} isActive={isActive} />
+      
       <div className="absolute inset-0 flex items-center justify-center">
         
         {/* Phase 1+: Stocks Management Table */}

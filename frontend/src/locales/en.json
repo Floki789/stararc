@@ -151,11 +151,24 @@
       },
       "privacy": {
         "title": "The New Gold: Privacy",
-        "subtitle": "All your data is encrypted and kept anonymous. Complete privacy by design."
+        "subtitle": "All your data is encrypted and kept anonymous. Complete privacy by design.",
+        "step9": {
+          "title": "Complete Privacy Separation",
+          "description": "No connection exists between your personal login data and your encrypted data in the StarArc Spaceship app"
+        },
+        "step10": {
+          "title": "Ultimate Data Protection",
+          "description": "Nobody can read your data, not even us",
+          "subtitle": "Securely store your private key for login. We cannot restore your password."
+        }
       },
       "wholeEnchilada": {
         "title": "Holistic Wealth and Security Management",
         "subtitle": "Complete ecosystem overview: self-managed & third-party assets, retirement capital, real estate, security architecture, and privacy documentation."
+      },
+      "plans": {
+        "title": "Flexible Pricing Plans", 
+        "subtitle": "From free to professional - the right choice for everyone."
       }
     }
   },
@@ -193,6 +206,34 @@
       "documentation": {
         "title": "Documentation"
       }
+    }
+  },
+  "plans": {
+    "title": "Plans & Pricing",
+    "subtitle": "Choose the perfect plan for your needs",
+    "free": {
+      "name": "Free",
+      "description": "Get to know us"
+    },
+    "spark": {
+      "name": "Spark", 
+      "description": "Complete suite for small and medium portfolios"
+    },
+    "nakamoto": {
+      "name": "Nakamoto",
+      "description": "As many Bitcoin setups as you want"
+    },
+    "core": {
+      "name": "Core",
+      "description": "Complete suite for large portfolios"
+    },
+    "apex": {
+      "name": "Apex",
+      "description": "For wealth advisors and family offices"
+    },
+    "sathosi": {
+      "name": "Sathosi",
+      "description": "Bitcoin only. Because there is no second best."
     }
   }
 }
