@@ -126,7 +126,7 @@ const HeroSection: React.FC = () => {
             </div>
 
             {/* Call-to-Action Button */}
-            <div className="absolute left-1/2 transform -translate-x-1/2" style={{bottom: '90px'}}>
+            <div className="absolute left-1/2 transform -translate-x-1/2 ml-4" style={{bottom: '90px'}}>
               <motion.button
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}

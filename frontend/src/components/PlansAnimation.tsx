@@ -123,7 +123,7 @@ const PlansAnimation: React.FC<PlansAnimationProps> = ({ className = "", isActiv
       {/* Animation Timer */}
       <AnimationTimer duration={10} isActive={isActive} />
       
-      <div className="absolute inset-0 flex flex-col">
+      <div className="absolute inset-0 flex flex-col mt-8">
         
         {/* Plans Grid */}
         <motion.div

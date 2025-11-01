@@ -20,15 +20,33 @@ const SubscriptionPlans: React.FC = () => {
   const plans: SubscriptionPlan[] = [
     {
       id: 1,
-      name: 'Starship Basic',
-      description: 'Essential privacy-focused portfolio management for individuals',
-      priceChf: 29,
-      priceUsd: 32,
-      priceEur: 28,
+      name: 'Starship Free',
+      description: 'Get started with basic portfolio management',
+      priceChf: 0,
+      priceUsd: 0,
+      priceEur: 0,
       billingCycle: 'monthly',
       maxPortfolios: 1,
       features: [
         'Zero-Knowledge BIP39 Login',
+        'Basic Portfolio View',
+        'Limited Assets',
+        'Swiss Privacy Standards',
+        'Client-Side Encryption'
+      ]
+    },
+    {
+      id: 2,
+      name: 'Starship Basic',
+      description: 'Complete suite for small-medium portfolios',
+      priceChf: 9,
+      priceUsd: 9,
+      priceEur: 9,
+      billingCycle: 'monthly',
+      maxPortfolios: 1,
+      features: [
+        'Zero-Knowledge BIP39 Login',
+        'Complete Portfolio Suite',
         '1 Portfolio Management',
         'Basic OCR Document Processing',
         'Swiss Privacy Standards',
@@ -37,17 +55,18 @@ const SubscriptionPlans: React.FC = () => {
       ]
     },
     {
-      id: 2,
+      id: 3,
       name: 'Starship Pro',
-      description: 'Advanced portfolio management with multi-bank support',
-      priceChf: 59,
-      priceUsd: 65,
-      priceEur: 58,
+      description: 'Advanced features for large portfolios',
+      priceChf: 29,
+      priceUsd: 29,
+      priceEur: 29,
       billingCycle: 'monthly',
       maxPortfolios: 5,
       isPopular: true,
       features: [
         'Zero-Knowledge BIP39 Login',
+        'Complete Portfolio Suite',
         '5 Portfolio Management',
         'Advanced OCR Processing',
         'Multi-Bank Integration',
@@ -55,43 +74,40 @@ const SubscriptionPlans: React.FC = () => {
         'Encrypted Vault System',
         'Priority Support'
       ]
-    },
-    {
-      id: 3,
-      name: 'Starship Enterprise',
-      description: 'Full-featured solution for serious investors and advisors',
-      priceChf: 199,
-      priceUsd: 220,
-      priceEur: 195,
-      billingCycle: 'monthly',
-      maxPortfolios: -1,
-      features: [
-        'Zero-Knowledge BIP39 Login',
-        'Unlimited Portfolios',
-        'Premium OCR with AI',
-        'Complete Banking Integration',
-        'Advanced Analytics',
-        'API Access',
-        'On-Premise Deployment',
-        'White-Label Option',
-        '24/7 Support'
-      ]
     }
   ];
 
   const yearlyPlans: SubscriptionPlan[] = [
     {
       id: 4,
+      name: 'Starship Free',
+      description: 'Get started with basic portfolio management - always free',
+      priceChf: 0,
+      priceUsd: 0,
+      priceEur: 0,
+      billingCycle: 'yearly',
+      maxPortfolios: 1,
+      features: [
+        'Zero-Knowledge BIP39 Login',
+        'Basic Portfolio View',
+        'Limited Assets',
+        'Swiss Privacy Standards',
+        'Client-Side Encryption'
+      ]
+    },
+    {
+      id: 5,
       name: 'Starship Basic',
-      description: 'Essential privacy-focused portfolio management - 2 months free',
-      priceChf: 290,
-      priceUsd: 320,
-      priceEur: 280,
+      description: 'Complete suite for small-medium portfolios - 2 months free',
+      priceChf: 90,
+      priceUsd: 90,
+      priceEur: 90,
       billingCycle: 'yearly',
       maxPortfolios: 1,
       savings: '2 Monate gratis',
       features: [
         'Zero-Knowledge BIP39 Login',
+        'Complete Portfolio Suite',
         '1 Portfolio Management',
         'Basic OCR Document Processing',
         'Swiss Privacy Standards',
@@ -101,47 +117,25 @@ const SubscriptionPlans: React.FC = () => {
       ]
     },
     {
-      id: 5,
+      id: 6,
       name: 'Starship Pro',
-      description: 'Advanced portfolio management - 2 months free',
-      priceChf: 590,
-      priceUsd: 650,
-      priceEur: 580,
+      description: 'Advanced features for large portfolios - 2 months free',
+      priceChf: 290,
+      priceUsd: 290,
+      priceEur: 290,
       billingCycle: 'yearly',
       maxPortfolios: 5,
       isPopular: true,
       savings: '2 Monate gratis',
       features: [
         'Zero-Knowledge BIP39 Login',
+        'Complete Portfolio Suite',
         '5 Portfolio Management',
         'Advanced OCR Processing',
         'Multi-Bank Integration',
         'Real-time Market Data',
         'Encrypted Vault System',
         'Priority Support',
-        '2 Months Free'
-      ]
-    },
-    {
-      id: 6,
-      name: 'Starship Enterprise',
-      description: 'Full-featured solution - 2 months free',
-      priceChf: 1990,
-      priceUsd: 2200,
-      priceEur: 1950,
-      billingCycle: 'yearly',
-      maxPortfolios: -1,
-      savings: '2 Monate gratis',
-      features: [
-        'Zero-Knowledge BIP39 Login',
-        'Unlimited Portfolios',
-        'Premium OCR with AI',
-        'Complete Banking Integration',
-        'Advanced Analytics',
-        'API Access',
-        'On-Premise Deployment',
-        'White-Label Option',
-        '24/7 Support',
         '2 Months Free'
       ]
     }
@@ -277,15 +271,23 @@ const SubscriptionPlans: React.FC = () => {
                 <p className="text-gray-400 mb-4">{plan.description}</p>
                 
                 <div className="mb-4">
-                  <span className="text-4xl font-bold text-white">
-                    {pricing.symbol}{pricing.monthly.toFixed(0)}
-                  </span>
-                  <span className="text-gray-400 ml-1">
-                    /month {billingCycle === 'yearly' && '(billed yearly)'}
-                  </span>
+                  {plan.priceChf === 0 ? (
+                    <span className="text-4xl font-bold text-green-400">
+                      Free
+                    </span>
+                  ) : (
+                    <>
+                      <span className="text-4xl font-bold text-white">
+                        {pricing.symbol}{pricing.monthly.toFixed(0)}
+                      </span>
+                      <span className="text-gray-400 ml-1">
+                        /month {billingCycle === 'yearly' && '(billed yearly)'}
+                      </span>
+                    </>
+                  )}
                 </div>
 
-                {billingCycle === 'yearly' && (
+                {billingCycle === 'yearly' && plan.priceChf > 0 && (
                   <p className="text-sm text-green-400">
                     Total: {pricing.symbol}{pricing.total} per year
                   </p>

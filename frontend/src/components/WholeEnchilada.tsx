@@ -104,7 +104,7 @@ const WholeEnchilada: React.FC<WholeEnchiladaProps> = ({ className = "", isActiv
       <AnimationTimer duration={10} isActive={isActive} />
       
       {/* Concentric Rings Background */}
-      <div className="absolute inset-0 flex items-center justify-center">
+      <div className="absolute inset-0 flex items-center justify-center -mt-20">
         
         {/* Dynamic Concentric Rings Background System */}
         <div className="absolute z-10 flex items-center justify-center">

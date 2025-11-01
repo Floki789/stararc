@@ -98,7 +98,7 @@ const AssetOrganizationAnimation: React.FC<AssetOrganizationAnimationProps> = ({
 
   // Generate organized positions for organizing state 1 (4x2 Grid like in screenshot)
   const generateOrganizedPosition = (index: number, isWealth: boolean) => {
-    const baseX = isWealth ? -140 : 140; // Etwas mehr Abstand zwischen den Blöcken
+    const baseX = isWealth ? -150 : 150; // Symmetrischer Abstand zwischen den Blöcken
     const row = Math.floor(index / 2); // 4 Reihen (0-3)
     const col = index % 2; // 2 Spalten (0-1)
     
@@ -118,7 +118,7 @@ const AssetOrganizationAnimation: React.FC<AssetOrganizationAnimationProps> = ({
       {/* Animation Timer */}
       <AnimationTimer duration={12} isActive={isActive} />
       
-      <div className="absolute inset-0 flex items-center justify-center transform translate-y-[30px]">
+      <div className="absolute inset-0 flex items-center justify-center transform translate-y-[10px]">
         
         {/* Phase 0: Black Screen - No assets visible */}
         {/* Phase 1: Assets appearing gradually with gradient effect */}
@@ -154,14 +154,14 @@ const AssetOrganizationAnimation: React.FC<AssetOrganizationAnimationProps> = ({
                   stiffness: 80
                 },
                 x: { 
-                  duration: animationPhase === 2 ? 2.5 : 1.5, 
+                  duration: 1.5, 
                   type: "spring", 
-                  stiffness: animationPhase === 2 ? 50 : 80,
-                  damping: animationPhase === 2 ? 15 : 10,
+                  stiffness: 80,
+                  damping: 10,
                   delay: animationPhase === 2 ? index * 0.15 : 0
                 },
                 y: { 
-                  duration: animationPhase === 2 ? 2.5 : 1.5, 
+                  duration: 1.5, 
                   type: "spring", 
                   stiffness: animationPhase === 2 ? 50 : 80,
                   damping: animationPhase === 2 ? 15 : 10,
