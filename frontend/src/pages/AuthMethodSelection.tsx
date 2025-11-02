@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Shield, Lock, Key, AlertTriangle, CheckCircle, XCircle, Info } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useAuth } from '../hooks/useAuth';
 
 type AuthMethodType = 'standard' | 'sovereignty';
 
@@ -24,9 +25,12 @@ interface AuthMethod {
 const AuthMethodSelection: React.FC = () => {
   const navigate = useNavigate();
   const { t } = useLanguage();
+  const { updateUser } = useAuth();
   const [selectedMethod, setSelectedMethod] = useState<AuthMethodType>('standard');
   const [showComparison, setShowComparison] = useState(false);
   const [acknowledgedWarning, setAcknowledgedWarning] = useState(false);
+
+
 
   const authMethods: AuthMethod[] = [
     {
@@ -76,15 +80,46 @@ const AuthMethodSelection: React.FC = () => {
     }
   ];
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     if (selectedMethod === 'sovereignty' && !acknowledgedWarning) {
       alert(t('authMethod.sovereignty.mustAcknowledge'));
       return;
     }
 
-    // Store selected method in sessionStorage for register page
-    sessionStorage.setItem('selectedAuthMethod', selectedMethod);
-    navigate('/register');
+    try {
+      // Update onboarding step and selected login method
+      const apiUrl = (import.meta as any).env.VITE_API_URL || 'http://localhost:3004';
+      const response = await fetch(`${apiUrl}/api/auth/update-onboarding-step`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({
+          onboardingStep: 'completed',
+          loginMethod: selectedMethod === 'standard' ? 'standard' : 'privacy'
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update onboarding step');
+      }
+
+      // Update user data in Auth Context and localStorage
+      const updatedUserData = {
+        onboardingStep: 'completed',
+        loginMethodSelected: selectedMethod === 'standard' ? 'standard' : 'privacy'
+      };
+      
+      // Update Auth Context (this will also update localStorage)
+      updateUser(updatedUserData);
+
+      // Redirect to dashboard
+      navigate('/dashboard');
+    } catch (error) {
+      console.error('Error updating onboarding step:', error);
+      alert('Fehler beim Speichern der Einstellungen. Bitte versuchen Sie es erneut.');
+    }
   };
 
   return (

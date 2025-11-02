@@ -99,7 +99,7 @@ export class StripeService {
   }
 
   // Construct webhook event
-  static constructWebhookEvent(body: string, signature: string): Stripe.Event {
+  static constructWebhookEvent(body: Buffer | string, signature: string): Stripe.Event {
     return stripe.webhooks.constructEvent(
       body,
       signature,

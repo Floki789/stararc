@@ -49,10 +49,13 @@ const SpaceshipAccessButton: React.FC<SpaceshipAccessButtonProps> = ({
     try {
       if (hasAccess) {
         // User already has access - just redirect
+        setIsLoading(false); // Reset loading before redirect
         await spaceshipService.loginToSpaceship();
       } else {
         // Create access and redirect
         await spaceshipService.createSpaceshipAccess();
+        setHasAccess(true); // Update access status
+        setIsLoading(false); // Reset loading before redirect
         await spaceshipService.loginToSpaceship();
       }
     } catch (error: any) {

@@ -131,7 +131,7 @@ router.get('/subscription', authMiddleware, async (req, res): Promise<any> => {
     const userId = (req as any).user.id;
     
     const result = await pool.query(
-      'SELECT subscription_plan, subscription_status, subscription_expires_at FROM users WHERE id = $1',
+      'SELECT subscription_plan, subscription_status, subscription_expires_at, spaceship_integration_completed FROM users WHERE id = $1',
       [userId]
     );
 
@@ -141,12 +141,20 @@ router.get('/subscription', authMiddleware, async (req, res): Promise<any> => {
 
     const user = result.rows[0];
     
+    console.log('🔍 Backend /subscription for user:', userId, {
+      subscription_plan: user.subscription_plan,
+      subscription_status: user.subscription_status,
+      spaceship_integration_completed: user.spaceship_integration_completed,
+      hasSubscription: !!(user.subscription_plan && user.subscription_status)
+    });
+    
     // Return null for plan/status if user has no subscription
     res.json({
       plan: user.subscription_plan,
       status: user.subscription_status,
       expiresAt: user.subscription_expires_at,
-      hasSubscription: !!(user.subscription_plan && user.subscription_status)
+      hasSubscription: !!(user.subscription_plan && user.subscription_status),
+      spaceshipIntegrationCompleted: user.spaceship_integration_completed
     });
 
   } catch (error) {
@@ -155,60 +163,73 @@ router.get('/subscription', authMiddleware, async (req, res): Promise<any> => {
   }
 });
 
-// Stripe webhook handler
-router.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
-  const sig = req.headers['stripe-signature'] as string;
+// Test endpoint to verify logging works
+router.post('/test-webhook', async (req, res) => {
+  console.log('🚨 TEST WEBHOOK CALLED - This should appear in logs!');
+  res.json({ test: 'success', timestamp: new Date().toISOString() });
+});
 
+// Stripe webhook handler (express.raw middleware is already applied in app.ts)
+router.post('/webhook', async (req, res) => {
+  // ALWAYS log that we received something
+  console.log('🚨 WEBHOOK HANDLER CALLED - Start of function');
+  
   try {
-    const event = StripeService.constructWebhookEvent(req.body.toString(), sig);
+    const sig = req.headers['stripe-signature'] as string;
+    console.log('� WEBHOOK - Got signature header');
 
-    switch (event.type) {
-      case 'checkout.session.completed':
-        const session = event.data.object as any;
-        const userId = parseInt(session.metadata.userId);
-        
-        // Update user subscription (no password/hash generation)
-        await pool.query(
-          `UPDATE users SET 
-           subscription_plan = $1, 
-           subscription_status = 'active',
-           stripe_subscription_id = $2,
-           updated_at = CURRENT_TIMESTAMP
-           WHERE id = $3`,
-          ['basic', session.subscription, userId]
-        );
-        break;
+    console.log('🚨 WEBHOOK - Request details:', {
+      timestamp: new Date().toISOString(),
+      signature: sig ? 'present' : 'missing',
+      bodyLength: req.body?.length,
+      bodyType: typeof req.body,
+      hasWebhookSecret: !!process.env.STRIPE_WEBHOOK_SECRET
+    });
 
-      case 'invoice.payment_succeeded':
-        // Handle successful payment
-        break;
+    // Try to construct the event
+    console.log('� WEBHOOK - Constructing Stripe event...');
+    const event = StripeService.constructWebhookEvent(req.body, sig);
+    console.log('� WEBHOOK - Event constructed successfully:', event.type);
 
-      case 'invoice.payment_failed':
-        // Handle failed payment
-        break;
+    // Handle the event
+    if (event.type === 'checkout.session.completed') {
+      console.log('🚨 WEBHOOK - Processing checkout.session.completed');
+      const session = event.data.object as any;
+      const userId = parseInt(session.metadata?.userId);
+      
+      if (!userId) {
+        console.log('� WEBHOOK - No userId in metadata:', session.metadata);
+        res.json({ received: true, warning: 'No userId in metadata' });
+        return;
+      }
 
-      case 'customer.subscription.deleted':
-        const subscription = event.data.object as any;
-        
-        // Downgrade to free plan
-        await pool.query(
-          `UPDATE users SET 
-           subscription_plan = 'free',
-           subscription_status = 'canceled',
-           stripe_subscription_id = NULL
-           WHERE stripe_subscription_id = $1`,
-          [subscription.id]
-        );
-        break;
-
-      default:
-        break;
+      console.log('🚨 WEBHOOK - Updating user:', userId);
+      
+      // Update user subscription and advance onboarding step
+      const updateResult = await pool.query(
+        `UPDATE users SET 
+         subscription_plan = $1, 
+         subscription_status = 'active',
+         stripe_subscription_id = $2,
+         onboarding_step = 'auth_method_selection',
+         updated_at = CURRENT_TIMESTAMP
+         WHERE id = $3
+         RETURNING id, email, onboarding_step`,
+        ['basic', session.subscription, userId]
+      );
+      
+      console.log('� WEBHOOK - Database update result:', updateResult.rows);
+    } else {
+      console.log('🚨 WEBHOOK - Ignoring event type:', event.type);
     }
 
+    console.log('🚨 WEBHOOK - Sending success response');
     res.json({ received: true });
+    
   } catch (error) {
-    console.error('Webhook error:', error);
-    res.status(400).send(`Webhook Error: ${error}`);
+    console.log('� WEBHOOK - ERROR CAUGHT:', error);
+    console.error('❌ Full webhook error:', error);
+    res.status(400).json({ error: `Webhook Error: ${error}` });
   }
 });
 

@@ -12,6 +12,7 @@ interface Subscription {
   plan: string;
   status: string;
   expiresAt?: string;
+  spaceshipIntegrationCompleted?: boolean;
 }
 
 const Dashboard: React.FC = () => {
@@ -38,16 +39,78 @@ const Dashboard: React.FC = () => {
   const [passwordDeleted, setPasswordDeleted] = useState(false);
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const isNew = params.get('new') === 'true';
+    // Refresh user data from backend to ensure we have latest onboarding status
+    const refreshUserData = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) return false;
+        
+        const apiUrl = (import.meta as any).env.VITE_API_URL || 'http://localhost:3004';
+        const response = await fetch(`${apiUrl}/api/auth/me`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          const freshUserData = {
+            id: data.user.id,
+            email: data.user.email,
+            firstName: data.user.firstName,
+            lastName: data.user.lastName,
+            role: data.user.role,
+            onboardingStep: data.user.onboardingStep,
+            loginMethodSelected: data.user.loginMethodSelected,
+            spaceshipIntegrationCompleted: data.user.spaceshipIntegrationCompleted
+          };
+          
+          // Update localStorage with fresh data
+          localStorage.setItem('user', JSON.stringify(freshUserData));
+          
+          // Check onboarding status with fresh data
+          if (freshUserData.onboardingStep !== 'completed') {
+            switch (freshUserData.onboardingStep) {
+              case 'registration':
+                navigate('/subscription-selection');
+                return false;
+              case 'subscription_selection':
+              case 'auth_method_selection':
+                navigate('/auth-method-selection');
+                return false;
+              default:
+                navigate('/subscription-selection');
+                return false;
+            }
+          }
+          return true; // Onboarding completed
+        }
+      } catch (error) {
+        console.error('Failed to refresh user data:', error);
+      }
+      return false;
+    };
     
-    if (isNew) {
-      setIsNewSubscription(true);
-      window.history.replaceState({}, '', '/dashboard');
-    }
+    const initializeDashboard = async () => {
+      const params = new URLSearchParams(window.location.search);
+      const isNew = params.get('new') === 'true';
+      
+      if (isNew) {
+        setIsNewSubscription(true);
+        window.history.replaceState({}, '', '/dashboard');
+      }
+
+      if (user) {
+        // Always refresh user data for latest onboarding status
+        const canProceed = await refreshUserData();
+        if (canProceed && user.onboardingStep === 'completed') {
+          loadDashboardDataWithDelay(isNew);
+        }
+      }
+    };
     
-    loadDashboardDataWithDelay(isNew);
-  }, []);
+    initializeDashboard();
+  }, [user, navigate]);
 
   const loadDashboardDataWithDelay = async (isNew: boolean) => {
     try {
@@ -85,18 +148,41 @@ const Dashboard: React.FC = () => {
       }
       
       // Normal load (not new subscription)
-      const subData = await StripeAPIService.getSubscriptionStatus();
-      
-      if (!subData.hasSubscription) {
-        navigate('/subscription-selection');
-        return;
+      // Load actual subscription data from backend
+      console.log('🔍 Dashboard: Loading subscription data for normal user...');
+      try {
+        console.log('🔍 Dashboard: Calling getSubscriptionStatus()...');
+        
+        // Add timeout to prevent hanging
+        const timeoutPromise = new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('Subscription API timeout')), 1000)
+        );
+        
+        const subData = await Promise.race([
+          StripeAPIService.getSubscriptionStatus(),
+          timeoutPromise
+        ]) as any;
+        
+        console.log('🔍 Dashboard: Got subscription data:', subData);
+        setSubscription({
+          plan: subData.plan || 'free',
+          status: subData.status || 'active',
+          expiresAt: subData.expiresAt,
+          spaceshipIntegrationCompleted: subData.spaceshipIntegrationCompleted
+        });
+        console.log('🔍 Dashboard: Subscription set successfully');
+      } catch (error) {
+        console.error('Failed to load subscription data:', error);
+        // Fallback to free plan
+        setSubscription({
+          plan: 'free',
+          status: 'active',
+          expiresAt: undefined
+        });
       }
       
-      setSubscription({
-        plan: subData.plan,
-        status: subData.status,
-        expiresAt: subData.expiresAt
-      });
+      console.log('🔍 Dashboard: Setting loading to false');
+      setLoading(false);
       
     } catch (error) {
       console.error('Failed to load dashboard data:', error);
@@ -108,25 +194,56 @@ const Dashboard: React.FC = () => {
     }
   };
 
+  // Auto-sync for new subscriptions only (prevent loops)
+  const [hasTriggeredSync, setHasTriggeredSync] = useState(false);
+  
   useEffect(() => {
+    console.log('🔍 Dashboard sync effect:', {
+      isNewSubscription,
+      subscription: subscription?.plan,
+      spaceshipIntegrationCompleted: subscription?.spaceshipIntegrationCompleted,
+      hasTriggeredSync
+    });
+    
+    // Only trigger once per session and only for new subscriptions or incomplete integrations
+    if (!subscription || hasTriggeredSync) return;
+    
     if (isNewSubscription && subscription && !generatedPassword) {
+      console.log('🔍 Dashboard: New subscription - generating password');
+      setHasTriggeredSync(true);
       PasswordGenerator.generatePassword(subscription.plan).then(async (generated) => {
         setGeneratedPassword(generated.password);
         setPasswordHash(generated.hash);
-        
-        // Automatically send hash to Starship app
         await sendHashToStarship(generated.hash, subscription.plan);
       });
+    } else if (subscription.plan === 'basic' && !subscription.spaceshipIntegrationCompleted && user?.loginMethodSelected === 'privacy') {
+      // Only for PRIVACY login users - automatic sync with seed/hash
+      console.log('🔍 Dashboard: Privacy login basic user needs automatic spaceship sync');
+      setHasTriggeredSync(true);
+      (async () => {
+        try {
+          const generated = await PasswordGenerator.generatePassword(subscription.plan);
+          setGeneratedPassword(generated.password);
+          setPasswordHash(generated.hash);
+          await sendHashToStarship(generated.hash, subscription.plan);
+        } catch (error) {
+          console.error('🔍 Dashboard: Sync error:', error);
+        }
+      })();
+    } else if (subscription.plan === 'basic' && !subscription.spaceshipIntegrationCompleted && user?.loginMethodSelected === 'standard') {
+      // For STANDARD login users - they should use "App freischalten" button, no auto-sync
+      console.log('🔍 Dashboard: Standard login user - must use "App freischalten" button for Spaceship access');
     }
-  }, [isNewSubscription, subscription, generatedPassword]);
+  }, [subscription?.plan, subscription?.spaceshipIntegrationCompleted, isNewSubscription, hasTriggeredSync]);
 
   const sendHashToStarship = async (hash: string, plan: string) => {
     try {
       const starshipApiUrl = import.meta.env.VITE_STARSHIP_API_URL || 'http://localhost:3001';
       
-      console.log('🚀 Sending hash to Starship:', {
+      console.log('🔍 StarArc sending to Spaceship:', {
         url: `${starshipApiUrl}/api/auth/register-hash`,
         plan: plan,
+        planType: typeof plan,
         hashLength: hash.length
       });
       
@@ -141,11 +258,7 @@ const Dashboard: React.FC = () => {
         })
       });
 
-      console.log('📥 Response from Starship:', {
-        status: response.status,
-        statusText: response.statusText,
-        ok: response.ok
-      });
+
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
@@ -154,7 +267,7 @@ const Dashboard: React.FC = () => {
         
         // If user already exists, that's actually fine
         if (response.status === 409) {
-          console.log('✅ User already exists in Starship (hash already registered)');
+
           setStarshipSyncStatus('success');
           return;
         }
@@ -162,11 +275,23 @@ const Dashboard: React.FC = () => {
         throw new Error(errorData.error || 'Failed to sync with Starship');
       }
 
-      const data = await response.json();
-      console.log('✅ User registered with Starship:', {
-        userId: data.userId,
-        subscriptionPlan: data.subscriptionPlan
-      });
+      await response.json();
+
+      // Mark integration as completed in StarArc
+      try {
+        const apiUrl = (import.meta as any).env.VITE_API_URL || 'http://localhost:3004';
+        await fetch(`${apiUrl}/api/auth/mark-spaceship-integrated`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        console.log('✅ StarArc: Spaceship integration marked as completed');
+      } catch (error) {
+        console.error('⚠️ Failed to mark spaceship integration as completed:', error);
+      }
+
       setStarshipSyncStatus('success');
 
     } catch (error) {

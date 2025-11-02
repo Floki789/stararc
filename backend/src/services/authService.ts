@@ -100,7 +100,7 @@ export class AuthService {
     try {
       // Find user
       const result = await client.query(
-        'SELECT id, email, password_hash, first_name, last_name, email_verified, role, created_at FROM users WHERE email = $1',
+        'SELECT id, email, password_hash, first_name, last_name, email_verified, role, created_at, onboarding_step, login_method_selected, spaceship_integration_completed FROM users WHERE email = $1',
         [email]
       );
 
@@ -233,7 +233,7 @@ export class AuthService {
     
     try {
       const result = await client.query(
-        'SELECT id, email, first_name, last_name, email_verified, role, created_at, last_login FROM users WHERE id = $1',
+        'SELECT id, email, first_name, last_name, email_verified, role, created_at, last_login, onboarding_step, login_method_selected, spaceship_integration_completed FROM users WHERE id = $1',
         [userId]
       );
 

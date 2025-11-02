@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import { StripeAPIService } from '../services/stripeService';
 
 interface LoginFormData {
   email: string;
@@ -66,7 +65,8 @@ const Login: React.FC = () => {
     setErrors({});
 
     try {
-      const response = await fetch('/api/auth/login', {
+      const apiUrl = (import.meta as any).env.VITE_API_URL || 'http://localhost:3004';
+      const response = await fetch(`${apiUrl}/api/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -84,21 +84,33 @@ const Login: React.FC = () => {
         // Update AuthContext immediately
         login(data.user, data.token);
         
-        // Check subscription status before redirecting
-        try {
-          const subscriptionData = await StripeAPIService.getSubscriptionStatus();
-          
-          if (subscriptionData.hasSubscription) {
-            // User has subscription, redirect to intended destination or dashboard
-            navigate(from, { replace: true });
-          } else {
-            // User needs to select a subscription plan
+        // Check user's onboarding step and redirect accordingly
+        const onboardingStep = data.user.onboardingStep || 'registration';
+        
+        switch (onboardingStep) {
+          case 'registration':
+            // User just registered, needs to select subscription
             navigate('/subscription-selection', { replace: true });
-          }
-        } catch (error) {
-          console.error('Error checking subscription status:', error);
-          // Fallback to subscription selection on error
-          navigate('/subscription-selection', { replace: true });
+            break;
+            
+          case 'subscription_selection':
+            // User has subscription but needs to select auth method
+            navigate('/auth-method-selection', { replace: true });
+            break;
+            
+          case 'auth_method_selection':
+            // User selected auth method but hasn't completed setup
+            navigate('/auth-method-selection', { replace: true });
+            break;
+            
+          case 'completed':
+            // User completed onboarding, redirect to dashboard
+            navigate(from, { replace: true });
+            break;
+            
+          default:
+            // Fallback to subscription selection
+            navigate('/subscription-selection', { replace: true });
         }
       } else {
         if (data.errors && Array.isArray(data.errors)) {

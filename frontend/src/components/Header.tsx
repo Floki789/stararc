@@ -56,12 +56,14 @@ const Header: React.FC = () => {
                   {t('nav.dashboard')}
                 </Link>
 
-                {/* Spaceship Access Button */}
-                <SpaceshipAccessButton 
-                  variant="outline" 
-                  size="sm" 
-                  className="ml-2" 
-                />
+                {/* Spaceship Access Button - only show if onboarding is completed */}
+                {user?.onboardingStep === 'completed' && (
+                  <SpaceshipAccessButton 
+                    variant="outline" 
+                    size="sm" 
+                    className="ml-2" 
+                  />
+                )}
                 
                 {/* User Profile Dropdown */}
                 <div className="flex items-center space-x-3 bg-slate-800/50 rounded-lg px-3 py-2 border border-slate-600">

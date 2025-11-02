@@ -6,6 +6,9 @@ interface User {
   firstName: string;
   lastName: string;
   role?: string;
+  onboardingStep?: string;
+  loginMethodSelected?: string;
+  spaceshipIntegrationCompleted?: boolean;
 }
 
 interface AuthContextType {
@@ -13,6 +16,7 @@ interface AuthContextType {
   token: string | null;
   isLoading: boolean;
   login: (user: User, token: string) => void;
+  updateUser: (userData: Partial<User>) => void;
   logout: () => void;
   isAuthenticated: boolean;
 }
@@ -51,6 +55,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.setItem('user', JSON.stringify(userData));
   };
 
+  const updateUser = (updatedData: Partial<User>) => {
+    if (user) {
+      const updatedUser = { ...user, ...updatedData };
+      setUser(updatedUser);
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+    }
+  };
+
   const logout = () => {
     setUser(null);
     setToken(null);
@@ -63,6 +75,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     token,
     isLoading,
     login,
+    updateUser,
     logout,
     isAuthenticated: !!user && !!token
   };

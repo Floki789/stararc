@@ -76,7 +76,8 @@ export class StripeAPIService {
       hasSubscription: data.hasSubscription,
       plan: data.plan,
       status: data.status,
-      expiresAt: data.expiresAt
+      expiresAt: data.expiresAt,
+      spaceshipIntegrationCompleted: data.spaceshipIntegrationCompleted
     };
   }
 

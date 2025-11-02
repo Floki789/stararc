@@ -163,7 +163,10 @@ router.post('/login', authLimiter, loginValidation, async (req: Request, res: Re
         firstName: (user as any).first_name,
         lastName: (user as any).last_name,
         emailVerified: (user as any).email_verified,
-        role: (user as any).role
+        role: (user as any).role,
+        onboardingStep: (user as any).onboarding_step,
+        loginMethodSelected: (user as any).login_method_selected,
+        spaceshipIntegrationCompleted: (user as any).spaceship_integration_completed
       }
     });
   } catch (error: any) {
@@ -190,6 +193,45 @@ router.post('/logout', authMiddleware, (req: Request, res: Response) => {
   res.json({ message: 'Logout successful' });
 });
 
+// POST /api/auth/update-onboarding-step
+router.post('/update-onboarding-step', authMiddleware, async (req: Request, res: Response): Promise<any> => {
+  try {
+    const userId = (req as any).user.id;
+    const { onboardingStep, loginMethod } = req.body;
+    
+    // Validate onboarding step
+    const validSteps = ['subscription_selection', 'auth_method_selection', 'completed'];
+    if (!validSteps.includes(onboardingStep)) {
+      return res.status(400).json({ error: 'Invalid onboarding step' });
+    }
+    
+    // Validate login method (if provided)
+    if (loginMethod && !['standard', 'privacy'].includes(loginMethod)) {
+      return res.status(400).json({ error: 'Invalid login method' });
+    }
+    
+    const client = await pool.connect();
+    try {
+      let updateQuery = 'UPDATE users SET onboarding_step = $1, updated_at = NOW() WHERE id = $2';
+      let params = [onboardingStep, userId];
+      
+      if (loginMethod) {
+        updateQuery = 'UPDATE users SET onboarding_step = $1, login_method_selected = $2, updated_at = NOW() WHERE id = $3';
+        params = [onboardingStep, loginMethod, userId];
+      }
+      
+      await client.query(updateQuery, params);
+      
+      res.json({ message: 'Onboarding step updated successfully' });
+    } finally {
+      client.release();
+    }
+  } catch (error: any) {
+    console.error('Update onboarding step error:', error);
+    res.status(500).json({ error: 'Failed to update onboarding step' });
+  }
+});
+
 // GET /api/auth/me
 router.get('/me', authMiddleware, async (req: Request, res: Response): Promise<any> => {
   try {
@@ -209,7 +251,11 @@ router.get('/me', authMiddleware, async (req: Request, res: Response): Promise<a
         emailVerified: (user as any).email_verified,
         role: (user as any).role,
         createdAt: (user as any).created_at,
-        lastLogin: (user as any).last_login
+        lastLogin: (user as any).last_login,
+        onboardingStep: (user as any).onboarding_step,
+        loginMethodSelected: (user as any).login_method_selected,
+        spaceshipIntegrationCompleted: (user as any).spaceship_integration_completed,
+        subscriptionPlan: (user as any).subscription_plan
       }
     });
   } catch (error) {
@@ -384,16 +430,25 @@ router.get('/spaceship-access-status', authMiddleware, async (req: Request, res:
 
 // POST /api/auth/create-spaceship-access
 router.post('/create-spaceship-access', authMiddleware, async (req: Request, res: Response): Promise<any> => {
+  console.log('🔍 create-spaceship-access called');
   try {
     const user = (req as any).user;
     
-    // Check if user already has spaceship access
-    const existingAccess = await pool.query(
-      'SELECT spaceship_auth_key FROM users WHERE id = $1',
+    // Get user with subscription plan (direct query to ensure we have current data)
+    const userWithPlan = await pool.query(
+      'SELECT id, email, subscription_plan, spaceship_auth_key FROM users WHERE id = $1',
       [user.id]
     );
     
-    if (existingAccess.rows[0]?.spaceship_auth_key) {
+    if (userWithPlan.rows.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    const userData = userWithPlan.rows[0];
+    console.log('🔍 User data from DB:', { id: userData.id, email: userData.email, subscription_plan: userData.subscription_plan });
+    
+    // Check if user already has spaceship access
+    if (userData.spaceship_auth_key) {
       return res.json({
         success: true,
         message: 'Spaceship access already exists',
@@ -410,10 +465,8 @@ router.post('/create-spaceship-access', authMiddleware, async (req: Request, res
     // Create Spaceship user via internal API
     const spaceshipResponse = await createSpaceshipUser({
       authKeyHash,
-      subscriptionPlan: user.subscription_plan || 'free'
-    });
-    
-    if (!spaceshipResponse.success) {
+      subscriptionPlan: userData.subscription_plan || 'free'
+    });    if (!spaceshipResponse.success) {
       return res.status(500).json({ 
         error: 'Failed to create spaceship access',
         details: spaceshipResponse.error
@@ -431,7 +484,7 @@ router.post('/create-spaceship-access', authMiddleware, async (req: Request, res
     // Store encrypted auth key in StarArc database
     await pool.query(
       'UPDATE users SET spaceship_auth_key = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2',
-      [JSON.stringify(encryptedAuthKey), user.id]
+      [JSON.stringify(encryptedAuthKey), userData.id]
     );
     
     res.json({
@@ -446,6 +499,54 @@ router.post('/create-spaceship-access', authMiddleware, async (req: Request, res
       error: 'Failed to create spaceship access',
       details: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
+  }
+});
+
+// GET /api/auth/debug-user-plan - Debug endpoint to check user subscription plan
+router.get('/debug-user-plan', authMiddleware, async (req: Request, res: Response): Promise<any> => {
+  try {
+    const user = (req as any).user;
+    
+    // Get user with subscription plan (direct query)
+    const userWithPlan = await pool.query(
+      'SELECT id, email, subscription_plan FROM users WHERE id = $1',
+      [user.id]
+    );
+    
+    res.json({
+      authMiddlewareUser: user,
+      directQueryUser: userWithPlan.rows[0] || null
+    });
+  } catch (error: any) {
+    console.error('Debug user plan error:', error);
+    res.status(500).json({ error: 'Failed to debug user plan' });
+  }
+});
+
+// GET /api/auth/test-frontend-connection - Test if frontend is connecting to right backend
+router.get('/test-frontend-connection', (req: Request, res: Response) => {
+  res.json({
+    message: 'Frontend connected to TypeScript backend',
+    timestamp: new Date().toISOString(),
+    pid: process.pid
+  });
+});
+
+// POST /api/auth/mark-spaceship-integrated
+router.post('/mark-spaceship-integrated', authMiddleware, async (req: Request, res: Response): Promise<any> => {
+  try {
+    const user = (req as any).user;
+    
+    await pool.query(
+      'UPDATE users SET spaceship_integration_completed = true WHERE id = $1',
+      [user.id]
+    );
+    
+    console.log(`✅ Marked spaceship integration as completed for user ${user.id}`);
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error marking spaceship integration as completed:', error);
+    res.status(500).json({ error: 'Failed to mark spaceship integration as completed' });
   }
 });
 
@@ -552,6 +653,9 @@ async function createSpaceshipUser({ authKeyHash, subscriptionPlan }: {
     const parsedUrl = new URL(`${spaceshipApiUrl}/api/internal/create-user`);
     const isHttps = parsedUrl.protocol === 'https:';
     const client = isHttps ? https : http;
+    
+    // Debug: Log what subscription plan is being sent
+    console.log('🚀 Sending to Spaceship API:', { authKeyHash: authKeyHash.substring(0, 10) + '...', subscriptionPlan, baseCurrency: 'CHF' });
     
     const postData = JSON.stringify({
       authKeyHash,

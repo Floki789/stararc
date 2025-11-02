@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import { StripeAPIService } from '../services/stripeService';
 
 interface RegisterFormData {
   email: string;
@@ -75,7 +74,8 @@ const Register: React.FC = () => {
     setSuccessMessage('');
 
     try {
-      const response = await fetch('/api/auth/register', {
+      const apiUrl = (import.meta as any).env.VITE_API_URL || 'http://localhost:3004';
+      const response = await fetch(`${apiUrl}/api/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -98,22 +98,8 @@ const Register: React.FC = () => {
           // Update AuthContext with real token from backend
           login(data.user, data.token);
           
-          // Check subscription status before redirecting
-          try {
-            const subscriptionData = await StripeAPIService.getSubscriptionStatus();
-            
-            if (subscriptionData.hasSubscription) {
-              // User has subscription, redirect to dashboard
-              navigate('/dashboard');
-            } else {
-              // User needs to select a subscription plan
-              navigate('/subscription-selection');
-            }
-          } catch (error) {
-            console.error('Error checking subscription status:', error);
-            // Fallback to subscription selection on error
-            navigate('/subscription-selection');
-          }
+          // New users always start with subscription selection
+          navigate('/subscription-selection');
         } else {
           setSuccessMessage('Registrierung erfolgreich! Sie können sich jetzt anmelden.');
         }

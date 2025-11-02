@@ -12,23 +12,69 @@ const SubscriptionSelection: React.FC = () => {
   const [loading, setLoading] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
-    console.log('SubscriptionSelection mounted, user:', user);
-    // Check if user already has subscription
-    checkSubscriptionStatus();
-    loadPlans();
-  }, []);
+    const initializeSubscriptionSelection = async () => {
+      // Refresh user data from backend to get latest onboarding status
+      try {
+        const token = localStorage.getItem('token');
+        if (token && user) {
+          const apiUrl = (import.meta as any).env.VITE_API_URL || 'http://localhost:3004';
+          const response = await fetch(`${apiUrl}/api/auth/me`, {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            const freshUserData = {
+              id: data.user.id,
+              email: data.user.email,
+              firstName: data.user.firstName,
+              lastName: data.user.lastName,
+              role: data.user.role,
+              onboardingStep: data.user.onboardingStep,
+              loginMethodSelected: data.user.loginMethodSelected,
+              spaceshipIntegrationCompleted: data.user.spaceshipIntegrationCompleted
+            };
+            
+            // Update localStorage with fresh data
+            localStorage.setItem('user', JSON.stringify(freshUserData));
+            
+            // Check onboarding status with fresh data
+            if (freshUserData.onboardingStep === 'completed') {
+              navigate('/dashboard');
+              return;
+            }
 
-  const checkSubscriptionStatus = async () => {
-    try {
-      const status = await StripeAPIService.getSubscriptionStatus();
-      if (status.hasSubscription) {
-        // User already has subscription, redirect to dashboard
-        navigate('/dashboard');
+            if (freshUserData.onboardingStep === 'auth_method_selection') {
+              navigate('/auth-method-selection');
+              return;
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Failed to refresh user data:', error);
       }
-    } catch (error) {
-      console.error('Failed to check subscription status:', error);
-    }
-  };
+
+      // If user has completed onboarding, redirect to dashboard
+      if (user && user.onboardingStep === 'completed') {
+        navigate('/dashboard');
+        return;
+      }
+
+      // If user has already selected a subscription but not completed onboarding
+      // redirect to the next step in the workflow
+      if (user && user.onboardingStep === 'auth_method_selection') {
+        navigate('/auth-method-selection');
+        return;
+      }
+      
+      // Load available plans
+      loadPlans();
+    };
+
+    initializeSubscriptionSelection();
+  }, [user, navigate]);
 
   const loadPlans = async () => {
     try {
@@ -86,8 +132,31 @@ const SubscriptionSelection: React.FC = () => {
 
     try {
       if (planId === 'free') {
-        // Activate Free Plan and redirect to auth method selection
-        await StripeAPIService.activateFreePlan();
+        // For Free Plan, just update onboarding step (no Stripe needed)
+        const apiUrl = (import.meta as any).env.VITE_API_URL || 'http://localhost:3004';
+        const response = await fetch(`${apiUrl}/api/auth/update-onboarding-step`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          },
+          body: JSON.stringify({
+            onboardingStep: 'auth_method_selection'
+          })
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to update onboarding step');
+        }
+
+        // Update user data in localStorage
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+          const userData = JSON.parse(storedUser);
+          userData.onboardingStep = 'auth_method_selection';
+          localStorage.setItem('user', JSON.stringify(userData));
+        }
+        
         // Store selected plan for later use
         sessionStorage.setItem('selectedPlan', 'free');
         navigate('/auth-method-selection');
