@@ -7,6 +7,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import StripeAPIService from '../services/stripeService';
 import { PasswordGenerator } from '../utils/passwordGenerator';
 import SpaceshipAccessButton from '../components/SpaceshipAccessButton';
+import ApexManagement from '../components/ApexManagement';
 
 interface Subscription {
   plan: string;
@@ -737,6 +738,11 @@ const Dashboard: React.FC = () => {
               </a>
             </div>
           </motion.div>
+        )}
+
+        {/* Apex Client Management - Only show for Apex subscription users */}
+        {subscription?.plan === 'Apex' && (
+          <ApexManagement userToken={localStorage.getItem('token') || ''} />
         )}
 
       </div>

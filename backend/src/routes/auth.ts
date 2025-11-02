@@ -5,6 +5,7 @@ import { AuthService } from '../services/authService';
 import { EmailService } from '../services/emailService';
 import { pool } from '../database/connection';
 import { authMiddleware } from '../middleware/auth';
+import * as crypto from 'crypto';
 
 const router = Router();
 const authService = new AuthService(pool);
@@ -633,9 +634,10 @@ router.post('/generate-spaceship-token', authMiddleware, async (req: Request, re
 });
 
 // Helper function: Create Spaceship user via internal API
-async function createSpaceshipUser({ authKeyHash, subscriptionPlan }: {
+async function createSpaceshipUser({ authKeyHash, subscriptionPlan, parentUserId }: {
   authKeyHash: string;
   subscriptionPlan: string;
+  parentUserId?: number;
 }): Promise<{ success: boolean; userId?: number; error?: string }> {
   try {
     const spaceshipApiUrl = process.env.SPACESHIP_API_URL || 'http://localhost:3001';
@@ -655,12 +657,18 @@ async function createSpaceshipUser({ authKeyHash, subscriptionPlan }: {
     const client = isHttps ? https : http;
     
     // Debug: Log what subscription plan is being sent
-    console.log('🚀 Sending to Spaceship API:', { authKeyHash: authKeyHash.substring(0, 10) + '...', subscriptionPlan, baseCurrency: 'CHF' });
+    console.log('🚀 Sending to Spaceship API:', { 
+      authKeyHash: authKeyHash.substring(0, 10) + '...', 
+      subscriptionPlan, 
+      baseCurrency: 'CHF',
+      parentUserId: parentUserId || 'none'
+    });
     
     const postData = JSON.stringify({
       authKeyHash,
       subscriptionPlan,
-      baseCurrency: 'CHF'
+      baseCurrency: 'CHF',
+      ...(parentUserId && { parentUserId })
     });
     
     const options = {
@@ -713,5 +721,347 @@ async function createSpaceshipUser({ authKeyHash, subscriptionPlan }: {
     };
   }
 }
+
+// ================================================================
+// APEX MANAGEMENT ENDPOINTS
+// ================================================================
+
+// Create a new ApexChild (managed client) for Apex subscription users
+router.post('/create-apex-client', authMiddleware, [
+  body('clientName')
+    .trim()
+    .isLength({ min: 2, max: 100 })
+    .withMessage('Client name must be between 2 and 100 characters'),
+  body('clientEmail')
+    .isEmail()
+    .normalizeEmail()
+    .withMessage('Valid client email is required'),
+], async (req: Request, res: Response): Promise<any> => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ 
+        error: 'Validation failed', 
+        details: errors.array() 
+      });
+    }
+
+    const apexManager = (req as any).user;
+    
+    // Validate: User must be Apex subscription
+    if (apexManager.subscription_plan !== 'Apex') {
+      return res.status(403).json({ 
+        error: 'Only Apex subscription users can create managed clients' 
+      });
+    }
+    
+    // Check current managed account limit
+    const managedCountResult = await pool.query(
+      'SELECT COUNT(*) FROM users WHERE parent_user_id = $1',
+      [apexManager.id]
+    );
+    
+    const currentCount = parseInt(managedCountResult.rows[0].count);
+    const maxAccounts = apexManager.max_managed_accounts || 30;
+    
+    if (currentCount >= maxAccounts) {
+      return res.status(400).json({ 
+        error: `Account limit reached. Current: ${currentCount}/${maxAccounts}`,
+        upgradeRequired: true 
+      });
+    }
+    
+    const { clientName, clientEmail } = req.body;
+    
+    // Check if email already exists
+    const existingUser = await pool.query(
+      'SELECT id FROM users WHERE email = $1',
+      [clientEmail]
+    );
+    
+    if (existingUser.rows.length > 0) {
+      return res.status(400).json({ 
+        error: 'Email already exists in system' 
+      });
+    }
+    
+    // Create ApexChild user (treated as Core account - full functionality)
+    const tempPassword = crypto.randomBytes(16).toString('hex'); // Generate secure temporary password
+    const passwordHash = crypto.createHash('sha256').update(tempPassword).digest('hex');
+    
+    const createResult = await pool.query(`
+      INSERT INTO users (
+        email, 
+        password_hash, 
+        first_name, 
+        last_name,
+        client_name,
+        parent_user_id,
+        subscription_plan,
+        is_apex_manager,
+        email_verified,
+        onboarding_step,
+        created_at
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, NOW())
+      RETURNING id, email, client_name, created_at
+    `, [
+      clientEmail,
+      passwordHash, // Standard password hash
+      clientName.split(' ')[0] || '',
+      clientName.split(' ').slice(1).join(' ') || '',
+      clientName,
+      apexManager.id,
+      'Core', // Create as Core account - same functionality
+      false,
+      true, // Auto-verified for managed accounts
+      'completed' // Skip onboarding
+    ]);
+    
+    const apexChild = createResult.rows[0];
+    
+    // Auto-create Spaceship access for the ApexChild
+    const authKey = crypto.randomBytes(32).toString('hex');
+    const authKeyHash = hashAuthKey(authKey);
+    
+    const spaceshipResponse = await createSpaceshipUser({
+      authKeyHash,
+      subscriptionPlan: 'Core', // Create as Core account in Spaceship
+      parentUserId: apexManager.id
+    });
+    
+    if (spaceshipResponse.success) {
+      // Store encrypted auth key
+      const masterKey = process.env.MASTER_ENCRYPTION_KEY!;
+      const iv = crypto.randomBytes(16);
+      const cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(masterKey.padEnd(32, '0').slice(0, 32)), iv);
+      let encryptedAuthKey = cipher.update(authKey, 'utf8', 'hex');
+      encryptedAuthKey += cipher.final('hex');
+      
+      const encryptedData = {
+        encrypted: encryptedAuthKey,
+        iv: iv.toString('hex')
+      };
+      
+      await pool.query(
+        'UPDATE users SET spaceship_auth_key = $1, spaceship_integration_completed = $2 WHERE id = $3',
+        [JSON.stringify(encryptedData), true, apexChild.id]
+      );
+    }
+    
+    res.json({
+      success: true,
+      client: {
+        id: apexChild.id,
+        clientName: apexChild.client_name,
+        clientEmail: apexChild.email,
+        createdAt: apexChild.created_at,
+        spaceshipIntegration: spaceshipResponse.success
+      },
+      currentCount: currentCount + 1,
+      maxAccounts
+    });
+    
+  } catch (error: any) {
+    console.error('Create apex client error:', error);
+    res.status(500).json({ error: 'Failed to create managed client' });
+  }
+});
+
+// Get all managed clients for Apex user
+router.get('/managed-clients', authMiddleware, async (req: Request, res: Response): Promise<any> => {
+  try {
+    const apexManager = (req as any).user;
+    
+    // Debug logging
+    console.log('🔍 Apex Manager Debug:', {
+      id: apexManager.id,
+      email: apexManager.email,
+      subscription_plan: apexManager.subscription_plan,
+      is_apex_manager: apexManager.is_apex_manager
+    });
+    
+    if (apexManager.subscription_plan !== 'Apex') {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+    
+    const clients = await pool.query(`
+      SELECT 
+        id, 
+        client_name as "clientName", 
+        email as "clientEmail", 
+        created_at as "createdAt", 
+        spaceship_auth_key IS NOT NULL as "hasSpaceshipAccess",
+        spaceship_integration_completed as "spaceshipIntegrationCompleted"
+      FROM users 
+      WHERE parent_user_id = $1 AND subscription_plan = 'Core'
+      ORDER BY created_at DESC
+    `, [apexManager.id]);
+    
+    // Debug: Log what we're returning
+    console.log('🔍 Returning clients:', JSON.stringify(clients.rows, null, 2));
+    
+    res.json({
+      clients: clients.rows,
+      totalCount: clients.rows.length,
+      maxAccounts: apexManager.max_managed_accounts || 30
+    });
+    
+  } catch (error: any) {
+    console.error('Get managed clients error:', error);
+    res.status(500).json({ error: 'Failed to fetch managed clients' });
+  }
+});
+
+// Generate Spaceship access token for a managed client
+router.post('/generate-spaceship-token-for-client', authMiddleware, async (req: Request, res: Response): Promise<any> => {
+  try {
+    const apexManager = (req as any).user;
+    const { clientId } = req.body;
+    
+    if (!clientId) {
+      return res.status(400).json({ error: 'Client ID is required' });
+    }
+    
+    // Validate: Manager can only access their own clients
+    const client = await pool.query(
+      'SELECT * FROM users WHERE id = $1 AND parent_user_id = $2 AND subscription_plan = $3',
+      [clientId, apexManager.id, 'Core']
+    );
+    
+    if (client.rows.length === 0) {
+      return res.status(404).json({ error: 'Client not found or access denied' });
+    }
+    
+    const clientData = client.rows[0];
+    
+    if (!clientData.spaceship_auth_key) {
+      return res.status(400).json({ 
+        error: 'Client does not have Spaceship integration configured' 
+      });
+    }
+    
+    // Decrypt the stored auth key
+    const encryptedData = JSON.parse(clientData.spaceship_auth_key);
+    const masterKey = process.env.MASTER_ENCRYPTION_KEY!;
+    
+    const decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(masterKey.padEnd(32, '0').slice(0, 32)), Buffer.from(encryptedData.iv, 'hex'));
+    let authKey = decipher.update(encryptedData.encrypted, 'hex', 'utf8');
+    authKey += decipher.final('utf8');
+    
+    // Generate cross-app JWT token
+    const jwt = await import('jsonwebtoken');
+    const crossAppSecret = process.env.CROSS_APP_JWT_SECRET!;
+    
+    const spaceshipToken = jwt.sign(
+      {
+        authKey,
+        authMethod: 'stararc_key', 
+        subscriptionPlan: 'Core', // Access as Core account in Spaceship
+        crossApp: true,
+        source: 'stararc',
+        userId: clientData.id,
+        managedBy: apexManager.email,
+        clientName: clientData.client_name,
+        parentUserId: apexManager.id
+      },
+      crossAppSecret,
+      { expiresIn: '5m' }
+    );
+    
+    const spaceshipUrl = process.env.SPACESHIP_URL || 'http://localhost:3000';
+    
+    res.json({
+      success: true,
+      clientName: clientData.client_name,
+      spaceshipToken,
+      redirectUrl: `${spaceshipUrl}/?token=${encodeURIComponent(spaceshipToken)}`
+    });
+    
+  } catch (error: any) {
+    console.error('Generate client spaceship token error:', error);
+    res.status(500).json({ error: 'Failed to generate client access token' });
+  }
+});
+
+// Delete a managed client (ApexChild)
+router.delete('/managed-client/:clientId', authMiddleware, async (req: Request, res: Response): Promise<any> => {
+  try {
+    const apexManager = (req as any).user;
+    const { clientId } = req.params;
+    
+    if (apexManager.subscription_plan !== 'Apex') {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+    
+    // Validate ownership and delete
+    const deleteResult = await pool.query(
+      'DELETE FROM users WHERE id = $1 AND parent_user_id = $2 AND subscription_plan = $3 RETURNING client_name',
+      [clientId, apexManager.id, 'Core']
+    );
+    
+    if (deleteResult.rows.length === 0) {
+      return res.status(404).json({ error: 'Client not found or access denied' });
+    }
+    
+    res.json({
+      success: true,
+      message: `Client "${deleteResult.rows[0].client_name}" deleted successfully`
+    });
+    
+  } catch (error: any) {
+    console.error('Delete managed client error:', error);
+    res.status(500).json({ error: 'Failed to delete managed client' });
+  }
+});
+
+// Get Spaceship user details for managed clients  
+router.get('/apex-client-spaceship-details/:clientId', authMiddleware, async (req: Request, res: Response): Promise<any> => {
+  try {
+    const apexManager = (req as any).user;
+    const { clientId } = req.params;
+    
+    if (apexManager.subscription_plan !== 'Apex') {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+    
+    // Validate client ownership
+    const client = await pool.query(
+      'SELECT * FROM users WHERE id = $1 AND parent_user_id = $2 AND subscription_plan = $3',
+      [clientId, apexManager.id, 'Core']
+    );
+    
+    if (client.rows.length === 0) {
+      return res.status(404).json({ error: 'Client not found or access denied' });
+    }
+    
+    const clientData = client.rows[0];
+    
+    // Query Spaceship database for corresponding user
+    // This would require a cross-database connection or API call
+    // For now, return the tracking info we have
+    
+    res.json({
+      success: true,
+      client: {
+        starArcId: clientData.id,
+        clientName: clientData.client_name,
+        email: clientData.email,
+        parentUserId: clientData.parent_user_id,
+        // To get Spaceship details, would need:
+        // - Query Spaceship DB where managed_by_email = apexManager.email AND client_display_name = clientData.client_name
+        // - Or use parent_stararc_user_id = apexManager.id
+        trackingInfo: {
+          managedByEmail: apexManager.email,
+          clientDisplayName: clientData.client_name,
+          parentStarArcUserId: apexManager.id
+        }
+      }
+    });
+    
+  } catch (error: any) {
+    console.error('Get client Spaceship details error:', error);
+    res.status(500).json({ error: 'Failed to get client details' });
+  }
+});
 
 export default router;
