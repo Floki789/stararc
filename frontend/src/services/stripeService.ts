@@ -81,6 +81,20 @@ export class StripeAPIService {
     };
   }
 
+  static async selectPlan(planId: string): Promise<{ success: boolean; workflow: 'direct' | 'stripe'; sessionId?: string; url?: string; plan?: string; status?: string; message?: string }> {
+    const response = await this.fetchWithAuth('/select-plan', {
+      method: 'POST',
+      body: JSON.stringify({ planId }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to select plan');
+    }
+
+    return response.json();
+  }
+
   static async activateFreePlan() {
     const response = await this.fetchWithAuth('/activate-free-plan', {
       method: 'POST',

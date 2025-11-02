@@ -15,33 +15,51 @@ export interface SubscriptionPlan {
 }
 
 export const SUBSCRIPTION_PLANS: Record<string, SubscriptionPlan> = {
-  free: {
-    id: 'free',
-    name: 'Free Plan',
+  Free: {
+    id: 'Free',
+    name: 'Free',
     price: 0,
-    currency: 'chf',
+    currency: 'usd',
     interval: 'month',
     features: [
-      'Basis Portfolio-Tracking',
-      'Bitcoin Self-Custody',
-      '1 Portfolio',
-      '5 Assets pro Kategorie',
-      'Zero-Knowledge Sicherheit'
+      'Basic Portfolio View',
+      'Limited Assets'
     ]
   },
-  basic: {
-    id: 'basic',
-    stripeId: 'price_1SFYAcD1Ykg9qG9IDLFZ9YYl', // Test mode Stripe price ID
-    name: 'Basic Plan', 
-    price: 1200, // CHF 12.00 in cents
-    currency: 'chf',
+  Spark: {
+    id: 'Spark',
+    stripeId: 'price_1SP7aDD1Ykg9qG9IPlotX2vt', // Spark Plan $9/mo
+    name: 'Spark',
+    price: 900, // $9.00 in cents
+    currency: 'usd',
     interval: 'month',
     features: [
-      'Alle Free Features',
-      'Alle Asset-Klassen',
-      'Erweiterte Analysen',
-      '5 Portfolios',
-      'Monatliche Reports'
+      'Complete Suite',
+      'Small-Medium Portfolios'
+    ]
+  },
+  Core: {
+    id: 'Core',
+    stripeId: 'price_1SP7aED1Ykg9qG9IithW6lYq', // Core Plan $29/mo
+    name: 'Core',
+    price: 2900, // $29.00 in cents
+    currency: 'usd',
+    interval: 'month',
+    features: [
+      'Complete Suite',
+      'Large Portfolios'
+    ]
+  },
+  Apex: {
+    id: 'Apex',
+    stripeId: 'price_1SP7aFD1Ykg9qG9IMgDFklF9', // Apex Plan $199/mo
+    name: 'Apex',
+    price: 19900, // $199.00 in cents
+    currency: 'usd',
+    interval: 'month',
+    features: [
+      'Family Offices',
+      'Wealth Advisors'
     ]
   }
 };
@@ -62,6 +80,7 @@ export class StripeService {
     customerId: string,
     priceId: string,
     userId: number,
+    planId: string,
     successUrl: string,
     cancelUrl: string
   ): Promise<Stripe.Checkout.Session> {
@@ -78,7 +97,8 @@ export class StripeService {
       success_url: successUrl,
       cancel_url: cancelUrl,
       metadata: {
-        userId: userId.toString()
+        userId: userId.toString(),
+        planId: planId
       },
       allow_promotion_codes: true,
     });

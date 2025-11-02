@@ -17,6 +17,117 @@ router.get('/plans', authMiddleware, async (req, res) => {
   }
 });
 
+// Plan selection endpoint - routes to appropriate workflow
+router.post('/select-plan', authMiddleware, async (req, res): Promise<any> => {
+  try {
+    const { planId } = req.body;
+    const userId = (req as any).user.id;
+    const userEmail = (req as any).user.email;
+
+    if (!planId) {
+      return res.status(400).json({ error: 'Plan ID is required' });
+    }
+
+    // Validate plan exists
+    const plan = SUBSCRIPTION_PLANS[planId];
+    if (!plan) {
+      return res.status(400).json({ error: 'Invalid plan ID' });
+    }
+
+    // Free plan - no Stripe workflow
+    if (planId === 'Free') {
+      // Check if user already has a subscription
+      const userResult = await pool.query(
+        'SELECT subscription_plan, subscription_status FROM users WHERE id = $1',
+        [userId]
+      );
+
+      if (userResult.rows.length === 0) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+
+      const user = userResult.rows[0];
+      
+      // If user already has any subscription, don't allow activation
+      if (user.subscription_plan && user.subscription_status) {
+        return res.status(400).json({ 
+          error: 'User already has an active subscription',
+          currentPlan: user.subscription_plan 
+        });
+      }
+
+      // Activate Free Plan directly
+      await pool.query(
+        `UPDATE users SET 
+         subscription_plan = 'Free', 
+         subscription_status = 'active',
+         updated_at = CURRENT_TIMESTAMP
+         WHERE id = $1`,
+        [userId]
+      );
+
+      return res.json({ 
+        success: true, 
+        message: 'Free Plan erfolgreich aktiviert!',
+        plan: 'Free',
+        status: 'active',
+        workflow: 'direct'
+      });
+    }
+
+    // Paid plans (Spark, Core, Apex) - Stripe workflow
+    if (['Spark', 'Core', 'Apex'].includes(planId)) {
+      // Get or create Stripe customer
+      let stripeCustomerId: string;
+      
+      const userResult = await pool.query(
+        'SELECT stripe_customer_id FROM users WHERE id = $1',
+        [userId]
+      );
+
+      if (userResult.rows[0]?.stripe_customer_id) {
+        stripeCustomerId = userResult.rows[0].stripe_customer_id;
+      } else {
+        const customer = await StripeService.createCustomer(userEmail, userId);
+        stripeCustomerId = customer.id;
+        
+        // Update user with Stripe customer ID
+        await pool.query(
+          'UPDATE users SET stripe_customer_id = $1 WHERE id = $2',
+          [stripeCustomerId, userId]
+        );
+      }
+
+      // Create checkout session
+      const successUrl = `${process.env.FRONTEND_URL || 'http://localhost:3003'}/dashboard?new=true`;
+      const cancelUrl = `${process.env.FRONTEND_URL || 'http://localhost:3003'}/subscription-selection?canceled=true`;
+
+      const session = await StripeService.createCheckoutSession(
+        stripeCustomerId,
+        plan.stripeId || plan.id,
+        userId,
+        planId,
+        successUrl,
+        cancelUrl
+      );
+
+      return res.json({ 
+        success: true,
+        sessionId: session.id,
+        url: session.url,
+        workflow: 'stripe',
+        plan: planId
+      });
+    }
+
+    return res.status(400).json({ error: 'Invalid plan for selection' });
+
+  } catch (error) {
+    console.error('Plan selection error:', error);
+    res.status(500).json({ error: 'Failed to select plan' });
+  }
+});
+
 // Activate Free Plan (protected route)
 router.post('/activate-free-plan', authMiddleware, async (req, res): Promise<any> => {
   try {
@@ -45,7 +156,7 @@ router.post('/activate-free-plan', authMiddleware, async (req, res): Promise<any
     // Activate Free Plan (no password/hash generation)
     await pool.query(
       `UPDATE users SET 
-       subscription_plan = 'free', 
+       subscription_plan = 'Free', 
        subscription_status = 'active',
        updated_at = CURRENT_TIMESTAMP
        WHERE id = $1`,
@@ -55,7 +166,7 @@ router.post('/activate-free-plan', authMiddleware, async (req, res): Promise<any
     res.json({ 
       success: true, 
       message: 'Free Plan erfolgreich aktiviert!',
-      plan: 'free',
+      plan: 'Free',
       status: 'active'
     });
 
@@ -72,8 +183,13 @@ router.post('/create-checkout-session', authMiddleware, async (req, res): Promis
     const userId = (req as any).user.id;
     const userEmail = (req as any).user.email;
 
-    if (!planId || planId === 'free') {
-      return res.status(400).json({ error: 'Invalid plan selection' });
+    if (!planId || planId === 'Free') {
+      return res.status(400).json({ error: 'Invalid plan selection - Free plan should use activate-free-plan endpoint' });
+    }
+
+    // Only allow Spark, Core, and Apex for Stripe checkout
+    if (!['Spark', 'Core', 'Apex'].includes(planId)) {
+      return res.status(400).json({ error: 'Invalid plan for Stripe checkout' });
     }
 
     const plan = SUBSCRIPTION_PLANS[planId];
@@ -110,6 +226,7 @@ router.post('/create-checkout-session', authMiddleware, async (req, res): Promis
       stripeCustomerId,
       plan.stripeId || plan.id,
       userId,
+      planId,
       successUrl,
       cancelUrl
     );
@@ -196,6 +313,7 @@ router.post('/webhook', async (req, res) => {
       console.log('🚨 WEBHOOK - Processing checkout.session.completed');
       const session = event.data.object as any;
       const userId = parseInt(session.metadata?.userId);
+      const planId = session.metadata?.planId;
       
       if (!userId) {
         console.log('� WEBHOOK - No userId in metadata:', session.metadata);
@@ -203,7 +321,13 @@ router.post('/webhook', async (req, res) => {
         return;
       }
 
-      console.log('🚨 WEBHOOK - Updating user:', userId);
+      if (!planId) {
+        console.log('� WEBHOOK - No planId in metadata:', session.metadata);
+        res.json({ received: true, warning: 'No planId in metadata' });
+        return;
+      }
+
+      console.log('🚨 WEBHOOK - Updating user:', userId, 'with plan:', planId);
       
       // Update user subscription and advance onboarding step
       const updateResult = await pool.query(
@@ -215,7 +339,7 @@ router.post('/webhook', async (req, res) => {
          updated_at = CURRENT_TIMESTAMP
          WHERE id = $3
          RETURNING id, email, onboarding_step`,
-        ['basic', session.subscription, userId]
+        [planId, session.subscription, userId]
       );
       
       console.log('� WEBHOOK - Database update result:', updateResult.rows);

@@ -465,7 +465,7 @@ router.post('/create-spaceship-access', authMiddleware, async (req: Request, res
     // Create Spaceship user via internal API
     const spaceshipResponse = await createSpaceshipUser({
       authKeyHash,
-      subscriptionPlan: userData.subscription_plan || 'free'
+      subscriptionPlan: userData.subscription_plan || 'Free'
     });    if (!spaceshipResponse.success) {
       return res.status(500).json({ 
         error: 'Failed to create spaceship access',
@@ -604,7 +604,7 @@ router.post('/generate-spaceship-token', authMiddleware, async (req: Request, re
       {
         authKey,
         authMethod: 'stararc_key', 
-        subscriptionPlan: user.subscription_plan || 'free',
+        subscriptionPlan: user.subscription_plan || 'Free',
         crossApp: true,
         source: 'stararc',
         userId: user.id,

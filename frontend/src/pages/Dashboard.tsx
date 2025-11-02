@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Shield, Star, Copy, CheckCircle, AlertTriangle } from 'lucide-react';
+import { Shield, Star, Crown, Copy, CheckCircle, AlertTriangle } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -123,7 +123,7 @@ const Dashboard: React.FC = () => {
           const subData = await StripeAPIService.getSubscriptionStatus();
           
           // Check if subscription is activated
-          if (subData.hasSubscription && (subData.plan === 'basic' || subData.plan === 'free')) {
+          if (subData.hasSubscription && ['Free', 'Spark', 'Core', 'Apex'].includes(subData.plan)) {
             setSubscription({
               plan: subData.plan,
               status: subData.status,
@@ -216,9 +216,9 @@ const Dashboard: React.FC = () => {
         setPasswordHash(generated.hash);
         await sendHashToStarship(generated.hash, subscription.plan);
       });
-    } else if (subscription.plan === 'basic' && !subscription.spaceshipIntegrationCompleted && user?.loginMethodSelected === 'privacy') {
+    } else if (['Spark', 'Core', 'Apex'].includes(subscription.plan) && !subscription.spaceshipIntegrationCompleted && user?.loginMethodSelected === 'privacy') {
       // Only for PRIVACY login users - automatic sync with seed/hash
-      console.log('🔍 Dashboard: Privacy login basic user needs automatic spaceship sync');
+      console.log('🔍 Dashboard: Privacy login paid user needs automatic spaceship sync');
       setHasTriggeredSync(true);
       (async () => {
         try {
@@ -230,7 +230,7 @@ const Dashboard: React.FC = () => {
           console.error('🔍 Dashboard: Sync error:', error);
         }
       })();
-    } else if (subscription.plan === 'basic' && !subscription.spaceshipIntegrationCompleted && user?.loginMethodSelected === 'standard') {
+    } else if (['Spark', 'Core', 'Apex'].includes(subscription.plan) && !subscription.spaceshipIntegrationCompleted && user?.loginMethodSelected === 'standard') {
       // For STANDARD login users - they should use "App freischalten" button, no auto-sync
       console.log('🔍 Dashboard: Standard login user - must use "App freischalten" button for Spaceship access');
     }
@@ -361,8 +361,10 @@ const Dashboard: React.FC = () => {
 
   const getPlanIcon = (plan: string) => {
     switch (plan) {
-      case 'free': return Shield;
-      case 'basic': return Star;
+      case 'Free': return Shield;
+      case 'Spark': return Star;
+      case 'Core': return Crown;
+      case 'Apex': return Crown;
       default: return Shield;
     }
   };
@@ -437,15 +439,21 @@ const Dashboard: React.FC = () => {
         >
           <div className="flex items-center gap-4 mb-4">
             <div className={`p-3 rounded-full ${
-              subscription.plan === 'free' ? 'bg-green-500/20' : 'bg-blue-500/20'
+              subscription.plan === 'Free' ? 'bg-green-500/20' :
+              subscription.plan === 'Spark' ? 'bg-blue-500/20' :
+              subscription.plan === 'Core' ? 'bg-purple-500/20' :
+              subscription.plan === 'Apex' ? 'bg-yellow-500/20' : 'bg-gray-500/20'
             }`}>
               <Icon className={`w-6 h-6 ${
-                subscription.plan === 'free' ? 'text-green-400' : 'text-blue-400'
+                subscription.plan === 'Free' ? 'text-green-400' :
+                subscription.plan === 'Spark' ? 'text-blue-400' :
+                subscription.plan === 'Core' ? 'text-purple-400' :
+                subscription.plan === 'Apex' ? 'text-yellow-400' : 'text-gray-400'
               }`} />
             </div>
             <div>
               <h2 className="text-2xl font-bold text-white capitalize">
-                {subscription.plan === 'free' ? 'Free' : 'Basic'} Plan
+                {subscription.plan} Plan
               </h2>
               <p className="text-green-400 font-semibold">● Aktiv</p>
             </div>
