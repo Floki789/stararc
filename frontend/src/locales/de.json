@@ -253,5 +253,77 @@
       "name": "Sathosi",
       "description": "Bitcoin only. Because there is no second best."
     }
+  },
+  "authMethod": {
+    "title": "Wählen Sie Ihre Authentifizierungsmethode",
+    "subtitle": "Entscheiden Sie, wie Sie Ihren Starship-Account schützen möchten. Beide Methoden sind sicher, bieten aber unterschiedliche Vor- und Nachteile zwischen Komfort und Privatsphäre.",
+    "recommended": "Empfohlen",
+    "bestFor": "Ideal für",
+    "advantages": "Vorteile",
+    "disadvantages": "Nachteile",
+    "detailedComparison": "Detaillierter Vergleich anzeigen",
+    "back": "← Zurück",
+    "continue": "Weiter zur Registrierung",
+    "standard": {
+      "name": "Standard-Modus",
+      "tagline": "Sicher mit Wiederherstellungsoptionen",
+      "pros": {
+        "recovery": "Passwort-Wiederherstellung möglich",
+        "changePassword": "Passwort jederzeit änderbar",
+        "encrypted": "Verschlüsselte Schlüssel-Speicherung",
+        "recoveryPhrase": "12-Wort-Wiederherstellungsphrase als Backup"
+      },
+      "cons": {
+        "serverData": "Verschlüsselter Schlüssel auf Server gespeichert",
+        "emailRequired": "E-Mail-Adresse erforderlich"
+      },
+      "bestFor": "Die meisten Nutzer, die Sicherheit mit Seelenfrieden wünschen"
+    },
+    "sovereignty": {
+      "name": "Souveränitäts-Modus",
+      "tagline": "Maximale Privatsphäre, Maximale Verantwortung",
+      "pros": {
+        "zeroKnowledge": "Echtes Zero-Knowledge (Server weiß nichts)",
+        "noServer": "Keine Daten auf Server gespeichert",
+        "maxPrivacy": "Maximale Privatsphäre-Garantie",
+        "noEmail": "Keine E-Mail erforderlich"
+      },
+      "cons": {
+        "noRecovery": "KEINE Passwort-Wiederherstellung möglich",
+        "lostForever": "Verloren = Für immer verloren",
+        "noPasswordChange": "Login-Code kann nicht geändert werden",
+        "highResponsibility": "100% Nutzer-Verantwortung"
+      },
+      "bestFor": "Privatsphäre-Puristen, Bitcoin-Maximalisten, fortgeschrittene Nutzer",
+      "warning": {
+        "title": "⚠️ Kritische Warnung - Bitte sorgfältig lesen",
+        "point1": "Wenn Sie Ihren Login-Code verlieren, ist Ihr Account PERMANENT UNZUGÄNGLICH. Wir können Ihnen nicht bei der Wiederherstellung helfen.",
+        "point2": "Es gibt KEIN Passwort-Reset, KEINE Kundenservice-Wiederherstellung, KEINEN Backup-Zugang.",
+        "point3": "Sie sind zu 100% verantwortlich für die sichere Aufbewahrung Ihres Login-Codes. Schreiben Sie ihn auf, nutzen Sie einen Passwort-Manager oder bewahren Sie ihn in einem sicheren Tresor auf.",
+        "acknowledge": "Ich verstehe und akzeptiere die volle Verantwortung. Mir ist bewusst, dass der Verlust meines Login-Codes den permanenten Verlust des Zugriffs auf meinen Account und alle Daten bedeutet.",
+        "mustAcknowledge": "Sie müssen die Warnung bestätigen, bevor Sie fortfahren können."
+      }
+    },
+    "comparison": {
+      "feature": "Funktion",
+      "passwordRecovery": "Passwort-Wiederherstellung",
+      "emailLogin": "E-Mail/Passwort-Login",
+      "serverStores": "Server speichert",
+      "changePassword": "Passwort ändern",
+      "accountRecovery": "Account-Wiederherstellung",
+      "privacyLevel": "Privatsphäre-Level",
+      "userResponsibility": "Nutzer-Verantwortung",
+      "encryptedKey": "Verschlüsselter Datenschlüssel",
+      "nothing": "Nichts (Zero-Knowledge)",
+      "viaRecoveryPhrase": "Via Wiederherstellungsphrase",
+      "impossible": "Unmöglich",
+      "high": "Hoch",
+      "maximum": "Maximal",
+      "medium": "Mittel",
+      "extreme": "Extrem"
+    },
+    "footer": {
+      "info": "Sie können unabhängig von Ihrer Authentifizierungsmethode jederzeit sowohl auf die Starship-App als auch auf das StarArc-Abonnement-Portal zugreifen."
+    }
   }
 }

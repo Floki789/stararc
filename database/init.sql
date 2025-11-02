@@ -177,27 +177,27 @@ CREATE INDEX IF NOT EXISTS idx_privacy_audit_created ON privacy_audit_log(create
 INSERT INTO subscription_plans (name, description, price_chf, price_usd, price_eur, billing_cycle, features, max_portfolios, sort_order) 
 SELECT * FROM (VALUES
     ('Starship Basic', 'Essential privacy-focused portfolio management for individuals', 29.00, 32.00, 28.00, 'monthly', 
-     '["Zero-Knowledge BIP39 Login", "1 Portfolio Management", "Basic OCR Document Processing", "Swiss Privacy Standards", "Automatic Document Deletion", "Client-Side Encryption"]'::jsonb, 
+     '["Zero-Knowledge Login Code", "1 Portfolio Management", "Basic OCR Document Processing", "Swiss Privacy Standards", "Automatic Document Deletion", "Client-Side Encryption"]'::jsonb, 
      1, 1),
      
     ('Starship Pro', 'Advanced portfolio management with multi-bank support', 59.00, 65.00, 58.00, 'monthly', 
-     '["Zero-Knowledge BIP39 Login", "5 Portfolio Management", "Advanced OCR Processing", "Multi-Bank Integration", "Real-time Market Data", "Encrypted Vault System", "Priority Support"]'::jsonb, 
+     '["Zero-Knowledge Login Code", "5 Portfolio Management", "Advanced OCR Processing", "Multi-Bank Integration", "Real-time Market Data", "Encrypted Vault System", "Priority Support"]'::jsonb, 
      5, 2),
      
     ('Starship Enterprise', 'Full-featured solution for serious investors and advisors', 199.00, 220.00, 195.00, 'monthly', 
-     '["Zero-Knowledge BIP39 Login", "Unlimited Portfolios", "Premium OCR with AI", "Complete Banking Integration", "Advanced Analytics", "API Access", "On-Premise Deployment", "White-Label Option", "24/7 Support"]'::jsonb, 
+     '["Zero-Knowledge Login Code", "Unlimited Portfolios", "Premium OCR with AI", "Complete Banking Integration", "Advanced Analytics", "API Access", "On-Premise Deployment", "White-Label Option", "24/7 Support"]'::jsonb, 
      -1, 3),
 
     ('Starship Basic (Yearly)', 'Essential privacy-focused portfolio management - 2 months free', 290.00, 320.00, 280.00, 'yearly', 
-     '["Zero-Knowledge BIP39 Login", "1 Portfolio Management", "Basic OCR Document Processing", "Swiss Privacy Standards", "Automatic Document Deletion", "Client-Side Encryption", "2 Months Free"]'::jsonb, 
+     '["Zero-Knowledge Login Code", "1 Portfolio Management", "Basic OCR Document Processing", "Swiss Privacy Standards", "Automatic Document Deletion", "Client-Side Encryption", "2 Months Free"]'::jsonb, 
      1, 4),
      
     ('Starship Pro (Yearly)', 'Advanced portfolio management - 2 months free', 590.00, 650.00, 580.00, 'yearly', 
-     '["Zero-Knowledge BIP39 Login", "5 Portfolio Management", "Advanced OCR Processing", "Multi-Bank Integration", "Real-time Market Data", "Encrypted Vault System", "Priority Support", "2 Months Free"]'::jsonb, 
+     '["Zero-Knowledge Login Code", "5 Portfolio Management", "Advanced OCR Processing", "Multi-Bank Integration", "Real-time Market Data", "Encrypted Vault System", "Priority Support", "2 Months Free"]'::jsonb, 
      5, 5),
      
     ('Starship Enterprise (Yearly)', 'Full-featured solution - 2 months free', 1990.00, 2200.00, 1950.00, 'yearly', 
-     '["Zero-Knowledge BIP39 Login", "Unlimited Portfolios", "Premium OCR with AI", "Complete Banking Integration", "Advanced Analytics", "API Access", "On-Premise Deployment", "White-Label Option", "24/7 Support", "2 Months Free"]'::jsonb, 
+     '["Zero-Knowledge Login Code", "Unlimited Portfolios", "Premium OCR with AI", "Complete Banking Integration", "Advanced Analytics", "API Access", "On-Premise Deployment", "White-Label Option", "24/7 Support", "2 Months Free"]'::jsonb, 
      -1, 6)
 ) AS v(name, description, price_chf, price_usd, price_eur, billing_cycle, features, max_portfolios, sort_order)
 WHERE NOT EXISTS (SELECT 1 FROM subscription_plans);

@@ -28,7 +28,7 @@ const SubscriptionPlans: React.FC = () => {
       billingCycle: 'monthly',
       maxPortfolios: 1,
       features: [
-        'Zero-Knowledge BIP39 Login',
+        'Zero-Knowledge Login Code',
         'Basic Portfolio View',
         'Limited Assets',
         'Swiss Privacy Standards',
@@ -45,7 +45,7 @@ const SubscriptionPlans: React.FC = () => {
       billingCycle: 'monthly',
       maxPortfolios: 1,
       features: [
-        'Zero-Knowledge BIP39 Login',
+        'Zero-Knowledge Login Code',
         'Complete Portfolio Suite',
         '1 Portfolio Management',
         'Basic OCR Document Processing',
@@ -65,7 +65,7 @@ const SubscriptionPlans: React.FC = () => {
       maxPortfolios: 5,
       isPopular: true,
       features: [
-        'Zero-Knowledge BIP39 Login',
+        'Zero-Knowledge Login Code',
         'Complete Portfolio Suite',
         '5 Portfolio Management',
         'Advanced OCR Processing',
@@ -88,7 +88,7 @@ const SubscriptionPlans: React.FC = () => {
       billingCycle: 'yearly',
       maxPortfolios: 1,
       features: [
-        'Zero-Knowledge BIP39 Login',
+        'Zero-Knowledge Login Code',
         'Basic Portfolio View',
         'Limited Assets',
         'Swiss Privacy Standards',
@@ -106,7 +106,7 @@ const SubscriptionPlans: React.FC = () => {
       maxPortfolios: 1,
       savings: '2 Monate gratis',
       features: [
-        'Zero-Knowledge BIP39 Login',
+        'Zero-Knowledge Login Code',
         'Complete Portfolio Suite',
         '1 Portfolio Management',
         'Basic OCR Document Processing',
@@ -128,7 +128,7 @@ const SubscriptionPlans: React.FC = () => {
       isPopular: true,
       savings: '2 Monate gratis',
       features: [
-        'Zero-Knowledge BIP39 Login',
+        'Zero-Knowledge Login Code',
         'Complete Portfolio Suite',
         '5 Portfolio Management',
         'Advanced OCR Processing',

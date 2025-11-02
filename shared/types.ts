@@ -142,3 +142,30 @@ export interface PricingInfo {
   amount: number;
   formatted: string;
 }
+
+// Authentication Method Types
+export type AuthMethodType = 'standard' | 'sovereignty';
+
+export interface AuthMethodPreference {
+  userId: number;
+  authMethod: AuthMethodType;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface StandardAuthData {
+  email: string;
+  password: string;
+  recoveryPhrase: string; // BIP39 12-word phrase
+}
+
+export interface SovereigntyAuthData {
+  loginCode: string; // 24-character secure code
+  // No email, no recovery possible
+}
+
+export interface CreateUserWithAuthMethodRequest {
+  authMethod: AuthMethodType;
+  standardAuth?: StandardAuthData;
+  sovereigntyAuth?: SovereigntyAuthData;
+}

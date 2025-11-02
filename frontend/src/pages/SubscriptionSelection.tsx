@@ -86,9 +86,11 @@ const SubscriptionSelection: React.FC = () => {
 
     try {
       if (planId === 'free') {
-        // Activate Free Plan and redirect to dashboard with new subscription flag
+        // Activate Free Plan and redirect to auth method selection
         await StripeAPIService.activateFreePlan();
-        navigate('/dashboard?new=true');
+        // Store selected plan for later use
+        sessionStorage.setItem('selectedPlan', 'free');
+        navigate('/auth-method-selection');
       } else if (planId === 'basic') {
         // Handle Basic plan upgrade - redirect to Stripe Checkout
         console.log('Creating checkout session for basic plan...');
@@ -116,7 +118,7 @@ const SubscriptionSelection: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 pt-32 pb-6 px-6">
       <div className="max-w-7xl mx-auto">
         {/* Welcome Section */}
         <motion.div

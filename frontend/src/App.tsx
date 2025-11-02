@@ -10,6 +10,7 @@ import ForgotPassword from './pages/ForgotPassword';
 import VerifyEmail from './pages/VerifyEmail';
 import Dashboard from './pages/Dashboard';
 import SubscriptionSelection from './pages/SubscriptionSelection';
+import AuthMethodSelection from './pages/AuthMethodSelection';
 import { AuthProvider } from './hooks/useAuth';
 import { LanguageProvider } from './contexts/LanguageContext';
 
@@ -45,6 +46,12 @@ function App() {
               <Route path="/subscription-selection" element={
                 <ProtectedRoute>
                   <SubscriptionSelection />
+                </ProtectedRoute>
+              } />
+              
+              <Route path="/auth-method-selection" element={
+                <ProtectedRoute>
+                  <AuthMethodSelection />
                 </ProtectedRoute>
               } />
               

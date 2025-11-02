@@ -4,7 +4,7 @@ A modern landing page and subscription system for the Starship zero-knowledge po
 
 ## 🚀 Features
 
-- **Zero-Knowledge Authentication**: BIP39 mnemonic-based login system
+- **Zero-Knowledge Authentication**: Secure login code system with bcrypt hashing
 - **Swiss Privacy Standards**: No data retention, automatic document deletion
 - **Subscription Management**: Stripe-powered billing with multiple tiers
 - **Privacy-by-Design**: Client-side encryption, no server-side data storage

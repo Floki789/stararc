@@ -253,5 +253,77 @@
       "name": "Sathosi",
       "description": "Bitcoin only. Because there is no second best."
     }
+  },
+  "authMethod": {
+    "title": "Choose Your Authentication Method",
+    "subtitle": "Select how you want to protect your Starship account. Both methods are secure, but offer different trade-offs between convenience and privacy.",
+    "recommended": "Recommended",
+    "bestFor": "Best for",
+    "advantages": "Advantages",
+    "disadvantages": "Disadvantages",
+    "detailedComparison": "Show detailed comparison",
+    "back": "← Back",
+    "continue": "Continue to Registration",
+    "standard": {
+      "name": "Standard Mode",
+      "tagline": "Secure with Recovery Options",
+      "pros": {
+        "recovery": "Password recovery available",
+        "changePassword": "Change password anytime",
+        "encrypted": "Encrypted data key storage",
+        "recoveryPhrase": "12-word recovery phrase backup"
+      },
+      "cons": {
+        "serverData": "Encrypted key stored on server",
+        "emailRequired": "Email address required"
+      },
+      "bestFor": "Most users who want security with peace of mind"
+    },
+    "sovereignty": {
+      "name": "Sovereignty Mode",
+      "tagline": "Maximum Privacy, Maximum Responsibility",
+      "pros": {
+        "zeroKnowledge": "True Zero-Knowledge (server knows nothing)",
+        "noServer": "No data stored on server",
+        "maxPrivacy": "Maximum privacy guarantee",
+        "noEmail": "No email required"
+      },
+      "cons": {
+        "noRecovery": "NO password recovery possible",
+        "lostForever": "Lost access = Lost forever",
+        "noPasswordChange": "Cannot change login code",
+        "highResponsibility": "100% user responsibility"
+      },
+      "bestFor": "Privacy purists, Bitcoin maximalists, advanced users",
+      "warning": {
+        "title": "⚠️ Critical Warning - Read Carefully",
+        "point1": "If you lose your login code, your account is PERMANENTLY INACCESSIBLE. We cannot help you recover it.",
+        "point2": "There is NO password reset, NO customer support recovery, NO backup access.",
+        "point3": "You are 100% responsible for storing your login code securely. Write it down, use a password manager, or store it in a secure vault.",
+        "acknowledge": "I understand and accept full responsibility. I know that losing my login code means permanent loss of access to my account and all data.",
+        "mustAcknowledge": "You must acknowledge the warning before continuing."
+      }
+    },
+    "comparison": {
+      "feature": "Feature",
+      "passwordRecovery": "Password Recovery",
+      "emailLogin": "Email/Password Login",
+      "serverStores": "Server Stores",
+      "changePassword": "Change Password",
+      "accountRecovery": "Account Recovery",
+      "privacyLevel": "Privacy Level",
+      "userResponsibility": "User Responsibility",
+      "encryptedKey": "Encrypted Data Key",
+      "nothing": "Nothing (Zero-Knowledge)",
+      "viaRecoveryPhrase": "Via Recovery Phrase",
+      "impossible": "Impossible",
+      "high": "High",
+      "maximum": "Maximum",
+      "medium": "Medium",
+      "extreme": "Extreme"
+    },
+    "footer": {
+      "info": "You can always access both the Starship app and StarArc subscription portal regardless of your authentication method."
+    }
   }
 }
