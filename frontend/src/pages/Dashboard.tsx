@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import StripeAPIService from '../services/stripeService';
 import { PasswordGenerator } from '../utils/passwordGenerator';
+import SpaceshipAccessButton from '../components/SpaceshipAccessButton';
 
 interface Subscription {
   plan: string;
@@ -323,6 +324,57 @@ const Dashboard: React.FC = () => {
               </h2>
               <p className="text-green-400 font-semibold">● Aktiv</p>
             </div>
+          </div>
+        </motion.div>
+
+        {/* Spaceship App Access */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="bg-gradient-to-br from-purple-900/30 to-blue-900/30 backdrop-blur-sm border border-purple-500/30 rounded-2xl p-6 mb-6"
+        >
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h3 className="text-xl font-bold text-white mb-1">Spaceship Portfolio App</h3>
+              <p className="text-slate-400 text-sm">
+                Verwalten Sie Ihr komplettes Portfolio mit Zero-Knowledge Verschlüsselung
+              </p>
+            </div>
+            <div className="p-3 rounded-full bg-gradient-to-br from-purple-500/20 to-blue-500/20">
+              <svg className="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-4 mb-6">
+            <div className="bg-slate-800/40 rounded-lg p-4">
+              <h4 className="text-sm font-semibold text-purple-300 mb-2">Features</h4>
+              <ul className="text-xs text-slate-300 space-y-1">
+                <li>• Bitcoin & Altcoin Portfolio</li>
+                <li>• Aktien & ETF Tracking</li>
+                <li>• Real Estate Management</li>
+                <li>• Zero-Knowledge Encryption</li>
+              </ul>
+            </div>
+            <div className="bg-slate-800/40 rounded-lg p-4">
+              <h4 className="text-sm font-semibold text-blue-300 mb-2">Sicherheit</h4>
+              <ul className="text-xs text-slate-300 space-y-1">
+                <li>• End-to-End Verschlüsselung</li>
+                <li>• Keine Daten auf Servern</li>
+                <li>• Self-Custody Prinzip</li>
+                <li>• Swiss Privacy Standards</li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="flex justify-center">
+            <SpaceshipAccessButton 
+              variant="primary" 
+              size="lg" 
+              className="px-8 py-4"
+            />
           </div>
         </motion.div>
 

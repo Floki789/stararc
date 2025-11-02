@@ -348,4 +348,266 @@ router.post('/reset-password', authLimiter, resetPasswordValidation, async (req:
   }
 });
 
+// ================================================================
+// SPACESHIP INTEGRATION ENDPOINTS
+// ================================================================
+
+import { generateSecureAuthKey } from '../utils/secureKeyGenerator';
+import { encryptAuthKey, decryptAuthKey } from '../utils/secureEncryption';
+import { hashAuthKey } from '../utils/secureHashing';
+import jwt from 'jsonwebtoken';
+
+// GET /api/auth/spaceship-access-status
+router.get('/spaceship-access-status', authMiddleware, async (req: Request, res: Response): Promise<any> => {
+  try {
+    const user = (req as any).user;
+    
+    // Check if user has spaceship access
+    const result = await pool.query(
+      'SELECT spaceship_auth_key FROM users WHERE id = $1',
+      [user.id]
+    );
+    
+    const hasAccess = !!(result.rows[0]?.spaceship_auth_key);
+    
+    res.json({
+      hasAccess,
+      spaceshipUserId: hasAccess ? user.id : null
+    });
+  } catch (error: any) {
+    console.error('❌ Spaceship access status error:', error);
+    res.status(500).json({
+      error: 'Failed to check Spaceship access status'
+    });
+  }
+});
+
+// POST /api/auth/create-spaceship-access
+router.post('/create-spaceship-access', authMiddleware, async (req: Request, res: Response): Promise<any> => {
+  try {
+    const user = (req as any).user;
+    
+    // Check if user already has spaceship access
+    const existingAccess = await pool.query(
+      'SELECT spaceship_auth_key FROM users WHERE id = $1',
+      [user.id]
+    );
+    
+    if (existingAccess.rows[0]?.spaceship_auth_key) {
+      return res.json({
+        success: true,
+        message: 'Spaceship access already exists',
+        hasAccess: true
+      });
+    }
+    
+    // Generate secure auth key (256-bit entropy)
+    const authKey = generateSecureAuthKey();
+    
+    // Generate HMAC-SHA256 hash for Spaceship (rainbow table resistant)
+    const authKeyHash = hashAuthKey(authKey);
+    
+    // Create Spaceship user via internal API
+    const spaceshipResponse = await createSpaceshipUser({
+      authKeyHash,
+      subscriptionPlan: user.subscription_plan || 'free'
+    });
+    
+    if (!spaceshipResponse.success) {
+      return res.status(500).json({ 
+        error: 'Failed to create spaceship access',
+        details: spaceshipResponse.error
+      });
+    }
+    
+    // Encrypt auth key with AES-GCM (authenticated encryption)
+    const masterKey = process.env.MASTER_ENCRYPTION_KEY;
+    if (!masterKey) {
+      throw new Error('MASTER_ENCRYPTION_KEY environment variable is required');
+    }
+    
+    const encryptedAuthKey = encryptAuthKey(authKey, masterKey);
+    
+    // Store encrypted auth key in StarArc database
+    await pool.query(
+      'UPDATE users SET spaceship_auth_key = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2',
+      [JSON.stringify(encryptedAuthKey), user.id]
+    );
+    
+    res.json({
+      success: true,
+      message: 'Secure spaceship access created successfully',
+      spaceshipUserId: spaceshipResponse.userId
+    });
+    
+  } catch (error: any) {
+    console.error('Create spaceship access error:', error);
+    res.status(500).json({ 
+      error: 'Failed to create spaceship access',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+});
+
+// POST /api/auth/generate-spaceship-token
+router.post('/generate-spaceship-token', authMiddleware, async (req: Request, res: Response): Promise<any> => {
+  try {
+    const user = (req as any).user;
+    
+    // Get encrypted auth key from database
+    const result = await pool.query(
+      'SELECT spaceship_auth_key FROM users WHERE id = $1',
+      [user.id]
+    );
+    
+    if (!result.rows[0]?.spaceship_auth_key) {
+      return res.status(404).json({ 
+        error: 'No spaceship access found. Please create access first.',
+        createAccessUrl: '/api/auth/create-spaceship-access'
+      });
+    }
+    
+    // Parse encrypted data
+    let encryptedData;
+    try {
+      encryptedData = JSON.parse(result.rows[0].spaceship_auth_key);
+    } catch (parseError) {
+      return res.status(500).json({ 
+        error: 'Invalid spaceship access data. Please contact support.' 
+      });
+    }
+    
+    // Decrypt auth key with AES-GCM
+    const masterKey = process.env.MASTER_ENCRYPTION_KEY;
+    if (!masterKey) {
+      throw new Error('MASTER_ENCRYPTION_KEY environment variable is required');
+    }
+    
+    let authKey: string;
+    try {
+      authKey = decryptAuthKey(encryptedData, masterKey);
+    } catch (decryptError) {
+      console.error('Auth key decryption failed:', decryptError);
+      return res.status(500).json({ 
+        error: 'Authentication data corrupted. Please contact support.' 
+      });
+    }
+    
+    // Generate short-lived cross-app token
+    const crossAppSecret = process.env.CROSS_APP_JWT_SECRET;
+    if (!crossAppSecret) {
+      throw new Error('CROSS_APP_JWT_SECRET environment variable is required');
+    }
+    
+    const spaceshipToken = jwt.sign(
+      {
+        authKey,
+        authMethod: 'stararc_key', 
+        subscriptionPlan: user.subscription_plan || 'free',
+        crossApp: true,
+        source: 'stararc',
+        userId: user.id,
+        email: user.email // For logging purposes only
+      },
+      crossAppSecret,
+      { expiresIn: '5m' } // Short-lived for security
+    );
+    
+    const spaceshipUrl = process.env.SPACESHIP_URL || 'http://localhost:3000';
+    
+    res.json({
+      success: true,
+      spaceshipToken,
+      expiresIn: 300, // 5 minutes in seconds
+      redirectUrl: `${spaceshipUrl}/login/cross-app?token=${encodeURIComponent(spaceshipToken)}`
+    });
+    
+  } catch (error: any) {
+    console.error('Generate spaceship token error:', error);
+    res.status(500).json({ 
+      error: 'Failed to generate spaceship token',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+});
+
+// Helper function: Create Spaceship user via internal API
+async function createSpaceshipUser({ authKeyHash, subscriptionPlan }: {
+  authKeyHash: string;
+  subscriptionPlan: string;
+}): Promise<{ success: boolean; userId?: number; error?: string }> {
+  try {
+    const spaceshipApiUrl = process.env.SPACESHIP_API_URL || 'http://localhost:3001';
+    const internalSecret = process.env.INTERNAL_API_SECRET;
+    
+    if (!internalSecret) {
+      throw new Error('INTERNAL_API_SECRET environment variable is required');
+    }
+    
+    // Use native fetch (Node.js 18+) or implement with axios/http
+    const https = require('https');
+    const http = require('http');
+    const url = require('url');
+    
+    const parsedUrl = new URL(`${spaceshipApiUrl}/api/internal/create-user`);
+    const isHttps = parsedUrl.protocol === 'https:';
+    const client = isHttps ? https : http;
+    
+    const postData = JSON.stringify({
+      authKeyHash,
+      subscriptionPlan,
+      baseCurrency: 'CHF'
+    });
+    
+    const options = {
+      hostname: parsedUrl.hostname,
+      port: parsedUrl.port || (isHttps ? 443 : 80),
+      path: parsedUrl.pathname,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Internal-Secret': internalSecret,
+        'Content-Length': Buffer.byteLength(postData)
+      }
+    };
+    
+    return new Promise((resolve, reject) => {
+      const req = client.request(options, (res: any) => {
+        let data = '';
+        
+        res.on('data', (chunk: any) => {
+          data += chunk;
+        });
+        
+        res.on('end', () => {
+          try {
+            if (res.statusCode >= 200 && res.statusCode < 300) {
+              const result = JSON.parse(data) as { success: boolean; userId?: number; error?: string };
+              resolve(result);
+            } else {
+              reject(new Error(`Spaceship API error: ${res.statusCode} ${data}`));
+            }
+          } catch (parseError) {
+            reject(new Error(`Invalid JSON response: ${data}`));
+          }
+        });
+      });
+      
+      req.on('error', (error: any) => {
+        reject(error);
+      });
+      
+      req.write(postData);
+      req.end();
+    });
+    
+  } catch (error: any) {
+    console.error('Spaceship user creation failed:', error);
+    return { 
+      success: false, 
+      error: error.message 
+    };
+  }
+}
+
 export default router;
