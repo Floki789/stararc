@@ -59,6 +59,10 @@ const loginValidation = [
   body('password')
     .notEmpty()
     .withMessage('Password is required'),
+  body('twoFactorToken')
+    .optional()
+    .isLength({ min: 6, max: 6 })
+    .withMessage('2FA token must be 6 digits'),
 ];
 
 const forgotPasswordValidation = [
@@ -150,10 +154,44 @@ router.post('/login', authLimiter, loginValidation, async (req: Request, res: Re
       });
     }
 
-    const { email, password } = req.body;
+    const { email, password, twoFactorToken } = req.body;
 
-    // Login user
-    const { user, token } = await authService.loginUser(email, password);
+    // First, validate credentials without 2FA
+    const loginResult = await authService.loginUser(email, password);
+    
+    // Check if user has 2FA enabled
+    const userQuery = await pool.query(
+      'SELECT two_factor_enabled, two_factor_secret FROM users WHERE id = $1',
+      [loginResult.user.id]
+    );
+    
+    const userWith2FA = userQuery.rows[0];
+    
+    if (userWith2FA?.two_factor_enabled) {
+      // User has 2FA enabled - require 2FA token
+      if (!twoFactorToken) {
+        return res.status(200).json({
+          requires2FA: true,
+          message: '2FA token required'
+        });
+      }
+      
+      // Verify 2FA token
+      const speakeasy = require('speakeasy');
+      const verified = speakeasy.totp.verify({
+        secret: userWith2FA.two_factor_secret,
+        encoding: 'base32',
+        token: twoFactorToken,
+        window: 1
+      });
+      
+      if (!verified) {
+        return res.status(401).json({ error: 'Invalid 2FA token' });
+      }
+    }
+
+    // Login successful (with or without 2FA)
+    const { user, token } = loginResult;
 
     res.json({
       message: 'Login successful',
@@ -167,7 +205,8 @@ router.post('/login', authLimiter, loginValidation, async (req: Request, res: Re
         role: (user as any).role,
         onboardingStep: (user as any).onboarding_step,
         loginMethodSelected: (user as any).login_method_selected,
-        spaceshipIntegrationCompleted: (user as any).spaceship_integration_completed
+        spaceshipIntegrationCompleted: (user as any).spaceship_integration_completed,
+        twoFactorEnabled: userWith2FA?.two_factor_enabled || false
       }
     });
   } catch (error: any) {

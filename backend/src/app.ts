@@ -11,6 +11,7 @@ import authRoutes from './routes/auth';
 import userRoutes from './routes/users';
 import subscriptionRoutes from './routes/subscriptions';
 import stripeRoutes from './routes/stripe';
+import twoFactorRoutes from './routes/twoFactor';
 
 // Import middleware
 import { errorHandler } from './middleware/errorHandler';
@@ -105,6 +106,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/subscriptions', subscriptionRoutes);
 app.use('/api/stripe', stripeRoutes);
+app.use('/api/2fa', twoFactorRoutes);
 
 // Privacy policy endpoint
 app.get('/api/privacy', (req, res) => {
