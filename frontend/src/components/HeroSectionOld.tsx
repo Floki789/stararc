@@ -157,7 +157,7 @@ const HeroSection: React.FC = () => {
           >
             <h1 className="text-6xl md:text-8xl font-bold text-white mb-6">
               <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-blue-300 bg-clip-text text-transparent">
-                Stararc
+                Stara
               </span>
             </h1>
             
