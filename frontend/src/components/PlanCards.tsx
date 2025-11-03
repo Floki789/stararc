@@ -23,6 +23,7 @@ interface PlanCardsProps {
   showPricing?: boolean;
   className?: string;
   gridCols?: 'grid-cols-2' | 'grid-cols-3' | 'grid-cols-4';
+  currentPlan?: string; // Current user's plan
 }
 
 const PlanCards: React.FC<PlanCardsProps> = ({ 
@@ -30,11 +31,26 @@ const PlanCards: React.FC<PlanCardsProps> = ({
   loading = {},
   showPricing = true,
   className = '',
-  gridCols = 'grid-cols-4'
+  gridCols = 'grid-cols-4',
+  currentPlan
 }) => {
+
+  // Plan hierarchy for filtering (lower index = lower tier)
+  const planHierarchy = ['Free', 'Spark', 'Core', 'Apex'];
+  
+  const getPlanTier = (planId: string): number => {
+    return planHierarchy.indexOf(planId);
+  };
+
+  const isPlanSelectable = (planId: string, currentPlan?: string): boolean => {
+    if (!currentPlan) return true; // No current plan, all plans available
+    const currentTier = getPlanTier(currentPlan);
+    const planTier = getPlanTier(planId);
+    return planTier >= currentTier; // Only same tier (current) or higher tiers
+  };
   
   // Centralized plan data - single source of truth
-  const plans: PlanData[] = [
+  const allPlans: PlanData[] = [
     {
       id: 'Free',
       name: 'Free',
@@ -102,6 +118,9 @@ const PlanCards: React.FC<PlanCardsProps> = ({
     }
   ];
 
+  // Show all plans but disable non-selectable ones
+  const plans = allPlans;
+
   const handlePlanClick = (plan: PlanData) => {
     if (onPlanSelect) {
       onPlanSelect(plan.id, plan.priceValue);
@@ -109,7 +128,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
   };
 
   return (
-    <div className={`grid md:${gridCols} gap-6 ${className}`}>
+    <div className={`grid md:${gridCols} gap-6 place-content-center ${className}`}>
       {plans.map((plan, index) => {
         const IconComponent = plan.icon;
         
@@ -123,10 +142,23 @@ const PlanCards: React.FC<PlanCardsProps> = ({
             viewport={{ once: true }}
             className={`card p-6 text-center relative ${
               plan.isPopular ? 'border-2 border-purple-500' : ''
+            } ${
+              currentPlan === plan.id ? 'border-2 border-blue-500 opacity-75' : ''
+            } ${
+              !isPlanSelectable(plan.id, currentPlan) ? 'opacity-50' : ''
             }`}
           >
+            {/* Current Plan Badge */}
+            {currentPlan === plan.id && (
+              <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                <span className="bg-blue-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
+                  Aktueller Plan
+                </span>
+              </div>
+            )}
+
             {/* Popular Badge */}
-            {plan.isPopular && (
+            {plan.isPopular && currentPlan !== plan.id && (
               <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
                 <span className="bg-purple-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
                   Beliebt
@@ -166,12 +198,25 @@ const PlanCards: React.FC<PlanCardsProps> = ({
             {onPlanSelect && (
               <button 
                 onClick={() => handlePlanClick(plan)}
-                disabled={loading[plan.id]}
-                className={`w-full py-2 ${plan.bgGradient} text-white text-sm font-semibold rounded-lg hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+                disabled={loading[plan.id] || currentPlan === plan.id || !isPlanSelectable(plan.id, currentPlan)}
+                className={`w-full py-2 text-white text-sm font-semibold rounded-lg transition-all duration-200 ${
+                  currentPlan === plan.id 
+                    ? 'bg-gray-500 cursor-not-allowed' 
+                    : !isPlanSelectable(plan.id, currentPlan)
+                      ? 'bg-gray-600 cursor-not-allowed'
+                      : `${plan.bgGradient} hover:shadow-lg transform hover:scale-105`
+                } ${
                   loading[plan.id] ? 'opacity-50 cursor-not-allowed' : ''
                 }`}
               >
-                {loading[plan.id] ? 'Lädt...' : plan.buttonText}
+                {currentPlan === plan.id 
+                  ? 'Aktiver Plan' 
+                  : !isPlanSelectable(plan.id, currentPlan)
+                    ? 'Nicht verfügbar'
+                    : loading[plan.id] 
+                      ? 'Lädt...' 
+                      : plan.buttonText
+                }
               </button>
             )}
           </motion.div>

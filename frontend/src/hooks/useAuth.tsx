@@ -9,6 +9,7 @@ interface User {
   onboardingStep?: string;
   loginMethodSelected?: string;
   spaceshipIntegrationCompleted?: boolean;
+  subscriptionPlan?: string;
 }
 
 interface AuthContextType {

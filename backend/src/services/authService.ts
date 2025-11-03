@@ -233,7 +233,7 @@ export class AuthService {
     
     try {
       const result = await client.query(
-        'SELECT id, email, first_name, last_name, email_verified, role, created_at, last_login, onboarding_step, login_method_selected, spaceship_integration_completed FROM users WHERE id = $1',
+        'SELECT id, email, first_name, last_name, email_verified, role, created_at, last_login, onboarding_step, login_method_selected, spaceship_integration_completed, subscription_plan FROM users WHERE id = $1',
         [userId]
       );
 

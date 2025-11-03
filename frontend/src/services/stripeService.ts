@@ -108,6 +108,20 @@ export class StripeAPIService {
     return response.json();
   }
 
+  static async createUpgradeSession(targetPlan: string): Promise<{ url: string }> {
+    const response = await this.fetchWithAuth('/create-checkout-session', {
+      method: 'POST',
+      body: JSON.stringify({ planId: targetPlan }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to create upgrade session');
+    }
+
+    return response.json();
+  }
+
   static async redirectToCheckout(sessionId: string) {
     const stripe = await getStripe();
     

@@ -9,10 +9,15 @@ const SubscriptionSelection: React.FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState<Record<string, boolean>>({});
+  const [currentPlan, setCurrentPlan] = useState<string | null>(null);
 
   useEffect(() => {
     const initializeSubscriptionSelection = async () => {
-      // Refresh user data from backend to get latest onboarding status
+      // Check if this is an upgrade flow
+      const urlParams = new URLSearchParams(window.location.search);
+      const isUpgrade = urlParams.get('upgrade') === 'true';
+      
+      // Always refresh user data from backend to get latest onboarding status
       try {
         const token = localStorage.getItem('token');
         if (token && user) {
@@ -33,21 +38,30 @@ const SubscriptionSelection: React.FC = () => {
               role: data.user.role,
               onboardingStep: data.user.onboardingStep,
               loginMethodSelected: data.user.loginMethodSelected,
-              spaceshipIntegrationCompleted: data.user.spaceshipIntegrationCompleted
+              spaceshipIntegrationCompleted: data.user.spaceshipIntegrationCompleted,
+              subscriptionPlan: data.user.subscriptionPlan
             };
             
             // Update localStorage with fresh data
             localStorage.setItem('user', JSON.stringify(freshUserData));
             
-            // Check onboarding status with fresh data
-            if (freshUserData.onboardingStep === 'completed') {
-              navigate('/dashboard');
-              return;
+            // Set current plan if available
+            if (data.user.subscriptionPlan) {
+              setCurrentPlan(data.user.subscriptionPlan);
             }
+            
+            // Skip onboarding redirects if this is an upgrade flow
+            if (!isUpgrade) {
+              // Check onboarding status with fresh data
+              if (freshUserData.onboardingStep === 'completed') {
+                navigate('/dashboard');
+                return;
+              }
 
-            if (freshUserData.onboardingStep === 'auth_method_selection') {
-              navigate('/auth-method-selection');
-              return;
+              if (freshUserData.onboardingStep === 'auth_method_selection') {
+                navigate('/auth-method-selection');
+                return;
+              }
             }
           }
         }
@@ -55,17 +69,25 @@ const SubscriptionSelection: React.FC = () => {
         console.error('Failed to refresh user data:', error);
       }
 
-      // If user has completed onboarding, redirect to dashboard
-      if (user && user.onboardingStep === 'completed') {
-        navigate('/dashboard');
-        return;
+      // Set current plan from user object if available
+      if (user && (user as any).subscriptionPlan) {
+        setCurrentPlan((user as any).subscriptionPlan);
       }
 
-      // If user has already selected a subscription but not completed onboarding
-      // redirect to the next step in the workflow
-      if (user && user.onboardingStep === 'auth_method_selection') {
-        navigate('/auth-method-selection');
-        return;
+      // Skip onboarding redirects if this is an upgrade flow
+      if (!isUpgrade) {
+        // If user has completed onboarding, redirect to dashboard
+        if (user && user.onboardingStep === 'completed') {
+          navigate('/dashboard');
+          return;
+        }
+
+        // If user has already selected a subscription but not completed onboarding
+        // redirect to the next step in the workflow
+        if (user && user.onboardingStep === 'auth_method_selection') {
+          navigate('/auth-method-selection');
+          return;
+        }
       }
     };
 
@@ -162,10 +184,16 @@ const SubscriptionSelection: React.FC = () => {
         </motion.div>
 
         {/* Plans Grid */}
-        <PlanCards 
-          onPlanSelect={(planId) => handlePlanSelection(planId)}
-          loading={loading}
-        />
+        <div className="flex justify-center">
+          <PlanCards 
+            onPlanSelect={(planId) => handlePlanSelection(planId)}
+            loading={loading}
+            currentPlan={currentPlan || undefined}
+            className="max-w-5xl"
+          />
+        </div>
+        
+
       </div>
     </div>
   );
