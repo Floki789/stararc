@@ -8,6 +8,7 @@ import StripeAPIService from '../services/stripeService';
 import { PasswordGenerator } from '../utils/passwordGenerator';
 import SpaceshipAccessButton from '../components/SpaceshipAccessButton';
 import ApexManagement from '../components/ApexManagement';
+import TwoFactorManagement from '../components/TwoFactorManagement';
 
 interface Subscription {
   plan: string;
@@ -39,8 +40,7 @@ const Dashboard: React.FC = () => {
   const [hasConfirmedDeletion, setHasConfirmedDeletion] = useState(false);
   const [passwordDeleted, setPasswordDeleted] = useState(false);
   
-  // 2FA recommendation states
-  const [show2FARecommendation, setShow2FARecommendation] = useState(true);
+
 
   useEffect(() => {
     // Refresh user data from backend to ensure we have latest onboarding status
@@ -387,19 +387,7 @@ const Dashboard: React.FC = () => {
     navigate('/subscription-selection?upgrade=true');
   };
 
-  // 2FA handlers
-  const handle2FASetup = () => {
-    const spaceshipUrl = (import.meta as any).env.VITE_SPACESHIP_URL || 'http://localhost:3000';
-    window.open(`${spaceshipUrl}?setup2fa=true`, '_blank');
-  };
 
-  const handleLearnMore2FA = () => {
-    alert('Zwei-Faktor-Authentifizierung (2FA) bietet zusätzlichen Schutz durch einen zweiten Sicherheitsfaktor neben Ihrem Passwort.');
-  };
-
-  const dismiss2FARecommendation = () => {
-    setShow2FARecommendation(false);
-  };
 
   if (loading) {
     return (
@@ -524,65 +512,7 @@ const Dashboard: React.FC = () => {
           </div>
         </motion.div>
 
-        {/* 2FA Security Recommendation */}
-        {show2FARecommendation && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.15 }}
-            className="bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20 rounded-xl p-6 mb-6"
-          >
-            <div className="flex items-start space-x-4">
-              <div className="flex-shrink-0">
-                <div className="w-10 h-10 bg-amber-500/20 rounded-lg flex items-center justify-center">
-                  <svg className="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                  </svg>
-                </div>
-              </div>
-              <div className="flex-1">
-                <h3 className="text-lg font-semibold text-white mb-2">
-                  Erhöhen Sie die Sicherheit Ihres Spaceship-Zugangs
-                </h3>
-                <p className="text-gray-300 mb-4">
-                  Für zusätzlichen Schutz Ihrer Portfolio-Daten empfehlen wir die Einrichtung einer 
-                  Zwei-Faktor-Authentifizierung (2FA) für Ihren Spaceship-Zugang.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <button 
-                    onClick={handle2FASetup}
-                    className="inline-flex items-center px-4 py-2 bg-amber-500 hover:bg-amber-600 text-black font-medium rounded-lg transition-colors duration-200"
-                  >
-                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4" />
-                    </svg>
-                    2FA einrichten
-                  </button>
-                  <button 
-                    onClick={handleLearnMore2FA}
-                    className="inline-flex items-center px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white font-medium rounded-lg transition-colors duration-200"
-                  >
-                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    Mehr erfahren
-                  </button>
-                </div>
-              </div>
-              <div className="flex-shrink-0">
-                <button 
-                  onClick={dismiss2FARecommendation}
-                  className="text-gray-400 hover:text-white transition-colors" 
-                  title="Hinweis schließen"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </motion.div>
-        )}
+
 
         {/* Spaceship App Access */}
         <motion.div
@@ -862,6 +792,9 @@ const Dashboard: React.FC = () => {
             </div>
           </motion.div>
         )}
+
+        {/* Two-Factor Authentication Management */}
+        <TwoFactorManagement />
 
         {/* Apex Client Management - Only show for Apex subscription users */}
         {subscription?.plan === 'Apex' && (

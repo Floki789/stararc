@@ -7,6 +7,7 @@ import { useAuth } from '../hooks/useAuth';
 interface LoginFormData {
   email: string;
   password: string;
+  twoFactorToken?: string;
 }
 
 const Login: React.FC = () => {
@@ -23,6 +24,7 @@ const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isLoading, setIsLoading] = useState(false);
+  const [requires2FA, setRequires2FA] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -71,12 +73,23 @@ const Login: React.FC = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+          ...(formData.twoFactorToken && { twoFactorToken: formData.twoFactorToken })
+        }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
+        // Check if 2FA is required
+        if (data.requires2FA) {
+          setRequires2FA(true);
+          setErrors({ general: 'Bitte geben Sie Ihren 2FA-Code ein.' });
+          return;
+        }
+
         // Store token and user data in localStorage
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
@@ -243,6 +256,45 @@ const Login: React.FC = () => {
               <p className="mt-1 text-sm text-red-400">{errors.password}</p>
             )}
           </div>
+
+          {/* 2FA Token Input - Show when 2FA is required */}
+          {requires2FA && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              transition={{ duration: 0.3 }}
+            >
+              <label htmlFor="twoFactorToken" className="sr-only">
+                2FA-Code
+              </label>
+              <input
+                id="twoFactorToken"
+                name="twoFactorToken"
+                type="text"
+                inputMode="numeric"
+                autoComplete="one-time-code"
+                maxLength={6}
+                className={`appearance-none rounded-lg relative block w-full px-3 py-3 border ${
+                  errors.twoFactorToken ? 'border-red-500' : 'border-gray-600'
+                } placeholder-gray-400 text-white bg-gray-800/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-center text-lg tracking-wider`}
+                placeholder="2FA-Code (6 Stellen)"
+                value={formData.twoFactorToken || ''}
+                onChange={(e) => {
+                  const value = e.target.value.replace(/\D/g, '').slice(0, 6);
+                  setFormData(prev => ({ ...prev, twoFactorToken: value }));
+                  if (errors.twoFactorToken) {
+                    setErrors(prev => ({ ...prev, twoFactorToken: '' }));
+                  }
+                }}
+              />
+              {errors.twoFactorToken && (
+                <p className="mt-1 text-sm text-red-400">{errors.twoFactorToken}</p>
+              )}
+              <p className="mt-2 text-xs text-gray-400 text-center">
+                Geben Sie den 6-stelligen Code aus Ihrer Authenticator-App ein.
+              </p>
+            </motion.div>
+          )}
 
           <div className="flex items-center justify-between">
             <div className="text-sm">
