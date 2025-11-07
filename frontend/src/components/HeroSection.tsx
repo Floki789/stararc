@@ -8,7 +8,9 @@ import BigPicture from './BigPicture';
 import SecuritySetup from './SecuritySetup';
 import SingleMulti from './SingleMulti';
 import AssetOrganizationAnimation from './AssetOrganizationAnimation';
-import BootstrappingAnimation from './BootstrappingAnimation';
+import VaultManagement from './VaultManagement';
+import GenerationalWealth from './GenerationalWealth';
+import MarketAccess from './MarketAccess';
 import BootstrappingAnimation2 from './BootstrappingAnimation2';
 
 // Animation configuration - easily add, remove, or reorder animations here
@@ -44,9 +46,19 @@ const animationsConfig = [
     name: 'SingleMulti'
   },
   { 
-    component: BootstrappingAnimation, 
-    key: 'bootstrapping',
-    name: 'Bootstrapping'
+    component: VaultManagement, 
+    key: 'vaultManagement',
+    name: 'VaultManagement'
+  },
+  { 
+    component: GenerationalWealth, 
+    key: 'generationalWealth',
+    name: 'GenerationalWealth'
+  },
+  { 
+    component: MarketAccess, 
+    key: 'marketAccess',
+    name: 'MarketAccess'
   },
   { 
     component: BootstrappingAnimation2, 
@@ -61,8 +73,8 @@ const HeroSection: React.FC = () => {
 
   // Animation durations for auto-advance
   const getAnimationDuration = (animationIndex: number) => {
-    const durations = [15000, 15000, 15000, 15000, 15000, 15000, 15000, 15000]; // AssetOrg, Animation1, OneDashboard, BigPicture, SecuritySetup, SingleMulti, Bootstrapping, Bootstrapping2
-    return durations[animationIndex] || 10000;
+    const durations = [15000, 7000, 7000, 7000, 7000, 7000, 7000, 7000, 7000, 7000]; // AssetOrg, Animation1, OneDashboard, BigPicture, SecuritySetup, SingleMulti, VaultManagement, GenerationalWealth, MarketAccess, Bootstrapping2
+    return durations[animationIndex] || 7000;
   };
 
   // Generate animation content dynamically from config
@@ -108,6 +120,12 @@ const HeroSection: React.FC = () => {
         return 'text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-orange-500';
       case 'singleMulti':
         return 'text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500';
+      case 'vaultManagement':
+        return 'text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500';
+      case 'generationalWealth':
+        return 'text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-500';
+      case 'marketAccess':
+        return 'text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-500';
       case 'bootstrapping':
         return 'text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-500';
       case 'bootstrapping2':
@@ -142,10 +160,26 @@ const HeroSection: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: "easeOut" }}
-              className={`text-5xl md:text-6xl font-bold mb-3 leading-tight ${getAnimationColorClass(currentAnimation)}`}
+              className={`text-5xl md:text-6xl font-bold mb-3 leading-tight`}
             >
-            >
-              {animationContent[currentAnimation].title}
+              {/* Hide titles for the three new animations */}
+              {!['vaultManagement', 'generationalWealth', 'marketAccess'].includes(animationsConfig[currentAnimation]?.key) && (
+                <>
+                  {/* Special handling for AssetOrganization title to match Animation1 style */}
+                  {animationsConfig[currentAnimation]?.key === 'assetOrganization' ? (
+                    <span className="text-white">
+                      Organize your{' '}
+                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-cyan-400">
+                        wealth and security
+                      </span>
+                    </span>
+                  ) : (
+                    <span className={getAnimationColorClass(currentAnimation)}>
+                      {animationContent[currentAnimation].title}
+                    </span>
+                  )}
+                </>
+              )}
             </motion.h1>
             <motion.p 
               key={`subtitle-${currentAnimation}`} // Key für Re-Animation bei Wechsel
@@ -154,7 +188,10 @@ const HeroSection: React.FC = () => {
               transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
               className={`text-xl text-gray-300 leading-relaxed ${animationContent[currentAnimation].subtitle ? 'mb-8' : 'mb-2'}`}
             >
-              {animationContent[currentAnimation].subtitle}
+              {/* Hide subtitles for the three new animations */}
+              {!['vaultManagement', 'generationalWealth', 'marketAccess'].includes(animationsConfig[currentAnimation]?.key) && 
+                animationContent[currentAnimation].subtitle
+              }
             </motion.p>
             
             {/* Animation Slideshow */}
@@ -162,12 +199,29 @@ const HeroSection: React.FC = () => {
               {/* Dynamic Animation Rendering */}
               {animationsConfig.map((animation, index) => {
                 const AnimationComponent = animation.component;
+                
+                // Calculate animation position with proper wrap-around handling
+                let xPosition;
+                if (currentAnimation === index) {
+                  // Current animation stays in center
+                  xPosition = 0;
+                } else if (currentAnimation === 0 && index === animationsConfig.length - 1) {
+                  // Special case: when looping from last to first, last animation slides left
+                  xPosition = -1200;
+                } else if (currentAnimation < index) {
+                  // Future animations slide to the right
+                  xPosition = 1200;
+                } else {
+                  // Past animations slide to the left
+                  xPosition = -1200;
+                }
+                
                 return (
                   <motion.div
                     key={animation.key}
                     initial={{ x: index === 0 ? 0 : 1200 }}
                     animate={{ 
-                      x: currentAnimation === index ? 0 : currentAnimation < index ? 1200 : -1200,
+                      x: xPosition,
                       opacity: currentAnimation === index ? 1 : 0
                     }}
                     transition={{ duration: 1, ease: "easeInOut" }}

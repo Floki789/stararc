@@ -175,6 +175,18 @@
         "title": "",
         "subtitle": ""
       },
+      "vaultManagement": {
+        "title": "Verwalten Sie Ihre Tresore",
+        "subtitle": "Sowohl physisch als auch digital"
+      },
+      "generationalWealth": {
+        "title": "Hinterlassen Sie Ihren Erben ein gut organisiertes Portfolio",
+        "subtitle": "Generationenvermögen. Unabhängigkeit"
+      },
+      "marketAccess": {
+        "title": "Erhalten Sie direkten Marktzugang über unsere Partner",
+        "subtitle": "Bitcoin kaufen - Haus verkaufen - Hypotheken erneuern"
+      },
       "bootstrapping": {
         "title": "",
         "subtitle": ""

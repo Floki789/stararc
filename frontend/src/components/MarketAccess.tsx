@@ -2,23 +2,22 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import AnimationTimer from './AnimationTimer';
 import { 
-  Heart,
-  Users,
-  Zap
+  Building2,
+  Coins,
+  Home
 } from 'lucide-react';
 
-interface BootstrappingAnimationProps {
+interface MarketAccessProps {
   className?: string;
   isActive?: boolean;
 }
 
-const BootstrappingAnimation: React.FC<BootstrappingAnimationProps> = ({ className = "", isActive = true }) => {
-  const [animationPhase, setAnimationPhase] = useState(1); // Start with phase 1 immediately
+const MarketAccess: React.FC<MarketAccessProps> = ({ className = "", isActive = true }) => {
+  const [animationPhase, setAnimationPhase] = useState(1);
 
-  // Reset and start animation when becoming active
   useEffect(() => {
     if (isActive) {
-      setAnimationPhase(1); // Start immediately with headline
+      setAnimationPhase(1);
     }
   }, [isActive]);
 
@@ -27,21 +26,20 @@ const BootstrappingAnimation: React.FC<BootstrappingAnimationProps> = ({ classNa
     
     const animationSequence = setTimeout(() => {
       if (animationPhase === 1) {
-        setAnimationPhase(2); // Show subtext
+        setAnimationPhase(2);
       } else if (animationPhase === 2) {
-        setAnimationPhase(3); // Show call-to-action
+        setAnimationPhase(3);
       } else if (animationPhase === 3) {
-        setAnimationPhase(4); // Hold final state for 5 more seconds
+        setAnimationPhase(4);
       }
-    }, 2000); // 2 seconds between phases
+    }, 2000);
 
     return () => clearTimeout(animationSequence);
   }, [animationPhase, isActive]);
 
   return (
     <div className={`relative h-[540px] overflow-visible ${className}`}>
-      {/* Animation Timer */}
-      <AnimationTimer duration={15} isActive={isActive} />
+      <AnimationTimer duration={7} isActive={isActive} />
       
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
         
@@ -55,7 +53,7 @@ const BootstrappingAnimation: React.FC<BootstrappingAnimationProps> = ({ classNa
           transition={{ duration: 1, ease: "easeOut" }}
           className="absolute inset-0 flex items-center justify-center pointer-events-none"
         >
-          <div className="w-96 h-96 rounded-full bg-gradient-to-r from-blue-500/20 to-purple-500/20 blur-3xl" />
+          <div className="w-96 h-96 rounded-full bg-gradient-to-r from-orange-500/20 to-yellow-500/20 blur-3xl" />
         </motion.div>
 
         {/* Main Headline */}
@@ -68,10 +66,11 @@ const BootstrappingAnimation: React.FC<BootstrappingAnimationProps> = ({ classNa
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 max-w-4xl"
         >
-          Support our independent{' '}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">
-            bootstraping
-          </span>
+          Get direct{' '}
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-500">
+            market access
+          </span>{' '}
+          through our partners
         </motion.h2>
 
         {/* Subtext */}
@@ -84,14 +83,7 @@ const BootstrappingAnimation: React.FC<BootstrappingAnimationProps> = ({ classNa
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="text-xl text-gray-300 mb-8 max-w-3xl"
         >
-          Become a beta tester. Get{' '}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-500 font-semibold">
-            100'000 Sats
-          </span>
-          {' '}and a{' '}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600 font-semibold">
-            lifelong Core Subscription
-          </span>
+          Buy Bitcoin - sell your house - renew mortgages
         </motion.p>
 
         {/* Feature Icons */}
@@ -105,16 +97,16 @@ const BootstrappingAnimation: React.FC<BootstrappingAnimationProps> = ({ classNa
           className="flex gap-8 mb-8"
         >
           <div className="flex flex-col items-center">
-            <Heart className="w-8 h-8 text-red-400 mb-2" />
-            <span className="text-sm text-gray-400">Independent</span>
+            <Coins className="w-8 h-8 text-orange-400 mb-2" />
+            <span className="text-sm text-gray-400">Bitcoin</span>
           </div>
           <div className="flex flex-col items-center">
-            <Users className="w-8 h-8 text-blue-400 mb-2" />
-            <span className="text-sm text-gray-400">Community</span>
+            <Home className="w-8 h-8 text-blue-400 mb-2" />
+            <span className="text-sm text-gray-400">Real Estate</span>
           </div>
           <div className="flex flex-col items-center">
-            <Zap className="w-8 h-8 text-purple-400 mb-2" />
-            <span className="text-sm text-gray-400">Lifetime Value</span>
+            <Building2 className="w-8 h-8 text-green-400 mb-2" />
+            <span className="text-sm text-gray-400">Banking</span>
           </div>
         </motion.div>
 
@@ -128,11 +120,11 @@ const BootstrappingAnimation: React.FC<BootstrappingAnimationProps> = ({ classNa
           transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
         >
           <motion.button
-            whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(99, 102, 241, 0.3)" }}
+            whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(249, 115, 22, 0.3)" }}
             whileTap={{ scale: 0.95 }}
-            className="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-lg font-semibold rounded-lg transition-all duration-300 hover:shadow-xl"
+            className="px-8 py-4 bg-gradient-to-r from-orange-600 to-yellow-600 text-white text-lg font-semibold rounded-lg transition-all duration-300 hover:shadow-xl"
           >
-            Join Beta Testing
+            Access Markets
           </motion.button>
         </motion.div>
 
@@ -141,4 +133,4 @@ const BootstrappingAnimation: React.FC<BootstrappingAnimationProps> = ({ classNa
   );
 };
 
-export default BootstrappingAnimation;
+export default MarketAccess;

@@ -192,14 +192,6 @@
         "title": "Holistic Wealth and Security Management",
         "subtitle": "Complete ecosystem overview: self-managed & third-party assets, retirement capital, real estate, security architecture, and privacy documentation."
       },
-      "bootstrapping": {
-        "title": "",
-        "subtitle": ""
-      },
-      "bootstrapping2": {
-        "title": "",
-        "subtitle": ""
-      },
       "bigPicture": {
         "title": "",
         "subtitle": ""
@@ -209,6 +201,26 @@
         "subtitle": ""
       },
       "singleMulti": {
+        "title": "",
+        "subtitle": ""
+      },
+      "vaultManagement": {
+        "title": "Manage your vaults",
+        "subtitle": "Both Physical and digital"
+      },
+      "generationalWealth": {
+        "title": "Leave your heirs a well organized portfolio",
+        "subtitle": "Protect generational wealth"
+      },
+      "marketAccess": {
+        "title": "Get direct market access through our partners",
+        "subtitle": "Buy Bitcoin - sell your house - renew mortgages"
+      },
+      "bootstrapping": {
+        "title": "",
+        "subtitle": ""
+      },
+      "bootstrapping2": {
         "title": "",
         "subtitle": ""
       }

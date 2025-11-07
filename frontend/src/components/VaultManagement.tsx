@@ -2,23 +2,22 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import AnimationTimer from './AnimationTimer';
 import { 
+  Vault,
   Shield,
-  Eye,
-  Lock
+  Database
 } from 'lucide-react';
 
-interface OneDashboardProps {
+interface VaultManagementProps {
   className?: string;
   isActive?: boolean;
 }
 
-const OneDashboard: React.FC<OneDashboardProps> = ({ className = "", isActive = true }) => {
-  const [animationPhase, setAnimationPhase] = useState(1); // Start with phase 1 immediately
+const VaultManagement: React.FC<VaultManagementProps> = ({ className = "", isActive = true }) => {
+  const [animationPhase, setAnimationPhase] = useState(1);
 
-  // Reset and start animation when becoming active
   useEffect(() => {
     if (isActive) {
-      setAnimationPhase(1); // Start immediately with headline
+      setAnimationPhase(1);
     }
   }, [isActive]);
 
@@ -27,21 +26,20 @@ const OneDashboard: React.FC<OneDashboardProps> = ({ className = "", isActive = 
     
     const animationSequence = setTimeout(() => {
       if (animationPhase === 1) {
-        setAnimationPhase(2); // Show subtext
+        setAnimationPhase(2);
       } else if (animationPhase === 2) {
-        setAnimationPhase(3); // Show call-to-action
+        setAnimationPhase(3);
       } else if (animationPhase === 3) {
-        setAnimationPhase(4); // Hold final state for 5 more seconds
+        setAnimationPhase(4);
       }
-    }, 2000); // 2 seconds between phases
+    }, 2000);
 
     return () => clearTimeout(animationSequence);
   }, [animationPhase, isActive]);
 
   return (
     <div className={`relative h-[540px] overflow-visible ${className}`}>
-      {/* Animation Timer */}
-      <AnimationTimer duration={15} isActive={isActive} />
+      <AnimationTimer duration={7} isActive={isActive} />
       
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
         
@@ -55,7 +53,7 @@ const OneDashboard: React.FC<OneDashboardProps> = ({ className = "", isActive = 
           transition={{ duration: 1, ease: "easeOut" }}
           className="absolute inset-0 flex items-center justify-center pointer-events-none"
         >
-          <div className="w-96 h-96 rounded-full bg-gradient-to-r from-indigo-500/20 to-cyan-500/20 blur-3xl" />
+          <div className="w-96 h-96 rounded-full bg-gradient-to-r from-blue-500/20 to-purple-500/20 blur-3xl" />
         </motion.div>
 
         {/* Main Headline */}
@@ -68,10 +66,10 @@ const OneDashboard: React.FC<OneDashboardProps> = ({ className = "", isActive = 
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 max-w-4xl"
         >
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-500">
-            ONE
+          Manage your{' '}
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
+            Vaults
           </span>
-          {' '}dashboard for all your assets
         </motion.h2>
 
         {/* Subtext */}
@@ -84,7 +82,7 @@ const OneDashboard: React.FC<OneDashboardProps> = ({ className = "", isActive = 
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="text-xl text-gray-300 mb-8 max-w-3xl"
         >
-          non-custodial · secure · privacy sensitive
+          Both Physical and digital
         </motion.p>
 
         {/* Feature Icons */}
@@ -98,16 +96,16 @@ const OneDashboard: React.FC<OneDashboardProps> = ({ className = "", isActive = 
           className="flex gap-8 mb-8"
         >
           <div className="flex flex-col items-center">
-            <Shield className="w-8 h-8 text-indigo-400 mb-2" />
-            <span className="text-sm text-gray-400">Non-custodial</span>
+            <Vault className="w-8 h-8 text-blue-400 mb-2" />
+            <span className="text-sm text-gray-400">Physical</span>
           </div>
           <div className="flex flex-col items-center">
-            <Lock className="w-8 h-8 text-cyan-400 mb-2" />
+            <Database className="w-8 h-8 text-cyan-400 mb-2" />
+            <span className="text-sm text-gray-400">Digital</span>
+          </div>
+          <div className="flex flex-col items-center">
+            <Shield className="w-8 h-8 text-green-400 mb-2" />
             <span className="text-sm text-gray-400">Secure</span>
-          </div>
-          <div className="flex flex-col items-center">
-            <Eye className="w-8 h-8 text-indigo-500 mb-2" />
-            <span className="text-sm text-gray-400">Privacy Sensitive</span>
           </div>
         </motion.div>
 
@@ -121,11 +119,11 @@ const OneDashboard: React.FC<OneDashboardProps> = ({ className = "", isActive = 
           transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
         >
           <motion.button
-            whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(99, 102, 241, 0.3)" }}
+            whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(59, 130, 246, 0.3)" }}
             whileTap={{ scale: 0.95 }}
-            className="px-8 py-4 bg-gradient-to-r from-indigo-600 to-cyan-600 text-white text-lg font-semibold rounded-lg transition-all duration-300 hover:shadow-xl"
+            className="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-lg font-semibold rounded-lg transition-all duration-300 hover:shadow-xl"
           >
-            Explore Dashboard
+            Setup Vault Management
           </motion.button>
         </motion.div>
 
@@ -134,4 +132,4 @@ const OneDashboard: React.FC<OneDashboardProps> = ({ className = "", isActive = 
   );
 };
 
-export default OneDashboard;
+export default VaultManagement;
