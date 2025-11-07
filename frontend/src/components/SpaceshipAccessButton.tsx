@@ -101,7 +101,7 @@ const SpaceshipAccessButton: React.FC<SpaceshipAccessButtonProps> = ({
       return (
         <>
           {showIcon && <CheckCircleIcon className={`${iconSizes[size]} mr-2 text-green-300`} />}
-          Zur Spaceship App
+          Zum Stararc Portfolio
         </>
       );
     }
@@ -135,21 +135,6 @@ const SpaceshipAccessButton: React.FC<SpaceshipAccessButtonProps> = ({
           className="text-red-400 text-sm text-center max-w-xs"
         >
           {error}
-        </motion.div>
-      )}
-
-      {/* Access status indicator */}
-      {hasAccess !== null && !error && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-xs text-gray-400 text-center"
-        >
-          {hasAccess ? (
-            <span className="text-green-400">✓ Spaceship Zugang aktiv</span>
-          ) : (
-            <span>Spaceship Zugang wird beim ersten Klick erstellt</span>
-          )}
         </motion.div>
       )}
     </div>

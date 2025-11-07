@@ -146,23 +146,6 @@ const TwoFactorManagement: React.FC = () => {
           </div>
         ) : (
           <div>
-            <p className="text-gray-300 mb-4">
-              Schützen Sie Ihr Konto mit einer zusätzlichen Sicherheitsebene. 
-              2FA verhindert unbefugten Zugriff, auch wenn Ihr Passwort kompromittiert wird.
-            </p>
-            
-            <div className="bg-yellow-900/20 border border-yellow-500/30 rounded-lg p-4 mb-4">
-              <div className="flex items-start space-x-2">
-                <AlertTriangle className="w-5 h-5 text-yellow-400 mt-0.5" />
-                <div>
-                  <p className="text-yellow-300 text-sm font-semibold">Empfohlen</p>
-                  <p className="text-yellow-300 text-xs">
-                    Aktivieren Sie 2FA für optimale Sicherheit aller Ihrer Apps.
-                  </p>
-                </div>
-              </div>
-            </div>
-
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => setShowSetup(true)}
