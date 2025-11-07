@@ -2,26 +2,56 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
+import Animation1 from './Animation1';
+import OneDashboard from './OneDashboard';
+import BigPicture from './BigPicture';
+import SecuritySetup from './SecuritySetup';
+import SingleMulti from './SingleMulti';
 import AssetOrganizationAnimation from './AssetOrganizationAnimation';
-import WholeEnchilada from './WholeEnchilada';
-import PlansAnimation from './PlansAnimation';
+import BootstrappingAnimation from './BootstrappingAnimation';
+import BootstrappingAnimation2 from './BootstrappingAnimation2';
 
 // Animation configuration - easily add, remove, or reorder animations here
 const animationsConfig = [
-  { 
-    component: WholeEnchilada, 
-    key: 'wholeEnchilada',
-    name: 'WholeEnchilada'
-  },
   { 
     component: AssetOrganizationAnimation, 
     key: 'assetOrganization',
     name: 'AssetOrganization'
   },
   { 
-    component: PlansAnimation, 
-    key: 'plans',
-    name: 'Plans'
+    component: Animation1, 
+    key: 'animation1',
+    name: 'Animation1'
+  },
+  { 
+    component: OneDashboard, 
+    key: 'oneDashboard',
+    name: 'OneDashboard'
+  },
+  { 
+    component: BigPicture, 
+    key: 'bigPicture',
+    name: 'BigPicture'
+  },
+  { 
+    component: SecuritySetup, 
+    key: 'securitySetup',
+    name: 'SecuritySetup'
+  },
+  { 
+    component: SingleMulti, 
+    key: 'singleMulti',
+    name: 'SingleMulti'
+  },
+  { 
+    component: BootstrappingAnimation, 
+    key: 'bootstrapping',
+    name: 'Bootstrapping'
+  },
+  { 
+    component: BootstrappingAnimation2, 
+    key: 'bootstrapping2',
+    name: 'Bootstrapping2'
   }
 ];
 
@@ -31,7 +61,7 @@ const HeroSection: React.FC = () => {
 
   // Animation durations for auto-advance
   const getAnimationDuration = (animationIndex: number) => {
-    const durations = [10000, 15000, 10000]; // WholeEnchilada, AssetOrg, Plans
+    const durations = [15000, 15000, 15000, 15000, 15000, 15000, 15000, 15000]; // AssetOrg, Animation1, OneDashboard, BigPicture, SecuritySetup, SingleMulti, Bootstrapping, Bootstrapping2
     return durations[animationIndex] || 10000;
   };
 
@@ -61,6 +91,32 @@ const HeroSection: React.FC = () => {
     return () => clearTimeout(timer);
   }, [currentAnimation, animationContent.length]);
 
+  // Function to get animation-specific color class for title
+  const getAnimationColorClass = (animationIndex: number) => {
+    const animationKey = animationsConfig[animationIndex]?.key;
+    
+    switch (animationKey) {
+      case 'assetOrganization':
+        return 'text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-cyan-400';
+      case 'animation1':
+        return 'text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-teal-500';
+      case 'oneDashboard':
+        return 'text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-blue-500';
+      case 'bigPicture':
+        return 'text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-pink-500';
+      case 'securitySetup':
+        return 'text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-orange-500';
+      case 'singleMulti':
+        return 'text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500';
+      case 'bootstrapping':
+        return 'text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-500';
+      case 'bootstrapping2':
+        return 'text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-500';
+      default:
+        return 'text-white';
+    }
+  };
+
   return (
     <div className="relative overflow-hidden bg-gray-950 min-h-screen flex items-center justify-center">
       <div className="absolute inset-0 bg-gradient-to-br from-gray-950 via-gray-900 to-black"></div>
@@ -79,14 +135,15 @@ const HeroSection: React.FC = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="mb-8 pt-24"
+            className="mb-4 pt-32"
           >
             <motion.h1 
               key={currentAnimation} // Key für Re-Animation bei Wechsel
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: "easeOut" }}
-              className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight"
+              className={`text-5xl md:text-6xl font-bold mb-3 leading-tight ${getAnimationColorClass(currentAnimation)}`}
+            >
             >
               {animationContent[currentAnimation].title}
             </motion.h1>
@@ -95,13 +152,13 @@ const HeroSection: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-              className="text-xl text-gray-300 leading-relaxed mb-8"
+              className={`text-xl text-gray-300 leading-relaxed ${animationContent[currentAnimation].subtitle ? 'mb-8' : 'mb-2'}`}
             >
               {animationContent[currentAnimation].subtitle}
             </motion.p>
             
             {/* Animation Slideshow */}
-            <div className="relative mb-8 overflow-hidden mt-4 w-full min-w-[1000px]">
+            <div className="relative mb-8 overflow-hidden mt-2 w-full min-w-[1000px]">
               {/* Dynamic Animation Rendering */}
               {animationsConfig.map((animation, index) => {
                 const AnimationComponent = animation.component;
@@ -125,7 +182,8 @@ const HeroSection: React.FC = () => {
               <div className="h-[600px] w-full min-w-[1000px]"></div>
             </div>
 
-            {/* Call-to-Action Button */}
+            {/* Call-to-Action Button - REMOVED */}
+            {/* 
             <div className="absolute left-1/2 transform -translate-x-1/2 ml-4" style={{bottom: '90px'}}>
               <motion.button
                 initial={{ opacity: 0, y: 20 }}
@@ -137,6 +195,7 @@ const HeroSection: React.FC = () => {
                 {t('hero.cta')}
               </motion.button>
             </div>
+            */}
 
             {/* Navigation Arrows */}
             <div className="absolute inset-y-0 left-0 flex items-center">

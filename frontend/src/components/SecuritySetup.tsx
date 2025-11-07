@@ -2,23 +2,23 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import AnimationTimer from './AnimationTimer';
 import { 
-  Heart,
-  Users,
-  Zap
+  Shield,
+  Vault,
+  FileCheck
 } from 'lucide-react';
 
-interface PlansAnimationProps {
+interface SecuritySetupProps {
   className?: string;
   isActive?: boolean;
 }
 
-const PlansAnimation: React.FC<PlansAnimationProps> = ({ className = "", isActive = true }) => {
-  const [animationPhase, setAnimationPhase] = useState(0);
+const SecuritySetup: React.FC<SecuritySetupProps> = ({ className = "", isActive = true }) => {
+  const [animationPhase, setAnimationPhase] = useState(1); // Start with phase 1 immediately
 
   // Reset and start animation when becoming active
   useEffect(() => {
     if (isActive) {
-      setAnimationPhase(0);
+      setAnimationPhase(1); // Start immediately with headline
     }
   }, [isActive]);
 
@@ -26,12 +26,12 @@ const PlansAnimation: React.FC<PlansAnimationProps> = ({ className = "", isActiv
     if (!isActive) return;
     
     const animationSequence = setTimeout(() => {
-      if (animationPhase === 0) {
-        setAnimationPhase(1); // Show headline
-      } else if (animationPhase === 1) {
+      if (animationPhase === 1) {
         setAnimationPhase(2); // Show subtext
       } else if (animationPhase === 2) {
         setAnimationPhase(3); // Show call-to-action
+      } else if (animationPhase === 3) {
+        setAnimationPhase(4); // Hold final state for 5 more seconds
       }
     }, 2000); // 2 seconds between phases
 
@@ -41,7 +41,7 @@ const PlansAnimation: React.FC<PlansAnimationProps> = ({ className = "", isActiv
   return (
     <div className={`relative h-[540px] overflow-visible ${className}`}>
       {/* Animation Timer */}
-      <AnimationTimer duration={10} isActive={isActive} />
+      <AnimationTimer duration={15} isActive={isActive} />
       
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
         
@@ -49,13 +49,13 @@ const PlansAnimation: React.FC<PlansAnimationProps> = ({ className = "", isActiv
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ 
-            opacity: animationPhase >= 0 ? 0.1 : 0,
-            scale: animationPhase >= 0 ? 1 : 0.8
+            opacity: animationPhase >= 1 ? 0.1 : 0,
+            scale: animationPhase >= 1 ? 1 : 0.8
           }}
-          transition={{ duration: 2, ease: "easeOut" }}
+          transition={{ duration: 1, ease: "easeOut" }}
           className="absolute inset-0 flex items-center justify-center pointer-events-none"
         >
-          <div className="w-96 h-96 rounded-full bg-gradient-to-r from-blue-500/20 to-purple-500/20 blur-3xl" />
+          <div className="w-96 h-96 rounded-full bg-gradient-to-r from-red-500/20 to-orange-500/20 blur-3xl" />
         </motion.div>
 
         {/* Main Headline */}
@@ -68,9 +68,9 @@ const PlansAnimation: React.FC<PlansAnimationProps> = ({ className = "", isActiv
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 max-w-4xl"
         >
-          Support our independent{' '}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">
-            bootstraping
+          Document and review your{' '}
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-orange-500">
+            security setup
           </span>
         </motion.h2>
 
@@ -84,10 +84,7 @@ const PlansAnimation: React.FC<PlansAnimationProps> = ({ className = "", isActiv
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="text-xl text-gray-300 mb-8 max-w-3xl"
         >
-          Become a beta tester and get a{' '}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600 font-semibold">
-            lifelong Core Subscription
-          </span>
+          Digital and physical Vaults — Backup strategy
         </motion.p>
 
         {/* Feature Icons */}
@@ -101,16 +98,16 @@ const PlansAnimation: React.FC<PlansAnimationProps> = ({ className = "", isActiv
           className="flex gap-8 mb-8"
         >
           <div className="flex flex-col items-center">
-            <Heart className="w-8 h-8 text-red-400 mb-2" />
-            <span className="text-sm text-gray-400">Independent</span>
+            <Shield className="w-8 h-8 text-red-400 mb-2" />
+            <span className="text-sm text-gray-400">Security</span>
           </div>
           <div className="flex flex-col items-center">
-            <Users className="w-8 h-8 text-blue-400 mb-2" />
-            <span className="text-sm text-gray-400">Community</span>
+            <Vault className="w-8 h-8 text-orange-400 mb-2" />
+            <span className="text-sm text-gray-400">Vaults</span>
           </div>
           <div className="flex flex-col items-center">
-            <Zap className="w-8 h-8 text-purple-400 mb-2" />
-            <span className="text-sm text-gray-400">Lifetime Value</span>
+            <FileCheck className="w-8 h-8 text-red-500 mb-2" />
+            <span className="text-sm text-gray-400">Backup</span>
           </div>
         </motion.div>
 
@@ -124,27 +121,12 @@ const PlansAnimation: React.FC<PlansAnimationProps> = ({ className = "", isActiv
           transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
         >
           <motion.button
-            whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(99, 102, 241, 0.3)" }}
+            whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(239, 68, 68, 0.3)" }}
             whileTap={{ scale: 0.95 }}
-            className="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-lg font-semibold rounded-lg transition-all duration-300 hover:shadow-xl"
+            className="px-8 py-4 bg-gradient-to-r from-red-600 to-orange-600 text-white text-lg font-semibold rounded-lg transition-all duration-300 hover:shadow-xl"
           >
-            Join Beta Testing
+            Review Security
           </motion.button>
-        </motion.div>
-
-        {/* Progress indicator */}
-        <motion.div
-          initial={{ opacity: 0, width: 0 }}
-          animate={{ 
-            opacity: animationPhase >= 3 ? 1 : 0,
-            width: animationPhase >= 3 ? "100%" : 0
-          }}
-          transition={{ duration: 1.5, delay: 0.5 }}
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-        >
-          <div className="w-64 h-1 bg-gray-700 rounded-full overflow-hidden">
-            <div className="h-full bg-gradient-to-r from-blue-400 to-purple-600 rounded-full" />
-          </div>
         </motion.div>
 
       </div>
@@ -152,4 +134,4 @@ const PlansAnimation: React.FC<PlansAnimationProps> = ({ className = "", isActiv
   );
 };
 
-export default PlansAnimation;
+export default SecuritySetup;

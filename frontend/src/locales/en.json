@@ -152,8 +152,8 @@
   "heroSection": {
     "animations": {
       "assetOrganization": {
-        "title": "Order over Entropy",
-        "subtitle": "From scattered assets and missing documentation to a perfectly organized portfolio with a privacy-first approach."
+        "title": "Organize your wealth and security",
+        "subtitle": ""
       },
       "assetsOverview": {
         "title": "Complete Assets Overview",
@@ -180,13 +180,37 @@
           "subtitle": "Securely store your private key for login. We cannot restore your password."
         }
       },
+      "animation1": {
+        "title": "",
+        "subtitle": ""
+      },
+      "oneDashboard": {
+        "title": "",
+        "subtitle": ""
+      },
       "wholeEnchilada": {
         "title": "Holistic Wealth and Security Management",
         "subtitle": "Complete ecosystem overview: self-managed & third-party assets, retirement capital, real estate, security architecture, and privacy documentation."
       },
-      "plans": {
-        "title": "Flexible Pricing Plans", 
-        "subtitle": "From free to professional - the right choice for everyone."
+      "bootstrapping": {
+        "title": "",
+        "subtitle": ""
+      },
+      "bootstrapping2": {
+        "title": "",
+        "subtitle": ""
+      },
+      "bigPicture": {
+        "title": "",
+        "subtitle": ""
+      },
+      "securitySetup": {
+        "title": "",
+        "subtitle": ""
+      },
+      "singleMulti": {
+        "title": "",
+        "subtitle": ""
       }
     }
   },

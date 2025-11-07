@@ -152,8 +152,36 @@
   "heroSection": {
     "animations": {
       "assetOrganization": {
-        "title": "Ordnung statt Entropie",
-        "subtitle": "Von verstreuten Vermögenswerten und fehlender Dokumentation zu einem perfekt organisierten Portfolio mit Privacy-First-Ansatz."
+        "title": "Organize your wealth and security",
+        "subtitle": ""
+      },
+      "animation1": {
+        "title": "",
+        "subtitle": ""
+      },
+      "oneDashboard": {
+        "title": "",
+        "subtitle": ""
+      },
+      "bigPicture": {
+        "title": "",
+        "subtitle": ""
+      },
+      "securitySetup": {
+        "title": "",
+        "subtitle": ""
+      },
+      "singleMulti": {
+        "title": "",
+        "subtitle": ""
+      },
+      "bootstrapping": {
+        "title": "",
+        "subtitle": ""
+      },
+      "bootstrapping2": {
+        "title": "",
+        "subtitle": ""
       },
       "assetsOverview": {
         "title": "Komplette Vermögensübersicht",
@@ -184,9 +212,17 @@
         "title": "Ganzheitliches Vermögens- und Sicherheitsmanagement",
         "subtitle": "Alle Vermögenswerte unter einem Dach."
       },
-      "plans": {
-        "title": "Flexible Preispläne",
-        "subtitle": "Von kostenlos bis professionell - für jeden das Richtige."
+      "bigPicture": {
+        "title": "",
+        "subtitle": ""
+      },
+      "securitySetup": {
+        "title": "",
+        "subtitle": ""
+      },
+      "singleMulti": {
+        "title": "",
+        "subtitle": ""
       }
     }
   },
