@@ -153,6 +153,8 @@
     "animations": {
       "assetOrganization": {
         "title": "Organize your wealth and security",
+        "titlePart1": "Organize your",
+        "titlePart2": "wealth and security",
         "subtitle": ""
       },
       "assetsOverview": {
@@ -360,6 +362,132 @@
     },
     "footer": {
       "info": "You can always access both the Starship app and StarArc subscription portal regardless of your authentication method."
+    }
+  },
+  "animations": {
+    "animation1": {
+      "headline": {
+        "part1": "Hodl and manage Assets",
+        "part2": "for generations"
+      },
+      "subtext": "Take control of your wealth with our comprehensive asset management platform. From Bitcoin custody to traditional investments - all in one secure, private dashboard.",
+      "features": {
+        "security": "Bank-level security",
+        "privacy": "Complete privacy",
+        "control": "Full control"
+      },
+      "cta": "Start Managing Assets"
+    },
+    "vaultManagement": {
+      "headline": {
+        "part1": "Manage your",
+        "part2": "Vaults"
+      },
+      "subtext": "Both Physical and digital",
+      "features": {
+        "physical": "Physical",
+        "digital": "Digital", 
+        "secure": "Secure"
+      },
+      "cta": "Setup Vault Management"
+    },
+    "generationalWealth": {
+      "headline": {
+        "part1": "Leave your heirs a",
+        "part2": "well organized portfolio"
+      },
+      "subtext": "Generational wealth. Independence",
+      "features": {
+        "family": "Family",
+        "growth": "Growth",
+        "legacy": "Legacy"
+      },
+      "cta": "Plan Your Legacy"
+    },
+    "marketAccess": {
+      "headline": {
+        "part1": "Get direct",
+        "part2": "market access",
+        "part3": "through our partners"
+      },
+      "subtext": "Buy Bitcoin - sell your house - renew mortgages",
+      "features": {
+        "bitcoin": "Bitcoin",
+        "realEstate": "Real Estate",
+        "banking": "Banking"
+      },
+      "cta": "Access Markets"
+    },
+    "oneDashboard": {
+      "headline": {
+        "part1": "ONE",
+        "part2": "dashboard for all your assets"
+      },
+      "subtext": "non-custodial · secure · privacy sensitive",
+      "features": {
+        "nonCustodial": "Non-custodial",
+        "secure": "Secure",
+        "privacySensitive": "Privacy Sensitive"
+      },
+      "cta": "Start Managing Assets"
+    },
+    "bigPicture": {
+      "headline": {
+        "part1": "See the",
+        "part2": "big picture",
+        "part3": "— then move forward"
+      },
+      "subtext": "Analyze · Learn · Improve",
+      "features": {
+        "analyze": "Analyze",
+        "learn": "Learn",
+        "improve": "Improve"
+      },
+      "cta": "See Big Picture"
+    },
+    "singleMulti": {
+      "headline": {
+        "part1": "Document",
+        "part2": "singlesig and multisig"
+      },
+      "subtext": "With our Bitcoin self-custody wizard",
+      "features": {
+        "singleSig": "Single Signature",
+        "multiSig": "Multi Signature",
+        "selfCustody": "Self-Custody"
+      },
+      "cta": "Start Wizard"
+    },
+    "bootstrapping2": {
+      "headline": {
+        "part1": "StarArc independent",
+        "part2": "bootstrapping"
+      },
+      "subtext": {
+        "part1": "Become a",
+        "part2": "StarArc early supporter",
+        "part3": "and get a",
+        "part4": "lifelong Core Subscription for 999 Dollars"
+      },
+      "features": {
+        "independent": "Independent",
+        "limited": "Limited to 100",
+        "earlySupporter": "Early Supporter"
+      },
+      "cta": "Become Early Supporter"
+    },
+    "securitySetup": {
+      "headline": {
+        "part1": "Document and review your",
+        "part2": "security setup"
+      },
+      "subtext": "Digital and physical Vaults — Backup strategy",
+      "features": {
+        "security": "Security",
+        "vaults": "Vaults",
+        "backup": "Backup"
+      },
+      "cta": "Review Security"
     }
   }
 }

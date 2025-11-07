@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { useLanguage } from '../contexts/LanguageContext';
 import AnimationTimer from './AnimationTimer';
 import { 
   Building2,
@@ -14,6 +16,8 @@ interface MarketAccessProps {
 
 const MarketAccess: React.FC<MarketAccessProps> = ({ className = "", isActive = true }) => {
   const [animationPhase, setAnimationPhase] = useState(1);
+  const navigate = useNavigate();
+  const { t } = useLanguage();
 
   useEffect(() => {
     if (isActive) {
@@ -66,11 +70,11 @@ const MarketAccess: React.FC<MarketAccessProps> = ({ className = "", isActive = 
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 max-w-4xl"
         >
-          Get direct{' '}
+          {t('animations.marketAccess.headline.part1')}{' '}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-500">
-            market access
+            {t('animations.marketAccess.headline.part2')}
           </span>{' '}
-          through our partners
+          {t('animations.marketAccess.headline.part3')}
         </motion.h2>
 
         {/* Subtext */}
@@ -83,7 +87,7 @@ const MarketAccess: React.FC<MarketAccessProps> = ({ className = "", isActive = 
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="text-xl text-gray-300 mb-8 max-w-3xl"
         >
-          Buy Bitcoin - sell your house - renew mortgages
+          {t('animations.marketAccess.subtext')}
         </motion.p>
 
         {/* Feature Icons */}
@@ -98,15 +102,15 @@ const MarketAccess: React.FC<MarketAccessProps> = ({ className = "", isActive = 
         >
           <div className="flex flex-col items-center">
             <Coins className="w-8 h-8 text-orange-400 mb-2" />
-            <span className="text-sm text-gray-400">Bitcoin</span>
+            <span className="text-sm text-gray-400">{t('animations.marketAccess.features.bitcoin')}</span>
           </div>
           <div className="flex flex-col items-center">
             <Home className="w-8 h-8 text-blue-400 mb-2" />
-            <span className="text-sm text-gray-400">Real Estate</span>
+            <span className="text-sm text-gray-400">{t('animations.marketAccess.features.realEstate')}</span>
           </div>
           <div className="flex flex-col items-center">
             <Building2 className="w-8 h-8 text-green-400 mb-2" />
-            <span className="text-sm text-gray-400">Banking</span>
+            <span className="text-sm text-gray-400">{t('animations.marketAccess.features.banking')}</span>
           </div>
         </motion.div>
 
@@ -122,9 +126,10 @@ const MarketAccess: React.FC<MarketAccessProps> = ({ className = "", isActive = 
           <motion.button
             whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(249, 115, 22, 0.3)" }}
             whileTap={{ scale: 0.95 }}
-            className="px-8 py-4 bg-gradient-to-r from-orange-600 to-yellow-600 text-white text-lg font-semibold rounded-lg transition-all duration-300 hover:shadow-xl"
+            onClick={() => navigate('/register')}
+            className="px-8 py-4 bg-gradient-to-r from-orange-600 to-yellow-600 text-white text-lg font-semibold rounded-lg transition-all duration-300 hover:shadow-xl cursor-pointer"
           >
-            Access Markets
+            {t('animations.marketAccess.cta')}
           </motion.button>
         </motion.div>
 

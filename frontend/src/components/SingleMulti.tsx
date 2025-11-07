@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { useLanguage } from '../contexts/LanguageContext';
 import AnimationTimer from './AnimationTimer';
 import { 
   Key,
@@ -14,6 +16,8 @@ interface SingleMultiProps {
 
 const SingleMulti: React.FC<SingleMultiProps> = ({ className = "", isActive = true }) => {
   const [animationPhase, setAnimationPhase] = useState(1); // Start with phase 1 immediately
+  const navigate = useNavigate();
+  const { t } = useLanguage();
 
   // Reset and start animation when becoming active
   useEffect(() => {
@@ -41,7 +45,7 @@ const SingleMulti: React.FC<SingleMultiProps> = ({ className = "", isActive = tr
   return (
     <div className={`relative h-[540px] overflow-visible ${className}`}>
       {/* Animation Timer */}
-      <AnimationTimer duration={15} isActive={isActive} />
+      <AnimationTimer duration={7} isActive={isActive} />
       
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
         
@@ -68,9 +72,9 @@ const SingleMulti: React.FC<SingleMultiProps> = ({ className = "", isActive = tr
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 max-w-4xl"
         >
-          Document{' '}
+          {t('animations.singleMulti.headline.part1')}{' '}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">
-            singlesig and multisig
+            {t('animations.singleMulti.headline.part2')}
           </span>
         </motion.h2>
 
@@ -84,7 +88,7 @@ const SingleMulti: React.FC<SingleMultiProps> = ({ className = "", isActive = tr
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="text-xl text-gray-300 mb-8 max-w-3xl"
         >
-          With our Bitcoin self-custody wizard
+          {t('animations.singleMulti.subtext')}
         </motion.p>
 
         {/* Feature Icons */}
@@ -99,15 +103,15 @@ const SingleMulti: React.FC<SingleMultiProps> = ({ className = "", isActive = tr
         >
           <div className="flex flex-col items-center">
             <Key className="w-8 h-8 text-amber-400 mb-2" />
-            <span className="text-sm text-gray-400">Single Signature</span>
+            <span className="text-sm text-gray-400">{t('animations.singleMulti.features.singleSig')}</span>
           </div>
           <div className="flex flex-col items-center">
             <Users className="w-8 h-8 text-orange-400 mb-2" />
-            <span className="text-sm text-gray-400">Multi Signature</span>
+            <span className="text-sm text-gray-400">{t('animations.singleMulti.features.multiSig')}</span>
           </div>
           <div className="flex flex-col items-center">
             <Bitcoin className="w-8 h-8 text-amber-500 mb-2" />
-            <span className="text-sm text-gray-400">Self-Custody</span>
+            <span className="text-sm text-gray-400">{t('animations.singleMulti.features.selfCustody')}</span>
           </div>
         </motion.div>
 
@@ -123,9 +127,10 @@ const SingleMulti: React.FC<SingleMultiProps> = ({ className = "", isActive = tr
           <motion.button
             whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(245, 158, 11, 0.3)" }}
             whileTap={{ scale: 0.95 }}
-            className="px-8 py-4 bg-gradient-to-r from-amber-600 to-orange-600 text-white text-lg font-semibold rounded-lg transition-all duration-300 hover:shadow-xl"
+            onClick={() => navigate('/register')}
+            className="px-8 py-4 bg-gradient-to-r from-amber-600 to-orange-600 text-white text-lg font-semibold rounded-lg transition-all duration-300 hover:shadow-xl cursor-pointer"
           >
-            Start Wizard
+            {t('animations.singleMulti.cta')}
           </motion.button>
         </motion.div>
 

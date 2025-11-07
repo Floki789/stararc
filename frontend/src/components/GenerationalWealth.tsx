@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { useLanguage } from '../contexts/LanguageContext';
 import AnimationTimer from './AnimationTimer';
 import { 
   Users,
@@ -14,6 +16,8 @@ interface GenerationalWealthProps {
 
 const GenerationalWealth: React.FC<GenerationalWealthProps> = ({ className = "", isActive = true }) => {
   const [animationPhase, setAnimationPhase] = useState(1);
+  const navigate = useNavigate();
+  const { t } = useLanguage();
 
   useEffect(() => {
     if (isActive) {
@@ -66,9 +70,9 @@ const GenerationalWealth: React.FC<GenerationalWealthProps> = ({ className = "",
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 max-w-4xl"
         >
-          Leave your heirs a{' '}
+          {t('animations.generationalWealth.headline.part1')}{' '}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-500">
-            well organized portfolio
+            {t('animations.generationalWealth.headline.part2')}
           </span>
         </motion.h2>
 
@@ -82,7 +86,7 @@ const GenerationalWealth: React.FC<GenerationalWealthProps> = ({ className = "",
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="text-xl text-gray-300 mb-8 max-w-3xl"
         >
-          Generational wealth. Independence
+          {t('animations.generationalWealth.subtext')}
         </motion.p>
 
         {/* Feature Icons */}
@@ -97,15 +101,15 @@ const GenerationalWealth: React.FC<GenerationalWealthProps> = ({ className = "",
         >
           <div className="flex flex-col items-center">
             <Users className="w-8 h-8 text-green-400 mb-2" />
-            <span className="text-sm text-gray-400">Family</span>
+            <span className="text-sm text-gray-400">{t('animations.generationalWealth.features.family')}</span>
           </div>
           <div className="flex flex-col items-center">
             <TrendingUp className="w-8 h-8 text-emerald-400 mb-2" />
-            <span className="text-sm text-gray-400">Growth</span>
+            <span className="text-sm text-gray-400">{t('animations.generationalWealth.features.growth')}</span>
           </div>
           <div className="flex flex-col items-center">
             <Heart className="w-8 h-8 text-green-500 mb-2" />
-            <span className="text-sm text-gray-400">Legacy</span>
+            <span className="text-sm text-gray-400">{t('animations.generationalWealth.features.legacy')}</span>
           </div>
         </motion.div>
 
@@ -121,9 +125,10 @@ const GenerationalWealth: React.FC<GenerationalWealthProps> = ({ className = "",
           <motion.button
             whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(34, 197, 94, 0.3)" }}
             whileTap={{ scale: 0.95 }}
-            className="px-8 py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white text-lg font-semibold rounded-lg transition-all duration-300 hover:shadow-xl"
+            onClick={() => navigate('/register')}
+            className="px-8 py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white text-lg font-semibold rounded-lg transition-all duration-300 hover:shadow-xl cursor-pointer"
           >
-            Plan Your Legacy
+            {t('animations.generationalWealth.cta')}
           </motion.button>
         </motion.div>
 

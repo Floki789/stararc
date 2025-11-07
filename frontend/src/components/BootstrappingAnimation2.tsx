@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { useLanguage } from '../contexts/LanguageContext';
 import AnimationTimer from './AnimationTimer';
 import { 
   Heart,
@@ -14,6 +16,8 @@ interface BootstrappingAnimation2Props {
 
 const BootstrappingAnimation2: React.FC<BootstrappingAnimation2Props> = ({ className = "", isActive = true }) => {
   const [animationPhase, setAnimationPhase] = useState(1); // Start with phase 1 immediately
+  const navigate = useNavigate();
+  const { t } = useLanguage();
 
   // Reset and start animation when becoming active
   useEffect(() => {
@@ -41,7 +45,7 @@ const BootstrappingAnimation2: React.FC<BootstrappingAnimation2Props> = ({ class
   return (
     <div className={`relative h-[540px] overflow-visible ${className}`}>
       {/* Animation Timer */}
-      <AnimationTimer duration={15} isActive={isActive} />
+      <AnimationTimer duration={7} isActive={isActive} />
       
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
         
@@ -68,9 +72,9 @@ const BootstrappingAnimation2: React.FC<BootstrappingAnimation2Props> = ({ class
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 max-w-4xl"
         >
-          StarArc independent{' '}
+          {t('animations.bootstrapping2.headline.part1')}{' '}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-500">
-            bootstrapping
+            {t('animations.bootstrapping2.headline.part2')}
           </span>
         </motion.h2>
 
@@ -84,13 +88,13 @@ const BootstrappingAnimation2: React.FC<BootstrappingAnimation2Props> = ({ class
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="text-xl text-gray-300 mb-8 max-w-3xl"
         >
-          Become a{' '}
+          {t('animations.bootstrapping2.subtext.part1')}{' '}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-500 font-semibold">
-            StarArc early supporter
+            {t('animations.bootstrapping2.subtext.part2')}
           </span>
-          {' '}and get a{' '}
+          {' '}{t('animations.bootstrapping2.subtext.part3')}{' '}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600 font-semibold">
-            lifelong Core Subscription for 999 Dollars
+            {t('animations.bootstrapping2.subtext.part4')}
           </span>
         </motion.p>
 
@@ -106,15 +110,15 @@ const BootstrappingAnimation2: React.FC<BootstrappingAnimation2Props> = ({ class
         >
           <div className="flex flex-col items-center">
             <Heart className="w-8 h-8 text-red-400 mb-2" />
-            <span className="text-sm text-gray-400">Independent</span>
+            <span className="text-sm text-gray-400">{t('animations.bootstrapping2.features.independent')}</span>
           </div>
           <div className="flex flex-col items-center">
             <Users className="w-8 h-8 text-orange-400 mb-2" />
-            <span className="text-sm text-gray-400">Limited to 100</span>
+            <span className="text-sm text-gray-400">{t('animations.bootstrapping2.features.limited')}</span>
           </div>
           <div className="flex flex-col items-center">
             <Crown className="w-8 h-8 text-yellow-400 mb-2" />
-            <span className="text-sm text-gray-400">Early Supporter</span>
+            <span className="text-sm text-gray-400">{t('animations.bootstrapping2.features.earlySupporter')}</span>
           </div>
         </motion.div>
 
@@ -130,9 +134,10 @@ const BootstrappingAnimation2: React.FC<BootstrappingAnimation2Props> = ({ class
           <motion.button
             whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(249, 115, 22, 0.3)" }}
             whileTap={{ scale: 0.95 }}
-            className="px-8 py-4 bg-gradient-to-r from-orange-600 to-yellow-600 text-white text-lg font-semibold rounded-lg transition-all duration-300 hover:shadow-xl"
+            onClick={() => navigate('/register')}
+            className="px-8 py-4 bg-gradient-to-r from-orange-600 to-yellow-600 text-white text-lg font-semibold rounded-lg transition-all duration-300 hover:shadow-xl cursor-pointer"
           >
-            Become Early Supporter
+            {t('animations.bootstrapping2.cta')}
           </motion.button>
         </motion.div>
 

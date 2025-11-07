@@ -153,6 +153,8 @@
     "animations": {
       "assetOrganization": {
         "title": "Organize your wealth and security",
+        "titlePart1": "Organisieren Sie Ihr",
+        "titlePart2": "Vermögen und Ihre Sicherheit",
         "subtitle": ""
       },
       "animation1": {
@@ -181,7 +183,7 @@
       },
       "generationalWealth": {
         "title": "Hinterlassen Sie Ihren Erben ein gut organisiertes Portfolio",
-        "subtitle": "Generationenvermögen. Unabhängigkeit"
+        "subtitle": "Schützen Sie das Vermögen von Generationen"
       },
       "marketAccess": {
         "title": "Erhalten Sie direkten Marktzugang über unsere Partner",
@@ -223,18 +225,6 @@
       "wholeEnchilada": {
         "title": "Ganzheitliches Vermögens- und Sicherheitsmanagement",
         "subtitle": "Alle Vermögenswerte unter einem Dach."
-      },
-      "bigPicture": {
-        "title": "",
-        "subtitle": ""
-      },
-      "securitySetup": {
-        "title": "",
-        "subtitle": ""
-      },
-      "singleMulti": {
-        "title": "",
-        "subtitle": ""
       }
     }
   },
@@ -372,6 +362,132 @@
     },
     "footer": {
       "info": "Sie können unabhängig von Ihrer Authentifizierungsmethode jederzeit sowohl auf die Starship-App als auch auf das StarArc-Abonnement-Portal zugreifen."
+    }
+  },
+  "animations": {
+    "animation1": {
+      "headline": {
+        "part1": "Halten und verwalten Sie ihr Vermögen",
+        "part2": "für Generationen"
+      },
+      "subtext": "Übernehmen Sie die Kontrolle über Ihr Vermögen mit unserer umfassenden Asset-Management-Plattform. Von Bitcoin-Verwahrung bis hin zu traditionellen Investitionen - alles in einem sicheren, privaten Dashboard.",
+      "features": {
+        "security": "Bank-Level-Sicherheit",
+        "privacy": "Vollständige Privatsphäre",
+        "control": "Vollständige Kontrolle"
+      },
+      "cta": "Vermögen verwalten starten"
+    },
+    "vaultManagement": {
+      "headline": {
+        "part1": "Verwalten Sie Ihre",
+        "part2": "Tresore"
+      },
+      "subtext": "Sowohl physisch als auch digital",
+      "features": {
+        "physical": "Physisch",
+        "digital": "Digital",
+        "secure": "Sicher"
+      },
+      "cta": "Tresorverwaltung einrichten"
+    },
+    "generationalWealth": {
+      "headline": {
+        "part1": "Hinterlassen Sie Ihren Erben ein",
+        "part2": "gut organisiertes Portfolio"
+      },
+      "subtext": "Generationenvermögen. Unabhängigkeit",
+      "features": {
+        "family": "Familie",
+        "growth": "Wachstum",
+        "legacy": "Erbe"
+      },
+      "cta": "Ihr Erbe planen"
+    },
+    "marketAccess": {
+      "headline": {
+        "part1": "Erhalten Sie direkten",
+        "part2": "Marktzugang",
+        "part3": "über unsere Partner"
+      },
+      "subtext": "Bitcoin kaufen - Haus verkaufen - Hypotheken erneuern",
+      "features": {
+        "bitcoin": "Bitcoin",
+        "realEstate": "Immobilien",
+        "banking": "Banking"
+      },
+      "cta": "Märkte erschließen"
+    },
+    "oneDashboard": {
+      "headline": {
+        "part1": "EIN",
+        "part2": "Dashboard für alle Ihre Vermögenswerte"
+      },
+      "subtext": "selbstverwaltet · sicher · datenschutzsensibel",
+      "features": {
+        "nonCustodial": "Selbstverwaltet",
+        "secure": "Sicher",
+        "privacySensitive": "Datenschutzsensibel"
+      },
+      "cta": "Vermögensverwaltung starten"
+    },
+    "bigPicture": {
+      "headline": {
+        "part1": "Sehen Sie das",
+        "part2": "große Ganze",
+        "part3": "— dann handeln Sie"
+      },
+      "subtext": "Analysieren · Lernen · Verbessern",
+      "features": {
+        "analyze": "Analysieren",
+        "learn": "Lernen",
+        "improve": "Verbessern"
+      },
+      "cta": "Das große Ganze sehen"
+    },
+    "singleMulti": {
+      "headline": {
+        "part1": "Dokumentieren Sie",
+        "part2": "SingleSig und MultiSig"
+      },
+      "subtext": "Mit unserem Bitcoin Self-Custody-Assistenten",
+      "features": {
+        "singleSig": "Einzelsignatur",
+        "multiSig": "Mehrfachsignatur",
+        "selfCustody": "Eigenverwahrung"
+      },
+      "cta": "Assistenten starten"
+    },
+    "bootstrapping2": {
+      "headline": {
+        "part1": "StarArc unabhängiges",
+        "part2": "Bootstrapping"
+      },
+      "subtext": {
+        "part1": "Werden Sie ein",
+        "part2": "StarArc Früh-Unterstützer",
+        "part3": "und erhalten Sie ein",
+        "part4": "lebenslange Core-Mitgliedschaft für 999 Dollar"
+      },
+      "features": {
+        "independent": "Unabhängig",
+        "limited": "Begrenzt auf 100",
+        "earlySupporter": "Früh-Unterstützer"
+      },
+      "cta": "Früh-Unterstützer werden"
+    },
+    "securitySetup": {
+      "headline": {
+        "part1": "Dokumentieren und überprüfen Sie Ihr",
+        "part2": "Sicherheitssetup"
+      },
+      "subtext": "Digitale und physische Tresore — Backup-Strategie",
+      "features": {
+        "security": "Sicherheit",
+        "vaults": "Tresore",
+        "backup": "Backup"
+      },
+      "cta": "Sicherheit überprüfen"
     }
   }
 }

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { useLanguage } from '../contexts/LanguageContext';
 import AnimationTimer from './AnimationTimer';
 import { 
   Shield,
@@ -14,6 +16,8 @@ interface Animation1Props {
 
 const Animation1: React.FC<Animation1Props> = ({ className = "", isActive = true }) => {
   const [animationPhase, setAnimationPhase] = useState(1); // Start with phase 1 immediately
+  const navigate = useNavigate();
+  const { t } = useLanguage();
 
   // Reset and start animation when becoming active
   useEffect(() => {
@@ -41,7 +45,7 @@ const Animation1: React.FC<Animation1Props> = ({ className = "", isActive = true
   return (
     <div className={`relative h-[540px] overflow-visible ${className}`}>
       {/* Animation Timer */}
-      <AnimationTimer duration={15} isActive={isActive} />
+      <AnimationTimer duration={7} isActive={isActive} />
       
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
         
@@ -68,9 +72,9 @@ const Animation1: React.FC<Animation1Props> = ({ className = "", isActive = true
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 max-w-4xl"
         >
-          Hodl and manage{' '}
+          {t('animations.animation1.headline.part1')}{' '}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-500">
-            Assets for generations
+            {t('animations.animation1.headline.part2')}
           </span>
         </motion.h2>
 
@@ -84,7 +88,7 @@ const Animation1: React.FC<Animation1Props> = ({ className = "", isActive = true
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="text-xl text-gray-300 mb-8 max-w-3xl"
         >
-          Bitcoin, Securities, Real Estate, Precious Metals, Art
+          {t('animations.animation1.subtext')}
         </motion.p>
 
         {/* Feature Icons */}
@@ -99,15 +103,15 @@ const Animation1: React.FC<Animation1Props> = ({ className = "", isActive = true
         >
           <div className="flex flex-col items-center">
             <Shield className="w-8 h-8 text-green-400 mb-2" />
-            <span className="text-sm text-gray-400">Secure</span>
+            <span className="text-sm text-gray-400">{t('animations.animation1.features.security')}</span>
           </div>
           <div className="flex flex-col items-center">
             <TrendingUp className="w-8 h-8 text-emerald-400 mb-2" />
-            <span className="text-sm text-gray-400">Growth</span>
+            <span className="text-sm text-gray-400">{t('animations.animation1.features.privacy')}</span>
           </div>
           <div className="flex flex-col items-center">
             <Clock className="w-8 h-8 text-green-500 mb-2" />
-            <span className="text-sm text-gray-400">Long-term</span>
+            <span className="text-sm text-gray-400">{t('animations.animation1.features.control')}</span>
           </div>
         </motion.div>
 
@@ -123,9 +127,10 @@ const Animation1: React.FC<Animation1Props> = ({ className = "", isActive = true
           <motion.button
             whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(34, 197, 94, 0.3)" }}
             whileTap={{ scale: 0.95 }}
-            className="px-8 py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white text-lg font-semibold rounded-lg transition-all duration-300 hover:shadow-xl"
+            onClick={() => navigate('/register')}
+            className="px-8 py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white text-lg font-semibold rounded-lg transition-all duration-300 hover:shadow-xl cursor-pointer"
           >
-            Start Managing Assets
+            {t('animations.animation1.cta')}
           </motion.button>
         </motion.div>
 

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { useLanguage } from '../contexts/LanguageContext';
 import AnimationTimer from './AnimationTimer';
 import { 
   Vault,
@@ -14,6 +16,8 @@ interface VaultManagementProps {
 
 const VaultManagement: React.FC<VaultManagementProps> = ({ className = "", isActive = true }) => {
   const [animationPhase, setAnimationPhase] = useState(1);
+  const navigate = useNavigate();
+  const { t } = useLanguage();
 
   useEffect(() => {
     if (isActive) {
@@ -66,9 +70,9 @@ const VaultManagement: React.FC<VaultManagementProps> = ({ className = "", isAct
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 max-w-4xl"
         >
-          Manage your{' '}
+          {t('animations.vaultManagement.headline.part1')}{' '}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
-            Vaults
+            {t('animations.vaultManagement.headline.part2')}
           </span>
         </motion.h2>
 
@@ -82,7 +86,7 @@ const VaultManagement: React.FC<VaultManagementProps> = ({ className = "", isAct
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="text-xl text-gray-300 mb-8 max-w-3xl"
         >
-          Both Physical and digital
+          {t('animations.vaultManagement.subtext')}
         </motion.p>
 
         {/* Feature Icons */}
@@ -97,15 +101,15 @@ const VaultManagement: React.FC<VaultManagementProps> = ({ className = "", isAct
         >
           <div className="flex flex-col items-center">
             <Vault className="w-8 h-8 text-blue-400 mb-2" />
-            <span className="text-sm text-gray-400">Physical</span>
+            <span className="text-sm text-gray-400">{t('animations.vaultManagement.features.physical')}</span>
           </div>
           <div className="flex flex-col items-center">
             <Database className="w-8 h-8 text-cyan-400 mb-2" />
-            <span className="text-sm text-gray-400">Digital</span>
+            <span className="text-sm text-gray-400">{t('animations.vaultManagement.features.digital')}</span>
           </div>
           <div className="flex flex-col items-center">
             <Shield className="w-8 h-8 text-green-400 mb-2" />
-            <span className="text-sm text-gray-400">Secure</span>
+            <span className="text-sm text-gray-400">{t('animations.vaultManagement.features.secure')}</span>
           </div>
         </motion.div>
 
@@ -121,9 +125,10 @@ const VaultManagement: React.FC<VaultManagementProps> = ({ className = "", isAct
           <motion.button
             whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(59, 130, 246, 0.3)" }}
             whileTap={{ scale: 0.95 }}
-            className="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-lg font-semibold rounded-lg transition-all duration-300 hover:shadow-xl"
+            onClick={() => navigate('/register')}
+            className="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-lg font-semibold rounded-lg transition-all duration-300 hover:shadow-xl cursor-pointer"
           >
-            Setup Vault Management
+            {t('animations.vaultManagement.cta')}
           </motion.button>
         </motion.div>
 

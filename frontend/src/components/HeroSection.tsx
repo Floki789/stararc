@@ -21,14 +21,14 @@ const animationsConfig = [
     name: 'AssetOrganization'
   },
   { 
-    component: Animation1, 
-    key: 'animation1',
-    name: 'Animation1'
-  },
-  { 
     component: OneDashboard, 
     key: 'oneDashboard',
     name: 'OneDashboard'
+  },
+  { 
+    component: Animation1, 
+    key: 'animation1',
+    name: 'Animation1'
   },
   { 
     component: BigPicture, 
@@ -168,9 +168,9 @@ const HeroSection: React.FC = () => {
                   {/* Special handling for AssetOrganization title to match Animation1 style */}
                   {animationsConfig[currentAnimation]?.key === 'assetOrganization' ? (
                     <span className="text-white">
-                      Organize your{' '}
+                      {t('heroSection.animations.assetOrganization.titlePart1')}{' '}
                       <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-cyan-400">
-                        wealth and security
+                        {t('heroSection.animations.assetOrganization.titlePart2')}
                       </span>
                     </span>
                   ) : (

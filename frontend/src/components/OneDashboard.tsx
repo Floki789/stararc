@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { useLanguage } from '../contexts/LanguageContext';
 import AnimationTimer from './AnimationTimer';
 import { 
   Shield,
@@ -14,6 +16,8 @@ interface OneDashboardProps {
 
 const OneDashboard: React.FC<OneDashboardProps> = ({ className = "", isActive = true }) => {
   const [animationPhase, setAnimationPhase] = useState(1); // Start with phase 1 immediately
+  const navigate = useNavigate();
+  const { t } = useLanguage();
 
   // Reset and start animation when becoming active
   useEffect(() => {
@@ -41,7 +45,7 @@ const OneDashboard: React.FC<OneDashboardProps> = ({ className = "", isActive = 
   return (
     <div className={`relative h-[540px] overflow-visible ${className}`}>
       {/* Animation Timer */}
-      <AnimationTimer duration={15} isActive={isActive} />
+      <AnimationTimer duration={7} isActive={isActive} />
       
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
         
@@ -69,9 +73,9 @@ const OneDashboard: React.FC<OneDashboardProps> = ({ className = "", isActive = 
           className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 max-w-4xl"
         >
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-500">
-            ONE
+            {t('animations.oneDashboard.headline.part1')}
           </span>
-          {' '}dashboard for all your assets
+          {' '}{t('animations.oneDashboard.headline.part2')}
         </motion.h2>
 
         {/* Subtext */}
@@ -84,7 +88,7 @@ const OneDashboard: React.FC<OneDashboardProps> = ({ className = "", isActive = 
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="text-xl text-gray-300 mb-8 max-w-3xl"
         >
-          non-custodial · secure · privacy sensitive
+          {t('animations.oneDashboard.subtext')}
         </motion.p>
 
         {/* Feature Icons */}
@@ -99,15 +103,15 @@ const OneDashboard: React.FC<OneDashboardProps> = ({ className = "", isActive = 
         >
           <div className="flex flex-col items-center">
             <Shield className="w-8 h-8 text-indigo-400 mb-2" />
-            <span className="text-sm text-gray-400">Non-custodial</span>
+            <span className="text-sm text-gray-400">{t('animations.oneDashboard.features.nonCustodial')}</span>
           </div>
           <div className="flex flex-col items-center">
             <Lock className="w-8 h-8 text-cyan-400 mb-2" />
-            <span className="text-sm text-gray-400">Secure</span>
+            <span className="text-sm text-gray-400">{t('animations.oneDashboard.features.secure')}</span>
           </div>
           <div className="flex flex-col items-center">
             <Eye className="w-8 h-8 text-indigo-500 mb-2" />
-            <span className="text-sm text-gray-400">Privacy Sensitive</span>
+            <span className="text-sm text-gray-400">{t('animations.oneDashboard.features.privacySensitive')}</span>
           </div>
         </motion.div>
 
@@ -120,12 +124,13 @@ const OneDashboard: React.FC<OneDashboardProps> = ({ className = "", isActive = 
           }}
           transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
         >
-          <motion.button
-            whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(99, 102, 241, 0.3)" }}
+                    <motion.button
+            whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(34, 197, 94, 0.3)" }}
             whileTap={{ scale: 0.95 }}
-            className="px-8 py-4 bg-gradient-to-r from-indigo-600 to-cyan-600 text-white text-lg font-semibold rounded-lg transition-all duration-300 hover:shadow-xl"
+            onClick={() => navigate('/register')}
+            className="px-8 py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white text-lg font-semibold rounded-lg transition-all duration-300 hover:shadow-xl cursor-pointer"
           >
-            Explore Dashboard
+            {t('animations.oneDashboard.cta')}
           </motion.button>
         </motion.div>
 

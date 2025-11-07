@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { useLanguage } from '../contexts/LanguageContext';
 import AnimationTimer from './AnimationTimer';
 import { 
   Shield,
@@ -14,6 +16,8 @@ interface SecuritySetupProps {
 
 const SecuritySetup: React.FC<SecuritySetupProps> = ({ className = "", isActive = true }) => {
   const [animationPhase, setAnimationPhase] = useState(1); // Start with phase 1 immediately
+  const navigate = useNavigate();
+  const { t } = useLanguage();
 
   // Reset and start animation when becoming active
   useEffect(() => {
@@ -41,7 +45,7 @@ const SecuritySetup: React.FC<SecuritySetupProps> = ({ className = "", isActive 
   return (
     <div className={`relative h-[540px] overflow-visible ${className}`}>
       {/* Animation Timer */}
-      <AnimationTimer duration={15} isActive={isActive} />
+      <AnimationTimer duration={7} isActive={isActive} />
       
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
         
@@ -68,9 +72,9 @@ const SecuritySetup: React.FC<SecuritySetupProps> = ({ className = "", isActive 
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 max-w-4xl"
         >
-          Document and review your{' '}
+          {t('animations.securitySetup.headline.part1')}{' '}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-orange-500">
-            security setup
+            {t('animations.securitySetup.headline.part2')}
           </span>
         </motion.h2>
 
@@ -84,7 +88,7 @@ const SecuritySetup: React.FC<SecuritySetupProps> = ({ className = "", isActive 
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="text-xl text-gray-300 mb-8 max-w-3xl"
         >
-          Digital and physical Vaults — Backup strategy
+          {t('animations.securitySetup.subtext')}
         </motion.p>
 
         {/* Feature Icons */}
@@ -99,15 +103,15 @@ const SecuritySetup: React.FC<SecuritySetupProps> = ({ className = "", isActive 
         >
           <div className="flex flex-col items-center">
             <Shield className="w-8 h-8 text-red-400 mb-2" />
-            <span className="text-sm text-gray-400">Security</span>
+            <span className="text-sm text-gray-400">{t('animations.securitySetup.features.security')}</span>
           </div>
           <div className="flex flex-col items-center">
             <Vault className="w-8 h-8 text-orange-400 mb-2" />
-            <span className="text-sm text-gray-400">Vaults</span>
+            <span className="text-sm text-gray-400">{t('animations.securitySetup.features.vaults')}</span>
           </div>
           <div className="flex flex-col items-center">
             <FileCheck className="w-8 h-8 text-red-500 mb-2" />
-            <span className="text-sm text-gray-400">Backup</span>
+            <span className="text-sm text-gray-400">{t('animations.securitySetup.features.backup')}</span>
           </div>
         </motion.div>
 
@@ -123,9 +127,10 @@ const SecuritySetup: React.FC<SecuritySetupProps> = ({ className = "", isActive 
           <motion.button
             whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(239, 68, 68, 0.3)" }}
             whileTap={{ scale: 0.95 }}
-            className="px-8 py-4 bg-gradient-to-r from-red-600 to-orange-600 text-white text-lg font-semibold rounded-lg transition-all duration-300 hover:shadow-xl"
+            onClick={() => navigate('/register')}
+            className="px-8 py-4 bg-gradient-to-r from-red-600 to-orange-600 text-white text-lg font-semibold rounded-lg transition-all duration-300 hover:shadow-xl cursor-pointer"
           >
-            Review Security
+            {t('animations.securitySetup.cta')}
           </motion.button>
         </motion.div>
 
