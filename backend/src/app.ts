@@ -5,6 +5,7 @@ import compression from 'compression';
 import morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
+import path from 'path';
 
 // Import routes
 import authRoutes from './routes/auth';
@@ -123,6 +124,21 @@ app.get('/api/privacy', (req, res) => {
     contact: 'privacy@stararc.one'
   });
 });
+
+// Serve static files from React build in production
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../../frontend/dist')));
+  
+  // Catch all handler: send back React's index.html file for SPA routing
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../../frontend/dist', 'index.html'));
+  });
+} else {
+  // Development: Just serve API endpoints
+  app.get('/', (req, res) => {
+    res.json({ message: 'Stararc API - Development Mode' });
+  });
+}
 
 // 404 handler
 app.use(notFound);
