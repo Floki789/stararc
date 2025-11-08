@@ -46,6 +46,7 @@ app.use(helmet({
 app.use(cors({
   origin: [
     process.env.FRONTEND_URL || 'http://localhost:3003',
+    process.env.SPACESHIP_URL || 'http://localhost:3001', // Spaceship app
     'http://localhost:3000', // Fallback for testing
     'http://localhost:3001',
     'http://localhost:3003'
