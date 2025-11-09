@@ -69,7 +69,7 @@ if (process.env.NODE_ENV !== 'test') {
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: process.env.NODE_ENV === 'production' ? 100 : 1000, // limit each IP
+  max: process.env.NODE_ENV === 'production' ? 500 : 1000, // Increased for testing: 500 in production, 1000 in dev
   message: {
     error: 'Too many requests from this IP, please try again later.',
     retryAfter: '15 minutes'

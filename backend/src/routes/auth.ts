@@ -16,7 +16,7 @@ const isDevelopment = process.env.NODE_ENV === 'development';
 
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: isDevelopment ? 1000 : 50, // Increased for testing: 1000 in dev, 50 in production
+  max: isDevelopment ? 1000 : 200, // Increased for testing: 1000 in dev, 200 in production
   message: { error: 'Too many authentication attempts, please try again later.' },
   standardHeaders: true,
   legacyHeaders: false,
@@ -24,7 +24,7 @@ const authLimiter = rateLimit({
 
 const registerLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hour
-  max: isDevelopment ? 1000 : 30, // Increased for testing: 1000 in dev, 30 in production
+  max: isDevelopment ? 1000 : 100, // Increased for testing: 1000 in dev, 100 in production
   message: { error: 'Too many registration attempts, please try again later.' },
 });
 
