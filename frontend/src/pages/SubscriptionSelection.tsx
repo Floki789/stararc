@@ -110,6 +110,8 @@ const SubscriptionSelection: React.FC = () => {
       // Use the new unified plan selection endpoint
       const result = await StripeAPIService.selectPlan(planId);
       
+      console.log('Plan selection result:', JSON.stringify(result, null, 2));
+      
       if (result.success) {
         if (result.workflow === 'direct') {
           // Free plan - navigate directly to next step
