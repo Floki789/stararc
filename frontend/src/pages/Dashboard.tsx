@@ -123,16 +123,18 @@ const Dashboard: React.FC = () => {
 
   const loadDashboardDataWithDelay = async (isNew: boolean) => {
     try {
-      // If this is a new subscription from Stripe, poll for webhook completion
+      // If this is a new subscription from Stripe, poll for activation
       if (isNew) {
+        console.log('🔧 TEST MODE: Checking for auto-activated subscription...');
         let attempts = 0;
-        const maxAttempts = 20; // Poll for up to 20 seconds
+        const maxAttempts = 3; // Reduced to 3 seconds for test mode with auto-activation
         
         while (attempts < maxAttempts) {
           const subData = await StripeAPIService.getSubscriptionStatus();
           
           // Check if subscription is activated
           if (subData.hasSubscription && ['Free', 'Spark', 'Core', 'Apex'].includes(subData.plan)) {
+            console.log('🔧 TEST MODE: Subscription activated!', subData.plan);
             setSubscription({
               plan: subData.plan,
               status: subData.status,
@@ -149,8 +151,8 @@ const Dashboard: React.FC = () => {
           }
         }
         
-        // Timeout - webhook might have failed, try manual activation
-        console.error('Webhook timeout - subscription not activated after 20 seconds');
+        // Timeout - auto-activation might have failed, try manual activation
+        console.error('TEST MODE: Auto-activation timeout - subscription not activated after 3 seconds');
         console.log('🔧 Attempting manual subscription activation...');
         
         try {

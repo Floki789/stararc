@@ -111,12 +111,34 @@ router.post('/select-plan', authMiddleware, async (req, res): Promise<any> => {
         cancelUrl
       );
 
+      // TEST MODE WORKAROUND: Automatically activate subscription after session creation
+      console.log('🔧 TEST MODE: Auto-activating subscription for user:', userId, 'plan:', planId);
+      
+      try {
+        await pool.query(
+          `UPDATE users SET 
+           subscription_plan = $1, 
+           subscription_status = 'active',
+           stripe_subscription_id = $2,
+           onboarding_step = 'auth_method_selection',
+           updated_at = CURRENT_TIMESTAMP
+           WHERE id = $3`,
+          [planId, session.id, userId]
+        );
+        
+        console.log('🔧 TEST MODE: Subscription auto-activated successfully');
+      } catch (activationError) {
+        console.error('🔧 TEST MODE: Auto-activation failed:', activationError);
+        // Continue anyway - user can still use manual activation fallback
+      }
+
       return res.json({ 
         success: true,
         sessionId: session.id,
         url: session.url,
         workflow: 'stripe',
-        plan: planId
+        plan: planId,
+        testModeActivated: true // Indicate that subscription was auto-activated
       });
     }
 
