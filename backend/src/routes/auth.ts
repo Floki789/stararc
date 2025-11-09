@@ -1103,4 +1103,46 @@ router.get('/apex-client-spaceship-details/:clientId', authMiddleware, async (re
   }
 });
 
+// Generate cross-app token for automatic Spaceship login
+router.post('/generate-cross-app-token', authMiddleware, async (req: Request, res: Response): Promise<any> => {
+  try {
+    const user = (req as any).user;
+    
+    // Generate auth key for cross-app authentication
+    const authKey = crypto.randomBytes(32).toString('hex');
+    
+    // Store auth key in database temporarily (expires in 5 minutes)
+    const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes from now
+    
+    await pool.query(
+      'INSERT INTO user_auth_keys (user_id, auth_key, expires_at) VALUES ($1, $2, $3) ON CONFLICT (user_id) DO UPDATE SET auth_key = $2, expires_at = $3',
+      [user.id, authKey, expiresAt]
+    );
+    
+    // Generate JWT token for cross-app authentication
+    const jwt = require('jsonwebtoken');
+    const secret = process.env.JWT_SECRET || 'fallback-secret';
+    
+    const token = jwt.sign({
+      authKey,
+      authMethod: 'stararc_key',
+      subscriptionPlan: user.subscription_plan,
+      crossApp: true,
+      source: 'stararc',
+      userId: user.id,
+      email: user.email
+    }, secret, { expiresIn: '5m' });
+    
+    res.json({
+      success: true,
+      token,
+      expiresIn: 300 // 5 minutes in seconds
+    });
+    
+  } catch (error: any) {
+    console.error('Generate cross-app token error:', error);
+    res.status(500).json({ error: 'Failed to generate cross-app token' });
+  }
+});
+
 export default router;

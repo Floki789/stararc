@@ -117,8 +117,24 @@ const Login: React.FC = () => {
             break;
             
           case 'completed':
-            // User completed onboarding, redirect to dashboard
-            navigate(from, { replace: true });
+            // User completed onboarding, redirect directly to Spaceship
+            try {
+              // Import spaceshipService
+              const { spaceshipService } = await import('../services/spaceshipService');
+              
+              // Create Spaceship access if needed and login automatically
+              const access = await spaceshipService.checkSpaceshipAccess();
+              if (!access.hasAccess) {
+                await spaceshipService.createSpaceshipAccess();
+              }
+              
+              // Generate token and redirect to Spaceship
+              await spaceshipService.loginToSpaceship();
+            } catch (spaceshipError) {
+              console.error('Spaceship auto-login failed:', spaceshipError);
+              // Fallback to dashboard if Spaceship login fails
+              navigate(from, { replace: true });
+            }
             break;
             
           default:
