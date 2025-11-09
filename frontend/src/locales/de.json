@@ -151,6 +151,10 @@
   },
   "heroSection": {
     "animations": {
+      "wealthManager": {
+        "title": "Become your own wealth manager",
+        "subtitle": "Übernehmen Sie die Kontrolle über Ihr Vermögen"
+      },
       "assetOrganization": {
         "title": "Organize your wealth and security",
         "titlePart1": "Organisieren Sie Ihr",
@@ -365,6 +369,19 @@
     }
   },
   "animations": {
+    "wealthManager": {
+      "headline": {
+        "part1": "Become your own",
+        "part2": "wealth manager"
+      },
+      "subtext": "Übernehmen Sie die Kontrolle über Ihr Vermögen. Verwalten Sie Ihre Investments eigenständig und profitieren Sie von professionellen Tools ohne hohe Gebühren.",
+      "features": {
+        "control": "Portfolio-Kontrolle",
+        "strategy": "Strategische Planung", 
+        "independence": "Finanzielle Unabhängigkeit"
+      },
+      "cta": "Jetzt starten"
+    },
     "animation1": {
       "headline": {
         "part1": "Halten und verwalten Sie ihr Vermögen",

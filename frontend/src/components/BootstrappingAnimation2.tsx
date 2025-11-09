@@ -47,7 +47,7 @@ const BootstrappingAnimation2: React.FC<BootstrappingAnimation2Props> = ({ class
   return (
     <div className={`relative h-[540px] overflow-visible ${className}`}>
       {/* Animation Timer */}
-      <AnimationTimer duration={7} isActive={isActive} />
+      <AnimationTimer duration={9} isActive={isActive} />
       
       {/* Only render content when active to prevent flicker */}
       {isActive && (

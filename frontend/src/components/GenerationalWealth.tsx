@@ -45,7 +45,7 @@ const GenerationalWealth: React.FC<GenerationalWealthProps> = ({ className = "",
 
   return (
     <div className={`relative h-[540px] overflow-visible ${className}`}>
-      <AnimationTimer duration={7} isActive={isActive} />
+      <AnimationTimer duration={9} isActive={isActive} />
       
       {/* Only render content when active to prevent flicker */}
       {isActive && (

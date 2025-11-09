@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../hooks/useAuth';
-import { SparklesIcon, UserCircleIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/solid';
+import { UserCircleIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/solid';
+import CassiopeiaIcon from './icons/CassiopeiaIcon';
 
 const Header: React.FC = () => {
   const { t, language, setLanguage } = useLanguage();
@@ -19,11 +20,11 @@ const Header: React.FC = () => {
       <div className="container mx-auto px-4 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-3 group">
-            <div className="p-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg shadow-lg group-hover:shadow-xl transition-shadow">
-              <SparklesIcon className="w-6 h-6 text-white" />
+          <Link to="/" className="flex items-center space-x-1 group">
+            <div className="p-3">
+              <CassiopeiaIcon className="w-16 h-8 text-white" />
             </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+            <span className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
               Stararc
             </span>
           </Link>

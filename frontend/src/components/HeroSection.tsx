@@ -12,9 +12,15 @@ import VaultManagement from './VaultManagement';
 import GenerationalWealth from './GenerationalWealth';
 import MarketAccess from './MarketAccess';
 import BootstrappingAnimation2 from './BootstrappingAnimation2';
+import WealthManagerAnimation from './WealthManagerAnimation';
 
 // Animation configuration - easily add, remove, or reorder animations here
 const animationsConfig = [
+  { 
+    component: WealthManagerAnimation, 
+    key: 'wealthManager',
+    name: 'WealthManager'
+  },
   { 
     component: AssetOrganizationAnimation, 
     key: 'assetOrganization',
@@ -73,8 +79,8 @@ const HeroSection: React.FC = () => {
 
   // Animation durations for auto-advance
   const getAnimationDuration = (animationIndex: number) => {
-    const durations = [15000, 7000, 7000, 7000, 7000, 7000, 7000, 7000, 7000, 7000]; // AssetOrg, Animation1, OneDashboard, BigPicture, SecuritySetup, SingleMulti, VaultManagement, GenerationalWealth, MarketAccess, Bootstrapping2
-    return durations[animationIndex] || 7000;
+    const durations = [9000, 15000, 9000, 9000, 9000, 9000, 9000, 9000, 9000, 9000, 9000]; // WealthManager, AssetOrg, Animation1, OneDashboard, BigPicture, SecuritySetup, SingleMulti, VaultManagement, GenerationalWealth, MarketAccess, Bootstrapping2
+    return durations[animationIndex] || 9000;
   };
 
   // Generate animation content dynamically from config
@@ -108,6 +114,8 @@ const HeroSection: React.FC = () => {
     const animationKey = animationsConfig[animationIndex]?.key;
     
     switch (animationKey) {
+      case 'wealthManager':
+        return 'text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-500';
       case 'assetOrganization':
         return 'text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-cyan-400';
       case 'animation1':
@@ -163,7 +171,7 @@ const HeroSection: React.FC = () => {
               className={`text-5xl md:text-6xl font-bold mb-3 leading-tight`}
             >
               {/* Hide titles for the three new animations */}
-              {!['vaultManagement', 'generationalWealth', 'marketAccess'].includes(animationsConfig[currentAnimation]?.key) && (
+              {!['wealthManager', 'vaultManagement', 'generationalWealth', 'marketAccess'].includes(animationsConfig[currentAnimation]?.key) && (
                 <>
                   {/* Special handling for AssetOrganization title to match Animation1 style */}
                   {animationsConfig[currentAnimation]?.key === 'assetOrganization' ? (
@@ -189,9 +197,8 @@ const HeroSection: React.FC = () => {
               className={`text-xl text-gray-300 leading-relaxed ${animationContent[currentAnimation].subtitle ? 'mb-8' : 'mb-2'}`}
             >
               {/* Hide subtitles for the three new animations */}
-              {!['vaultManagement', 'generationalWealth', 'marketAccess'].includes(animationsConfig[currentAnimation]?.key) && 
-                animationContent[currentAnimation].subtitle
-              }
+              {!['wealthManager', 'vaultManagement', 'generationalWealth', 'marketAccess'].includes(animationsConfig[currentAnimation]?.key) && 
+                animationContent[currentAnimation].subtitle}
             </motion.p>
             
             {/* Animation Slideshow */}
@@ -219,7 +226,7 @@ const HeroSection: React.FC = () => {
                 return (
                   <motion.div
                     key={animation.key}
-                    initial={{ x: index === 0 ? 0 : 1200 }}
+                    initial={{ x: index === 0 ? 1200 : 1200 }} // WealthManager starts from right like all others
                     animate={{ 
                       x: xPosition,
                       opacity: currentAnimation === index ? 1 : 0

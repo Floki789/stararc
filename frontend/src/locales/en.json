@@ -151,6 +151,10 @@
   },
   "heroSection": {
     "animations": {
+      "wealthManager": {
+        "title": "Become your own wealth manager",
+        "subtitle": "Take control of your wealth and manage investments independently"
+      },
       "assetOrganization": {
         "title": "Organize your wealth and security",
         "titlePart1": "Organize your",
@@ -365,6 +369,19 @@
     }
   },
   "animations": {
+    "wealthManager": {
+      "headline": {
+        "part1": "Become your own",
+        "part2": "wealth manager"
+      },
+      "subtext": "Take control of your wealth. Manage your investments independently and benefit from professional tools without high fees.",
+      "features": {
+        "control": "Portfolio Control",
+        "strategy": "Strategic Planning",
+        "independence": "Financial Independence"
+      },
+      "cta": "Get Started"
+    },
     "animation1": {
       "headline": {
         "part1": "Hodl and manage Assets",
