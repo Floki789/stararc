@@ -123,17 +123,25 @@ export class StripeAPIService {
   }
 
   static async redirectToCheckout(sessionId: string) {
+    console.log('redirectToCheckout called with sessionId:', sessionId);
+    
     const stripe = await getStripe();
+    
+    console.log('Stripe instance:', stripe);
     
     if (!stripe) {
       throw new Error('Stripe not loaded');
     }
 
+    console.log('Calling stripe.redirectToCheckout...');
     const { error } = await stripe.redirectToCheckout({ sessionId });
     
     if (error) {
+      console.error('Stripe redirectToCheckout error:', error);
       throw error;
     }
+    
+    console.log('redirectToCheckout completed successfully');
   }
 }
 
