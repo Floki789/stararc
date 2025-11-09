@@ -149,8 +149,48 @@ const Dashboard: React.FC = () => {
           }
         }
         
-        // Timeout - webhook might have failed
+        // Timeout - webhook might have failed, try manual activation
         console.error('Webhook timeout - subscription not activated after 20 seconds');
+        console.log('🔧 Attempting manual subscription activation...');
+        
+        try {
+          // Try to get session ID from URL params or session storage
+          const urlParams = new URLSearchParams(window.location.search);
+          const sessionId = urlParams.get('session_id') || sessionStorage.getItem('stripe_session_id');
+          
+          if (sessionId) {
+            const apiUrl = (import.meta as any).env.VITE_API_URL || 'http://localhost:3004';
+            const response = await fetch(`${apiUrl}/api/stripe/activate-subscription`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+              },
+              body: JSON.stringify({ sessionId })
+            });
+            
+            if (response.ok) {
+              const result = await response.json();
+              console.log('🔧 Manual activation successful:', result);
+              
+              // Refresh subscription data
+              const subData = await StripeAPIService.getSubscriptionStatus();
+              if (subData.hasSubscription) {
+                setSubscription({
+                  plan: subData.plan,
+                  status: subData.status,
+                  expiresAt: subData.expiresAt
+                });
+                setLoading(false);
+                setPollingError(false);
+                return;
+              }
+            }
+          }
+        } catch (manualError) {
+          console.error('Manual activation failed:', manualError);
+        }
+        
         setPollingError(true);
         setLoading(false);
         return;

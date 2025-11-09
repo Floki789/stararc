@@ -99,7 +99,7 @@ router.post('/select-plan', authMiddleware, async (req, res): Promise<any> => {
       }
 
       // Create checkout session
-      const successUrl = `${process.env.FRONTEND_URL || 'http://localhost:3003'}/dashboard?new=true`;
+      const successUrl = `${process.env.FRONTEND_URL || 'http://localhost:3003'}/dashboard?new=true&session_id={CHECKOUT_SESSION_ID}`;
       const cancelUrl = `${process.env.FRONTEND_URL || 'http://localhost:3003'}/subscription-selection?canceled=true`;
 
       const session = await StripeService.createCheckoutSession(
@@ -354,6 +354,63 @@ router.post('/webhook', async (req, res) => {
     console.log('� WEBHOOK - ERROR CAUGHT:', error);
     console.error('❌ Full webhook error:', error);
     res.status(400).json({ error: `Webhook Error: ${error}` });
+  }
+});
+
+// Manual subscription activation (fallback for webhook failures)
+router.post('/activate-subscription', authMiddleware, async (req, res): Promise<any> => {
+  try {
+    const { sessionId } = req.body;
+    const userId = (req as any).user.id;
+    
+    if (!sessionId) {
+      return res.status(400).json({ error: 'Session ID is required' });
+    }
+
+    console.log('🔧 Manual activation for user:', userId, 'session:', sessionId);
+    
+    // Get the session from Stripe to verify it's completed
+    const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+    const session = await stripe.checkout.sessions.retrieve(sessionId);
+    
+    if (session.payment_status === 'paid' && session.status === 'complete') {
+      const planId = session.metadata?.planId;
+      
+      if (!planId) {
+        return res.status(400).json({ error: 'Plan ID not found in session metadata' });
+      }
+
+      // Update user subscription
+      const updateResult = await pool.query(
+        `UPDATE users SET 
+         subscription_plan = $1, 
+         subscription_status = 'active',
+         stripe_subscription_id = $2,
+         onboarding_step = 'auth_method_selection',
+         updated_at = CURRENT_TIMESTAMP
+         WHERE id = $3
+         RETURNING id, email, onboarding_step, subscription_plan`,
+        [planId, session.subscription, userId]
+      );
+      
+      console.log('🔧 Manual activation successful:', updateResult.rows);
+      
+      return res.json({ 
+        success: true, 
+        message: 'Subscription activated successfully',
+        user: updateResult.rows[0]
+      });
+    } else {
+      return res.status(400).json({ 
+        error: 'Session not completed or payment not successful',
+        payment_status: session.payment_status,
+        status: session.status
+      });
+    }
+    
+  } catch (error) {
+    console.error('Manual activation error:', error);
+    res.status(500).json({ error: 'Failed to activate subscription' });
   }
 });
 
