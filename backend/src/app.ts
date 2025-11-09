@@ -37,6 +37,7 @@ app.use(helmet({
       scriptSrc: ["'self'", "https://js.stripe.com"],
       imgSrc: ["'self'", "data:", "https:"],
       connectSrc: ["'self'", "https://api.stripe.com"],
+      frameSrc: ["'self'", "https://js.stripe.com"],
     },
   },
   crossOriginEmbedderPolicy: false
