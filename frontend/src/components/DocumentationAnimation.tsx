@@ -25,29 +25,32 @@ const DocumentationAnimation: React.FC<DocumentationAnimationProps> = ({
   isActive = false, 
   className = "" 
 }) => {
-  const [animationPhase, setAnimationPhase] = useState(0); // 0: hidden, 1-6: different phases
+  const [animationPhase, setAnimationPhase] = useState(-1); // Start with -1 to ensure nothing renders initially
 
   useEffect(() => {
     if (!isActive) {
-      setAnimationPhase(0);
+      setAnimationPhase(-1); // Reset to completely hidden state
       return;
     }
 
+    // Initialize properly before starting animation
+    setAnimationPhase(0); // Set to 0 first (everything hidden but initialized)
+
     // Animation sequence when active
-    const timer1 = setTimeout(() => setAnimationPhase(1), 500);   // Self-custody elements
-    const timer2 = setTimeout(() => setAnimationPhase(2), 2500);  // Custodial assets
-    const timer3 = setTimeout(() => setAnimationPhase(3), 4500);  // Pension/Retirement
-    const timer4 = setTimeout(() => setAnimationPhase(4), 6500);  // Real Estate
-    const timer5 = setTimeout(() => setAnimationPhase(5), 8500);  // Vaults
-    const timer6 = setTimeout(() => setAnimationPhase(6), 10500); // Custodians
+    const timer0 = setTimeout(() => setAnimationPhase(1), 500);   // Self-custody elements
+    const timer1 = setTimeout(() => setAnimationPhase(2), 2500);  // Custodial assets
+    const timer2 = setTimeout(() => setAnimationPhase(3), 4500);  // Pension/Retirement
+    const timer3 = setTimeout(() => setAnimationPhase(4), 6500);  // Real Estate
+    const timer4 = setTimeout(() => setAnimationPhase(5), 8500);  // Vaults
+    const timer5 = setTimeout(() => setAnimationPhase(6), 10500); // Custodians
 
     return () => {
+      clearTimeout(timer0);
       clearTimeout(timer1);
       clearTimeout(timer2);
       clearTimeout(timer3);
       clearTimeout(timer4);
       clearTimeout(timer5);
-      clearTimeout(timer6);
     };
   }, [isActive]);
 
@@ -114,7 +117,8 @@ const DocumentationAnimation: React.FC<DocumentationAnimationProps> = ({
   };
 
   const renderAssetCategory = (categoryKey: keyof typeof assetCategories, categoryIndex: number, phaseToShow: number, title: string) => {
-    if (animationPhase < phaseToShow) return null;
+    // Don't render anything if not properly initialized or before the phase
+    if (animationPhase < 0 || animationPhase < phaseToShow) return null;
     
     const category = assetCategories[categoryKey];
     const blockPosition = getCategoryBlockPosition(categoryIndex);
@@ -191,44 +195,43 @@ const DocumentationAnimation: React.FC<DocumentationAnimationProps> = ({
       <AnimationTimer duration={15} isActive={isActive} />
       
       <div className="absolute inset-0 flex items-center justify-center">
-        
+        {/* Only render content when animation phase is 0 or higher (properly initialized) */}
+        {animationPhase >= 0 && (
+          <>
+            {/* Phase 1: Self-Custody Elements */}
+            {renderAssetCategory('selfCustody', 0, 1, 'Self-Custody')}
 
+            {/* Phase 2: Custodial Assets */}
+            {renderAssetCategory('custodialAssets', 1, 2, 'Custodial Assets')}
 
-        {/* Phase 1: Self-Custody Elements */}
-        {renderAssetCategory('selfCustody', 0, 1, 'Self-Custody')}
+            {/* Phase 3: Pension/Retirement */}
+            {renderAssetCategory('pension', 2, 3, 'Vorsorge')}
 
-        {/* Phase 2: Custodial Assets */}
-        {renderAssetCategory('custodialAssets', 1, 2, 'Custodial Assets')}
+            {/* Phase 4: Real Estate */}
+            {renderAssetCategory('realEstate', 3, 4, 'Real Estate')}
 
-        {/* Phase 3: Pension/Retirement */}
-        {renderAssetCategory('pension', 2, 3, 'Vorsorge')}
+            {/* Phase 5: Vaults */}
+            {renderAssetCategory('vaults', 4, 5, 'Vaults')}
 
-        {/* Phase 4: Real Estate */}
-        {renderAssetCategory('realEstate', 3, 4, 'Real Estate')}
+            {/* Phase 6: Custodians */}
+            {renderAssetCategory('custodians', 5, 6, 'Custodians')}
 
-        {/* Phase 5: Vaults */}
-        {renderAssetCategory('vaults', 4, 5, 'Vaults')}
-
-        {/* Phase 6: Custodians */}
-        {renderAssetCategory('custodians', 5, 6, 'Custodians')}
-
-
-
-        {/* Final Phase: Complete Overview Container */}
-        {animationPhase === 6 && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, delay: 1 }}
-            className="absolute z-0 flex items-center justify-center"
-            style={{ x: 50, y: -150 }}
-          >
-            <div className="w-[1100px] h-[320px] bg-gray-800/20 backdrop-blur-sm border border-gray-600/30 rounded-2xl shadow-2xl">
-              {/* Background container for two-row layout with better spacing */}
-            </div>
-          </motion.div>
+            {/* Final Phase: Complete Overview Container */}
+            {animationPhase === 6 && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 1, delay: 1 }}
+                className="absolute z-0 flex items-center justify-center"
+                style={{ x: 50, y: -150 }}
+              >
+                <div className="w-[1100px] h-[320px] bg-gray-800/20 backdrop-blur-sm border border-gray-600/30 rounded-2xl shadow-2xl">
+                  {/* Background container for two-row layout with better spacing */}
+                </div>
+              </motion.div>
+            )}
+          </>
         )}
-
       </div>
     </div>
   );
