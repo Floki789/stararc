@@ -108,11 +108,7 @@ const SubscriptionSelection: React.FC = () => {
 
     try {
       // Use the new unified plan selection endpoint
-      console.log('About to call StripeAPIService.selectPlan with planId:', planId);
       const result = await StripeAPIService.selectPlan(planId);
-      console.log('StripeAPIService.selectPlan completed');
-      
-      console.log('Plan selection result:', JSON.stringify(result, null, 2));
       
       if (result.success) {
         if (result.workflow === 'direct') {

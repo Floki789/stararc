@@ -44,7 +44,7 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     // Refresh user data from backend to ensure we have latest onboarding status
-    const refreshUserData = async () => {
+    const refreshUserData = async (skipOnboardingRedirect = false) => {
       try {
         const token = localStorage.getItem('token');
         if (!token) return false;
@@ -72,8 +72,8 @@ const Dashboard: React.FC = () => {
           // Update localStorage with fresh data
           localStorage.setItem('user', JSON.stringify(freshUserData));
           
-          // Check onboarding status with fresh data
-          if (freshUserData.onboardingStep !== 'completed') {
+          // Check onboarding status with fresh data (skip redirect if coming from Stripe)
+          if (!skipOnboardingRedirect && freshUserData.onboardingStep !== 'completed') {
             switch (freshUserData.onboardingStep) {
               case 'registration':
                 navigate('/subscription-selection');
@@ -87,7 +87,7 @@ const Dashboard: React.FC = () => {
                 return false;
             }
           }
-          return true; // Onboarding completed
+          return true; // Onboarding completed or skipped redirect
         }
       } catch (error) {
         console.error('Failed to refresh user data:', error);
@@ -106,9 +106,14 @@ const Dashboard: React.FC = () => {
 
       if (user) {
         // Always refresh user data for latest onboarding status
-        const canProceed = await refreshUserData();
-        if (canProceed && user.onboardingStep === 'completed') {
-          loadDashboardDataWithDelay(isNew);
+        // Skip onboarding redirect if this is a new subscription from Stripe
+        const canProceed = await refreshUserData(isNew);
+        if (canProceed) {
+          // For new subscriptions, always load dashboard even if onboarding not completed
+          // The webhook will update the user status shortly
+          if (isNew || user.onboardingStep === 'completed') {
+            loadDashboardDataWithDelay(isNew);
+          }
         }
       }
     };

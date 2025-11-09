@@ -82,25 +82,17 @@ export class StripeAPIService {
   }
 
   static async selectPlan(planId: string): Promise<{ success: boolean; workflow: 'direct' | 'stripe'; sessionId?: string; url?: string; plan?: string; status?: string; message?: string }> {
-    console.log('selectPlan called with planId:', planId);
-    
     const response = await this.fetchWithAuth('/select-plan', {
       method: 'POST',
       body: JSON.stringify({ planId }),
     });
 
-    console.log('selectPlan response status:', response.status);
-    console.log('selectPlan response ok:', response.ok);
-
     if (!response.ok) {
       const error = await response.json();
-      console.error('selectPlan error response:', error);
       throw new Error(error.error || 'Failed to select plan');
     }
 
-    const result = await response.json();
-    console.log('selectPlan success response:', result);
-    return result;
+    return response.json();
   }
 
   static async activateFreePlan() {
@@ -131,25 +123,17 @@ export class StripeAPIService {
   }
 
   static async redirectToCheckout(sessionId: string) {
-    console.log('redirectToCheckout called with sessionId:', sessionId);
-    
     const stripe = await getStripe();
-    
-    console.log('Stripe instance:', stripe);
     
     if (!stripe) {
       throw new Error('Stripe not loaded');
     }
 
-    console.log('Calling stripe.redirectToCheckout...');
     const { error } = await stripe.redirectToCheckout({ sessionId });
     
     if (error) {
-      console.error('Stripe redirectToCheckout error:', error);
       throw error;
     }
-    
-    console.log('redirectToCheckout completed successfully');
   }
 }
 
