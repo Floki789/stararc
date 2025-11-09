@@ -15,13 +15,15 @@ interface GenerationalWealthProps {
 }
 
 const GenerationalWealth: React.FC<GenerationalWealthProps> = ({ className = "", isActive = true }) => {
-  const [animationPhase, setAnimationPhase] = useState(1);
+  const [animationPhase, setAnimationPhase] = useState(0); // Start with phase 0 to prevent flicker
   const navigate = useNavigate();
   const { t } = useLanguage();
 
   useEffect(() => {
     if (isActive) {
       setAnimationPhase(1);
+    } else {
+      setAnimationPhase(0); // Reset to hidden state when not active
     }
   }, [isActive]);
 
@@ -45,17 +47,19 @@ const GenerationalWealth: React.FC<GenerationalWealthProps> = ({ className = "",
     <div className={`relative h-[540px] overflow-visible ${className}`}>
       <AnimationTimer duration={7} isActive={isActive} />
       
-      <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
-        
-        {/* Background decoration */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ 
-            opacity: animationPhase >= 1 ? 0.1 : 0,
-            scale: animationPhase >= 1 ? 1 : 0.8
-          }}
-          transition={{ duration: 1, ease: "easeOut" }}
-          className="absolute inset-0 flex items-center justify-center pointer-events-none"
+      {/* Only render content when active to prevent flicker */}
+      {isActive && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
+          
+          {/* Background decoration */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ 
+              opacity: animationPhase >= 1 ? 0.1 : 0,
+              scale: animationPhase >= 1 ? 1 : 0.8
+            }}
+            transition={{ duration: 1, ease: "easeOut" }}
+            className="absolute inset-0 flex items-center justify-center pointer-events-none"
         >
           <div className="w-96 h-96 rounded-full bg-gradient-to-r from-green-500/20 to-emerald-500/20 blur-3xl" />
         </motion.div>
@@ -132,7 +136,8 @@ const GenerationalWealth: React.FC<GenerationalWealthProps> = ({ className = "",
           </motion.button>
         </motion.div>
 
-      </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -15,7 +15,7 @@ interface SecuritySetupProps {
 }
 
 const SecuritySetup: React.FC<SecuritySetupProps> = ({ className = "", isActive = true }) => {
-  const [animationPhase, setAnimationPhase] = useState(1); // Start with phase 1 immediately
+  const [animationPhase, setAnimationPhase] = useState(0); // Start with phase 0 to prevent flicker
   const navigate = useNavigate();
   const { t } = useLanguage();
 
@@ -23,6 +23,8 @@ const SecuritySetup: React.FC<SecuritySetupProps> = ({ className = "", isActive 
   useEffect(() => {
     if (isActive) {
       setAnimationPhase(1); // Start immediately with headline
+    } else {
+      setAnimationPhase(0); // Reset to hidden state when not active
     }
   }, [isActive]);
 
@@ -47,20 +49,22 @@ const SecuritySetup: React.FC<SecuritySetupProps> = ({ className = "", isActive 
       {/* Animation Timer */}
       <AnimationTimer duration={7} isActive={isActive} />
       
-      <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
-        
-        {/* Background decoration */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ 
-            opacity: animationPhase >= 1 ? 0.1 : 0,
-            scale: animationPhase >= 1 ? 1 : 0.8
-          }}
-          transition={{ duration: 1, ease: "easeOut" }}
-          className="absolute inset-0 flex items-center justify-center pointer-events-none"
-        >
-          <div className="w-96 h-96 rounded-full bg-gradient-to-r from-red-500/20 to-orange-500/20 blur-3xl" />
-        </motion.div>
+      {/* Only render content when active to prevent flicker */}
+      {isActive && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
+          
+          {/* Background decoration */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ 
+              opacity: animationPhase >= 1 ? 0.1 : 0,
+              scale: animationPhase >= 1 ? 1 : 0.8
+            }}
+            transition={{ duration: 1, ease: "easeOut" }}
+            className="absolute inset-0 flex items-center justify-center pointer-events-none"
+          >
+            <div className="w-96 h-96 rounded-full bg-gradient-to-r from-red-500/20 to-orange-500/20 blur-3xl" />
+          </motion.div>
 
         {/* Main Headline */}
         <motion.h2
@@ -134,7 +138,8 @@ const SecuritySetup: React.FC<SecuritySetupProps> = ({ className = "", isActive 
           </motion.button>
         </motion.div>
 
-      </div>
+        </div>
+      )}
     </div>
   );
 };
