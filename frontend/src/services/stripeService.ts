@@ -82,17 +82,25 @@ export class StripeAPIService {
   }
 
   static async selectPlan(planId: string): Promise<{ success: boolean; workflow: 'direct' | 'stripe'; sessionId?: string; url?: string; plan?: string; status?: string; message?: string }> {
+    console.log('selectPlan called with planId:', planId);
+    
     const response = await this.fetchWithAuth('/select-plan', {
       method: 'POST',
       body: JSON.stringify({ planId }),
     });
 
+    console.log('selectPlan response status:', response.status);
+    console.log('selectPlan response ok:', response.ok);
+
     if (!response.ok) {
       const error = await response.json();
+      console.error('selectPlan error response:', error);
       throw new Error(error.error || 'Failed to select plan');
     }
 
-    return response.json();
+    const result = await response.json();
+    console.log('selectPlan success response:', result);
+    return result;
   }
 
   static async activateFreePlan() {
