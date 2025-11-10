@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import HeroSection from '../components/HeroSection';
 import PlanCards from '../components/PlanCards';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleNavigateToRegister = () => {
     navigate('/register');
@@ -14,6 +15,24 @@ const Home: React.FC = () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }, 100);
   };
+
+  // Handle scrolling to hash fragments (e.g., #plans) or top of page
+  useEffect(() => {
+    if (location.hash) {
+      // Scroll to specific section if hash is present
+      const element = document.getElementById(location.hash.substring(1));
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    } else {
+      // Scroll to top if no hash (home link clicked)
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 100);
+    }
+  }, [location.hash, location.pathname]);
 
   return (
     <div className="min-h-screen">      

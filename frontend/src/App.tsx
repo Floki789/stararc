@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -16,10 +16,19 @@ import { LanguageProvider } from './contexts/LanguageContext';
 
 function App() {
   const [mounted, setMounted] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Global scroll behavior for route changes
+  useEffect(() => {
+    // Only scroll to top for non-hash routes (not /#plans)
+    if (!location.hash && location.pathname !== '/') {
+      window.scrollTo(0, 0);
+    }
+  }, [location.pathname, location.key]);
 
   if (!mounted) {
     return (

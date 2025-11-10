@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 
 interface RegisterFormData {
@@ -12,7 +12,17 @@ interface RegisterFormData {
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useAuth();
+  
+  // Scroll to top when register page loads or when navigating to register
+  useEffect(() => {
+    // Force scroll to top with multiple methods for reliability
+    window.scrollTo(0, 0);
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 50);
+  }, [location.pathname, location.key]);
   const [formData, setFormData] = useState<RegisterFormData>({
     email: '',
     password: '',

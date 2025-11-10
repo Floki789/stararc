@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
@@ -14,6 +14,15 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { login } = useAuth();
+  
+  // Scroll to top when login page loads or when navigating to login
+  useEffect(() => {
+    // Force scroll to top with multiple methods for reliability
+    window.scrollTo(0, 0);
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 50);
+  }, [location.pathname, location.key]);
   
   // Get the intended destination from the location state, default to dashboard
   const from = location.state?.from?.pathname || '/dashboard';
@@ -151,6 +160,106 @@ const Login: React.FC = () => {
           setErrors(backendErrors);
         } else {
           setErrors({ general: data.error || 'Anmeldung fehlgeschlagen' });
+        }
+      }
+    } catch (error) {
+      setErrors({ general: 'Netzwerkfehler. Bitte versuchen Sie es später erneut.' });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleDemoLogin = async () => {
+    // Set demo credentials in the form
+    setFormData({
+      email: 'demo@stararc.one',
+      password: 'Demo@Stararc.1',
+      twoFactorToken: ''
+    });
+    
+    // Clear any existing errors
+    setErrors({});
+    setIsLoading(true);
+
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+      
+      const response = await fetch(`${apiUrl}/api/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: 'demo@stararc.one',
+          password: 'Demo@Stararc.1'
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        login(data.user, data.token);
+        
+        // For demo account, always use FastLogin to Spaceship regardless of status
+        if (data.user.email === 'demo@stararc.one') {
+          try {
+            const { spaceshipService } = await import('../services/spaceshipService');
+            
+            // Check if user already has Spaceship access
+            const hasAccess = await spaceshipService.checkSpaceshipAccess();
+            if (!hasAccess) {
+              // Create Spaceship access if needed and login automatically
+              await spaceshipService.createSpaceshipAccess();
+            }
+            
+            // Login to Spaceship automatically
+            await spaceshipService.loginToSpaceship();
+            return; // Exit here to prevent further navigation
+          } catch (spaceshipError) {
+            console.error('Spaceship auto-login failed for demo user:', spaceshipError);
+            // Fallback to dashboard if Spaceship login fails
+            navigate(from, { replace: true });
+            return;
+          }
+        }
+        
+        // Handle different user states for regular users
+        switch (data.user.status) {
+          case 'onboarding_completed':
+            // User has completed onboarding - use FastLogin to go directly to Spaceship
+            try {
+              const { spaceshipService } = await import('../services/spaceshipService');
+              
+              // Check if user already has Spaceship access
+              const hasAccess = await spaceshipService.checkSpaceshipAccess();
+              if (!hasAccess) {
+                // Create Spaceship access if needed and login automatically
+                await spaceshipService.createSpaceshipAccess();
+              }
+              
+              // Login to Spaceship automatically
+              await spaceshipService.loginToSpaceship();
+            } catch (spaceshipError) {
+              console.error('Spaceship auto-login failed:', spaceshipError);
+              // Fallback to dashboard if Spaceship login fails
+              navigate(from, { replace: true });
+            }
+            break;
+            
+          default:
+            // Fallback to subscription selection
+            navigate('/subscription-selection', { replace: true });
+        }
+      } else {
+        if (data.errors && Array.isArray(data.errors)) {
+          // Handle validation errors from backend
+          const backendErrors: { [key: string]: string } = {};
+          data.errors.forEach((error: any) => {
+            backendErrors[error.path] = error.msg;
+          });
+          setErrors(backendErrors);
+        } else {
+          setErrors({ general: data.message || 'Demo-Login fehlgeschlagen' });
         }
       }
     } catch (error) {
@@ -346,6 +455,52 @@ const Login: React.FC = () => {
             </motion.button>
           </div>
         </motion.form>
+
+        {/* Demo Login Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="mt-8 text-center"
+        >
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-600"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 bg-slate-900 text-gray-400">Demo</span>
+            </div>
+          </div>
+          
+          <div className="mt-6">
+            <p className="text-sm text-gray-300 mb-4">
+              Möchten Sie StarArc Portfolio in Aktion sehen?
+            </p>
+            <motion.button
+              whileHover={{ scale: isLoading ? 1 : 1.02 }}
+              whileTap={{ scale: isLoading ? 1 : 0.98 }}
+              onClick={handleDemoLogin}
+              disabled={isLoading}
+              className={`w-full flex justify-center py-3 px-4 border-2 border-dashed text-sm font-medium rounded-lg transition-all duration-200 ${
+                isLoading
+                  ? 'border-gray-600 text-gray-500 cursor-not-allowed'
+                  : 'border-gray-500 text-gray-300 hover:border-blue-400 hover:text-blue-400 hover:bg-blue-400/5'
+              }`}
+            >
+              {isLoading ? (
+                <div className="flex items-center">
+                  <div className="w-4 h-4 border-2 border-gray-500 border-t-transparent rounded-full animate-spin mr-2"></div>
+                  Demo-Login läuft...
+                </div>
+              ) : (
+                '🚀 Mit Demo-Account anmelden'
+              )}
+            </motion.button>
+            <p className="text-xs text-gray-400 mt-2">
+              Direkter Zugang zu einem vorkonfigurierten Portfolio
+            </p>
+          </div>
+        </motion.div>
       </motion.div>
     </div>
   );

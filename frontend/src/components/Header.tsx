@@ -21,12 +21,12 @@ const Header: React.FC = () => {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-1 group">
-            <div className="p-3">
-              <CassiopeiaIcon className="w-16 h-8 text-white" />
-            </div>
             <span className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
               Stararc
             </span>
+            <div className="p-3">
+              <CassiopeiaIcon className="w-16 h-8 text-white" />
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
@@ -39,12 +39,12 @@ const Header: React.FC = () => {
             </Link>
             
             {!isAuthenticated && (
-              <a
-                href="#plans"
+              <Link
+                to="/#plans"
                 className="text-slate-300 hover:text-white transition-colors font-medium"
               >
                 {t('nav.pricing')}
-              </a>
+              </Link>
             )}
 
             {isAuthenticated ? (
@@ -174,13 +174,13 @@ const Header: React.FC = () => {
                 </>
               ) : (
                 <>
-                  <a
-                    href="#plans"
+                  <Link
+                    to="/#plans"
                     className="text-slate-300 hover:text-white transition-colors"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     {t('nav.pricing')}
-                  </a>
+                  </Link>
                   <Link
                     to="/login"
                     className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 inline-block text-center"
