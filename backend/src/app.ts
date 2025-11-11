@@ -27,6 +27,27 @@ const PORT = process.env.PORT || 3004;
 // Trust proxy for rate limiting behind reverse proxies
 app.set('trust proxy', 1);
 
+// Force HTTPS redirect middleware
+app.use((req, res, next) => {
+  // Skip redirect in development or if already HTTPS
+  if (process.env.NODE_ENV !== 'production') {
+    return next();
+  }
+  
+  // Check if request came through HTTPS
+  const isHttps = req.header('x-forwarded-proto') === 'https' || 
+                  req.secure;
+  
+  if (!isHttps) {
+    const httpsUrl = `https://${req.header('host')}${req.url}`;
+    return res.redirect(301, httpsUrl);
+  }
+  
+  // Add HSTS header for enhanced security
+  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+  next();
+});
+
 // Security middleware
 app.use(helmet({
   contentSecurityPolicy: {
