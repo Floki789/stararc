@@ -57,7 +57,12 @@ app.use(helmet({
       fontSrc: ["'self'", "https://fonts.gstatic.com"],
       scriptSrc: ["'self'", "https://js.stripe.com"],
       imgSrc: ["'self'", "data:", "https:"],
-      connectSrc: ["'self'", "https://api.stripe.com"],
+      connectSrc: [
+        "'self'", 
+        "https://api.stripe.com",
+        "https://spaceship.paymebits.com",
+        "https://spaceship-app-05fdc7b20f43.herokuapp.com"
+      ],
       frameSrc: ["'self'", "https://js.stripe.com"],
     },
   },
@@ -71,7 +76,12 @@ app.use(cors({
     process.env.SPACESHIP_URL || 'http://localhost:3001', // Spaceship app
     'http://localhost:3000', // Fallback for testing
     'http://localhost:3001',
-    'http://localhost:3003'
+    'http://localhost:3003',
+    'https://spaceship.paymebits.com', // Production Spaceship domain
+    'https://spaceship-app-05fdc7b20f43.herokuapp.com', // Production Spaceship Heroku domain
+    'https://paymebits.com', // Production StarArc domain
+    'https://www.paymebits.com', // Production StarArc www domain
+    'https://stararc-app-e576e504324e.herokuapp.com' // Production StarArc Heroku domain
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
