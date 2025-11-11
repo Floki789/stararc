@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface LoginFormData {
   email: string;
@@ -14,6 +15,7 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { login } = useAuth();
+  const { t } = useLanguage();
   
   // Scroll to top when login page loads or when navigating to login
   useEffect(() => {
@@ -23,6 +25,14 @@ const Login: React.FC = () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }, 50);
   }, [location.pathname, location.key]);
+  
+  // Check for demo parameter and trigger demo login
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    if (urlParams.get('demo') === 'true') {
+      handleDemoLogin();
+    }
+  }, [location.search]);
   
   // Get the intended destination from the location state, default to dashboard
   const from = location.state?.from?.pathname || '/dashboard';
@@ -159,11 +169,11 @@ const Login: React.FC = () => {
           });
           setErrors(backendErrors);
         } else {
-          setErrors({ general: data.error || 'Anmeldung fehlgeschlagen' });
+          setErrors({ general: data.error || t('auth.loginFailed') });
         }
       }
     } catch (error) {
-      setErrors({ general: 'Netzwerkfehler. Bitte versuchen Sie es später erneut.' });
+      setErrors({ general: t('auth.networkError') });
     } finally {
       setIsLoading(false);
     }
@@ -259,11 +269,11 @@ const Login: React.FC = () => {
           });
           setErrors(backendErrors);
         } else {
-          setErrors({ general: data.message || 'Demo-Login fehlgeschlagen' });
+          setErrors({ general: data.message || t('auth.demoLoginFailed') });
         }
       }
     } catch (error) {
-      setErrors({ general: 'Netzwerkfehler. Bitte versuchen Sie es später erneut.' });
+      setErrors({ general: t('auth.networkError') });
     } finally {
       setIsLoading(false);
     }
@@ -301,15 +311,15 @@ const Login: React.FC = () => {
       >
         <div className="-mt-4">
           <h2 className="text-center text-3xl font-extrabold text-white">
-            Anmelden
+            {t('auth.loginTitle')}
           </h2>
           <p className="mt-2 text-center text-sm text-gray-300">
-            Oder{' '}
+            {t('auth.or')}{' '}
             <Link
               to="/register"
               className="font-medium text-blue-400 hover:text-blue-300 transition-colors"
             >
-              erstellen Sie ein neues Konto
+              {t('auth.createAccount')}
             </Link>
           </p>
         </div>
@@ -340,7 +350,7 @@ const Login: React.FC = () => {
               className={`appearance-none rounded-lg relative block w-full px-3 py-3 border ${
                 errors.email ? 'border-red-500' : 'border-gray-600'
               } placeholder-gray-400 text-white bg-gray-800/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
-              placeholder="E-Mail-Adresse"
+              placeholder={t('auth.email')}
               value={formData.email}
               onChange={handleInputChange}
             />
@@ -351,7 +361,7 @@ const Login: React.FC = () => {
 
           <div className="relative">
             <label htmlFor="password" className="sr-only">
-              Passwort
+              {t('auth.password')}
             </label>
             <input
               id="password"
@@ -362,7 +372,7 @@ const Login: React.FC = () => {
               className={`appearance-none rounded-lg relative block w-full px-3 py-3 pr-10 border ${
                 errors.password ? 'border-red-500' : 'border-gray-600'
               } placeholder-gray-400 text-white bg-gray-800/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
-              placeholder="Passwort"
+              placeholder={t('auth.password')}
               value={formData.password}
               onChange={handleInputChange}
             />
@@ -390,7 +400,7 @@ const Login: React.FC = () => {
               transition={{ duration: 0.3 }}
             >
               <label htmlFor="twoFactorToken" className="sr-only">
-                2FA-Code
+                {t('auth.twoFactorToken')}
               </label>
               <input
                 id="twoFactorToken"
@@ -402,7 +412,7 @@ const Login: React.FC = () => {
                 className={`appearance-none rounded-lg relative block w-full px-3 py-3 border ${
                   errors.twoFactorToken ? 'border-red-500' : 'border-gray-600'
                 } placeholder-gray-400 text-white bg-gray-800/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-center text-lg tracking-wider`}
-                placeholder="2FA-Code (6 Stellen)"
+                placeholder={t('auth.twoFactorToken')}
                 value={formData.twoFactorToken || ''}
                 onChange={(e) => {
                   const value = e.target.value.replace(/\D/g, '').slice(0, 6);
@@ -447,10 +457,10 @@ const Login: React.FC = () => {
               {isLoading ? (
                 <div className="flex items-center">
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                  Anmeldung läuft...
+                  {t('auth.loggingIn')}
                 </div>
               ) : (
-                'Anmelden'
+                t('auth.login')
               )}
             </motion.button>
           </div>
@@ -468,14 +478,11 @@ const Login: React.FC = () => {
               <div className="w-full border-t border-gray-600"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-slate-900 text-gray-400">Demo</span>
+              <span className="px-2 bg-slate-900 text-gray-400">{t('auth.demo')}</span>
             </div>
           </div>
           
           <div className="mt-6">
-            <p className="text-sm text-gray-300 mb-4">
-              Möchten Sie StarArc Portfolio in Aktion sehen?
-            </p>
             <motion.button
               whileHover={{ scale: isLoading ? 1 : 1.02 }}
               whileTap={{ scale: isLoading ? 1 : 0.98 }}
@@ -488,12 +495,12 @@ const Login: React.FC = () => {
               }`}
             >
               {isLoading ? (
-                <div className="flex items-center">
-                  <div className="w-4 h-4 border-2 border-gray-500 border-t-transparent rounded-full animate-spin mr-2"></div>
-                  Demo-Login läuft...
+                <div className="flex items-center justify-center">
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                  {t('auth.demoLoading')}
                 </div>
               ) : (
-                '🚀 Mit Demo-Account anmelden'
+                t('auth.demoButton')
               )}
             </motion.button>
             <p className="text-xs text-gray-400 mt-2">

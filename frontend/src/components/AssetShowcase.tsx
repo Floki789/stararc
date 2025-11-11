@@ -1,4 +1,6 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useLanguage } from '../contexts/LanguageContext';
 import { 
   TrendingUp,
   Bitcoin,
@@ -11,60 +13,67 @@ import {
 } from 'lucide-react';
 
 const AssetShowcase: React.FC = () => {
+  const navigate = useNavigate();
+  const { t } = useLanguage();
+  
+  const handleDemoLogin = async () => {
+    // Set demo credentials and navigate to login page with auto-login
+    navigate('/login?demo=true');
+  };
   const assets = [
     {
       icon: TrendingUp,
-      title: "Wertschriften",
-      description: "Aktien, ETFs und Fonds",
+      titleKey: "homepage.assetShowcase.assets.securities.title",
+      descriptionKey: "homepage.assetShowcase.assets.securities.description",
       gradient: "from-blue-500 to-cyan-500",
       bgGradient: "from-blue-500/10 to-cyan-500/10"
     },
     {
       icon: Bitcoin,
-      title: "Bitcoin",
-      description: "Kryptowährungen & DeFi",
+      titleKey: "homepage.assetShowcase.assets.bitcoin.title",
+      descriptionKey: "homepage.assetShowcase.assets.bitcoin.description",
       gradient: "from-orange-500 to-yellow-500",
       bgGradient: "from-orange-500/10 to-yellow-500/10"
     },
     {
       icon: Gem,
-      title: "Edelmetalle",
-      description: "Gold, Silber & Platin",
+      titleKey: "homepage.assetShowcase.assets.metals.title",
+      descriptionKey: "homepage.assetShowcase.assets.metals.description",
       gradient: "from-yellow-400 to-amber-500",
       bgGradient: "from-yellow-400/10 to-amber-500/10"
     },
     {
       icon: Home,
-      title: "Immobilien",
-      description: "Direktinvestments & REITs",
+      titleKey: "homepage.assetShowcase.assets.realestate.title",
+      descriptionKey: "homepage.assetShowcase.assets.realestate.description",
       gradient: "from-green-500 to-emerald-500",
       bgGradient: "from-green-500/10 to-emerald-500/10"
     },
     {
       icon: Shield,
-      title: "Vorsorge",
-      description: "Säule 3a & Pensionskasse",
+      titleKey: "homepage.assetShowcase.assets.pension.title",
+      descriptionKey: "homepage.assetShowcase.assets.pension.description",
       gradient: "from-purple-500 to-indigo-500",
       bgGradient: "from-purple-500/10 to-indigo-500/10"
     },
     {
       icon: Heart,
-      title: "Versicherungen",
-      description: "Leben & Gesundheit",
+      titleKey: "homepage.assetShowcase.assets.insurance.title",
+      descriptionKey: "homepage.assetShowcase.assets.insurance.description",
       gradient: "from-red-500 to-pink-500",
       bgGradient: "from-red-500/10 to-pink-500/10"
     },
     {
       icon: Palette,
-      title: "Kunst",
-      description: "Gemälde & Skulpturen",
+      titleKey: "homepage.assetShowcase.assets.art.title",
+      descriptionKey: "homepage.assetShowcase.assets.art.description",
       gradient: "from-violet-500 to-purple-500",
       bgGradient: "from-violet-500/10 to-purple-500/10"
     },
     {
       icon: Star,
-      title: "Sammlerobjekte",
-      description: "Uhren, Wein & Raritäten",
+      titleKey: "homepage.assetShowcase.assets.collectibles.title",
+      descriptionKey: "homepage.assetShowcase.assets.collectibles.description",
       gradient: "from-rose-500 to-orange-500",
       bgGradient: "from-rose-500/10 to-orange-500/10"
     }
@@ -84,14 +93,14 @@ const AssetShowcase: React.FC = () => {
         <div className="text-center mb-12 sm:mb-16 md:mb-20">
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6">
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-500">
-              Ihre Assets
+              {t('homepage.assetShowcase.title.part1')}
             </span>
             <span className="block mt-2">
-              Zentral verwaltet
+              {t('homepage.assetShowcase.title.part2')}
             </span>
           </h2>
           <p className="text-lg sm:text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            Verwalten Sie alle Ihre Vermögenswerte an einem Ort - von traditionellen Anlagen bis hin zu alternativen Investments
+            {t('homepage.assetShowcase.subtitle')}
           </p>
         </div>
 
@@ -112,10 +121,10 @@ const AssetShowcase: React.FC = () => {
                 {/* Content */}
                 <div>
                   <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-2 sm:mb-3">
-                    {asset.title}
+                    {t(asset.titleKey)}
                   </h3>
                   <p className="text-sm sm:text-base md:text-lg text-gray-400 leading-relaxed">
-                    {asset.description}
+                    {t(asset.descriptionKey)}
                   </p>
                 </div>
 
@@ -129,14 +138,18 @@ const AssetShowcase: React.FC = () => {
         {/* Bottom Call to Action */}
         <div className="text-center mt-12 sm:mt-16 md:mt-20">
           <p className="text-base sm:text-lg md:text-xl text-gray-400 mb-6 sm:mb-8">
-            Entdecken Sie die Vielfalt Ihrer Anlagemöglichkeiten
+            {t('homepage.assetShowcase.cta.subtitle')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center">
-            <button className="w-full sm:w-auto px-6 sm:px-8 md:px-10 py-3 sm:py-4 bg-gradient-to-r from-amber-600 to-yellow-600 text-white text-base sm:text-lg md:text-xl font-semibold rounded-lg transition-all duration-300 hover:shadow-2xl hover:scale-105 cursor-pointer max-w-xs sm:max-w-none">
-              Jetzt Starten
+            <button 
+              onClick={() => navigate('/register')}
+              className="w-full sm:w-auto px-6 sm:px-8 md:px-10 py-3 sm:py-4 bg-gradient-to-r from-amber-600 to-yellow-600 text-white text-base sm:text-lg md:text-xl font-semibold rounded-lg transition-all duration-300 hover:shadow-2xl hover:scale-105 cursor-pointer max-w-xs sm:max-w-none">
+              {t('homepage.assetShowcase.cta.start')}
             </button>
-            <button className="w-full sm:w-auto px-6 sm:px-8 md:px-10 py-3 sm:py-4 bg-transparent border-2 border-amber-500 text-amber-400 text-base sm:text-lg md:text-xl font-semibold rounded-lg transition-all duration-300 hover:bg-amber-500 hover:text-white hover:shadow-xl hover:scale-105 cursor-pointer max-w-xs sm:max-w-none">
-              Demo Account
+            <button 
+              onClick={handleDemoLogin}
+              className="w-full sm:w-auto px-6 sm:px-8 md:px-10 py-3 sm:py-4 bg-transparent border-2 border-amber-500 text-amber-400 text-base sm:text-lg md:text-xl font-semibold rounded-lg transition-all duration-300 hover:bg-amber-500 hover:text-white hover:shadow-xl hover:scale-105 cursor-pointer max-w-xs sm:max-w-none">
+              {t('homepage.assetShowcase.cta.demo')}
             </button>
           </div>
         </div>

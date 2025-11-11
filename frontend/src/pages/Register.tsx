@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface RegisterFormData {
   email: string;
@@ -14,6 +15,7 @@ const Register: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { login } = useAuth();
+  const { t } = useLanguage();
   
   // Scroll to top when register page loads or when navigating to register
   useEffect(() => {
@@ -111,7 +113,7 @@ const Register: React.FC = () => {
           // New users always start with subscription selection
           navigate('/subscription-selection');
         } else {
-          setSuccessMessage('Registrierung erfolgreich! Sie können sich jetzt anmelden.');
+          setSuccessMessage(t('auth.registerSuccess'));
         }
       } else {
         if (data.errors && Array.isArray(data.errors)) {
@@ -122,11 +124,11 @@ const Register: React.FC = () => {
           });
           setErrors(backendErrors);
         } else {
-          setErrors({ general: data.error || 'Registrierung fehlgeschlagen' });
+          setErrors({ general: data.error || t('auth.registerFailed') });
         }
       }
     } catch (error) {
-      setErrors({ general: 'Netzwerkfehler. Bitte versuchen Sie es später erneut.' });
+      setErrors({ general: t('auth.networkError') });
     } finally {
       setIsLoading(false);
     }
@@ -164,17 +166,43 @@ const Register: React.FC = () => {
       >
         <div className="-mt-4">
           <h2 className="text-center text-3xl font-extrabold text-white">
-            Konto erstellen
+            {t('auth.registerTitle')}
           </h2>
           <p className="mt-2 text-center text-sm text-gray-300">
-            Oder{' '}
+            {t('auth.or')}{' '}
             <Link
               to="/login"
               className="font-medium text-blue-400 hover:text-blue-300 transition-colors"
             >
-              melden Sie sich in Ihr bestehendes Konto an
+              {t('auth.loginToExisting')}
             </Link>
           </p>
+          
+          {/* Early Beta Warning */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="mt-4 p-4 bg-amber-500/10 border border-amber-500/30 rounded-lg"
+          >
+            <div className="flex items-start">
+              <div className="flex-shrink-0">
+                <svg className="h-5 w-5 text-amber-400" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div className="ml-3">
+                <h3 className="text-sm font-medium text-amber-400">
+                  {t('auth.earlyBetaTitle')}
+                </h3>
+                <div className="mt-2 text-sm text-amber-200">
+                  <p>
+                    {t('auth.earlyBetaDescription')}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </div>
 
         <motion.form
@@ -200,7 +228,7 @@ const Register: React.FC = () => {
 
           <div>
             <label htmlFor="email" className="sr-only">
-              E-Mail-Adresse
+              {t('auth.email')}
             </label>
             <input
               id="email"
@@ -211,7 +239,7 @@ const Register: React.FC = () => {
               className={`appearance-none rounded-lg relative block w-full px-3 py-3 border ${
                 errors.email ? 'border-red-500' : 'border-gray-600'
               } placeholder-gray-400 text-white bg-gray-800/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
-              placeholder="E-Mail-Adresse"
+              placeholder={t('auth.email')}
               value={formData.email}
               onChange={handleInputChange}
             />
@@ -222,7 +250,7 @@ const Register: React.FC = () => {
 
           <div className="relative">
             <label htmlFor="password" className="sr-only">
-              Passwort
+              {t('auth.password')}
             </label>
             <input
               id="password"
@@ -233,7 +261,7 @@ const Register: React.FC = () => {
               className={`appearance-none rounded-lg relative block w-full px-3 py-3 pr-10 border ${
                 errors.password ? 'border-red-500' : 'border-gray-600'
               } placeholder-gray-400 text-white bg-gray-800/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
-              placeholder="Passwort (min. 8 Zeichen)"
+              placeholder={t('auth.passwordPlaceholder')}
               value={formData.password}
               onChange={handleInputChange}
             />
@@ -255,7 +283,7 @@ const Register: React.FC = () => {
 
           <div className="relative">
             <label htmlFor="confirmPassword" className="sr-only">
-              Passwort bestätigen
+              {t('auth.confirmPassword')}
             </label>
             <input
               id="confirmPassword"
@@ -266,7 +294,7 @@ const Register: React.FC = () => {
               className={`appearance-none rounded-lg relative block w-full px-3 py-3 pr-10 border ${
                 errors.confirmPassword ? 'border-red-500' : 'border-gray-600'
               } placeholder-gray-400 text-white bg-gray-800/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
-              placeholder="Passwort bestätigen"
+              placeholder={t('auth.confirmPassword')}
               value={formData.confirmPassword}
               onChange={handleInputChange}
             />
@@ -301,25 +329,25 @@ const Register: React.FC = () => {
               {isLoading ? (
                 <div className="flex items-center">
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                  Registrierung läuft...
+                  {t('auth.registering')}
                 </div>
               ) : (
-                'Konto erstellen'
+                t('auth.register')
               )}
             </motion.button>
           </div>
 
           <div className="text-center">
             <p className="text-xs text-gray-400">
-              Durch die Registrierung stimmen Sie unseren{' '}
+              {t('auth.agreementText')}{' '}
               <Link to="/privacy" className="text-blue-400 hover:text-blue-300">
-                Datenschutzbestimmungen
+                {t('auth.privacyPolicy')}
               </Link>{' '}
-              und{' '}
+              {t('auth.and')}{' '}
               <Link to="/terms" className="text-blue-400 hover:text-blue-300">
-                Nutzungsbedingungen
+                {t('auth.termsConditions')}
               </Link>{' '}
-              zu.
+              {t('auth.agreementEnd')}
             </p>
           </div>
         </motion.form>

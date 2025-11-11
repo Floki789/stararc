@@ -11,6 +11,11 @@ const HeroSection: React.FC = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
 
+  const handleDemoLogin = async () => {
+    // Set demo credentials and navigate to login page with auto-login
+    navigate('/login?demo=true');
+  };
+
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 overflow-hidden">
       {/* Background decorative elements - responsive */}
@@ -70,10 +75,10 @@ const HeroSection: React.FC = () => {
             </button>
             
             <button
-              onClick={() => navigate('/demo')}
+              onClick={handleDemoLogin}
               className="w-full sm:w-auto px-6 sm:px-8 md:px-12 lg:px-16 py-3 sm:py-4 md:py-5 bg-transparent border-2 border-amber-500 text-amber-400 text-base sm:text-lg md:text-xl lg:text-2xl font-semibold rounded-lg transition-all duration-300 hover:bg-amber-500 hover:text-white hover:shadow-2xl hover:scale-105 cursor-pointer max-w-xs sm:max-w-none mx-auto sm:mx-0"
             >
-              Demo Account
+              {t('homepage.hero.buttons.demo')}
             </button>
           </div>
 

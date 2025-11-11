@@ -107,7 +107,21 @@
     "termsConditions": "Nutzungsbedingungen",
     "agreementEnd": "zu.",
     "createAccount": "erstellen Sie ein neues Konto",
-    "loginToExisting": "melden Sie sich in Ihr bestehendes Konto an"
+    "loginToExisting": "melden Sie sich in Ihr bestehendes Konto an",
+    "earlyBetaTitle": "Early Beta Version",
+    "earlyBetaDescription": "Dies ist eine frühe Beta-Version von StarArc. Alle Daten können regelmäßig und ohne Ankündigung gelöscht werden. Nutzen Sie diese Version nur zu Test- und Evaluationszwecken.",
+    "loginTitle": "Anmelden",
+    "registerTitle": "Konto erstellen",
+    "twoFactorToken": "2FA-Token (optional)",
+    "loggingIn": "Anmeldung läuft...",
+    "demo": "Demo",
+    "demoButton": "🚀 Mit Demo-Account anmelden",
+    "demoLoading": "Demo-Login läuft...",
+    "networkError": "Netzwerkfehler. Bitte versuchen Sie es später erneut.",
+    "loginFailed": "Anmeldung fehlgeschlagen",
+    "demoLoginFailed": "Demo-Login fehlgeschlagen",
+    "registerSuccess": "Registrierung erfolgreich! Sie können sich jetzt anmelden.",
+    "registerFailed": "Registrierung fehlgeschlagen"
   },
   "subscription": {
     "title": "Plan auswählen",
@@ -505,6 +519,126 @@
         "backup": "Backup"
       },
       "cta": "Sicherheit überprüfen"
+    }
+  },
+  "homepage": {
+    "hero": {
+      "buttons": {
+        "start": "Jetzt Starten",
+        "demo": "Demo Account"
+      }
+    },
+    "assetShowcase": {
+      "title": {
+        "part1": "Ihre Assets",
+        "part2": "Zentral verwaltet"
+      },
+      "subtitle": "Verwalten Sie alle Ihre Vermögenswerte an einem Ort - von traditionellen Anlagen bis hin zu alternativen Investments",
+      "assets": {
+        "securities": {
+          "title": "Wertschriften",
+          "description": "Aktien, ETFs und Fonds"
+        },
+        "bitcoin": {
+          "title": "Bitcoin", 
+          "description": "Kryptowährungen & DeFi"
+        },
+        "metals": {
+          "title": "Edelmetalle",
+          "description": "Gold, Silber & Platin"
+        },
+        "realestate": {
+          "title": "Immobilien",
+          "description": "Direktinvestments & REITs"
+        },
+        "pension": {
+          "title": "Vorsorge",
+          "description": "Säule 3a & Pensionskasse"
+        },
+        "insurance": {
+          "title": "Versicherungen",
+          "description": "Leben & Gesundheit"
+        },
+        "art": {
+          "title": "Kunst",
+          "description": "Gemälde & Skulpturen"
+        },
+        "collectibles": {
+          "title": "Sammlerobjekte",
+          "description": "Uhren, Wein & Raritäten"
+        }
+      },
+      "cta": {
+        "subtitle": "Entdecken Sie die Vielfalt Ihrer Anlagemöglichkeiten",
+        "start": "Jetzt Starten",
+        "demo": "Demo Account"
+      }
+    },
+    "securityShowcase": {
+      "title": {
+        "part1": "Maximale Sicherheit",
+        "part2": "& Datenschutz"
+      },
+      "subtitle": "Bank-Level Sicherheit mit modernster Verschlüsselungstechnologie für alle Ihre digitalen und physischen Assets",
+      "features": {
+        "institutions": {
+          "title": "Finanzinstitute",
+          "description": "Verwaltung von Banken, Brokern und Depots",
+          "details": "API-Verschlüsselung & OAuth 2.0"
+        },
+        "physicalVaults": {
+          "title": "Physische Tresore",
+          "description": "Verwaltung von Aufbewahrungsorten, Schliessfächern und Treuhand",
+          "details": "Standort-Tracking & Inventar"
+        },
+        "digitalVaults": {
+          "title": "Digitale Tresore",
+          "description": "Verschlüsselte Cloud-Storage Integration",
+          "details": "AES-256 Verschlüsselung"
+        },
+        "singleSig": {
+          "title": "Bitcoin SingleSig",
+          "description": "Einfache Bitcoin-Wallet Verwaltung und Backup-Strategie",
+          "details": "Hardware Wallet Support"
+        },
+        "multiSig": {
+          "title": "Bitcoin MultiSig",
+          "description": "Multi-Signatur Sicherheitskonfiguration, Co-Signer Management",
+          "details": "2-of-3 bis 15-of-15 Setups"
+        },
+        "separation": {
+          "title": "User-Asset Trennung",
+          "description": "Strikte Datenisolation",
+          "details": "Zero-Knowledge Architektur"
+        }
+      },
+      "privacy": {
+        "title": "Datenschutz-Prinzipien",
+        "subtitle": "Wir setzen die höchsten Standards für den Schutz Ihrer Privatsphäre um",
+        "principles": {
+          "noSales": {
+            "title": "Keine Datenverkäufe",
+            "description": "Ihre Daten gehören nur Ihnen"
+          },
+          "encryption": {
+            "title": "End-to-End Verschlüsselung",
+            "description": "Daten sind nur für Sie lesbar"
+          },
+          "local": {
+            "title": "Lokale Datenhaltung",
+            "description": "Server in der Schweiz"
+          },
+          "compliance": {
+            "title": "Compliance",
+            "description": "DSGVO & Swiss Banking Standards"
+          }
+        }
+      },
+      "cta": {
+        "subtitle": "Vertrauen Sie auf Swiss-Made Sicherheit",
+        "start": "Jetzt Starten",
+        "demo": "Demo Account"
+      }
     }
   }
 }

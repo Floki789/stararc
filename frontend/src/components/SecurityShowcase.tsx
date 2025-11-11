@@ -1,4 +1,6 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useLanguage } from '../contexts/LanguageContext';
 import { 
   Shield,
   Lock,
@@ -13,77 +15,84 @@ import {
 } from 'lucide-react';
 
 const SecurityShowcase: React.FC = () => {
+  const navigate = useNavigate();
+  const { t } = useLanguage();
+  
+  const handleDemoLogin = async () => {
+    // Set demo credentials and navigate to login page with auto-login
+    navigate('/login?demo=true');
+  };
   const securityFeatures = [
     {
       icon: Building2,
-      title: "Finanzinstitute",
-      description: "Verwaltung von Banken, Brokern und Depots",
+      titleKey: "homepage.securityShowcase.features.institutions.title",
+      descriptionKey: "homepage.securityShowcase.features.institutions.description",
+      detailsKey: "homepage.securityShowcase.features.institutions.details",
       gradient: "from-blue-600 to-indigo-600",
-      bgGradient: "from-blue-600/10 to-indigo-600/10",
-      details: "API-Verschlüsselung & OAuth 2.0"
+      bgGradient: "from-blue-600/10 to-indigo-600/10"
     },
     {
       icon: Vault,
-      title: "Physische Tresore",
-      description: "Verwaltung von Aufbewahrungsorten, Schliessfächern und Treuhand",
+      titleKey: "homepage.securityShowcase.features.physicalVaults.title",
+      descriptionKey: "homepage.securityShowcase.features.physicalVaults.description",
+      detailsKey: "homepage.securityShowcase.features.physicalVaults.details",
       gradient: "from-gray-600 to-slate-600",
-      bgGradient: "from-gray-600/10 to-slate-600/10",
-      details: "Standort-Tracking & Inventar"
+      bgGradient: "from-gray-600/10 to-slate-600/10"
     },
     {
       icon: Smartphone,
-      title: "Digitale Tresore",
-      description: "Verschlüsselte Cloud-Storage Integration",
+      titleKey: "homepage.securityShowcase.features.digitalVaults.title",
+      descriptionKey: "homepage.securityShowcase.features.digitalVaults.description",
+      detailsKey: "homepage.securityShowcase.features.digitalVaults.details",
       gradient: "from-emerald-600 to-green-600",
-      bgGradient: "from-emerald-600/10 to-green-600/10",
-      details: "AES-256 Verschlüsselung"
+      bgGradient: "from-emerald-600/10 to-green-600/10"
     },
     {
       icon: Key,
-      title: "Bitcoin SingleSig",
-      description: "Einfache Bitcoin-Wallet Verwaltung und Backup-Strategie",
+      titleKey: "homepage.securityShowcase.features.singleSig.title",
+      descriptionKey: "homepage.securityShowcase.features.singleSig.description",
+      detailsKey: "homepage.securityShowcase.features.singleSig.details",
       gradient: "from-orange-500 to-amber-500",
-      bgGradient: "from-orange-500/10 to-amber-500/10",
-      details: "Hardware Wallet Support"
+      bgGradient: "from-orange-500/10 to-amber-500/10"
     },
     {
       icon: ShieldCheck,
-      title: "Bitcoin MultiSig",
-      description: "Multi-Signatur Sicherheitskonfiguration, Co-Signer Management",
+      titleKey: "homepage.securityShowcase.features.multiSig.title",
+      descriptionKey: "homepage.securityShowcase.features.multiSig.description",
+      detailsKey: "homepage.securityShowcase.features.multiSig.details",
       gradient: "from-red-600 to-orange-600",
-      bgGradient: "from-red-600/10 to-orange-600/10",
-      details: "2-of-3 bis 15-of-15 Setups"
+      bgGradient: "from-red-600/10 to-orange-600/10"
     },
     {
       icon: Users,
-      title: "User-Asset Trennung",
-      description: "Strikte Datenisolation",
+      titleKey: "homepage.securityShowcase.features.separation.title",
+      descriptionKey: "homepage.securityShowcase.features.separation.description",
+      detailsKey: "homepage.securityShowcase.features.separation.details",
       gradient: "from-purple-600 to-violet-600",
-      bgGradient: "from-purple-600/10 to-violet-600/10",
-      details: "Zero-Knowledge Architektur"
+      bgGradient: "from-purple-600/10 to-violet-600/10"
     }
   ];
 
   const privacyPrinciples = [
     {
       icon: Eye,
-      title: "Keine Datenverkäufe",
-      description: "Ihre Daten gehören nur Ihnen"
+      titleKey: "homepage.securityShowcase.privacy.principles.noSales.title",
+      descriptionKey: "homepage.securityShowcase.privacy.principles.noSales.description"
     },
     {
       icon: Lock,
-      title: "End-to-End Verschlüsselung",
-      description: "Daten sind nur für Sie lesbar"
+      titleKey: "homepage.securityShowcase.privacy.principles.encryption.title",
+      descriptionKey: "homepage.securityShowcase.privacy.principles.encryption.description"
     },
     {
       icon: Database,
-      title: "Lokale Datenhaltung",
-      description: "Server in der Schweiz"
+      titleKey: "homepage.securityShowcase.privacy.principles.local.title",
+      descriptionKey: "homepage.securityShowcase.privacy.principles.local.description"
     },
     {
       icon: Shield,
-      title: "Compliance",
-      description: "DSGVO & Swiss Banking Standards"
+      titleKey: "homepage.securityShowcase.privacy.principles.compliance.title",
+      descriptionKey: "homepage.securityShowcase.privacy.principles.compliance.description"
     }
   ];
 
@@ -102,14 +111,14 @@ const SecurityShowcase: React.FC = () => {
         <div className="text-center mb-12 sm:mb-16 md:mb-20">
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6">
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
-              Maximale Sicherheit
+              {t('homepage.securityShowcase.title.part1')}
             </span>
             <span className="block mt-2">
-              & Datenschutz
+              {t('homepage.securityShowcase.title.part2')}
             </span>
           </h2>
           <p className="text-lg sm:text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
-            Bank-Level Sicherheit mit modernster Verschlüsselungstechnologie für alle Ihre digitalen und physischen Assets
+            {t('homepage.securityShowcase.subtitle')}
           </p>
         </div>
 
@@ -130,13 +139,13 @@ const SecurityShowcase: React.FC = () => {
                 {/* Content */}
                 <div>
                   <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-2 sm:mb-3">
-                    {feature.title}
+                    {t(feature.titleKey)}
                   </h3>
                   <p className="text-sm sm:text-base md:text-lg text-gray-400 leading-relaxed mb-3 sm:mb-4">
-                    {feature.description}
+                    {t(feature.descriptionKey)}
                   </p>
                   <div className="text-xs sm:text-sm text-gray-500 font-mono bg-gray-800/50 px-3 py-2 rounded-lg">
-                    {feature.details}
+                    {t(feature.detailsKey)}
                   </div>
                 </div>
 
@@ -152,11 +161,11 @@ const SecurityShowcase: React.FC = () => {
           <div className="text-center mb-8 sm:mb-10 md:mb-12">
             <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4">
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500">
-                Datenschutz-Prinzipien
+                {t('homepage.securityShowcase.privacy.title')}
               </span>
             </h3>
             <p className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
-              Wir setzen die höchsten Standards für den Schutz Ihrer Privatsphäre um
+              {t('homepage.securityShowcase.privacy.subtitle')}
             </p>
           </div>
 
@@ -172,10 +181,10 @@ const SecurityShowcase: React.FC = () => {
                     <Icon className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
                   </div>
                   <h4 className="text-base sm:text-lg md:text-xl font-semibold text-white mb-2">
-                    {principle.title}
+                    {t(principle.titleKey)}
                   </h4>
                   <p className="text-sm sm:text-base text-gray-400 leading-relaxed">
-                    {principle.description}
+                    {t(principle.descriptionKey)}
                   </p>
                 </div>
               );
@@ -186,14 +195,18 @@ const SecurityShowcase: React.FC = () => {
         {/* Bottom Call to Action */}
         <div className="text-center mt-12 sm:mt-16 md:mt-20">
           <p className="text-base sm:text-lg md:text-xl text-gray-400 mb-6 sm:mb-8">
-            Vertrauen Sie auf Swiss-Made Sicherheit
+            {t('homepage.securityShowcase.cta.subtitle')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center">
-            <button className="w-full sm:w-auto px-6 sm:px-8 md:px-10 py-3 sm:py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-base sm:text-lg md:text-xl font-semibold rounded-lg transition-all duration-300 hover:shadow-2xl hover:scale-105 cursor-pointer max-w-xs sm:max-w-none">
-              Jetzt Starten
+            <button 
+              onClick={() => navigate('/register')}
+              className="w-full sm:w-auto px-6 sm:px-8 md:px-10 py-3 sm:py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-base sm:text-lg md:text-xl font-semibold rounded-lg transition-all duration-300 hover:shadow-2xl hover:scale-105 cursor-pointer max-w-xs sm:max-w-none">
+              {t('homepage.securityShowcase.cta.start')}
             </button>
-            <button className="w-full sm:w-auto px-6 sm:px-8 md:px-10 py-3 sm:py-4 bg-transparent border-2 border-blue-500 text-blue-400 text-base sm:text-lg md:text-xl font-semibold rounded-lg transition-all duration-300 hover:bg-blue-500 hover:text-white hover:shadow-xl hover:scale-105 cursor-pointer max-w-xs sm:max-w-none">
-              Demo Account
+            <button 
+              onClick={handleDemoLogin}
+              className="w-full sm:w-auto px-6 sm:px-8 md:px-10 py-3 sm:py-4 bg-transparent border-2 border-blue-500 text-blue-400 text-base sm:text-lg md:text-xl font-semibold rounded-lg transition-all duration-300 hover:bg-blue-500 hover:text-white hover:shadow-xl hover:scale-105 cursor-pointer max-w-xs sm:max-w-none">
+              {t('homepage.securityShowcase.cta.demo')}
             </button>
           </div>
         </div>

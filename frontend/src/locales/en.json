@@ -107,7 +107,21 @@
     "termsConditions": "Terms & Conditions",
     "agreementEnd": ".",
     "createAccount": "create a new account",
-    "loginToExisting": "sign in to your existing account"
+    "loginToExisting": "sign in to your existing account",
+    "earlyBetaTitle": "Early Beta Version",
+    "earlyBetaDescription": "This is an early beta version of StarArc. All data may be deleted regularly and without notice. Use this version only for testing and evaluation purposes.",
+    "loginTitle": "Sign In",
+    "registerTitle": "Create Account",
+    "twoFactorToken": "2FA Token (optional)",
+    "loggingIn": "Signing in...",
+    "demo": "Demo",
+    "demoButton": "🚀 Sign in with Demo Account",
+    "demoLoading": "Demo login running...",
+    "networkError": "Network error. Please try again later.",
+    "loginFailed": "Login failed",
+    "demoLoginFailed": "Demo login failed",
+    "registerSuccess": "Registration successful! You can now sign in.",
+    "registerFailed": "Registration failed"
   },
   "subscription": {
     "title": "Choose Your Plan",
@@ -505,6 +519,126 @@
         "backup": "Backup"
       },
       "cta": "Review Security"
+    }
+  },
+  "homepage": {
+    "hero": {
+      "buttons": {
+        "start": "Get Started",
+        "demo": "Demo Account"
+      }
+    },
+    "assetShowcase": {
+      "title": {
+        "part1": "Your Assets",
+        "part2": "Centrally Managed"
+      },
+      "subtitle": "Manage all your assets in one place - from traditional investments to alternative assets",
+      "assets": {
+        "securities": {
+          "title": "Securities",
+          "description": "Stocks, ETFs and Funds"
+        },
+        "bitcoin": {
+          "title": "Bitcoin", 
+          "description": "Cryptocurrencies & DeFi"
+        },
+        "metals": {
+          "title": "Precious Metals",
+          "description": "Gold, Silver & Platinum"
+        },
+        "realestate": {
+          "title": "Real Estate",
+          "description": "Direct Investments & REITs"
+        },
+        "pension": {
+          "title": "Retirement",
+          "description": "Pillar 3a & Pension Fund"
+        },
+        "insurance": {
+          "title": "Insurance",
+          "description": "Life & Health"
+        },
+        "art": {
+          "title": "Art",
+          "description": "Paintings & Sculptures"
+        },
+        "collectibles": {
+          "title": "Collectibles",
+          "description": "Watches, Wine & Rarities"
+        }
+      },
+      "cta": {
+        "subtitle": "Discover the diversity of your investment opportunities",
+        "start": "Get Started",
+        "demo": "Demo Account"
+      }
+    },
+    "securityShowcase": {
+      "title": {
+        "part1": "Maximum Security",
+        "part2": "& Privacy"
+      },
+      "subtitle": "Bank-level security with state-of-the-art encryption technology for all your digital and physical assets",
+      "features": {
+        "institutions": {
+          "title": "Financial Institutions",
+          "description": "Management of banks, brokers and portfolios",
+          "details": "API encryption & OAuth 2.0"
+        },
+        "physicalVaults": {
+          "title": "Physical Vaults",
+          "description": "Management of storage locations, safe deposit boxes and trusts",
+          "details": "Location tracking & inventory"
+        },
+        "digitalVaults": {
+          "title": "Digital Vaults",
+          "description": "Encrypted cloud storage integration",
+          "details": "AES-256 encryption"
+        },
+        "singleSig": {
+          "title": "Bitcoin SingleSig",
+          "description": "Simple Bitcoin wallet management and backup strategy",
+          "details": "Hardware wallet support"
+        },
+        "multiSig": {
+          "title": "Bitcoin MultiSig",
+          "description": "Multi-signature security configuration, co-signer management",
+          "details": "2-of-3 to 15-of-15 setups"
+        },
+        "separation": {
+          "title": "User-Asset Separation",
+          "description": "Strict data isolation",
+          "details": "Zero-knowledge architecture"
+        }
+      },
+      "privacy": {
+        "title": "Privacy Principles",
+        "subtitle": "We implement the highest standards for protecting your privacy",
+        "principles": {
+          "noSales": {
+            "title": "No Data Sales",
+            "description": "Your data belongs only to you"
+          },
+          "encryption": {
+            "title": "End-to-End Encryption",
+            "description": "Data is only readable by you"
+          },
+          "local": {
+            "title": "Local Data Storage",
+            "description": "Servers in Switzerland"
+          },
+          "compliance": {
+            "title": "Compliance",
+            "description": "GDPR & Swiss Banking Standards"
+          }
+        }
+      },
+      "cta": {
+        "subtitle": "Trust in Swiss-made security",
+        "start": "Get Started",
+        "demo": "Demo Account"
+      }
     }
   }
 }
