@@ -654,7 +654,9 @@ router.post('/generate-spaceship-token', authMiddleware, async (req: Request, re
       { expiresIn: '5m' } // Short-lived for security
     );
     
-    const spaceshipUrl = process.env.SPACESHIP_URL || 'http://localhost:3000';
+    const spaceshipUrl = process.env.NODE_ENV === 'production' 
+      ? 'https://spaceship.paymebits.com'
+      : process.env.SPACESHIP_URL || 'http://localhost:3000';
     
     res.json({
       success: true,
@@ -1007,7 +1009,9 @@ router.post('/generate-spaceship-token-for-client', authMiddleware, async (req: 
       { expiresIn: '5m' }
     );
     
-    const spaceshipUrl = process.env.SPACESHIP_URL || 'http://localhost:3000';
+    const spaceshipUrl = process.env.NODE_ENV === 'production' 
+      ? 'https://spaceship.paymebits.com'
+      : process.env.SPACESHIP_URL || 'http://localhost:3000';
     
     res.json({
       success: true,
