@@ -61,7 +61,11 @@ app.use(helmet({
         "'self'", 
         "https://api.stripe.com",
         "https://spaceship.paymebits.com",
-        "https://spaceship-app-05fdc7b20f43.herokuapp.com"
+        "https://spaceship-app-05fdc7b20f43.herokuapp.com",
+        "https://stararc-app-e576e504324e.herokuapp.com",
+        "https://paymebits.com",
+        "https://www.paymebits.com",
+        "https://stararc.paymebits.com"
       ],
       frameSrc: ["'self'", "https://js.stripe.com"],
     },
