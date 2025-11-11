@@ -785,7 +785,7 @@ const Dashboard: React.FC = () => {
                 {t('dashboard.exclusiveOwnership')}
               </p>
               <a
-                href="http://localhost:3000/"
+                href="https://spaceship.paymebits.com/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium"
