@@ -371,10 +371,10 @@
   "animations": {
     "wealthManager": {
       "headline": {
-        "part1": "Become your own",
-        "part2": "wealth manager"
+        "part1": "Werden Sie Ihr eigener",
+        "part2": "Vermögensverwalter"
       },
-      "subtext": "Übernehmen Sie die Kontrolle über Ihr Vermögen. Verwalten Sie Ihre Investments eigenständig und profitieren Sie von professionellen Tools ohne hohe Gebühren.",
+      "subtext": "Übernehmen Sie die Kontrolle über Ihr Vermögen. Verwahren sie dezentral, verwalten sie zentral.",
       "features": {
         "control": "Portfolio-Kontrolle",
         "strategy": "Strategische Planung", 

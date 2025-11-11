@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
 import HeroSection from '../components/HeroSection';
+import AssetShowcase from '../components/AssetShowcase';
+import SecurityShowcase from '../components/SecurityShowcase';
 import PlanCards from '../components/PlanCards';
 
 const Home: React.FC = () => {
@@ -38,6 +40,12 @@ const Home: React.FC = () => {
     <div className="min-h-screen">      
       {/* Hero Section */}
       <HeroSection />
+      
+      {/* Asset Showcase Section */}
+      <AssetShowcase />
+      
+      {/* Security & Privacy Showcase Section */}
+      <SecurityShowcase />
 
       {/* Subscription Plans - No Animation */}
       <div id="plans" className="py-20 bg-gray-900">
