@@ -502,10 +502,11 @@ router.post('/create-spaceship-access', authMiddleware, async (req: Request, res
     // Generate HMAC-SHA256 hash for Spaceship (rainbow table resistant)
     const authKeyHash = hashAuthKey(authKey);
     
-    // Create Spaceship user via internal API
+    // Create Spaceship user via StarArc token authentication
     const spaceshipResponse = await createSpaceshipUser({
-      authKeyHash,
-      subscriptionPlan: userData.subscription_plan || 'Free'
+      authKey: authKey,  // Pass the raw auth key (will be used as JWT payload)
+      subscriptionPlan: userData.subscription_plan || 'Free',
+      parentUserId: user.id
     });    if (!spaceshipResponse.success) {
       return res.status(500).json({ 
         error: 'Failed to create spaceship access',
@@ -674,42 +675,50 @@ router.post('/generate-spaceship-token', authMiddleware, async (req: Request, re
   }
 });
 
-// Helper function: Create Spaceship user via internal API
-async function createSpaceshipUser({ authKeyHash, subscriptionPlan, parentUserId }: {
-  authKeyHash: string;
+// Helper function: Create Spaceship user via StarArc token authentication
+async function createSpaceshipUser({ authKey, subscriptionPlan, parentUserId }: {
+  authKey: string;  // Raw auth key (will be used in JWT)
   subscriptionPlan: string;
   parentUserId?: number;
 }): Promise<{ success: boolean; userId?: number; error?: string }> {
   try {
     const spaceshipApiUrl = process.env.SPACESHIP_API_URL || 'http://localhost:3001';
-    const internalSecret = process.env.INTERNAL_API_SECRET;
-    
-    if (!internalSecret) {
-      throw new Error('INTERNAL_API_SECRET environment variable is required');
-    }
     
     // Use native fetch (Node.js 18+) or implement with axios/http
     const https = require('https');
     const http = require('http');
     const url = require('url');
     
-    const parsedUrl = new URL(`${spaceshipApiUrl}/api/internal/create-user`);
+    // Use the StarArc authentication endpoint
+    const parsedUrl = new URL(`${spaceshipApiUrl}/api/auth/stararc-key-login`);
     const isHttps = parsedUrl.protocol === 'https:';
     const client = isHttps ? https : http;
     
-    // Debug: Log what subscription plan is being sent
-    console.log('🚀 Sending to Spaceship API:', { 
-      authKeyHash: authKeyHash.substring(0, 10) + '...', 
-      subscriptionPlan, 
-      baseCurrency: 'CHF',
-      parentUserId: parentUserId || 'none'
+    // Create JWT token for StarArc authentication
+    const jwt = require('jsonwebtoken');
+    const CROSS_APP_JWT_SECRET = process.env.CROSS_APP_JWT_SECRET || 'shared-cross-app-secret';
+    
+    const stararcToken = jwt.sign({
+      authKey: authKey,  // Use the raw auth key
+      authMethod: 'stararc_key',
+      subscriptionPlan: subscriptionPlan || 'Free',
+      crossApp: true,
+      source: 'stararc',
+      userId: parentUserId,
+      iat: Math.floor(Date.now() / 1000),
+      exp: Math.floor(Date.now() / 1000) + (5 * 60) // 5 minutes expiry
+    }, CROSS_APP_JWT_SECRET);
+    
+    // Debug: Log what we're sending
+    console.log('🚀 Sending StarArc token to Spaceship API:', { 
+      userId: parentUserId,
+      authKey: authKey.substring(0, 10) + '...', 
+      subscriptionPlan,
+      endpoint: parsedUrl.pathname
     });
     
     const postData = JSON.stringify({
-      authKeyHash,
-      subscriptionPlan,
-      baseCurrency: 'CHF',
-      ...(parentUserId && { parentUserId })
+      stararc_token: stararcToken
     });
     
     const options = {
@@ -719,7 +728,6 @@ async function createSpaceshipUser({ authKeyHash, subscriptionPlan, parentUserId
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-Internal-Secret': internalSecret,
         'Content-Length': Buffer.byteLength(postData)
       }
     };
@@ -862,10 +870,9 @@ router.post('/create-apex-client', authMiddleware, [
     
     // Auto-create Spaceship access for the ApexChild
     const authKey = crypto.randomBytes(32).toString('hex');
-    const authKeyHash = hashAuthKey(authKey);
     
     const spaceshipResponse = await createSpaceshipUser({
-      authKeyHash,
+      authKey: authKey,  // Use raw auth key
       subscriptionPlan: 'Core', // Create as Core account in Spaceship
       parentUserId: apexManager.id
     });
