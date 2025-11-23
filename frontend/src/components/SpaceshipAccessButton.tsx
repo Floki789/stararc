@@ -101,7 +101,7 @@ const SpaceshipAccessButton: React.FC<SpaceshipAccessButtonProps> = ({
       return (
         <>
           {showIcon && <CheckCircleIcon className={`${iconSizes[size]} mr-2 text-green-300`} />}
-          Zum Spaceship Portfolio
+          Zum Stararc Portfolio
         </>
       );
     }
