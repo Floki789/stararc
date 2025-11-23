@@ -574,6 +574,60 @@
         "demo": "Demo Account"
       }
     },
+    "budgetShowcase": {
+      "title": {
+        "part1": "Intelligente Budget-",
+        "part2": "Verwaltung für Familien"
+      },
+      "subtitle": "Verwalten Sie Ihr Familienbudget mit intelligenter Automatisierung und regelbasierten Einnahmen- und Ausgabenpositionen",
+      "features": {
+        "family": {
+          "title": "Familienmitglieder",
+          "description": "Erfassen Sie alle Familienmitglieder und deren individuelle Budgetpositionen"
+        },
+        "automated": {
+          "title": "Regelbasierte Automatisierung",
+          "description": "Automatische Erstellung von Einnahmen- und Ausgabenpositionen basierend auf intelligenten Regeln"
+        },
+        "analytics": {
+          "title": "Budget-Analytics",
+          "description": "Detaillierte Auswertungen und Trends Ihrer Ausgaben und Einnahmen"
+        },
+        "goals": {
+          "title": "Finanzielle Ziele",
+          "description": "Setzen und verfolgen Sie Sparziele für Ihre Familie"
+        },
+        "categories": {
+          "title": "Smart-Kategorien",
+          "description": "Intelligente Kategorisierung Ihrer Ausgaben mit anpassbaren Regeln"
+        },
+        "planning": {
+          "title": "Langzeit-Planung",
+          "description": "Planen Sie Ihr Budget für Monate und Jahre im Voraus"
+        }
+      },
+      "benefits": {
+        "title": "Warum unser Budget Tool?",
+        "subtitle": "Innovative Features für moderne Familienfinanzen",
+        "feature1": {
+          "title": "Familienorientiert",
+          "description": "Speziell entwickelt für Familien mit mehreren Mitgliedern und komplexen Bedürfnissen"
+        },
+        "feature2": {
+          "title": "Benutzerfreundlich",
+          "description": "Intuitive Benutzeroberfläche, die auch Nicht-Finanzexperten leicht verstehen"
+        },
+        "feature3": {
+          "title": "Präzise Planung",
+          "description": "Exakte Budgetplanung mit intelligenten Vorhersagen und Empfehlungen"
+        }
+      },
+      "cta": {
+        "subtitle": "Starten Sie noch heute mit Ihrer intelligenten Budgetplanung",
+        "start": "Budget Tool Testen",
+        "demo": "Demo Ansehen"
+      }
+    },
     "securityShowcase": {
       "title": {
         "part1": "Maximale Sicherheit",

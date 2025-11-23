@@ -574,6 +574,60 @@
         "demo": "Demo Account"
       }
     },
+    "budgetShowcase": {
+      "title": {
+        "part1": "Intelligent Budget",
+        "part2": "Management for Families"
+      },
+      "subtitle": "Manage your family budget with intelligent automation and rule-based income and expense positions",
+      "features": {
+        "family": {
+          "title": "Family Members",
+          "description": "Capture all family members and their individual budget positions"
+        },
+        "automated": {
+          "title": "Rule-based Automation",
+          "description": "Automatic creation of income and expense positions based on intelligent rules"
+        },
+        "analytics": {
+          "title": "Budget Analytics",
+          "description": "Detailed analysis and trends of your expenses and income"
+        },
+        "goals": {
+          "title": "Financial Goals",
+          "description": "Set and track savings goals for your family"
+        },
+        "categories": {
+          "title": "Smart Categories",
+          "description": "Intelligent categorization of your expenses with customizable rules"
+        },
+        "planning": {
+          "title": "Long-term Planning",
+          "description": "Plan your budget for months and years in advance"
+        }
+      },
+      "benefits": {
+        "title": "Why our Budget Tool?",
+        "subtitle": "Innovative features for modern family finances",
+        "feature1": {
+          "title": "Family-oriented",
+          "description": "Specifically designed for families with multiple members and complex needs"
+        },
+        "feature2": {
+          "title": "User-friendly",
+          "description": "Intuitive user interface that even non-financial experts can easily understand"
+        },
+        "feature3": {
+          "title": "Precise Planning",
+          "description": "Accurate budget planning with intelligent predictions and recommendations"
+        }
+      },
+      "cta": {
+        "subtitle": "Start your intelligent budget planning today",
+        "start": "Test Budget Tool",
+        "demo": "View Demo"
+      }
+    },
     "securityShowcase": {
       "title": {
         "part1": "Maximum Security",

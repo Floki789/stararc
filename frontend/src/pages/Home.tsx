@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
 import HeroSection from '../components/HeroSection';
 import AssetShowcase from '../components/AssetShowcase';
+import BudgetShowcase from '../components/BudgetShowcase';
 import SecurityShowcase from '../components/SecurityShowcase';
 import PlanCards from '../components/PlanCards';
 
@@ -43,6 +44,9 @@ const Home: React.FC = () => {
       
       {/* Asset Showcase Section */}
       <AssetShowcase />
+      
+      {/* Budget Showcase Section */}
+      <BudgetShowcase />
       
       {/* Security & Privacy Showcase Section */}
       <SecurityShowcase />
