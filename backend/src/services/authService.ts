@@ -63,7 +63,8 @@ export class AuthService {
     
     try {
       // Check if user already exists
-      const existingUser = await client.query('SELECT id FROM users WHERE email = $1', [email]);
+      const emailHash = UserEncryptionService.generateEmailHash(email);
+      const existingUser = await client.query('SELECT id FROM users WHERE email_hash = $1', [emailHash]);
       if (existingUser.rows.length > 0) {
         throw new Error('User already exists');
       }
@@ -81,19 +82,19 @@ export class AuthService {
       const emailVerificationToken = this.generateEmailVerificationToken();
       const emailVerificationExpires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
 
-      // Insert user with encrypted data (keep old fields for transition)
+      // Insert user with encrypted data
       const result = await client.query(
         `INSERT INTO users (
-          email, password_hash, alias, 
+          password_hash, 
           email_hash, encrypted_email, encrypted_alias,
           admin_encrypted_email, admin_encrypted_alias,
           email_verification_token, email_verification_expires, 
           email_verified, created_at, updated_at
         )
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, NOW(), NOW())
-        RETURNING id, email, alias, email_verified, created_at`,
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, NOW(), NOW())
+        RETURNING id, email_hash, email_verified, created_at`,
         [
-          email, hashedPassword, alias || 'User',
+          hashedPassword,
           encryptedData.emailHash, encryptedData.encryptedEmail, encryptedData.encryptedAlias,
           encryptedData.adminEncryptedEmail, encryptedData.adminEncryptedAlias,
           emailVerificationToken, emailVerificationExpires, true
@@ -101,6 +102,10 @@ export class AuthService {
       );
 
       const user = result.rows[0];
+      
+      // Add decrypted data to user object for response
+      user.email = email;
+      user.alias = alias || 'User';
       
       // Store verification token temporarily for email sending
       user.emailVerificationToken = emailVerificationToken;
@@ -121,7 +126,7 @@ export class AuthService {
       
       // Find user by email hash
       const result = await client.query(
-        `SELECT id, email, password_hash, alias, email_verified, role, created_at, onboarding_step, 
+        `SELECT id, password_hash, email_verified, role, created_at, onboarding_step, 
          login_method_selected, spaceship_integration_completed, encrypted_email, encrypted_alias
          FROM users WHERE email_hash = $1`,
         [emailHash]
@@ -151,12 +156,12 @@ export class AuthService {
           encryptedAlias: user.encrypted_alias
         }, password);
         
-        // Use decrypted data if available, fallback to old fields
-        user.email = decryptedData.email || user.email;
-        user.alias = decryptedData.alias || user.alias;
+        // Add decrypted data to user object
+        user.email = decryptedData.email;
+        user.alias = decryptedData.alias;
       } catch (decryptError) {
-        // If decryption fails, use existing unencrypted data (during transition)
-        console.warn('Failed to decrypt user data, using fallback data:', decryptError);
+        // If decryption fails, throw error since we no longer have fallback data
+        throw new Error('Failed to decrypt user data - invalid password or corrupted data');
       }
 
       // Update last login
@@ -181,7 +186,7 @@ export class AuthService {
     try {
       // Find user with verification token
       const result = await client.query(
-        'SELECT id, email, alias FROM users WHERE email_verification_token = $1 AND email_verification_expires > NOW()',
+        'SELECT id, encrypted_email, encrypted_alias FROM users WHERE email_verification_token = $1 AND email_verification_expires > NOW()',
         [token]
       );
 
@@ -209,7 +214,8 @@ export class AuthService {
     
     try {
       // Check if user exists
-      const result = await client.query('SELECT id FROM users WHERE email = $1', [email]);
+      const emailHash = UserEncryptionService.generateEmailHash(email);
+      const result = await client.query('SELECT id FROM users WHERE email_hash = $1', [emailHash]);
       if (result.rows.length === 0) {
         // Don't reveal if email exists or not
         return 'Password reset email sent if account exists';
@@ -240,7 +246,7 @@ export class AuthService {
     try {
       // Find user with reset token
       const result = await client.query(
-        'SELECT id, email, alias FROM users WHERE password_reset_token = $1 AND password_reset_expires > NOW()',
+        'SELECT id, encrypted_email, encrypted_alias FROM users WHERE password_reset_token = $1 AND password_reset_expires > NOW()',
         [token]
       );
 
@@ -271,7 +277,7 @@ export class AuthService {
     
     try {
       const result = await client.query(
-        `SELECT id, email, alias, email_verified, role, created_at, last_login, 
+        `SELECT id, email_verified, role, created_at, last_login, 
          onboarding_step, login_method_selected, spaceship_integration_completed, 
          subscription_plan, admin_encrypted_email, admin_encrypted_alias 
          FROM users WHERE id = $1`,
@@ -291,12 +297,14 @@ export class AuthService {
           adminEncryptedAlias: user.admin_encrypted_alias
         });
         
-        // Use decrypted data if available, fallback to old fields
-        user.email = decryptedData.email || user.email;
-        user.alias = decryptedData.alias || user.alias;
+        // Add decrypted data to user object
+        user.email = decryptedData.email;
+        user.alias = decryptedData.alias;
       } catch (decryptError) {
-        // If decryption fails, use existing unencrypted data (during transition)
-        console.warn('Failed to decrypt admin data, using fallback data:', decryptError);
+        // If decryption fails, set default values
+        console.warn('Failed to decrypt admin data:', decryptError);
+        user.email = 'encrypted@hidden.com';
+        user.alias = 'Encrypted User';
       }
 
       return user;
@@ -312,8 +320,8 @@ export class AuthService {
     try {
       // Check if user exists and is not verified
       const result = await client.query(
-        'SELECT id, email_verified FROM users WHERE email = $1',
-        [email]
+        'SELECT id, email_verified FROM users WHERE email_hash = $1',
+        [UserEncryptionService.generateEmailHash(email)]
       );
 
       if (result.rows.length === 0) {

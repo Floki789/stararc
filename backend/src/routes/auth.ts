@@ -466,7 +466,7 @@ router.post('/create-spaceship-access', authMiddleware, async (req: Request, res
     
     // Get user with subscription plan (direct query to ensure we have current data)
     const userWithPlan = await pool.query(
-      'SELECT id, email, subscription_plan, spaceship_auth_key FROM users WHERE id = $1',
+      'SELECT id, admin_encrypted_email, subscription_plan, spaceship_auth_key FROM users WHERE id = $1',
       [user.id]
     );
     
@@ -540,7 +540,7 @@ router.get('/debug-user-plan', authMiddleware, async (req: Request, res: Respons
     
     // Get user with subscription plan (direct query)
     const userWithPlan = await pool.query(
-      'SELECT id, email, subscription_plan FROM users WHERE id = $1',
+      'SELECT id, admin_encrypted_email, subscription_plan FROM users WHERE id = $1',
       [user.id]
     );
     
@@ -812,9 +812,10 @@ router.post('/create-apex-client', authMiddleware, [
     const { clientName, clientEmail } = req.body;
     
     // Check if email already exists
+    const emailHash = require('../services/userEncryptionService').UserEncryptionService.generateEmailHash(clientEmail);
     const existingUser = await pool.query(
-      'SELECT id FROM users WHERE email = $1',
-      [clientEmail]
+      'SELECT id FROM users WHERE email_hash = $1',
+      [emailHash]
     );
     
     if (existingUser.rows.length > 0) {
