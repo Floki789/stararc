@@ -648,8 +648,7 @@ router.post('/generate-spaceship-token', authMiddleware, async (req: Request, re
         subscriptionPlan: user.subscription_plan || 'Free',
         crossApp: true,
         source: 'stararc',
-        userId: user.id,
-        email: user.email // For logging purposes only
+        userId: user.id
       },
       crossAppSecret,
       { expiresIn: '5m' } // Short-lived for security
@@ -1008,7 +1007,6 @@ router.post('/generate-spaceship-token-for-client', authMiddleware, async (req: 
         crossApp: true,
         source: 'stararc',
         userId: clientData.id,
-        managedBy: apexManager.email,
         clientName: clientData.client_name,
         parentUserId: apexManager.id
       },
@@ -1140,8 +1138,7 @@ router.post('/generate-cross-app-token', authMiddleware, async (req: Request, re
       subscriptionPlan: user.subscription_plan,
       crossApp: true,
       source: 'stararc',
-      userId: user.id,
-      email: user.email
+      userId: user.id
     }, secret, { expiresIn: '5m' });
     
     res.json({
