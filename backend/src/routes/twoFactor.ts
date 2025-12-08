@@ -58,10 +58,15 @@ router.post('/setup', authMiddleware, async (req: AuthRequest, res): Promise<any
     // Generate backup codes
     const backupCodes = generateBackupCodes();
 
-    // Store secret temporarily (not enabled yet)
+    // Encrypt secrets with master key before storing
+    const { UserEncryptionService } = require('../services/userEncryptionService');
+    const encryptedSecret = UserEncryptionService.encryptWithMasterKey(secret.base32);
+    const encryptedBackupCodes = UserEncryptionService.encryptWithMasterKey(JSON.stringify(backupCodes));
+
+    // Store encrypted secrets
     await pool.query(
-      'UPDATE users SET two_factor_secret = $1, two_factor_backup_codes = $2 WHERE id = $3',
-      [secret.base32, backupCodes, userId]
+      'UPDATE users SET encrypted_two_factor_secret = $1, encrypted_backup_codes = $2 WHERE id = $3',
+      [encryptedSecret, encryptedBackupCodes, userId]
     );
 
     res.json({
@@ -98,11 +103,11 @@ router.post('/verify', authMiddleware, async (req: AuthRequest, res): Promise<an
 
     // Get user's secret
     const user = await pool.query(
-      'SELECT two_factor_secret, two_factor_enabled FROM users WHERE id = $1',
+      'SELECT encrypted_two_factor_secret, two_factor_enabled FROM users WHERE id = $1',
       [userId]
     );
 
-    if (!user.rows[0]?.two_factor_secret) {
+    if (!user.rows[0]?.encrypted_two_factor_secret) {
       return res.status(400).json({ error: '2FA setup not initiated' });
     }
 
@@ -110,9 +115,18 @@ router.post('/verify', authMiddleware, async (req: AuthRequest, res): Promise<an
       return res.status(400).json({ error: '2FA is already enabled' });
     }
 
+    // Decrypt 2FA secret for verification
+    const { UserEncryptionService } = require('../services/userEncryptionService');
+    let twoFactorSecret;
+    try {
+      twoFactorSecret = UserEncryptionService.decryptWithMasterKey(user.rows[0].encrypted_two_factor_secret);
+    } catch (error) {
+      return res.status(500).json({ error: 'Failed to decrypt 2FA secret' });
+    }
+
     // Verify token
     const verified = speakeasy.totp.verify({
-      secret: user.rows[0].two_factor_secret,
+      secret: twoFactorSecret,
       encoding: 'base32',
       token: token,
       window: 1 // Allow 1 time-step tolerance
@@ -148,7 +162,7 @@ router.post('/disable', authMiddleware, async (req: AuthRequest, res): Promise<a
 
     // Verify password for security
     const user = await pool.query(
-      'SELECT password, two_factor_secret, two_factor_enabled FROM users WHERE id = $1',
+      'SELECT password_hash, encrypted_two_factor_secret, two_factor_enabled FROM users WHERE id = $1',
       [userId]
     );
 
@@ -158,14 +172,22 @@ router.post('/disable', authMiddleware, async (req: AuthRequest, res): Promise<a
 
     // Verify current password
     const bcrypt = require('bcryptjs');
-    const validPassword = await bcrypt.compare(password, user.rows[0].password);
+    const validPassword = await bcrypt.compare(password, user.rows[0].password_hash);
     if (!validPassword) {
       return res.status(400).json({ error: 'Invalid password' });
     }
 
-    // Verify 2FA token
+    // Decrypt and verify 2FA token
+    const { UserEncryptionService } = require('../services/userEncryptionService');
+    let twoFactorSecret;
+    try {
+      twoFactorSecret = UserEncryptionService.decryptWithMasterKey(user.rows[0].encrypted_two_factor_secret);
+    } catch (error) {
+      return res.status(500).json({ error: 'Failed to decrypt 2FA secret' });
+    }
+
     const verified = speakeasy.totp.verify({
-      secret: user.rows[0].two_factor_secret,
+      secret: twoFactorSecret,
       encoding: 'base32',
       token: token,
       window: 1
@@ -177,7 +199,7 @@ router.post('/disable', authMiddleware, async (req: AuthRequest, res): Promise<a
 
     // Disable 2FA
     await pool.query(
-      'UPDATE users SET two_factor_enabled = FALSE, two_factor_secret = NULL, two_factor_backup_codes = NULL, two_factor_enabled_at = NULL WHERE id = $1',
+      'UPDATE users SET two_factor_enabled = FALSE, encrypted_two_factor_secret = NULL, encrypted_backup_codes = NULL, two_factor_enabled_at = NULL WHERE id = $1',
       [userId]
     );
 

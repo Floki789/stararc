@@ -155,7 +155,7 @@ router.post('/login', authLimiter, loginValidation, async (req: Request, res: Re
     
     // Check if user has 2FA enabled
     const userQuery = await pool.query(
-      'SELECT two_factor_enabled, two_factor_secret FROM users WHERE id = $1',
+      'SELECT two_factor_enabled, encrypted_two_factor_secret FROM users WHERE id = $1',
       [loginResult.user.id]
     );
     
@@ -171,9 +171,21 @@ router.post('/login', authLimiter, loginValidation, async (req: Request, res: Re
       }
       
       // Verify 2FA token
+      let twoFactorSecret = userWith2FA.encrypted_two_factor_secret;
+      
+      // Decrypt 2FA secret with master key
+      if (twoFactorSecret) {
+        try {
+          const { UserEncryptionService } = require('../services/userEncryptionService');
+          twoFactorSecret = UserEncryptionService.decryptWithMasterKey(twoFactorSecret);
+        } catch (error) {
+          return res.status(500).json({ error: 'Failed to decrypt 2FA secret' });
+        }
+      }
+      
       const speakeasy = require('speakeasy');
       const verified = speakeasy.totp.verify({
-        secret: userWith2FA.two_factor_secret,
+        secret: twoFactorSecret,
         encoding: 'base32',
         token: twoFactorToken,
         window: 1
