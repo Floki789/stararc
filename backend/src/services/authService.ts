@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import { Pool } from 'pg';
 import { User } from '../types';
+import { UserEncryptionService } from './userEncryptionService';
 
 export class AuthService {
   private pool: Pool;
@@ -70,16 +71,33 @@ export class AuthService {
       // Hash password
       const hashedPassword = await this.hashPassword(password);
       
+      // Encrypt user data
+      const encryptedData = UserEncryptionService.encryptUserData({
+        email,
+        alias: alias || 'User'
+      }, password);
+      
       // Generate email verification token
       const emailVerificationToken = this.generateEmailVerificationToken();
       const emailVerificationExpires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
 
-      // Insert user (for testing: automatically verify email)
+      // Insert user with encrypted data (keep old fields for transition)
       const result = await client.query(
-        `INSERT INTO users (email, password_hash, alias, email_verification_token, email_verification_expires, email_verified, created_at, updated_at)
-         VALUES ($1, $2, $3, $4, $5, $6, NOW(), NOW())
-         RETURNING id, email, alias, email_verified, created_at`,
-        [email, hashedPassword, alias, emailVerificationToken, emailVerificationExpires, true]
+        `INSERT INTO users (
+          email, password_hash, alias, 
+          email_hash, encrypted_email, encrypted_alias,
+          admin_encrypted_email, admin_encrypted_alias,
+          email_verification_token, email_verification_expires, 
+          email_verified, created_at, updated_at
+        )
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, NOW(), NOW())
+        RETURNING id, email, alias, email_verified, created_at`,
+        [
+          email, hashedPassword, alias || 'User',
+          encryptedData.emailHash, encryptedData.encryptedEmail, encryptedData.encryptedAlias,
+          encryptedData.adminEncryptedEmail, encryptedData.adminEncryptedAlias,
+          emailVerificationToken, emailVerificationExpires, true
+        ]
       );
 
       const user = result.rows[0];
@@ -98,10 +116,15 @@ export class AuthService {
     const client = await this.pool.connect();
     
     try {
-      // Find user
+      // Generate email hash for lookup
+      const emailHash = UserEncryptionService.generateEmailHash(email);
+      
+      // Find user by email hash
       const result = await client.query(
-        'SELECT id, email, password_hash, alias, email_verified, role, created_at, onboarding_step, login_method_selected, spaceship_integration_completed FROM users WHERE email = $1',
-        [email]
+        `SELECT id, email, password_hash, alias, email_verified, role, created_at, onboarding_step, 
+         login_method_selected, spaceship_integration_completed, encrypted_email, encrypted_alias
+         FROM users WHERE email_hash = $1`,
+        [emailHash]
       );
 
       if (result.rows.length === 0) {
@@ -119,6 +142,21 @@ export class AuthService {
       // Check if email is verified
       if (!user.email_verified) {
         throw new Error('Email not verified. Please check your email and verify your account.');
+      }
+
+      // Decrypt user data for response
+      try {
+        const decryptedData = UserEncryptionService.decryptUserData({
+          encryptedEmail: user.encrypted_email,
+          encryptedAlias: user.encrypted_alias
+        }, password);
+        
+        // Use decrypted data if available, fallback to old fields
+        user.email = decryptedData.email || user.email;
+        user.alias = decryptedData.alias || user.alias;
+      } catch (decryptError) {
+        // If decryption fails, use existing unencrypted data (during transition)
+        console.warn('Failed to decrypt user data, using fallback data:', decryptError);
       }
 
       // Update last login
@@ -233,11 +271,35 @@ export class AuthService {
     
     try {
       const result = await client.query(
-        'SELECT id, email, alias, email_verified, role, created_at, last_login, onboarding_step, login_method_selected, spaceship_integration_completed, subscription_plan FROM users WHERE id = $1',
+        `SELECT id, email, alias, email_verified, role, created_at, last_login, 
+         onboarding_step, login_method_selected, spaceship_integration_completed, 
+         subscription_plan, admin_encrypted_email, admin_encrypted_alias 
+         FROM users WHERE id = $1`,
         [userId]
       );
 
-      return result.rows.length > 0 ? result.rows[0] : null;
+      if (result.rows.length === 0) {
+        return null;
+      }
+
+      const user = result.rows[0];
+
+      // Decrypt admin data for display
+      try {
+        const decryptedData = UserEncryptionService.decryptUserDataForAdmin({
+          adminEncryptedEmail: user.admin_encrypted_email,
+          adminEncryptedAlias: user.admin_encrypted_alias
+        });
+        
+        // Use decrypted data if available, fallback to old fields
+        user.email = decryptedData.email || user.email;
+        user.alias = decryptedData.alias || user.alias;
+      } catch (decryptError) {
+        // If decryption fails, use existing unencrypted data (during transition)
+        console.warn('Failed to decrypt admin data, using fallback data:', decryptError);
+      }
+
+      return user;
     } finally {
       client.release();
     }
