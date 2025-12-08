@@ -33,7 +33,7 @@ export const authMiddleware = async (
     
     // Get user from database
     const userQuery = `
-      SELECT id, email, first_name, last_name, 
+      SELECT id, email, alias, 
              email_verified, role, created_at, last_login,
              subscription_plan
       FROM users 

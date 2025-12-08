@@ -57,7 +57,7 @@ export class AuthService {
   }
 
   // Register user
-  async registerUser(email: string, password: string, firstName: string = '', lastName: string = ''): Promise<User> {
+  async registerUser(email: string, password: string, alias: string = ''): Promise<User> {
     const client = await this.pool.connect();
     
     try {
@@ -76,10 +76,10 @@ export class AuthService {
 
       // Insert user (for testing: automatically verify email)
       const result = await client.query(
-        `INSERT INTO users (email, password_hash, first_name, last_name, email_verification_token, email_verification_expires, email_verified, created_at, updated_at)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, NOW(), NOW())
-         RETURNING id, email, first_name, last_name, email_verified, created_at`,
-        [email, hashedPassword, firstName, lastName, emailVerificationToken, emailVerificationExpires, true]
+        `INSERT INTO users (email, password_hash, alias, email_verification_token, email_verification_expires, email_verified, created_at, updated_at)
+         VALUES ($1, $2, $3, $4, $5, $6, NOW(), NOW())
+         RETURNING id, email, alias, email_verified, created_at`,
+        [email, hashedPassword, alias, emailVerificationToken, emailVerificationExpires, true]
       );
 
       const user = result.rows[0];
@@ -100,7 +100,7 @@ export class AuthService {
     try {
       // Find user
       const result = await client.query(
-        'SELECT id, email, password_hash, first_name, last_name, email_verified, role, created_at, onboarding_step, login_method_selected, spaceship_integration_completed FROM users WHERE email = $1',
+        'SELECT id, email, password_hash, alias, email_verified, role, created_at, onboarding_step, login_method_selected, spaceship_integration_completed FROM users WHERE email = $1',
         [email]
       );
 
@@ -143,7 +143,7 @@ export class AuthService {
     try {
       // Find user with verification token
       const result = await client.query(
-        'SELECT id, email, first_name, last_name FROM users WHERE email_verification_token = $1 AND email_verification_expires > NOW()',
+        'SELECT id, email, alias FROM users WHERE email_verification_token = $1 AND email_verification_expires > NOW()',
         [token]
       );
 
@@ -202,7 +202,7 @@ export class AuthService {
     try {
       // Find user with reset token
       const result = await client.query(
-        'SELECT id, email, first_name, last_name FROM users WHERE password_reset_token = $1 AND password_reset_expires > NOW()',
+        'SELECT id, email, alias FROM users WHERE password_reset_token = $1 AND password_reset_expires > NOW()',
         [token]
       );
 
@@ -233,7 +233,7 @@ export class AuthService {
     
     try {
       const result = await client.query(
-        'SELECT id, email, first_name, last_name, email_verified, role, created_at, last_login, onboarding_step, login_method_selected, spaceship_integration_completed, subscription_plan FROM users WHERE id = $1',
+        'SELECT id, email, alias, email_verified, role, created_at, last_login, onboarding_step, login_method_selected, spaceship_integration_completed, subscription_plan FROM users WHERE id = $1',
         [userId]
       );
 

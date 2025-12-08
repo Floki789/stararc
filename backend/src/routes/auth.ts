@@ -39,16 +39,11 @@ const registerValidation = [
     .withMessage('Password must be at least 8 characters long')
     .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/)
     .withMessage('Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'),
-  body('firstName')
+  body('alias')
     .optional()
     .trim()
     .isLength({ max: 50 })
-    .withMessage('First name must be max 50 characters'),
-  body('lastName')
-    .optional()
-    .trim()
-    .isLength({ max: 50 })
-    .withMessage('Last name must be max 50 characters'),
+    .withMessage('Alias must be max 50 characters'),
 ];
 
 const loginValidation = [
@@ -95,10 +90,10 @@ router.post('/register', registerLimiter, registerValidation, async (req: Reques
       });
     }
 
-    const { email, password, firstName = '', lastName = '' } = req.body;
+    const { email, password, alias = '' } = req.body;
 
     // Register user
-    const user = await authService.registerUser(email, password, firstName, lastName);
+    const user = await authService.registerUser(email, password, alias);
 
     // Generate token for immediate login (since email verification is disabled for testing)
     const token = authService.generateToken(user);
@@ -112,8 +107,7 @@ router.post('/register', registerLimiter, registerValidation, async (req: Reques
       user: {
         id: user.id,
         email: user.email,
-        firstName: (user as any).first_name,
-        lastName: (user as any).last_name,
+        alias: (user as any).alias,
         emailVerified: (user as any).email_verified
       }
     });
@@ -199,8 +193,7 @@ router.post('/login', authLimiter, loginValidation, async (req: Request, res: Re
       user: {
         id: user.id,
         email: user.email,
-        firstName: (user as any).first_name,
-        lastName: (user as any).last_name,
+        alias: (user as any).alias,
         emailVerified: (user as any).email_verified,
         role: (user as any).role,
         onboardingStep: (user as any).onboarding_step,
@@ -286,8 +279,7 @@ router.get('/me', authMiddleware, async (req: Request, res: Response): Promise<a
       user: {
         id: user.id,
         email: user.email,
-        firstName: (user as any).first_name,
-        lastName: (user as any).last_name,
+        alias: (user as any).alias,
         emailVerified: (user as any).email_verified,
         role: (user as any).role,
         createdAt: (user as any).created_at,
@@ -317,15 +309,14 @@ router.post('/verify-email', async (req: Request, res: Response): Promise<any> =
     const user = await authService.verifyEmail(token);
 
     // Send welcome email
-    await emailService.sendWelcomeEmail(user.email, (user as any).first_name);
+    await emailService.sendWelcomeEmail(user.email, (user as any).alias);
 
     res.json({
       message: 'Email verified successfully! Welcome to Stararc.',
       user: {
         id: user.id,
         email: user.email,
-        firstName: (user as any).first_name,
-        lastName: (user as any).last_name
+        alias: (user as any).alias,
       }
     });
   } catch (error: any) {
@@ -419,8 +410,7 @@ router.post('/reset-password', authLimiter, resetPasswordValidation, async (req:
       user: {
         id: user.id,
         email: user.email,
-        firstName: (user as any).first_name,
-        lastName: (user as any).last_name
+        alias: (user as any).alias,
       }
     });
   } catch (error: any) {

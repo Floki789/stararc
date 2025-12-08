@@ -33,7 +33,7 @@ export class EmailService {
   }
 
   // Send email verification
-  async sendEmailVerification(email: string, firstName: string, verificationToken: string): Promise<void> {
+  async sendEmailVerification(email: string, alias: string, verificationToken: string): Promise<void> {
     const verificationUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/verify-email?token=${verificationToken}`;
     
     const mailOptions = {
@@ -48,7 +48,7 @@ export class EmailService {
           </div>
           
           <div style="background: rgba(255, 255, 255, 0.1); padding: 30px; border-radius: 10px; backdrop-filter: blur(10px);">
-            <h2 style="color: #f3f4f6; margin-bottom: 20px;">Willkommen ${firstName}!</h2>
+            <h2 style="color: #f3f4f6; margin-bottom: 20px;">Willkommen ${alias}!</h2>
             
             <p style="color: #d1d5db; line-height: 1.6; margin-bottom: 25px;">
               Vielen Dank für Ihre Registrierung bei Stararc. Um Ihr Konto zu aktivieren und 
@@ -92,7 +92,7 @@ export class EmailService {
   }
 
   // Send password reset email
-  async sendPasswordReset(email: string, firstName: string, resetToken: string): Promise<void> {
+  async sendPasswordReset(email: string, alias: string, resetToken: string): Promise<void> {
     const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/reset-password?token=${resetToken}`;
     
     const mailOptions = {
@@ -110,7 +110,7 @@ export class EmailService {
             <h2 style="color: #f3f4f6; margin-bottom: 20px;">🔐 Passwort zurücksetzen</h2>
             
             <p style="color: #e5e7eb; line-height: 1.6; margin-bottom: 25px;">
-              Hallo ${firstName},<br><br>
+              Hallo ${alias},<br><br>
               Sie haben eine Anfrage zum Zurücksetzen Ihres Passworts gestellt. 
               Klicken Sie auf den Button unten, um ein neues Passwort zu erstellen.
             </p>
@@ -148,7 +148,7 @@ export class EmailService {
   }
 
   // Send welcome email after email verification
-  async sendWelcomeEmail(email: string, firstName: string): Promise<void> {
+  async sendWelcomeEmail(email: string, alias: string): Promise<void> {
     const loginUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/login`;
     
     const mailOptions = {
@@ -163,7 +163,7 @@ export class EmailService {
           </div>
           
           <div style="background: rgba(255, 255, 255, 0.1); padding: 30px; border-radius: 10px; backdrop-filter: blur(10px);">
-            <h2 style="color: #f0fdf4; margin-bottom: 20px;">🎉 Herzlich willkommen ${firstName}!</h2>
+            <h2 style="color: #f0fdf4; margin-bottom: 20px;">🎉 Herzlich willkommen ${alias}!</h2>
             
             <p style="color: #d1fae5; line-height: 1.6; margin-bottom: 25px;">
               Ihr Stararc-Konto ist jetzt aktiviert! Sie können sich einloggen und beginnen, 

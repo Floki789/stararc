@@ -7,7 +7,7 @@ async function runMigrations(): Promise<void> {
     console.log('🔄 Running database migrations...');
     
     // Read the init.sql file
-    const sqlPath = path.join(__dirname, '../../../database/init.sql');
+    const sqlPath = path.join(__dirname, '../../../backend/database/init.sql');
     const sql = fs.readFileSync(sqlPath, 'utf8');
     
     // Execute the SQL

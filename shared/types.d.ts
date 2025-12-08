@@ -1,8 +1,7 @@
 export interface User {
     id: number;
     email: string;
-    firstName: string;
-    lastName: string;
+    alias?: string;
     emailVerified: boolean;
     createdAt: Date;
     updatedAt: Date;
@@ -10,8 +9,7 @@ export interface User {
 export interface CreateUserRequest {
     email: string;
     password: string;
-    firstName: string;
-    lastName: string;
+    alias?: string;
 }
 export interface LoginRequest {
     email: string;
