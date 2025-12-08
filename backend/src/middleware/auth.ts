@@ -50,7 +50,27 @@ export const authMiddleware = async (
       return;
     }
 
-    req.user = userResult.rows[0] as User;
+    const user = userResult.rows[0];
+    
+    // Decrypt admin data for middleware
+    try {
+      const { UserEncryptionService } = require('../services/userEncryptionService');
+      const decryptedData = UserEncryptionService.decryptUserDataForAdmin({
+        adminEncryptedEmail: user.admin_encrypted_email,
+        adminEncryptedAlias: user.admin_encrypted_alias
+      });
+      
+      // Add decrypted data to user object
+      user.email = decryptedData.email;
+      user.alias = decryptedData.alias;
+    } catch (decryptError) {
+      console.warn('Failed to decrypt user data in middleware:', decryptError);
+      // Set fallback values
+      user.email = 'encrypted@hidden.com';
+      user.alias = 'Encrypted User';
+    }
+
+    req.user = user as User;
     next();
   } catch (error) {
     console.error('Authentication error:', error);
