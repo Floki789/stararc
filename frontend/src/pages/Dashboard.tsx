@@ -318,7 +318,6 @@ const Dashboard: React.FC = () => {
         
         // If user already exists, that's actually fine
         if (response.status === 409) {
-
           setStarshipSyncStatus('success');
           return;
         }
