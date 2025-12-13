@@ -98,7 +98,7 @@
     "passwordRequired": "Password is required",
     "passwordMinLength": "Password must be at least 8 characters",
     "passwordsNotMatch": "Passwords do not match",
-    "passwordPlaceholder": "Password (min. 8 characters)",
+    "passwordPlaceholder": "Password (min. 8 characters, A-z, 0-9)",
     "registering": "Registering...",
     "or": "Or",
     "agreementText": "By registering, you agree to our",
