@@ -327,6 +327,12 @@ export class UserEncryptionService {
         console.log('✅ Re-encrypted alias from admin backup');
       }
       
+      if (adminEncryptedData.admin_encrypted_two_factor_secret) {
+        const twoFactorSecret = this.decryptWithMasterKey(adminEncryptedData.admin_encrypted_two_factor_secret);
+        result.encrypted_two_factor_secret = this.encryptWithUserPassword(twoFactorSecret, newPassword);
+        console.log('✅ Re-encrypted 2FA secret from admin backup');
+      }
+      
       return result;
     } catch (error) {
       console.error('Failed to re-encrypt user data from admin backup:', error);

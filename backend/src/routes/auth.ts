@@ -434,10 +434,10 @@ router.post('/reset-password', authLimiter, resetPasswordValidation, async (req:
       });
     }
 
-    const { token, password } = req.body;
+    const { token, password, twoFactorCode } = req.body;
 
-    // Reset password
-    const user = await authService.resetPassword(token, password);
+    // Reset password (with optional 2FA)
+    const user = await authService.resetPassword(token, password, twoFactorCode);
 
     res.json({
       message: 'Password reset successful! You can now log in with your new password.',
@@ -449,6 +449,17 @@ router.post('/reset-password', authLimiter, resetPasswordValidation, async (req:
     });
   } catch (error: any) {
     console.error('Reset password error:', error);
+    
+    if (error.message === '2FA_REQUIRED') {
+      return res.status(400).json({ 
+        error: '2FA_REQUIRED', 
+        message: '2FA code is required for this account' 
+      });
+    }
+    
+    if (error.message === 'Invalid 2FA code') {
+      return res.status(400).json({ error: 'Invalid 2FA code' });
+    }
     
     if (error.message === 'Invalid or expired reset token') {
       return res.status(400).json({ error: 'Invalid or expired reset token' });

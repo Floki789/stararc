@@ -6,6 +6,7 @@ import { ArrowLeftIcon, EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outlin
 interface FormData {
   password: string;
   confirmPassword: string;
+  twoFactorCode: string;
 }
 
 const ResetPassword: React.FC = () => {
@@ -15,13 +16,15 @@ const ResetPassword: React.FC = () => {
   
   const [formData, setFormData] = useState<FormData>({
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    twoFactorCode: ''
   });
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [requires2FA, setRequires2FA] = useState(false);
 
   useEffect(() => {
     if (!token) {
@@ -46,6 +49,12 @@ const ResetPassword: React.FC = () => {
       newErrors.confirmPassword = 'Passwörter stimmen nicht überein';
     }
 
+    if (requires2FA && !formData.twoFactorCode.trim()) {
+      newErrors.twoFactorCode = '2FA Code ist erforderlich';
+    } else if (requires2FA && !/^\d{6}$/.test(formData.twoFactorCode)) {
+      newErrors.twoFactorCode = '2FA Code muss 6 Ziffern haben';
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -67,29 +76,38 @@ const ResetPassword: React.FC = () => {
     setIsLoading(true);
     
     try {
+      const requestBody: any = { 
+        token,
+        password: formData.password 
+      };
+      
+      if (formData.twoFactorCode) {
+        requestBody.twoFactorCode = formData.twoFactorCode;
+      }
+      
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/reset-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 
-          token,
-          password: formData.password 
-        }),
+        body: JSON.stringify(requestBody),
       });
 
       const data = await response.json();
 
       if (response.ok) {
         setSuccessMessage('Passwort wurde erfolgreich zurückgesetzt! Sie werden zur Login-Seite weitergeleitet.');
-        setFormData({ password: '', confirmPassword: '' });
+        setFormData({ password: '', confirmPassword: '', twoFactorCode: '' });
         
         // Redirect to login after 3 seconds
         setTimeout(() => {
           navigate('/login');
         }, 3000);
       } else {
-        if (data.errors && Array.isArray(data.errors)) {
+        if (data.error === '2FA_REQUIRED') {
+          setRequires2FA(true);
+          setErrors({ general: '2FA Code erforderlich. Bitte geben Sie Ihren 6-stelligen Authenticator-Code ein.' });
+        } else if (data.errors && Array.isArray(data.errors)) {
           // Handle validation errors from backend
           const backendErrors: { [key: string]: string } = {};
           data.errors.forEach((error: any) => {
@@ -276,6 +294,37 @@ const ResetPassword: React.FC = () => {
                 <p className="mt-1 text-sm text-red-400">{errors.confirmPassword}</p>
               )}
             </motion.div>
+
+            {/* 2FA Field - only show if required */}
+            {requires2FA && (
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.7 }}
+              >
+                <label htmlFor="twoFactorCode" className="block text-sm font-medium text-gray-300 mb-2">
+                  2FA Authenticator Code
+                </label>
+                <input
+                  type="text"
+                  id="twoFactorCode"
+                  name="twoFactorCode"
+                  value={formData.twoFactorCode}
+                  onChange={handleInputChange}
+                  className={`w-full px-4 py-3 rounded-lg bg-white/5 border text-white placeholder-gray-400 focus:outline-none focus:ring-2 transition-all duration-200 ${
+                    errors.twoFactorCode
+                      ? 'border-red-500 focus:ring-red-500/50'
+                      : 'border-white/20 focus:ring-purple-500/50 focus:border-purple-500/50'
+                  }`}
+                  placeholder="123456"
+                  maxLength={6}
+                  disabled={isLoading}
+                />
+                {errors.twoFactorCode && (
+                  <p className="mt-1 text-sm text-red-400">{errors.twoFactorCode}</p>
+                )}
+              </motion.div>
+            )}
 
             {/* Submit Button */}
             <motion.button

@@ -112,7 +112,7 @@
     "earlyBetaDescription": "This is an early beta version of StarArc. All data may be deleted regularly and without notice. Use this version only for testing and evaluation purposes.",
     "loginTitle": "Sign In",
     "registerTitle": "Create Account",
-    "twoFactorToken": "2FA Token (optional)",
+    "twoFactorToken": "2FA Token",
     "loggingIn": "Signing in...",
     "demo": "Demo",
     "demoButton": "🚀 Sign in with Demo Account",

@@ -112,7 +112,7 @@
     "earlyBetaDescription": "Dies ist eine frühe Beta-Version von StarArc. Alle Daten können regelmäßig und ohne Ankündigung gelöscht werden. Nutzen Sie diese Version nur zu Test- und Evaluationszwecken.",
     "loginTitle": "Anmelden",
     "registerTitle": "Konto erstellen",
-    "twoFactorToken": "2FA-Token (optional)",
+    "twoFactorToken": "2FA-Token",
     "loggingIn": "Anmeldung läuft...",
     "demo": "Demo",
     "demoButton": "🚀 Mit Demo-Account anmelden",

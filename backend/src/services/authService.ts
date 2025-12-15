@@ -240,15 +240,15 @@ export class AuthService {
   }
 
   // Reset password
-  async resetPassword(token: string, newPassword: string): Promise<User> {
+  async resetPassword(token: string, newPassword: string, twoFactorCode?: string): Promise<User> {
     const client = await this.pool.connect();
     
     try {
       await client.query('BEGIN');
       
-      // Find user with reset token (get all encrypted fields)
+      // Find user with reset token (get all encrypted fields + 2FA status)
       const result = await client.query(
-        'SELECT id, encrypted_email, encrypted_alias, admin_encrypted_email, admin_encrypted_alias FROM users WHERE password_reset_token = $1 AND password_reset_expires > NOW()',
+        'SELECT id, encrypted_email, encrypted_alias, admin_encrypted_email, admin_encrypted_alias, admin_encrypted_two_factor_secret, two_factor_enabled FROM users WHERE password_reset_token = $1 AND password_reset_expires > NOW()',
         [token]
       );
 
@@ -257,6 +257,28 @@ export class AuthService {
       }
 
       const user = result.rows[0];
+      
+      // Check 2FA requirement with admin-encrypted secret
+      if (user.two_factor_enabled) {
+        if (!twoFactorCode) {
+          throw new Error('2FA_REQUIRED');
+        }
+        
+        if (user.admin_encrypted_two_factor_secret) {
+          // Decrypt admin-encrypted 2FA secret
+          const twoFactorSecret = UserEncryptionService.decryptWithMasterKey(user.admin_encrypted_two_factor_secret);
+          
+          // Validate 2FA code
+          const isValid2FA = await this.verify2FA(twoFactorSecret, twoFactorCode);
+          if (!isValid2FA) {
+            throw new Error('Invalid 2FA code');
+          }
+          
+          console.log('✅ 2FA verified for password reset using admin-encrypted secret');
+        } else {
+          console.log('⚠️ 2FA enabled but no admin-encrypted secret found - allowing reset without 2FA');
+        }
+      }
 
       // Hash new password
       const hashedPassword = await this.hashPassword(newPassword);
@@ -268,7 +290,8 @@ export class AuthService {
       try {
         const reencryptedData = UserEncryptionService.reencryptUserDataFromAdminBackup({
           admin_encrypted_email: user.admin_encrypted_email,
-          admin_encrypted_alias: user.admin_encrypted_alias
+          admin_encrypted_alias: user.admin_encrypted_alias,
+          admin_encrypted_two_factor_secret: user.admin_encrypted_two_factor_secret
         }, newPassword);
         
         if (reencryptedData.encrypted_email) {
@@ -279,6 +302,11 @@ export class AuthService {
         if (reencryptedData.encrypted_alias) {
           updateQuery += ', encrypted_alias = $' + (updateParams.length + 1);
           updateParams.push(reencryptedData.encrypted_alias);
+        }
+        
+        if (reencryptedData.encrypted_two_factor_secret) {
+          updateQuery += ', encrypted_two_factor_secret = $' + (updateParams.length + 1);
+          updateParams.push(reencryptedData.encrypted_two_factor_secret);
         }
         
         console.log('🔄 Successfully re-encrypted user data for password reset');
@@ -379,6 +407,23 @@ export class AuthService {
       return emailVerificationToken;
     } finally {
       client.release();
+    }
+  }
+
+  // Verify 2FA code
+  async verify2FA(secret: string, token: string): Promise<boolean> {
+    try {
+      const speakeasy = require('speakeasy');
+      
+      return speakeasy.totp.verify({
+        secret: secret,
+        encoding: 'base32',
+        token: token,
+        window: 2 // Allow 2 time steps of tolerance
+      });
+    } catch (error) {
+      console.error('2FA verification error:', error);
+      return false;
     }
   }
 }
