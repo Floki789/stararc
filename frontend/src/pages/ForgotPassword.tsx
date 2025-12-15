@@ -8,6 +8,7 @@ const ForgotPassword: React.FC = () => {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
+  const [debugResetLink, setDebugResetLink] = useState('');
 
   const validateForm = (): boolean => {
     const newErrors: { [key: string]: string } = {};
@@ -45,6 +46,11 @@ const ForgotPassword: React.FC = () => {
       if (response.ok) {
         setSuccessMessage('Wenn ein Konto mit dieser E-Mail-Adresse existiert, wurde ein Link zum Zurücksetzen des Passworts gesendet.');
         setEmail('');
+        
+        // DEV MODE: Show debug link
+        if (process.env.NODE_ENV === 'development' && data.devResetToken) {
+          setDebugResetLink(`/reset-password?token=${data.devResetToken}`);
+        }
       } else {
         if (data.errors && Array.isArray(data.errors)) {
           // Handle validation errors from backend
@@ -122,6 +128,18 @@ const ForgotPassword: React.FC = () => {
           {successMessage && (
             <div className="bg-green-500/10 border border-green-500/20 text-green-400 px-4 py-3 rounded-lg text-sm">
               {successMessage}
+            </div>
+          )}
+
+          {debugResetLink && (
+            <div className="bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 px-4 py-3 rounded-lg text-sm">
+              <p className="mb-2 font-semibold">🔧 DEV MODE: Direct reset link:</p>
+              <Link 
+                to={debugResetLink} 
+                className="text-blue-400 underline hover:text-blue-300 text-sm break-all"
+              >
+                Reset Password → {debugResetLink}
+              </Link>
             </div>
           )}
 

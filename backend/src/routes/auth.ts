@@ -388,12 +388,34 @@ router.post('/forgot-password', authLimiter, forgotPasswordValidation, async (re
     // Request password reset
     const resetToken = await authService.requestPasswordReset(email);
     
+    console.log(`🔍 DEBUG: Email: ${email}, ResetToken: ${resetToken}`);
+    
     if (resetToken !== 'Password reset email sent if account exists') {
       // Send reset email (only if user exists, but don't reveal this)
-      await emailService.sendPasswordReset(email, '', resetToken);
+      try {
+        await emailService.sendPasswordReset(email, '', resetToken);
+        console.log(`📧 Email sent successfully to ${email}`);
+      } catch (emailError) {
+        console.log(`📧 Email failed (DEV MODE - ignored):`, (emailError as Error).message);
+      }
+    } else {
+      console.log(`❌ User with email ${email} not found`);
     }
 
-    res.json({ message: 'If your email is registered, you will receive password reset instructions.' });
+    // Return response with optional dev token
+    const response: any = { 
+      message: 'If your email is registered, you will receive password reset instructions.' 
+    };
+    
+    // DEV MODE: Include reset token for easy testing
+    if (process.env.NODE_ENV === 'development' && resetToken !== 'Password reset email sent if account exists') {
+      response.devResetToken = resetToken;
+      console.log(`🔧 DEV MODE: Reset token for ${email}: ${resetToken}`);
+    } else if (process.env.NODE_ENV === 'development') {
+      console.log(`🔧 DEV MODE: No reset token returned - user might not exist`);
+    }
+
+    res.json(response);
   } catch (error) {
     console.error('Forgot password error:', error);
     res.status(500).json({ error: 'Failed to process password reset request' });
