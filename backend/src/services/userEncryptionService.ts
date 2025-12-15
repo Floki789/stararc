@@ -18,9 +18,9 @@ export class UserEncryptionService {
   
   // Environment variables getter methods
   private static getMasterKey(): Buffer {
-    const masterKey = process.env.ENCRYPTION_MASTER_KEY;
+    const masterKey = process.env.ADMIN_USER_DATA_ENCRYPTION_KEY;
     if (!masterKey) {
-      throw new Error('ENCRYPTION_MASTER_KEY environment variable is required');
+      throw new Error('ADMIN_USER_DATA_ENCRYPTION_KEY environment variable is required');
     }
     return Buffer.from(masterKey, 'utf8').slice(0, 32); // Ensure 256-bit key
   }

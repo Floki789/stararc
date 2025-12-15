@@ -15,7 +15,7 @@ const spaceshipPool = new Pool({
   connectionString: 'postgresql://sam@localhost:5432/spaceship_portfolio'
 });
 
-const MASTER_ENCRYPTION_KEY = '83e2dec399b2a5b2382d9835cc6958f1bced48d088714a14e08f26fc158b11f2';
+const SPACESHIP_AUTH_ENCRYPTION_KEY = '83e2dec399b2a5b2382d9835cc6958f1bced48d088714a14e08f26fc158b11f2';
 const SPACESHIP_HMAC_SECRET = '12c54087b1f404ee5499423ddfc618732f6dee73bcffc9c9a2517fd3e7df337f';
 
 // Function to decrypt auth key
@@ -59,7 +59,7 @@ async function fixApexChildAuth() {
       try {
         // Decrypt the auth key
         const encryptedData = JSON.parse(user.spaceship_auth_key);
-        const authKey = decryptAuthKey(encryptedData, MASTER_ENCRYPTION_KEY);
+        const authKey = decryptAuthKey(encryptedData, SPACESHIP_AUTH_ENCRYPTION_KEY);
         
         // Generate the correct hash
         const correctHash = hashAuthKey(authKey);

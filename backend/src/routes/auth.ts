@@ -550,9 +550,9 @@ router.post('/create-spaceship-access', authMiddleware, async (req: Request, res
     }
     
     // Encrypt auth key with AES-GCM (authenticated encryption)
-    const masterKey = process.env.MASTER_ENCRYPTION_KEY;
+    const masterKey = process.env.SPACESHIP_AUTH_ENCRYPTION_KEY;
     if (!masterKey) {
-      throw new Error('MASTER_ENCRYPTION_KEY environment variable is required');
+      throw new Error('SPACESHIP_AUTH_ENCRYPTION_KEY environment variable is required');
     }
     
     const encryptedAuthKey = encryptAuthKey(authKey, masterKey);
@@ -655,9 +655,9 @@ router.post('/generate-spaceship-token', authMiddleware, async (req: Request, re
     }
     
     // Decrypt auth key with AES-GCM
-    const masterKey = process.env.MASTER_ENCRYPTION_KEY;
+    const masterKey = process.env.SPACESHIP_AUTH_ENCRYPTION_KEY;
     if (!masterKey) {
-      throw new Error('MASTER_ENCRYPTION_KEY environment variable is required');
+      throw new Error('SPACESHIP_AUTH_ENCRYPTION_KEY environment variable is required');
     }
     
     let authKey: string;
@@ -914,7 +914,7 @@ router.post('/create-apex-client', authMiddleware, [
     
     if (spaceshipResponse.success) {
       // Store encrypted auth key
-      const masterKey = process.env.MASTER_ENCRYPTION_KEY!;
+      const masterKey = process.env.SPACESHIP_AUTH_ENCRYPTION_KEY!;
       const iv = crypto.randomBytes(16);
       const cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(masterKey.padEnd(32, '0').slice(0, 32)), iv);
       let encryptedAuthKey = cipher.update(authKey, 'utf8', 'hex');
@@ -1025,7 +1025,7 @@ router.post('/generate-spaceship-token-for-client', authMiddleware, async (req: 
     
     // Decrypt the stored auth key
     const encryptedData = JSON.parse(clientData.spaceship_auth_key);
-    const masterKey = process.env.MASTER_ENCRYPTION_KEY!;
+    const masterKey = process.env.SPACESHIP_AUTH_ENCRYPTION_KEY!;
     
     const decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(masterKey.padEnd(32, '0').slice(0, 32)), Buffer.from(encryptedData.iv, 'hex'));
     let authKey = decipher.update(encryptedData.encrypted, 'hex', 'utf8');
