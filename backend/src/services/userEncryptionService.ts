@@ -306,4 +306,43 @@ export class UserEncryptionService {
 
     return result;
   }
+
+  /**
+   * Re-encrypt user data from admin backup when password changes
+   */
+  static reencryptUserDataFromAdminBackup(adminEncryptedData: any, newPassword: string): any {
+    try {
+      const result: any = {};
+      
+      // Decrypt from admin backup (master key) and re-encrypt with new password
+      if (adminEncryptedData.admin_encrypted_email) {
+        const email = this.decryptWithMasterKey(adminEncryptedData.admin_encrypted_email);
+        result.encrypted_email = this.encryptWithUserPassword(email, newPassword);
+        console.log('✅ Re-encrypted email from admin backup');
+      }
+      
+      if (adminEncryptedData.admin_encrypted_alias) {
+        const alias = this.decryptWithMasterKey(adminEncryptedData.admin_encrypted_alias);
+        result.encrypted_alias = this.encryptWithUserPassword(alias, newPassword);
+        console.log('✅ Re-encrypted alias from admin backup');
+      }
+      
+      return result;
+    } catch (error) {
+      console.error('Failed to re-encrypt user data from admin backup:', error);
+      throw new Error('Failed to re-encrypt user data from admin backup');
+    }
+  }
+
+  /**
+   * Verify if user-encrypted data can be decrypted with given password
+   */
+  static canDecryptUserData(encryptedData: string, password: string): boolean {
+    try {
+      this.decryptWithUserPassword(encryptedData, password);
+      return true;
+    } catch {
+      return false;
+    }
+  }
 }

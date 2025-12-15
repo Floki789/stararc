@@ -244,9 +244,11 @@ export class AuthService {
     const client = await this.pool.connect();
     
     try {
-      // Find user with reset token
+      await client.query('BEGIN');
+      
+      // Find user with reset token (get all encrypted fields)
       const result = await client.query(
-        'SELECT id, encrypted_email, encrypted_alias FROM users WHERE password_reset_token = $1 AND password_reset_expires > NOW()',
+        'SELECT id, encrypted_email, encrypted_alias, admin_encrypted_email, admin_encrypted_alias FROM users WHERE password_reset_token = $1 AND password_reset_expires > NOW()',
         [token]
       );
 
@@ -259,13 +261,43 @@ export class AuthService {
       // Hash new password
       const hashedPassword = await this.hashPassword(newPassword);
 
-      // Update password and clear reset token
-      await client.query(
-        'UPDATE users SET password_hash = $1, password_reset_token = NULL, password_reset_expires = NULL, updated_at = NOW() WHERE id = $2',
-        [hashedPassword, user.id]
-      );
+      // Re-encrypt user data using admin backup
+      let updateQuery = 'UPDATE users SET password_hash = $1, password_reset_token = NULL, password_reset_expires = NULL, updated_at = NOW()';
+      let updateParams = [hashedPassword];
+      
+      try {
+        const reencryptedData = UserEncryptionService.reencryptUserDataFromAdminBackup({
+          admin_encrypted_email: user.admin_encrypted_email,
+          admin_encrypted_alias: user.admin_encrypted_alias
+        }, newPassword);
+        
+        if (reencryptedData.encrypted_email) {
+          updateQuery += ', encrypted_email = $' + (updateParams.length + 1);
+          updateParams.push(reencryptedData.encrypted_email);
+        }
+        
+        if (reencryptedData.encrypted_alias) {
+          updateQuery += ', encrypted_alias = $' + (updateParams.length + 1);
+          updateParams.push(reencryptedData.encrypted_alias);
+        }
+        
+        console.log('🔄 Successfully re-encrypted user data for password reset');
+      } catch (reencryptError) {
+        console.error('⚠️ Failed to re-encrypt user data, continuing with password reset only:', (reencryptError as Error).message);
+      }
+      
+      updateQuery += ' WHERE id = $' + (updateParams.length + 1);
+      updateParams.push(user.id);
+      
+      // Update password and re-encrypted data
+      await client.query(updateQuery, updateParams);
+      
+      await client.query('COMMIT');
 
       return user;
+    } catch (error) {
+      await client.query('ROLLBACK');
+      throw error;
     } finally {
       client.release();
     }
