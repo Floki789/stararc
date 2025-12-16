@@ -136,24 +136,8 @@ const Login: React.FC = () => {
             break;
             
           case 'completed':
-            // User completed onboarding, redirect directly to Spaceship
-            try {
-              // Import spaceshipService
-              const { spaceshipService } = await import('../services/spaceshipService');
-              
-              // Create Spaceship access if needed and login automatically
-              const access = await spaceshipService.checkSpaceshipAccess();
-              if (!access.hasAccess) {
-                await spaceshipService.createSpaceshipAccess();
-              }
-              
-              // Generate token and redirect to Spaceship
-              await spaceshipService.loginToSpaceship();
-            } catch (spaceshipError) {
-              console.error('Spaceship auto-login failed:', spaceshipError);
-              // Fallback to dashboard if Spaceship login fails
-              navigate(from, { replace: true });
-            }
+            // User completed onboarding - go to dashboard first
+            navigate(from, { replace: true });
             break;
             
           default:
@@ -210,50 +194,13 @@ const Login: React.FC = () => {
       if (response.ok) {
         login(data.user, data.token);
         
-        // For demo account, always use FastLogin to Spaceship regardless of status
-        if (data.user.email === 'demo@stararc.one') {
-          try {
-            const { spaceshipService } = await import('../services/spaceshipService');
-            
-            // Check if user already has Spaceship access
-            const hasAccess = await spaceshipService.checkSpaceshipAccess();
-            if (!hasAccess) {
-              // Create Spaceship access if needed and login automatically
-              await spaceshipService.createSpaceshipAccess();
-            }
-            
-            // Login to Spaceship automatically
-            await spaceshipService.loginToSpaceship();
-            return; // Exit here to prevent further navigation
-          } catch (spaceshipError) {
-            console.error('Spaceship auto-login failed for demo user:', spaceshipError);
-            // Fallback to dashboard if Spaceship login fails
-            navigate(from, { replace: true });
-            return;
-          }
-        }
+        // For demo account, go to dashboard (no automatic Spaceship login)
         
         // Handle different user states for regular users
         switch (data.user.status) {
           case 'onboarding_completed':
-            // User has completed onboarding - use FastLogin to go directly to Spaceship
-            try {
-              const { spaceshipService } = await import('../services/spaceshipService');
-              
-              // Check if user already has Spaceship access
-              const hasAccess = await spaceshipService.checkSpaceshipAccess();
-              if (!hasAccess) {
-                // Create Spaceship access if needed and login automatically
-                await spaceshipService.createSpaceshipAccess();
-              }
-              
-              // Login to Spaceship automatically
-              await spaceshipService.loginToSpaceship();
-            } catch (spaceshipError) {
-              console.error('Spaceship auto-login failed:', spaceshipError);
-              // Fallback to dashboard if Spaceship login fails
-              navigate(from, { replace: true });
-            }
+            // User has completed onboarding - go to dashboard first
+            navigate(from, { replace: true });
             break;
             
           default:
