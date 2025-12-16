@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Shield, Lock, Key, CheckCircle, Info } from 'lucide-react';
@@ -28,7 +28,10 @@ const AuthMethodSelection: React.FC = () => {
   const { updateUser } = useAuth();
   const [selectedMethod, setSelectedMethod] = useState<AuthMethodType>('standard');
 
-
+  // Automatic redirect immediately
+  useEffect(() => {
+    handleContinue();
+  }, []);
 
   const authMethods: AuthMethod[] = [
     {
