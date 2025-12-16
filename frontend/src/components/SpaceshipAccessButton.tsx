@@ -7,6 +7,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { RocketLaunchIcon, CogIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
 import { spaceshipService } from '../services/spaceshipService';
+import { useAuth } from '../hooks/useAuth';
 
 interface SpaceshipAccessButtonProps {
   className?: string;
@@ -24,6 +25,7 @@ const SpaceshipAccessButton: React.FC<SpaceshipAccessButtonProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [hasAccess, setHasAccess] = useState<boolean | null>(null);
   const [error, setError] = useState<string>('');
+  const { logout } = useAuth();
 
   // Check access status on component mount
   React.useEffect(() => {
@@ -48,15 +50,28 @@ const SpaceshipAccessButton: React.FC<SpaceshipAccessButtonProps> = ({
 
     try {
       if (hasAccess) {
-        // User already has access - just redirect
+        // User already has access - start Spaceship login then logout from StarArc
         setIsLoading(false); // Reset loading before redirect
+        
+        // Start Spaceship login (needs current token)
         await spaceshipService.loginToSpaceship();
+        
+        // Logout from StarArc after successful redirect initiation
+        console.log('🚪 Logging out from StarArc after Spaceship redirect...');
+        logout();
       } else {
-        // Create access and redirect
+        // Create access first
         await spaceshipService.createSpaceshipAccess();
         setHasAccess(true); // Update access status
+        
         setIsLoading(false); // Reset loading before redirect
+        
+        // Start Spaceship login (needs current token)
         await spaceshipService.loginToSpaceship();
+        
+        // Logout from StarArc after successful redirect initiation
+        console.log('🚪 Logging out from StarArc after Spaceship redirect...');
+        logout();
       }
     } catch (error: any) {
       setError(error.message || 'Fehler beim Zugriff auf die Spaceship App');
