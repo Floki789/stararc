@@ -690,7 +690,7 @@ router.post('/generate-spaceship-token', authMiddleware, async (req: Request, re
     );
     
     const spaceshipUrl = process.env.NODE_ENV === 'production' 
-      ? 'https://spaceship.paymebits.com'
+      ? process.env.SPACESHIP_URL || 'https://spaceship.stararc.one'
       : process.env.SPACESHIP_URL || 'http://localhost:3000';
     
     res.json({
@@ -1051,7 +1051,7 @@ router.post('/generate-spaceship-token-for-client', authMiddleware, async (req: 
     );
     
     const spaceshipUrl = process.env.NODE_ENV === 'production' 
-      ? 'https://spaceship.paymebits.com'
+      ? process.env.SPACESHIP_URL || 'https://spaceship.stararc.one'
       : process.env.SPACESHIP_URL || 'http://localhost:3000';
     
     res.json({
