@@ -105,53 +105,48 @@ export class EmailService {
     const mailOptions = {
       from: this.fromEmail,
       to: email,
-      subject: '🔐 Stararc - Passwort zurücksetzen',
+      subject: 'Stararc - Passwort zurücksetzen',
       html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background: linear-gradient(135deg, #7c3aed 0%, #ec4899 100%); color: white;">
-          <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="color: #ddd6fe; font-size: 32px; margin: 0;">🚀 Stararc</h1>
-            <p style="color: #e5e7eb; margin: 10px 0;">Zero-Knowledge Portfolio Management</p>
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px;">
+          <h2 style="color: #1f2937; margin-bottom: 20px;">Passwort zurücksetzen</h2>
+          
+          <p style="color: #4b5563; line-height: 1.6; margin-bottom: 30px;">
+            Klicken Sie auf den Button, um ein neues Passwort zu erstellen:
+          </p>
+          
+          <div style="margin: 30px 0;">
+            <a href="${resetUrl}" 
+               style="display: inline-block; background: #3b82f6; color: white; padding: 12px 30px; 
+                      text-decoration: none; border-radius: 6px; font-weight: 500;">
+              Passwort zurücksetzen
+            </a>
           </div>
           
-          <div style="background: rgba(255, 255, 255, 0.1); padding: 30px; border-radius: 10px; backdrop-filter: blur(10px);">
-            <h2 style="color: #f3f4f6; margin-bottom: 20px;">🔐 Passwort zurücksetzen</h2>
-            
-            <p style="color: #e5e7eb; line-height: 1.6; margin-bottom: 25px;">
-              Hallo ${alias},<br><br>
-              Sie haben eine Anfrage zum Zurücksetzen Ihres Passworts gestellt. 
-              Klicken Sie auf den Button unten, um ein neues Passwort zu erstellen.
-            </p>
-            
-            <div style="text-align: center; margin: 30px 0;">
-              <a href="${resetUrl}" 
-                 style="display: inline-block; background: #ef4444; color: white; padding: 12px 30px; 
-                        text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">
-                🔑 Passwort zurücksetzen
-              </a>
-            </div>
-            
-            <div style="background: rgba(239, 68, 68, 0.2); padding: 15px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #ef4444;">
-              <h4 style="color: #fecaca; margin: 0 0 10px 0;">⚠️ Sicherheitshinweis</h4>
-              <p style="color: #e5e7eb; margin: 0; font-size: 14px;">
-                Falls Sie diese Anfrage nicht gestellt haben, ignorieren Sie diese Email. 
-                Ihr Passwort bleibt unverändert. Der Link läuft in 1 Stunde ab.
-              </p>
-            </div>
-            
-            <p style="color: #9ca3af; font-size: 14px; margin-top: 25px;">
-              Aus Sicherheitsgründen können Sie diesen Link nur einmal verwenden.
-            </p>
-          </div>
+          <p style="color: #6b7280; font-size: 14px; margin-top: 30px;">
+            Der Link ist 1 Stunde gültig. Falls Sie diese Anfrage nicht gestellt haben, ignorieren Sie diese E-Mail.
+          </p>
           
-          <div style="text-align: center; margin-top: 20px; color: #9ca3af; font-size: 12px;">
-            <p>🇨🇭 Made in Switzerland | Privacy-by-Design | Zero-Knowledge</p>
-            <p>© ${new Date().getFullYear()} Stararc.one - Alle Rechte vorbehalten</p>
-          </div>
+          <p style="color: #9ca3af; font-size: 12px; margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+            Falls der Button nicht funktioniert:<br>
+            <a href="${resetUrl}" style="color: #3b82f6; word-break: break-all;">${resetUrl}</a>
+          </p>
         </div>
       `
     };
 
-    await this.transporter.sendMail(mailOptions);
+    try {
+      const info = await this.transporter.sendMail(mailOptions);
+      console.log(`✅ Password reset email sent to ${email}`);
+      console.log(`📧 Message ID: ${info.messageId}`);
+      
+      // In development, log preview URL
+      if (process.env.NODE_ENV !== 'production') {
+        console.log(`🔗 Preview URL: ${nodemailer.getTestMessageUrl(info)}`);
+      }
+    } catch (error) {
+      console.error('❌ Failed to send password reset email:', error);
+      throw new Error('Failed to send password reset email');
+    }
   }
 
   // Send welcome email after email verification
