@@ -342,6 +342,7 @@ router.post('/login', authLimiter, loginValidation, async (req: Request, res: Re
     if ((loginResult as any).backupCodeUsed) {
       response.backupCodeUsed = true;
       response.remainingBackupCodes = (loginResult as any).remainingBackupCodes;
+      response.shouldRegenerateBackupCodes = (loginResult as any).shouldRegenerateBackupCodes;
       if ((loginResult as any).newBackupCodes) {
         response.newBackupCodes = (loginResult as any).newBackupCodes;
       }
