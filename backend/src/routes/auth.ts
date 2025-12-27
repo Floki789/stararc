@@ -95,22 +95,35 @@ router.post('/register', registerLimiter, registerValidation, async (req: Reques
     // Register user
     const user = await authService.registerUser(email, password, alias);
 
-    // Generate token for immediate login (since email verification is disabled for testing)
-    const token = authService.generateToken(user);
-
-    // Skip email verification for testing
-    console.log(`🧪 Testing mode: Email verification skipped for ${email}`);
-
-    res.status(201).json({
-      message: 'Registrierung erfolgreich! Ihr Konto ist sofort einsatzbereit.',
-      token: token,
-      user: {
-        id: user.id,
-        email: user.email,
-        alias: (user as any).alias,
-        emailVerified: (user as any).email_verified
-      }
-    });
+    // Send email verification
+    try {
+      const verificationToken = (user as any).emailVerificationToken;
+      await emailService.sendEmailVerification(
+        email, 
+        alias || 'User', 
+        verificationToken
+      );
+      
+      console.log(`✅ Verification email sent to ${email}`);
+      
+      // Return success WITHOUT token (user must verify email first)
+      res.status(201).json({
+        message: 'Registrierung erfolgreich! Bitte bestätigen Sie Ihre E-Mail-Adresse. Wir haben Ihnen einen Bestätigungslink gesendet.',
+        requiresVerification: true,
+        email: email // Show email so user knows where to check
+      });
+    } catch (emailError) {
+      console.error('❌ Email sending failed:', emailError);
+      
+      // User is created but email failed - still return success
+      // (user can request new verification email)
+      res.status(201).json({
+        message: 'Registrierung erfolgreich, aber E-Mail-Versand fehlgeschlagen. Bitte kontaktieren Sie den Support.',
+        requiresVerification: true,
+        email: email,
+        emailFailed: true
+      });
+    }
   } catch (error: any) {
     console.error('Registration error:', error);
     console.error('Error details:', {
@@ -133,6 +146,70 @@ router.post('/register', registerLimiter, registerValidation, async (req: Reques
     } else {
       res.status(500).json({ error: 'Registration failed' });
     }
+  }
+});
+
+// GET /api/auth/verify-email?token=xxx
+router.get('/verify-email', async (req: Request, res: Response): Promise<any> => {
+  try {
+    const { token } = req.query;
+    
+    if (!token || typeof token !== 'string') {
+      return res.status(400).json({ error: 'Verification token required' });
+    }
+    
+    // Update user and mark email as verified
+    const result = await pool.query(
+      `UPDATE users 
+       SET email_verified = true, 
+           email_verification_token = NULL,
+           email_verification_expires = NULL,
+           updated_at = NOW()
+       WHERE email_verification_token = $1 
+       AND email_verification_expires > NOW()
+       RETURNING id, admin_encrypted_email`,
+      [token]
+    );
+    
+    if (result.rows.length === 0) {
+      return res.status(400).json({ 
+        error: 'Invalid or expired verification token',
+        message: 'Der Verifizierungslink ist ungültig oder abgelaufen. Bitte fordern Sie einen neuen Link an.'
+      });
+    }
+    
+    const user = result.rows[0];
+    console.log(`✅ Email verified for user ID: ${user.id}`);
+    
+    // Optionally send welcome email
+    try {
+      // Decrypt email for welcome message
+      const adminKey = process.env.ADMIN_ENCRYPTION_KEY;
+      if (adminKey && user.admin_encrypted_email) {
+        const decipher = crypto.createDecipheriv(
+          'aes-256-gcm',
+          Buffer.from(adminKey, 'hex'),
+          Buffer.from(user.admin_encrypted_email.iv, 'hex')
+        );
+        decipher.setAuthTag(Buffer.from(user.admin_encrypted_email.authTag, 'hex'));
+        let email = decipher.update(user.admin_encrypted_email.encryptedData, 'hex', 'utf8');
+        email += decipher.final('utf8');
+        
+        await emailService.sendWelcomeEmail(email, 'User');
+        console.log(`📧 Welcome email sent to user ${user.id}`);
+      }
+    } catch (welcomeError) {
+      console.error('❌ Failed to send welcome email:', welcomeError);
+      // Don't fail the verification if welcome email fails
+    }
+    
+    res.json({ 
+      message: 'E-Mail erfolgreich verifiziert! Sie können sich jetzt anmelden.',
+      verified: true 
+    });
+  } catch (error) {
+    console.error('Email verification error:', error);
+    res.status(500).json({ error: 'Verification failed' });
   }
 });
 

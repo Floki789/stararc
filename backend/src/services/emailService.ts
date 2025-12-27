@@ -9,18 +9,33 @@ export class EmailService {
     
     // Create transporter based on environment
     if (process.env.NODE_ENV === 'production') {
-      // Production email configuration (e.g., SendGrid, Mailgun, AWS SES)
+      // Production email configuration with Hostpoint SMTP
       this.transporter = nodemailer.createTransport({
         host: process.env.SMTP_HOST,
         port: parseInt(process.env.SMTP_PORT || '587'),
-        secure: process.env.SMTP_SECURE === 'true',
+        secure: process.env.SMTP_SECURE === 'true', // false for port 587 (STARTTLS)
         auth: {
           user: process.env.SMTP_USER,
           pass: process.env.SMTP_PASS,
         },
+        tls: {
+          rejectUnauthorized: true // Enforce certificate validation
+        }
+      });
+      
+      // Verify SMTP connection on startup
+      this.transporter.verify((error, success) => {
+        if (error) {
+          console.error('❌ SMTP connection failed:', error);
+          console.error('Check your Hostpoint SMTP credentials in environment variables');
+        } else {
+          console.log('✅ SMTP server ready to send emails via Hostpoint');
+          console.log(`📧 Sender: ${this.fromEmail}`);
+        }
       });
     } else {
       // Development: Use Ethereal Email for testing
+      console.log('🧪 Development mode: Using Ethereal Email (test only)');
       this.transporter = nodemailer.createTransport({
         host: 'smtp.ethereal.email',
         port: 587,
@@ -88,7 +103,19 @@ export class EmailService {
       `
     };
 
-    await this.transporter.sendMail(mailOptions);
+    try {
+      const info = await this.transporter.sendMail(mailOptions);
+      console.log(`✅ Verification email sent to ${email}`);
+      console.log(`📧 Message ID: ${info.messageId}`);
+      
+      // In development, log preview URL
+      if (process.env.NODE_ENV !== 'production') {
+        console.log(`🔗 Preview URL: ${nodemailer.getTestMessageUrl(info)}`);
+      }
+    } catch (error) {
+      console.error('❌ Failed to send verification email:', error);
+      throw new Error('Failed to send verification email');
+    }
   }
 
   // Send password reset email

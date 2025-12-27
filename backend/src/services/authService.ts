@@ -97,7 +97,7 @@ export class AuthService {
           hashedPassword,
           encryptedData.emailHash, encryptedData.encryptedEmail, encryptedData.encryptedAlias,
           encryptedData.adminEncryptedEmail, encryptedData.adminEncryptedAlias,
-          emailVerificationToken, emailVerificationExpires, true
+          emailVerificationToken, emailVerificationExpires, false // User must verify email
         ]
       );
 
