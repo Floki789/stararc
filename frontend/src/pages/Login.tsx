@@ -353,16 +353,14 @@ const Login: React.FC = () => {
                 id="twoFactorToken"
                 name="twoFactorToken"
                 type="text"
-                inputMode="numeric"
                 autoComplete="one-time-code"
-                maxLength={6}
                 className={`appearance-none rounded-lg relative block w-full px-3 py-3 border ${
                   errors.twoFactorToken ? 'border-red-500' : 'border-gray-600'
                 } placeholder-gray-400 text-white bg-gray-800/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-center text-lg tracking-wider`}
-                placeholder={t('auth.twoFactorToken')}
+                placeholder="2FA Code oder Backup Code"
                 value={formData.twoFactorToken || ''}
                 onChange={(e) => {
-                  const value = e.target.value.replace(/\D/g, '').slice(0, 6);
+                  const value = e.target.value.replace(/[^0-9A-Fa-f]/g, '').slice(0, 8).toUpperCase();
                   setFormData(prev => ({ ...prev, twoFactorToken: value }));
                   if (errors.twoFactorToken) {
                     setErrors(prev => ({ ...prev, twoFactorToken: '' }));
@@ -373,7 +371,8 @@ const Login: React.FC = () => {
                 <p className="mt-1 text-sm text-red-400">{errors.twoFactorToken}</p>
               )}
               <p className="mt-2 text-xs text-gray-400 text-center">
-                Geben Sie den 6-stelligen Code aus Ihrer Authenticator-App ein.
+                Geben Sie den 6-stelligen Code aus Ihrer Authenticator-App ein.<br />
+                <span className="text-gray-500">Oder verwenden Sie einen 8-stelligen Backup-Code (wird einmalig verbraucht).</span>
               </p>
             </motion.div>
           )}

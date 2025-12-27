@@ -232,14 +232,14 @@ router.post('/login', authLimiter, loginValidation, async (req: Request, res: Re
     
     // Check if user has 2FA enabled
     const userQuery = await pool.query(
-      'SELECT two_factor_enabled, encrypted_two_factor_secret FROM users WHERE id = $1',
+      'SELECT two_factor_enabled, encrypted_two_factor_secret, encrypted_backup_codes FROM users WHERE id = $1',
       [loginResult.user.id]
     );
     
     const userWith2FA = userQuery.rows[0];
     
     if (userWith2FA?.two_factor_enabled) {
-      // User has 2FA enabled - require 2FA token
+      // User has 2FA enabled - require 2FA token or backup code
       if (!twoFactorToken) {
         return res.status(200).json({
           requires2FA: true,
@@ -247,29 +247,67 @@ router.post('/login', authLimiter, loginValidation, async (req: Request, res: Re
         });
       }
       
-      // Verify 2FA token
-      let twoFactorSecret = userWith2FA.encrypted_two_factor_secret;
+      let verified = false;
       
-      // Decrypt 2FA secret with master key
-      if (twoFactorSecret) {
+      // Check if input looks like a backup code (8 hex characters)
+      const isBackupCode = /^[0-9A-Fa-f]{8}$/.test(twoFactorToken);
+      
+      if (isBackupCode && userWith2FA.encrypted_backup_codes) {
+        // Try to verify as backup code
         try {
           const { UserEncryptionService } = require('../services/userEncryptionService');
-          twoFactorSecret = UserEncryptionService.decryptWithMasterKey(twoFactorSecret);
+          const decryptedCodesJson = UserEncryptionService.decryptWithMasterKey(userWith2FA.encrypted_backup_codes);
+          const backupCodes: string[] = JSON.parse(decryptedCodesJson);
+          
+          const codeIndex = backupCodes.findIndex(code => 
+            code.toUpperCase() === twoFactorToken.toUpperCase()
+          );
+          
+          if (codeIndex !== -1) {
+            // Backup code is valid - remove it from the list
+            backupCodes.splice(codeIndex, 1);
+            const updatedCodesJson = JSON.stringify(backupCodes);
+            const encryptedUpdatedCodes = UserEncryptionService.encryptWithMasterKey(updatedCodesJson);
+            
+            await pool.query(
+              'UPDATE users SET encrypted_backup_codes = $1 WHERE id = $2',
+              [encryptedUpdatedCodes, loginResult.user.id]
+            );
+            
+            verified = true;
+            console.log(`✅ Backup code used for login. Remaining codes: ${backupCodes.length}`);
+          }
         } catch (error) {
-          return res.status(500).json({ error: 'Failed to decrypt 2FA secret' });
+          console.error('Error verifying backup code:', error);
+          // Continue to try as regular 2FA token
         }
       }
       
-      const speakeasy = require('speakeasy');
-      const verified = speakeasy.totp.verify({
-        secret: twoFactorSecret,
-        encoding: 'base32',
-        token: twoFactorToken,
-        window: 1
-      });
+      // If not verified as backup code, try as regular 2FA token
+      if (!verified) {
+        let twoFactorSecret = userWith2FA.encrypted_two_factor_secret;
+        
+        // Decrypt 2FA secret with master key
+        if (twoFactorSecret) {
+          try {
+            const { UserEncryptionService } = require('../services/userEncryptionService');
+            twoFactorSecret = UserEncryptionService.decryptWithMasterKey(twoFactorSecret);
+          } catch (error) {
+            return res.status(500).json({ error: 'Failed to decrypt 2FA secret' });
+          }
+        }
+        
+        const speakeasy = require('speakeasy');
+        verified = speakeasy.totp.verify({
+          secret: twoFactorSecret,
+          encoding: 'base32',
+          token: twoFactorToken,
+          window: 1
+        });
+      }
       
       if (!verified) {
-        return res.status(401).json({ error: 'Invalid 2FA token' });
+        return res.status(401).json({ error: 'Invalid 2FA token or backup code' });
       }
     }
 
