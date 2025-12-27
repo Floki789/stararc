@@ -63,8 +63,10 @@ fi
 
 # Push to Heroku
 echo ""
-echo "🚢 Pushing to Heroku main branch..."
-git push heroku main
+echo "🚢 Pushing to Heroku..."
+CURRENT_BRANCH=$(git branch --show-current)
+echo "📍 Current branch: $CURRENT_BRANCH"
+git push heroku $CURRENT_BRANCH:main
 
 echo ""
 echo "✅ Deployment complete!"
