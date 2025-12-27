@@ -156,53 +156,50 @@ export class EmailService {
     const mailOptions = {
       from: this.fromEmail,
       to: email,
-      subject: '🎉 Willkommen bei Stararc - Ihr Konto ist aktiviert!',
+      subject: 'Willkommen bei Stararc',
       html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background: linear-gradient(135deg, #059669 0%, #0d9488 100%); color: white;">
-          <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="color: #6ee7b7; font-size: 32px; margin: 0;">🚀 Stararc</h1>
-            <p style="color: #d1fae5; margin: 10px 0;">Zero-Knowledge Portfolio Management</p>
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px;">
+          <h2 style="color: #1f2937; margin-bottom: 20px;">Willkommen bei Stararc</h2>
+          
+          <p style="color: #4b5563; line-height: 1.6; margin-bottom: 30px;">
+            Ihr Konto ist aktiviert. Sie können sich jetzt einloggen und mit Stararc beginnen.
+          </p>
+          
+          <div style="margin: 30px 0;">
+            <a href="${loginUrl}" 
+               style="display: inline-block; background: #3b82f6; color: white; padding: 12px 30px; 
+                      text-decoration: none; border-radius: 6px; font-weight: 500;">
+              Jetzt einloggen
+            </a>
           </div>
           
-          <div style="background: rgba(255, 255, 255, 0.1); padding: 30px; border-radius: 10px; backdrop-filter: blur(10px);">
-            <h2 style="color: #f0fdf4; margin-bottom: 20px;">🎉 Herzlich willkommen ${alias}!</h2>
-            
-            <p style="color: #d1fae5; line-height: 1.6; margin-bottom: 25px;">
-              Ihr Stararc-Konto ist jetzt aktiviert! Sie können sich einloggen und beginnen, 
-              Ihre Vermögenswerte mit unserer Privacy-by-Design Plattform zu verwalten.
-            </p>
-            
-            <div style="text-align: center; margin: 30px 0;">
-              <a href="${loginUrl}" 
-                 style="display: inline-block; background: #1f2937; color: #6ee7b7; padding: 12px 30px; 
-                        text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">
-                🔐 Jetzt einloggen
-              </a>
-            </div>
-            
-            <div style="background: rgba(0, 0, 0, 0.2); padding: 20px; border-radius: 8px; margin: 20px 0;">
-              <h3 style="color: #fbbf24; margin: 0 0 15px 0;">💎 Was Sie jetzt tun können:</h3>
-              <div style="color: #d1fae5;">
-                <div style="margin-bottom: 10px;">📊 <strong>Ganzheitliches Asset Management</strong> - Alle Anlageklassen im Überblick</div>
-                <div style="margin-bottom: 10px;">₿ <strong>Bitcoin Self-Custody</strong> - xPub Import und Hardware Wallet Integration</div>
-                <div style="margin-bottom: 10px;">🔐 <strong>Privacy-First</strong> - Ihre Daten bleiben verschlüsselt bei Ihnen</div>
-                <div style="margin-bottom: 10px;">🇨🇭 <strong>Swiss Standards</strong> - Banking-Level Sicherheit</div>
-              </div>
-            </div>
-            
-            <p style="color: #a7f3d0; font-size: 14px; margin-top: 25px;">
-              Bei Fragen stehen wir Ihnen gerne zur Verfügung. Viel Spaß mit Stararc!
+          <div style="background: #f9fafb; padding: 20px; border-radius: 6px; margin: 30px 0; border-left: 3px solid #3b82f6;">
+            <p style="color: #4b5563; line-height: 1.6; margin: 0;">
+              <strong>Nach dem Login:</strong><br>
+              Sie werden durch <em>Getting Started</em> und <em>Getting Better</em> geführt. 
+              Diese Schritte helfen Ihnen, Stararc optimal zu nutzen – können aber auch jederzeit übersprungen werden.
             </p>
           </div>
           
-          <div style="text-align: center; margin-top: 20px; color: #6b7280; font-size: 12px;">
-            <p>🇨🇭 Made in Switzerland | Privacy-by-Design | Zero-Knowledge</p>
-            <p>© ${new Date().getFullYear()} Stararc.one - Alle Rechte vorbehalten</p>
-          </div>
+          <p style="color: #9ca3af; font-size: 12px; margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+            © ${new Date().getFullYear()} Stararc.one
+          </p>
         </div>
       `
     };
 
-    await this.transporter.sendMail(mailOptions);
+    try {
+      const info = await this.transporter.sendMail(mailOptions);
+      console.log(`✅ Welcome email sent to ${email}`);
+      console.log(`📧 Message ID: ${info.messageId}`);
+      
+      // In development, log preview URL
+      if (process.env.NODE_ENV !== 'production') {
+        console.log(`🔗 Preview URL: ${nodemailer.getTestMessageUrl(info)}`);
+      }
+    } catch (error) {
+      console.error('❌ Failed to send welcome email:', error);
+      throw new Error('Failed to send welcome email');
+    }
   }
 }
