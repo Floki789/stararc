@@ -320,7 +320,7 @@ router.post('/test-webhook', async (req, res) => {
 });
 
 // Stripe webhook handler (express.raw middleware is already applied in app.ts)
-router.post('/webhook', async (req, res) => {
+router.post('/webhook', async (req, res): Promise<any> => {
   console.log('🚨 WEBHOOK HANDLER CALLED');
   
   try {
