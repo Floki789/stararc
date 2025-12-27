@@ -356,7 +356,9 @@ router.post('/login', authLimiter, loginValidation, async (req: Request, res: Re
     }
     
     if (error.message.includes('Email not verified')) {
-      response.shouldRegenerateBackupCodes = (loginResult as any).shouldRegenerateBackupCodes; message: 'Please verify your email before logging in'
+      return res.status(403).json({
+        error: 'Email not verified',
+        message: 'Please verify your email before logging in'
       });
     }
     
