@@ -4,8 +4,10 @@ import qrcode from 'qrcode';
 import crypto from 'crypto';
 import { authMiddleware, AuthRequest } from '../middleware/auth';
 import { pool } from '../database/connection';
+import { EmailService } from '../services/emailService';
 
 const router = express.Router();
+const emailService = new EmailService();
 
 // Generate backup codes
 const generateBackupCodes = (): string[] => {
@@ -142,6 +144,19 @@ router.post('/verify', authMiddleware, async (req: AuthRequest, res): Promise<an
       [userId]
     );
 
+    // Send 2FA enabled notification email
+    try {
+      const userEmail = req.user?.email;
+      const userAlias = req.user?.alias || '';
+      if (userEmail) {
+        await emailService.send2FAEnabled(userEmail, userAlias);
+        console.log(`✅ 2FA enabled notification sent to ${userEmail}`);
+      }
+    } catch (emailError) {
+      console.error('⚠️ Failed to send 2FA enabled email (non-critical):', emailError);
+      // Don't fail the request if email fails
+    }
+
     res.json({ success: true, message: '2FA enabled successfully' });
 
   } catch (error) {
@@ -202,6 +217,19 @@ router.post('/disable', authMiddleware, async (req: AuthRequest, res): Promise<a
       'UPDATE users SET two_factor_enabled = FALSE, encrypted_two_factor_secret = NULL, encrypted_backup_codes = NULL, two_factor_enabled_at = NULL WHERE id = $1',
       [userId]
     );
+
+    // Send 2FA disabled security alert email
+    try {
+      const userEmail = req.user?.email;
+      const userAlias = req.user?.alias || '';
+      if (userEmail) {
+        await emailService.send2FADisabled(userEmail, userAlias);
+        console.log(`⚠️ 2FA disabled security alert sent to ${userEmail}`);
+      }
+    } catch (emailError) {
+      console.error('⚠️ Failed to send 2FA disabled email (non-critical):', emailError);
+      // Don't fail the request if email fails
+    }
 
     res.json({ success: true, message: '2FA disabled successfully' });
 

@@ -202,4 +202,132 @@ export class EmailService {
       throw new Error('Failed to send welcome email');
     }
   }
+
+  // Send 2FA enabled notification
+  async send2FAEnabled(email: string, alias: string): Promise<void> {
+    const dashboardUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/dashboard`;
+    
+    const mailOptions = {
+      from: this.fromEmail,
+      to: email,
+      subject: 'Zwei-Faktor-Authentifizierung aktiviert',
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px;">
+          <h2 style="color: #1f2937; margin-bottom: 20px;">Zwei-Faktor-Authentifizierung aktiviert</h2>
+          
+          <p style="color: #4b5563; line-height: 1.6; margin-bottom: 30px;">
+            Die Zwei-Faktor-Authentifizierung (2FA) wurde für Ihr Stararc-Konto aktiviert.
+          </p>
+          
+          <div style="background: #f0fdf4; padding: 20px; border-radius: 6px; margin: 30px 0; border-left: 3px solid #10b981;">
+            <p style="color: #065f46; line-height: 1.6; margin: 0;">
+              <strong>✓ Ihr Konto ist jetzt besser geschützt</strong><br>
+              Bei jedem Login benötigen Sie zusätzlich zu Ihrem Passwort einen Code aus Ihrer Authenticator-App.
+            </p>
+          </div>
+          
+          <div style="background: #fef3c7; padding: 20px; border-radius: 6px; margin: 30px 0; border-left: 3px solid #f59e0b;">
+            <p style="color: #92400e; line-height: 1.6; margin: 0;">
+              <strong>Wichtig:</strong> Bewahren Sie Ihre Backup-Codes sicher auf! 
+              Sie benötigen diese, falls Sie Ihr Gerät verlieren.
+            </p>
+          </div>
+          
+          <div style="margin: 30px 0;">
+            <a href="${dashboardUrl}" 
+               style="display: inline-block; background: #3b82f6; color: white; padding: 12px 30px; 
+                      text-decoration: none; border-radius: 6px; font-weight: 500;">
+              Zum Dashboard
+            </a>
+          </div>
+          
+          <p style="color: #6b7280; font-size: 14px; margin-top: 30px;">
+            Falls Sie dies nicht waren, kontaktieren Sie uns sofort unter info@stararc.one
+          </p>
+          
+          <p style="color: #9ca3af; font-size: 12px; margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+            © ${new Date().getFullYear()} Stararc.one
+          </p>
+        </div>
+      `
+    };
+
+    try {
+      const info = await this.transporter.sendMail(mailOptions);
+      console.log(`✅ 2FA enabled email sent to ${email}`);
+      console.log(`📧 Message ID: ${info.messageId}`);
+      
+      if (process.env.NODE_ENV !== 'production') {
+        console.log(`🔗 Preview URL: ${nodemailer.getTestMessageUrl(info)}`);
+      }
+    } catch (error) {
+      console.error('❌ Failed to send 2FA enabled email:', error);
+      throw new Error('Failed to send 2FA enabled email');
+    }
+  }
+
+  // Send 2FA disabled notification (security alert)
+  async send2FADisabled(email: string, alias: string): Promise<void> {
+    const changePasswordUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/dashboard`;
+    
+    const mailOptions = {
+      from: this.fromEmail,
+      to: email,
+      subject: '⚠️ Zwei-Faktor-Authentifizierung deaktiviert',
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px;">
+          <h2 style="color: #dc2626; margin-bottom: 20px;">⚠️ Zwei-Faktor-Authentifizierung deaktiviert</h2>
+          
+          <div style="background: #fef2f2; padding: 20px; border-radius: 6px; margin: 30px 0; border-left: 3px solid #dc2626;">
+            <p style="color: #991b1b; line-height: 1.6; margin: 0;">
+              <strong>Sicherheitshinweis:</strong><br>
+              Die Zwei-Faktor-Authentifizierung wurde für Ihr Stararc-Konto DEAKTIVIERT.
+              Ihr Konto ist jetzt weniger geschützt.
+            </p>
+          </div>
+          
+          <p style="color: #4b5563; line-height: 1.6; margin-bottom: 30px;">
+            Zeitpunkt: ${new Date().toLocaleString('de-CH', { timeZone: 'Europe/Zurich' })} (Schweizer Zeit)
+          </p>
+          
+          <div style="background: #fff7ed; padding: 20px; border-radius: 6px; margin: 30px 0; border-left: 3px solid #f59e0b;">
+            <p style="color: #92400e; line-height: 1.6; margin: 0;">
+              <strong>Falls Sie dies nicht waren:</strong><br>
+              Ihr Konto wurde möglicherweise kompromittiert. 
+              Ändern Sie sofort Ihr Passwort und aktivieren Sie 2FA erneut.
+            </p>
+          </div>
+          
+          <div style="margin: 30px 0;">
+            <a href="${changePasswordUrl}" 
+               style="display: inline-block; background: #dc2626; color: white; padding: 12px 30px; 
+                      text-decoration: none; border-radius: 6px; font-weight: 500;">
+              Passwort ändern
+            </a>
+          </div>
+          
+          <p style="color: #6b7280; font-size: 14px; margin-top: 30px;">
+            Bei Fragen kontaktieren Sie uns: info@stararc.one
+          </p>
+          
+          <p style="color: #9ca3af; font-size: 12px; margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+            © ${new Date().getFullYear()} Stararc.one
+          </p>
+        </div>
+      `
+    };
+
+    try {
+      const info = await this.transporter.sendMail(mailOptions);
+      console.log(`✅ 2FA disabled email sent to ${email}`);
+      console.log(`📧 Message ID: ${info.messageId}`);
+      
+      if (process.env.NODE_ENV !== 'production') {
+        console.log(`🔗 Preview URL: ${nodemailer.getTestMessageUrl(info)}`);
+      }
+    } catch (error) {
+      console.error('❌ Failed to send 2FA disabled email:', error);
+      throw new Error('Failed to send 2FA disabled email');
+    }
+  }
 }
