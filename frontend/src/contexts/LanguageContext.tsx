@@ -20,9 +20,21 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [, forceUpdate] = useState(0);
 
   useEffect(() => {
+    // Priority: 1. Saved preference > 2. Browser language > 3. Default (de)
     const savedLanguage = localStorage.getItem(LANGUAGE_STORAGE_KEY) as Language;
+    
     if (savedLanguage && (savedLanguage === 'de' || savedLanguage === 'en')) {
+      // User has manually selected a language before
       setLanguage(savedLanguage);
+      console.log('🌐 Using saved language preference:', savedLanguage);
+    } else {
+      // First visit - detect browser language
+      const browserLanguage = navigator.language.toLowerCase();
+      const detectedLanguage: Language = browserLanguage.startsWith('de') ? 'de' : 'en';
+      
+      setLanguage(detectedLanguage);
+      localStorage.setItem(LANGUAGE_STORAGE_KEY, detectedLanguage);
+      console.log('🌐 Browser language detected:', browserLanguage, '→ Using:', detectedLanguage);
     }
   }, []);
 
