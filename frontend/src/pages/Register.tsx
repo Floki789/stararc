@@ -35,6 +35,8 @@ const Register: React.FC = () => {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
+  const [registeredEmail, setRegisteredEmail] = useState('');
+  const [showSuccessScreen, setShowSuccessScreen] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -105,17 +107,9 @@ const Register: React.FC = () => {
       if (response.ok) {
         // Check if email verification is required
         if (data.requiresVerification) {
-          // Email verification required - show message with email
-          setSuccessMessage(
-            data.message || 
-            `Registrierung erfolgreich! Wir haben eine Bestätigungs-E-Mail an ${data.email || 'Ihre E-Mail-Adresse'} gesendet. Bitte überprüfen Sie Ihr Postfach und klicken Sie auf den Bestätigungslink.`
-          );
-          // Clear form
-          setFormData({
-            email: '',
-            password: '',
-            confirmPassword: ''
-          });
+          // Email verification required - show success screen
+          setRegisteredEmail(data.email || formData.email);
+          setShowSuccessScreen(true);
         } else if (data.user && data.token) {
           // No email verification - log in immediately (fallback for testing)
           localStorage.setItem('user', JSON.stringify(data.user));
@@ -168,12 +162,104 @@ const Register: React.FC = () => {
         ))}
       </div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="max-w-md w-full space-y-8 relative z-10"
-      >
+      {/* Success Screen */}
+      {showSuccessScreen ? (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="max-w-md w-full relative z-10"
+        >
+          <div className="bg-white/10 backdrop-blur-lg p-8 rounded-2xl shadow-2xl border border-white/20">
+            <div className="text-center">
+              {/* Success Icon */}
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+                className="mx-auto mb-6"
+              >
+                <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto">
+                  <svg className="w-12 h-12 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 19v-8.93a2 2 0 01.89-1.664l7-4.666a2 2 0 012.22 0l7 4.666A2 2 0 0121 10.07V19M3 19a2 2 0 002 2h14a2 2 0 002-2M3 19l6.75-4.5M21 19l-6.75-4.5M3 10l6.75 4.5M21 10l-6.75 4.5m0 0l-1.14.76a2 2 0 01-2.22 0l-1.14-.76" />
+                  </svg>
+                </div>
+              </motion.div>
+
+              {/* Title */}
+              <motion.h2
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="text-2xl font-bold text-white mb-3"
+              >
+                E-Mail versendet!
+              </motion.h2>
+
+              {/* Message */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+                className="space-y-4"
+              >
+                <p className="text-gray-300 text-sm leading-relaxed">
+                  Wir haben eine Bestätigungs-E-Mail an
+                </p>
+                <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3">
+                  <p className="text-blue-300 font-medium break-all">
+                    {registeredEmail}
+                  </p>
+                </div>
+                <p className="text-gray-300 text-sm leading-relaxed">
+                  gesendet. Bitte überprüfen Sie Ihr Postfach und klicken Sie auf den Bestätigungslink.
+                </p>
+              </motion.div>
+
+              {/* Info Box */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+                className="mt-6 bg-amber-500/10 border border-amber-500/30 rounded-lg p-4"
+              >
+                <div className="flex items-start">
+                  <svg className="h-5 w-5 text-amber-400 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                  </svg>
+                  <div className="ml-3 text-left">
+                    <p className="text-sm text-amber-200">
+                      Keine E-Mail erhalten? Prüfen Sie Ihren Spam-Ordner.
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Back to Login */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.6 }}
+                className="mt-6"
+              >
+                <Link
+                  to="/login"
+                  className="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors"
+                >
+                  Zurück zum Login
+                </Link>
+              </motion.div>
+            </div>
+          </div>
+        </motion.div>
+      ) : (
+        // Registration Form (existing code)
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="max-w-md w-full space-y-8 relative z-10"
+        >
         <div className="-mt-4">
           <h2 className="text-center text-3xl font-extrabold text-white">
             {t('auth.registerTitle')}
@@ -187,32 +273,6 @@ const Register: React.FC = () => {
               {t('auth.loginToExisting')}
             </Link>
           </p>
-          
-          {/* Early Beta Warning */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="mt-4 p-4 bg-amber-500/10 border border-amber-500/30 rounded-lg"
-          >
-            <div className="flex items-start">
-              <div className="flex-shrink-0">
-                <svg className="h-5 w-5 text-amber-400" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                </svg>
-              </div>
-              <div className="ml-3">
-                <h3 className="text-sm font-medium text-amber-400">
-                  {t('auth.earlyBetaTitle')}
-                </h3>
-                <div className="mt-2 text-sm text-amber-200">
-                  <p>
-                    {t('auth.earlyBetaDescription')}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </motion.div>
         </div>
 
         <motion.form
@@ -362,6 +422,7 @@ const Register: React.FC = () => {
           </div>
         </motion.form>
       </motion.div>
+      )}
     </div>
   );
 };
