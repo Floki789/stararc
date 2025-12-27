@@ -330,4 +330,75 @@ export class EmailService {
       throw new Error('Failed to send 2FA disabled email');
     }
   }
+
+  // Send backup codes low warning
+  async sendBackupCodesLowWarning(email: string, alias: string, remainingCodes: number): Promise<void> {
+    const dashboardUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/dashboard`;
+    
+    const mailOptions = {
+      from: this.fromEmail,
+      to: email,
+      subject: '⚠️ Nur noch wenige Backup-Codes verfügbar',
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px;">
+          <h2 style="color: #f59e0b; margin-bottom: 20px;">⚠️ Backup-Codes fast aufgebraucht</h2>
+          
+          <div style="background: #fff7ed; padding: 20px; border-radius: 6px; margin: 30px 0; border-left: 3px solid #f59e0b;">
+            <p style="color: #92400e; line-height: 1.6; margin: 0;">
+              <strong>Achtung:</strong><br>
+              Sie haben nur noch <strong>${remainingCodes} Backup-Code${remainingCodes !== 1 ? 's' : ''}</strong> für Ihr Stararc-Konto übrig.
+            </p>
+          </div>
+          
+          <p style="color: #4b5563; line-height: 1.6; margin-bottom: 20px;">
+            Um neue Backup-Codes zu erhalten, müssen Sie die Zwei-Faktor-Authentifizierung deaktivieren und anschließend wieder aktivieren.
+          </p>
+          
+          <div style="background: #eff6ff; padding: 20px; border-radius: 6px; margin: 30px 0; border-left: 3px solid #3b82f6;">
+            <p style="color: #1e40af; line-height: 1.6; margin: 0;">
+              <strong>So gehen Sie vor:</strong><br>
+              1. Gehen Sie zu den Sicherheitseinstellungen<br>
+              2. Deaktivieren Sie 2FA (mit Passwort + 2FA-Code)<br>
+              3. Aktivieren Sie 2FA erneut<br>
+              4. Sie erhalten automatisch 10 neue Backup-Codes
+            </p>
+          </div>
+          
+          <div style="margin: 30px 0;">
+            <a href="${dashboardUrl}" 
+               style="display: inline-block; background: #3b82f6; color: white; padding: 12px 30px; 
+                      text-decoration: none; border-radius: 6px; font-weight: 500;">
+              Zu den Sicherheitseinstellungen
+            </a>
+          </div>
+          
+          <p style="color: #6b7280; font-size: 14px; margin-top: 30px;">
+            <strong>Wichtig:</strong> Bewahren Sie Ihre Backup-Codes an einem sicheren Ort auf. 
+            Sie werden nur bei der Einrichtung angezeigt.
+          </p>
+          
+          <p style="color: #6b7280; font-size: 14px; margin-top: 20px;">
+            Bei Fragen kontaktieren Sie uns: info@stararc.one
+          </p>
+          
+          <p style="color: #9ca3af; font-size: 12px; margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+            © ${new Date().getFullYear()} Stararc.one
+          </p>
+        </div>
+      `
+    };
+
+    try {
+      const info = await this.transporter.sendMail(mailOptions);
+      console.log(`✅ Backup codes low warning email sent to ${email}`);
+      console.log(`📧 Message ID: ${info.messageId}`);
+      
+      if (process.env.NODE_ENV !== 'production') {
+        console.log(`🔗 Preview URL: ${nodemailer.getTestMessageUrl(info)}`);
+      }
+    } catch (error) {
+      console.error('❌ Failed to send backup codes warning email:', error);
+      throw new Error('Failed to send backup codes warning email');
+    }
+  }
 }

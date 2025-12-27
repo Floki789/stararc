@@ -115,7 +115,7 @@ const Login: React.FC = () => {
           let message = `✓ Backup-Code verwendet und verbraucht.\nNoch ${remaining} Backup-Codes verfügbar.`;
           
           if (data.shouldRegenerateBackupCodes) {
-            message += `\n\n⚠️ Warnung: Nur noch ${remaining} Backup-Codes übrig!\n\nBitte generieren Sie neue Backup-Codes in den Sicherheitseinstellungen.\nDie alten Codes werden dann durch 10 neue ersetzt.`;
+            message += `\n\n⚠️ Warnung: Nur noch ${remaining} Backup-Code${remaining !== 1 ? 's' : ''} übrig!\n\nUm neue Backup-Codes zu erhalten, deaktivieren Sie 2FA in den Sicherheitseinstellungen und aktivieren Sie es anschließend wieder.\n\nSie erhalten dann automatisch 10 neue Backup-Codes.\n(Sie haben auch eine E-Mail mit dieser Information erhalten)`;
           }
           
           setTimeout(() => {

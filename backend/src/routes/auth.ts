@@ -284,6 +284,23 @@ router.post('/login', authLimiter, loginValidation, async (req: Request, res: Re
             (loginResult as any).backupCodeUsed = true;
             (loginResult as any).remainingBackupCodes = remainingCodes;
             (loginResult as any).shouldRegenerateBackupCodes = remainingCodes <= 3;
+            
+            // Send email warning if ≤3 codes remaining
+            if (remainingCodes <= 3) {
+              try {
+                const { EmailService } = require('../services/emailService');
+                const emailService = new EmailService();
+                await emailService.sendBackupCodesLowWarning(
+                  userWith2FA.email,
+                  userWith2FA.alias || userWith2FA.email,
+                  remainingCodes
+                );
+                console.log(`📧 Sent backup codes low warning email (${remainingCodes} codes remaining)`);
+              } catch (emailError) {
+                console.error('Failed to send backup codes warning email:', emailError);
+                // Don't fail login if email fails
+              }
+            }
           }
         } catch (error) {
           console.error('Error verifying backup code:', error);

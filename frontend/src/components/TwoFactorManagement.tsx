@@ -15,10 +15,6 @@ const TwoFactorManagement: React.FC = () => {
   const [showDisable, setShowDisable] = useState(false);
   const [disableForm, setDisableForm] = useState({ password: '', twoFactorToken: '' });
   const [error, setError] = useState('');
-  const [showRegenerateBackupCodes, setShowRegenerateBackupCodes] = useState(false);
-  const [regenerateForm, setRegenerateForm] = useState({ twoFactorToken: '' });
-  const [newBackupCodes, setNewBackupCodes] = useState<string[]>([]);
-  const [regenerateError, setRegenerateError] = useState('');
 
   const fetchStatus = async () => {
     setLoading(true);
@@ -76,43 +72,6 @@ const TwoFactorManagement: React.FC = () => {
       setDisableForm({ password: '', twoFactorToken: '' });
     } catch (err: any) {
       setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const regenerateBackupCodes = async () => {
-    if (!regenerateForm.twoFactorToken) {
-      setRegenerateError('Bitte geben Sie Ihren 2FA-Code ein');
-      return;
-    }
-
-    setLoading(true);
-    setRegenerateError('');
-
-    try {
-      const apiUrl = (import.meta as any).env.VITE_API_URL || 'http://localhost:3004';
-      const response = await fetch(`${apiUrl}/api/2fa/regenerate-backup-codes`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify({
-          token: regenerateForm.twoFactorToken
-        })
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Fehler beim Generieren der Backup-Codes');
-      }
-
-      setNewBackupCodes(data.backupCodes);
-      setRegenerateForm({ twoFactorToken: '' });
-    } catch (err: any) {
-      setRegenerateError(err.message);
     } finally {
       setLoading(false);
     }
@@ -183,13 +142,6 @@ const TwoFactorManagement: React.FC = () => {
               className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors text-sm"
             >
               2FA deaktivieren
-            </button>
-
-            <button
-              onClick={() => setShowRegenerateBackupCodes(true)}
-              className="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg transition-colors text-sm ml-3"
-            >
-              Backup-Codes neu generieren
             </button>
           </div>
         ) : (
@@ -300,126 +252,6 @@ const TwoFactorManagement: React.FC = () => {
           fetchStatus(); // Refresh status after setup
         }}
       />
-
-      {/* Regenerate Backup Codes Modal */}
-      {showRegenerateBackupCodes && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="bg-gray-900 rounded-xl border border-gray-700 max-w-2xl w-full max-h-[90vh] overflow-y-auto"
-          >
-            <div className="p-6 border-b border-gray-700">
-              <h2 className="text-lg font-bold text-white flex items-center">
-                <Shield className="w-5 h-5 text-amber-400 mr-2" />
-                Backup-Codes neu generieren
-              </h2>
-            </div>
-            
-            <div className="p-6">
-              {!newBackupCodes.length ? (
-                <>
-                  {regenerateError && (
-                    <div className="mb-4 p-3 bg-red-900/20 border border-red-500/50 rounded-lg">
-                      <span className="text-red-300 text-sm">{regenerateError}</span>
-                    </div>
-                  )}
-
-                  <div className="bg-amber-900/20 border border-amber-500/30 rounded-lg p-4 mb-6">
-                    <div className="flex items-start space-x-2">
-                      <AlertTriangle className="w-5 h-5 text-amber-400 mt-0.5" />
-                      <div>
-                        <p className="text-amber-300 text-sm font-semibold">Wichtiger Hinweis:</p>
-                        <p className="text-amber-300 text-xs mt-1">
-                          Alle bestehenden Backup-Codes werden ungültig und durch 10 neue Codes ersetzt.
-                          Speichern Sie die neuen Codes sicher ab!
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="mb-6">
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      2FA-Code zur Bestätigung:
-                    </label>
-                    <input
-                      type="text"
-                      value={regenerateForm.twoFactorToken}
-                      onChange={(e) => setRegenerateForm({ twoFactorToken: e.target.value.replace(/\D/g, '').slice(0, 6) })}
-                      className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white"
-                      placeholder="123456"
-                      maxLength={6}
-                    />
-                  </div>
-
-                  <div className="flex space-x-3">
-                    <button
-                      onClick={() => {
-                        setShowRegenerateBackupCodes(false);
-                        setRegenerateForm({ twoFactorToken: '' });
-                        setRegenerateError('');
-                      }}
-                      className="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-2 rounded-lg transition-colors"
-                    >
-                      Abbrechen
-                    </button>
-                    <button
-                      onClick={regenerateBackupCodes}
-                      disabled={loading || !regenerateForm.twoFactorToken}
-                      className="flex-1 bg-amber-600 hover:bg-amber-700 text-white py-2 rounded-lg transition-colors disabled:opacity-50"
-                    >
-                      {loading ? 'Wird generiert...' : 'Neu generieren'}
-                    </button>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="bg-green-900/20 border border-green-500/30 rounded-lg p-4 mb-6">
-                    <div className="flex items-start space-x-2">
-                      <CheckCircle className="w-5 h-5 text-green-400 mt-0.5" />
-                      <div>
-                        <p className="text-green-300 text-sm font-semibold">Neue Backup-Codes generiert!</p>
-                        <p className="text-green-300 text-xs mt-1">
-                          Speichern Sie diese Codes sicher. Sie werden nur einmal angezeigt.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="bg-gray-800 rounded-lg p-4 mb-6">
-                    <div className="grid grid-cols-2 gap-3">
-                      {newBackupCodes.map((code, index) => (
-                        <div key={index} className="flex items-center justify-between bg-gray-900 p-3 rounded border border-gray-700">
-                          <span className="font-mono text-white text-sm">{code}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="bg-red-900/20 border border-red-500/30 rounded-lg p-4 mb-6">
-                    <p className="text-red-300 text-xs">
-                      <strong>⚠️ Alle alten Backup-Codes sind jetzt ungültig!</strong><br/>
-                      Nur diese neuen Codes funktionieren noch.
-                    </p>
-                  </div>
-
-                  <button
-                    onClick={() => {
-                      setShowRegenerateBackupCodes(false);
-                      setNewBackupCodes([]);
-                      setRegenerateForm({ twoFactorToken: '' });
-                      setRegenerateError('');
-                    }}
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition-colors"
-                  >
-                    Fertig - Codes gespeichert
-                  </button>
-                </>
-              )}
-            </div>
-          </motion.div>
-        </div>
-      )}
     </>
   );
 };
