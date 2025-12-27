@@ -270,20 +270,6 @@ router.post('/login', authLimiter, loginValidation, async (req: Request, res: Re
             
             console.log(`✅ Backup code used for login. Remaining codes: ${remainingCodes}`);
             
-            // If 3 or fewer codes remain, generate 10 new ones
-            let newCodesGenerated: string[] = [];
-            if (remainingCodes <= 3) {
-              console.log(`⚠️ Only ${remainingCodes} backup codes left. Generating 10 new codes...`);
-              
-              const crypto = require('crypto');
-              for (let i = 0; i < 10; i++) {
-                newCodesGenerated.push(crypto.randomBytes(4).toString('hex').toUpperCase());
-              }
-              
-              backupCodes.push(...newCodesGenerated);
-              console.log(`✅ Generated 10 new backup codes. Total codes now: ${backupCodes.length}`);
-            }
-            
             const updatedCodesJson = JSON.stringify(backupCodes);
             const encryptedUpdatedCodes = UserEncryptionService.encryptWithMasterKey(updatedCodesJson);
             
@@ -296,8 +282,8 @@ router.post('/login', authLimiter, loginValidation, async (req: Request, res: Re
             
             // Store backup code info in response
             (loginResult as any).backupCodeUsed = true;
-            (loginResult as any).remainingBackupCodes = backupCodes.length;
-            (loginResult as any).newBackupCodes = newCodesGenerated.length > 0 ? newCodesGenerated : undefined;
+            (loginResult as any).remainingBackupCodes = remainingCodes;
+            (loginResult as any).shouldRegenerateBackupCodes = remainingCodes <= 3;
           }
         } catch (error) {
           console.error('Error verifying backup code:', error);
@@ -370,9 +356,7 @@ router.post('/login', authLimiter, loginValidation, async (req: Request, res: Re
     }
     
     if (error.message.includes('Email not verified')) {
-      return res.status(401).json({ 
-        error: 'Email not verified',
-        message: 'Please verify your email before logging in'
+      response.shouldRegenerateBackupCodes = (loginResult as any).shouldRegenerateBackupCodes; message: 'Please verify your email before logging in'
       });
     }
     

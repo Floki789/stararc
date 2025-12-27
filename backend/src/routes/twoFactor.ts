@@ -320,4 +320,77 @@ router.post('/verify-backup', authMiddleware, async (req: AuthRequest, res): Pro
   }
 });
 
+// Regenerate backup codes (replaces old ones with 10 new ones)
+router.post('/regenerate-backup-codes', authMiddleware, async (req: AuthRequest, res): Promise<any> => {
+  try {
+    const userId = req.user?.id;
+    const { token } = req.body;
+
+    if (!userId) {
+      return res.status(401).json({ error: 'User not authenticated' });
+    }
+
+    if (!token || token.length !== 6) {
+      return res.status(400).json({ error: '2FA token required' });
+    }
+
+    // Get user's 2FA secret and status
+    const user = await pool.query(
+      'SELECT encrypted_two_factor_secret, two_factor_enabled FROM users WHERE id = $1',
+      [userId]
+    );
+
+    if (!user.rows[0]?.two_factor_enabled) {
+      return res.status(400).json({ error: '2FA is not enabled' });
+    }
+
+    // Verify 2FA token
+    const { UserEncryptionService } = require('../services/userEncryptionService');
+    let twoFactorSecret;
+    try {
+      twoFactorSecret = UserEncryptionService.decryptWithMasterKey(user.rows[0].encrypted_two_factor_secret);
+    } catch (error) {
+      return res.status(500).json({ error: 'Failed to decrypt 2FA secret' });
+    }
+
+    const speakeasy = require('speakeasy');
+    const verified = speakeasy.totp.verify({
+      secret: twoFactorSecret,
+      encoding: 'base32',
+      token: token,
+      window: 1
+    });
+
+    if (!verified) {
+      return res.status(400).json({ error: 'Invalid 2FA token' });
+    }
+
+    // Generate 10 new backup codes (replaces old ones)
+    const newBackupCodes: string[] = [];
+    for (let i = 0; i < 10; i++) {
+      newBackupCodes.push(crypto.randomBytes(4).toString('hex').toUpperCase());
+    }
+
+    const encryptedBackupCodes = UserEncryptionService.encryptWithMasterKey(JSON.stringify(newBackupCodes));
+
+    // Update database with new backup codes (old ones are replaced)
+    await pool.query(
+      'UPDATE users SET encrypted_backup_codes = $1 WHERE id = $2',
+      [encryptedBackupCodes, userId]
+    );
+
+    console.log(`✅ Generated 10 new backup codes for user ${userId}. Old codes replaced.`);
+
+    res.json({ 
+      success: true, 
+      message: 'New backup codes generated. Old codes are no longer valid.',
+      backupCodes: newBackupCodes
+    });
+
+  } catch (error) {
+    console.error('Regenerate backup codes error:', error);
+    res.status(500).json({ error: 'Failed to regenerate backup codes' });
+  }
+});
+
 export default router;
