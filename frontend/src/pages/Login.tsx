@@ -109,6 +109,25 @@ const Login: React.FC = () => {
           return;
         }
 
+        // Check if backup code was used
+        if (data.backupCodeUsed) {
+          const remaining = data.remainingBackupCodes;
+          let message = `✓ Backup-Code verwendet und verbraucht.\nNoch ${remaining} Backup-Codes verfügbar.`;
+          
+          if (data.newBackupCodes && data.newBackupCodes.length > 0) {
+            message += `\n\n🔐 Wichtig: 10 neue Backup-Codes wurden generiert!\n\nSpeichern Sie diese Codes sicher:\n\n${data.newBackupCodes.join('\n')}\n\nSie haben jetzt insgesamt ${remaining} Backup-Codes.`;
+            alert(message);
+          } else if (remaining <= 3) {
+            message += '\n\n⚠️ Warnung: Bitte generieren Sie bald neue Backup-Codes!';
+            alert(message);
+          } else {
+            // Show brief notification for normal backup code use
+            setTimeout(() => {
+              alert(message);
+            }, 100);
+          }
+        }
+
         // Store token and user data in localStorage
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));

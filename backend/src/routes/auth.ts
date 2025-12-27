@@ -266,6 +266,24 @@ router.post('/login', authLimiter, loginValidation, async (req: Request, res: Re
           if (codeIndex !== -1) {
             // Backup code is valid - remove it from the list
             backupCodes.splice(codeIndex, 1);
+            const remainingCodes = backupCodes.length;
+            
+            console.log(`✅ Backup code used for login. Remaining codes: ${remainingCodes}`);
+            
+            // If 3 or fewer codes remain, generate 10 new ones
+            let newCodesGenerated: string[] = [];
+            if (remainingCodes <= 3) {
+              console.log(`⚠️ Only ${remainingCodes} backup codes left. Generating 10 new codes...`);
+              
+              const crypto = require('crypto');
+              for (let i = 0; i < 10; i++) {
+                newCodesGenerated.push(crypto.randomBytes(4).toString('hex').toUpperCase());
+              }
+              
+              backupCodes.push(...newCodesGenerated);
+              console.log(`✅ Generated 10 new backup codes. Total codes now: ${backupCodes.length}`);
+            }
+            
             const updatedCodesJson = JSON.stringify(backupCodes);
             const encryptedUpdatedCodes = UserEncryptionService.encryptWithMasterKey(updatedCodesJson);
             
@@ -275,7 +293,11 @@ router.post('/login', authLimiter, loginValidation, async (req: Request, res: Re
             );
             
             verified = true;
-            console.log(`✅ Backup code used for login. Remaining codes: ${backupCodes.length}`);
+            
+            // Store backup code info in response
+            (loginResult as any).backupCodeUsed = true;
+            (loginResult as any).remainingBackupCodes = backupCodes.length;
+            (loginResult as any).newBackupCodes = newCodesGenerated.length > 0 ? newCodesGenerated : undefined;
           }
         } catch (error) {
           console.error('Error verifying backup code:', error);
@@ -314,7 +336,7 @@ router.post('/login', authLimiter, loginValidation, async (req: Request, res: Re
     // Login successful (with or without 2FA)
     const { user, token } = loginResult;
 
-    res.json({
+    const response: any = {
       message: 'Login successful',
       token,
       user: {
@@ -328,7 +350,18 @@ router.post('/login', authLimiter, loginValidation, async (req: Request, res: Re
         spaceshipIntegrationCompleted: (user as any).spaceship_integration_completed,
         twoFactorEnabled: userWith2FA?.two_factor_enabled || false
       }
-    });
+    };
+
+    // Add backup code info if a backup code was used
+    if ((loginResult as any).backupCodeUsed) {
+      response.backupCodeUsed = true;
+      response.remainingBackupCodes = (loginResult as any).remainingBackupCodes;
+      if ((loginResult as any).newBackupCodes) {
+        response.newBackupCodes = (loginResult as any).newBackupCodes;
+      }
+    }
+
+    res.json(response);
   } catch (error: any) {
     console.error('Login error:', error);
     
