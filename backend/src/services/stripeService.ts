@@ -4,9 +4,15 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2023-08-16',
 });
 
+// Detect production mode
+export const isProductionMode = (): boolean => {
+  return process.env.STRIPE_MODE === 'live';
+};
+
 export interface SubscriptionPlan {
   id: string;
-  stripeId?: string; // Optional Stripe price ID for paid plans
+  stripeId?: string; // Test mode Stripe price ID
+  stripeIdLive?: string; // Production mode Stripe price ID
   name: string;
   price: number;
   currency: string;
@@ -28,7 +34,8 @@ export const SUBSCRIPTION_PLANS: Record<string, SubscriptionPlan> = {
   },
   Spark: {
     id: 'Spark',
-    stripeId: 'price_1SP7aDD1Ykg9qG9IPlotX2vt', // Spark Plan $9/mo
+    stripeId: 'price_1SP7aDD1Ykg9qG9IPlotX2vt', // TEST MODE: Spark Plan $9/mo
+    stripeIdLive: process.env.STRIPE_PRICE_SPARK_LIVE || 'price_1SP7aDD1Ykg9qG9IPlotX2vt', // LIVE MODE: Set in env
     name: 'Spark',
     price: 900, // $9.00 in cents
     currency: 'usd',
@@ -40,7 +47,8 @@ export const SUBSCRIPTION_PLANS: Record<string, SubscriptionPlan> = {
   },
   Core: {
     id: 'Core',
-    stripeId: 'price_1SP7aED1Ykg9qG9IithW6lYq', // Core Plan $29/mo
+    stripeId: 'price_1SP7aED1Ykg9qG9IithW6lYq', // TEST MODE: Core Plan $29/mo
+    stripeIdLive: process.env.STRIPE_PRICE_CORE_LIVE || 'price_1SP7aED1Ykg9qG9IithW6lYq', // LIVE MODE: Set in env
     name: 'Core',
     price: 2900, // $29.00 in cents
     currency: 'usd',
@@ -52,7 +60,8 @@ export const SUBSCRIPTION_PLANS: Record<string, SubscriptionPlan> = {
   },
   Apex: {
     id: 'Apex',
-    stripeId: 'price_1SP7aFD1Ykg9qG9IMgDFklF9', // Apex Plan $199/mo
+    stripeId: 'price_1SP7aFD1Ykg9qG9IMgDFklF9', // TEST MODE: Apex Plan $199/mo
+    stripeIdLive: process.env.STRIPE_PRICE_APEX_LIVE || 'price_1SP7aFD1Ykg9qG9IMgDFklF9', // LIVE MODE: Set in env
     name: 'Apex',
     price: 19900, // $199.00 in cents
     currency: 'usd',
@@ -65,12 +74,26 @@ export const SUBSCRIPTION_PLANS: Record<string, SubscriptionPlan> = {
 };
 
 export class StripeService {
+  // Get the correct price ID based on mode (test/live)
+  static getPriceId(plan: SubscriptionPlan): string {
+    const isLive = isProductionMode();
+    const priceId = isLive ? plan.stripeIdLive : plan.stripeId;
+    
+    if (!priceId) {
+      throw new Error(`Missing price ID for plan ${plan.id} in ${isLive ? 'live' : 'test'} mode`);
+    }
+    
+    console.log(`💳 Using ${isLive ? 'LIVE' : 'TEST'} price ID for ${plan.id}: ${priceId}`);
+    return priceId;
+  }
+
   // Create customer
   static async createCustomer(email: string, userId: number): Promise<Stripe.Customer> {
     return await stripe.customers.create({
       email,
       metadata: {
-        userId: userId.toString()
+        userId: userId.toString(),
+        mode: isProductionMode() ? 'live' : 'test'
       }
     });
   }

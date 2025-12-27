@@ -1,6 +1,6 @@
 import express from 'express';
 import { authMiddleware } from '../middleware/auth';
-import { StripeService, SUBSCRIPTION_PLANS } from '../services/stripeService';
+import { StripeService, SUBSCRIPTION_PLANS, isProductionMode } from '../services/stripeService';
 import { pool } from '../database/connection';
 
 const router = express.Router();
@@ -102,34 +102,44 @@ router.post('/select-plan', authMiddleware, async (req, res): Promise<any> => {
       const successUrl = `${process.env.FRONTEND_URL || 'http://localhost:3003'}/dashboard?new=true&session_id={CHECKOUT_SESSION_ID}`;
       const cancelUrl = `${process.env.FRONTEND_URL || 'http://localhost:3003'}/subscription-selection?canceled=true`;
 
+      // Get correct price ID based on mode (test/live)
+      const priceId = StripeService.getPriceId(plan);
+
       const session = await StripeService.createCheckoutSession(
         stripeCustomerId,
-        plan.stripeId || plan.id,
+        priceId,
         userId,
         planId,
         successUrl,
         cancelUrl
       );
 
-      // TEST MODE WORKAROUND: Automatically activate subscription after session creation
-      console.log('🔧 TEST MODE: Auto-activating subscription for user:', userId, 'plan:', planId);
+      // TEST MODE ONLY: Automatically activate subscription after session creation
+      // In production mode, activation happens ONLY via webhook
+      const isTestMode = !isProductionMode();
       
-      try {
-        await pool.query(
-          `UPDATE users SET 
-           subscription_plan = $1, 
-           subscription_status = 'active',
-           stripe_subscription_id = $2,
-           onboarding_step = 'auth_method_selection',
-           updated_at = CURRENT_TIMESTAMP
-           WHERE id = $3`,
-          [planId, session.id, userId]
-        );
+      if (isTestMode) {
+        console.log('🔧 TEST MODE: Auto-activating subscription for user:', userId, 'plan:', planId);
         
-        console.log('🔧 TEST MODE: Subscription auto-activated successfully');
-      } catch (activationError) {
-        console.error('🔧 TEST MODE: Auto-activation failed:', activationError);
-        // Continue anyway - user can still use manual activation fallback
+        try {
+          await pool.query(
+            `UPDATE users SET 
+             subscription_plan = $1, 
+             subscription_status = 'active',
+             stripe_subscription_id = $2,
+             onboarding_step = 'auth_method_selection',
+             updated_at = CURRENT_TIMESTAMP
+             WHERE id = $3`,
+            [planId, session.id, userId]
+          );
+          
+          console.log('🔧 TEST MODE: Subscription auto-activated successfully');
+        } catch (activationError) {
+          console.error('🔧 TEST MODE: Auto-activation failed:', activationError);
+          // Continue anyway - user can still use manual activation fallback
+        }
+      } else {
+        console.log('🚀 PRODUCTION MODE: Subscription will be activated via webhook only');
       }
 
       return res.json({ 
@@ -138,7 +148,8 @@ router.post('/select-plan', authMiddleware, async (req, res): Promise<any> => {
         url: session.url,
         workflow: 'stripe',
         plan: planId,
-        testModeActivated: true // Indicate that subscription was auto-activated
+        testModeActivated: isTestMode, // Indicate if subscription was auto-activated
+        mode: isTestMode ? 'test' : 'live'
       });
     }
 
@@ -310,72 +321,182 @@ router.post('/test-webhook', async (req, res) => {
 
 // Stripe webhook handler (express.raw middleware is already applied in app.ts)
 router.post('/webhook', async (req, res) => {
-  // ALWAYS log that we received something
-  console.log('🚨 WEBHOOK HANDLER CALLED - Start of function');
+  console.log('🚨 WEBHOOK HANDLER CALLED');
   
   try {
     const sig = req.headers['stripe-signature'] as string;
-    console.log('� WEBHOOK - Got signature header');
-
-    console.log('🚨 WEBHOOK - Request details:', {
-      timestamp: new Date().toISOString(),
-      signature: sig ? 'present' : 'missing',
-      bodyLength: req.body?.length,
-      bodyType: typeof req.body,
-      hasWebhookSecret: !!process.env.STRIPE_WEBHOOK_SECRET
-    });
-
-    // Try to construct the event
-    console.log('� WEBHOOK - Constructing Stripe event...');
-    const event = StripeService.constructWebhookEvent(req.body, sig);
-    console.log('� WEBHOOK - Event constructed successfully:', event.type);
-
-    // Handle the event
-    if (event.type === 'checkout.session.completed') {
-      console.log('🚨 WEBHOOK - Processing checkout.session.completed');
-      const session = event.data.object as any;
-      const userId = parseInt(session.metadata?.userId);
-      const planId = session.metadata?.planId;
-      
-      if (!userId) {
-        console.log('� WEBHOOK - No userId in metadata:', session.metadata);
-        res.json({ received: true, warning: 'No userId in metadata' });
-        return;
-      }
-
-      if (!planId) {
-        console.log('� WEBHOOK - No planId in metadata:', session.metadata);
-        res.json({ received: true, warning: 'No planId in metadata' });
-        return;
-      }
-
-      console.log('🚨 WEBHOOK - Updating user:', userId, 'with plan:', planId);
-      
-      // Update user subscription and advance onboarding step
-      const updateResult = await pool.query(
-        `UPDATE users SET 
-         subscription_plan = $1, 
-         subscription_status = 'active',
-         stripe_subscription_id = $2,
-         onboarding_step = 'auth_method_selection',
-         updated_at = CURRENT_TIMESTAMP
-         WHERE id = $3
-         RETURNING id, email, onboarding_step`,
-        [planId, session.subscription, userId]
-      );
-      
-      console.log('� WEBHOOK - Database update result:', updateResult.rows);
-    } else {
-      console.log('🚨 WEBHOOK - Ignoring event type:', event.type);
+    
+    if (!sig) {
+      console.error('❌ WEBHOOK - No signature header');
+      return res.status(400).json({ error: 'No signature header' });
     }
 
-    console.log('🚨 WEBHOOK - Sending success response');
-    res.json({ received: true });
+    // Construct and verify the event
+    const event = StripeService.constructWebhookEvent(req.body, sig);
+    console.log(`📥 WEBHOOK - Event received: ${event.type} (${event.id})`);
+
+    // Log event to database
+    const eventData = event.data.object as any;
+    const metadata = eventData.metadata || {};
     
-  } catch (error) {
-    console.log('� WEBHOOK - ERROR CAUGHT:', error);
-    console.error('❌ Full webhook error:', error);
-    res.status(400).json({ error: `Webhook Error: ${error}` });
+    try {
+      await pool.query(
+        `INSERT INTO subscription_events 
+         (event_id, event_type, user_id, stripe_customer_id, stripe_subscription_id, 
+          stripe_session_id, payment_status, subscription_status, plan_id, 
+          amount, currency, metadata, raw_event, processed)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+         ON CONFLICT (event_id) DO NOTHING`,
+        [
+          event.id,
+          event.type,
+          metadata.userId ? parseInt(metadata.userId) : null,
+          eventData.customer || null,
+          eventData.subscription || null,
+          eventData.id || null, // Session ID for checkout events
+          eventData.payment_status || null,
+          eventData.status || null,
+          metadata.planId || null,
+          eventData.amount_total || eventData.amount || null,
+          eventData.currency || null,
+          JSON.stringify(metadata),
+          JSON.stringify(event),
+          false
+        ]
+      );
+      console.log(`✅ WEBHOOK - Event ${event.id} logged to database`);
+    } catch (logError) {
+      console.error('⚠️ WEBHOOK - Failed to log event (non-critical):', logError);
+    }
+
+    // Process specific event types
+    let processed = false;
+    let processingError = null;
+
+    try {
+      switch (event.type) {
+        case 'checkout.session.completed': {
+          console.log('💳 WEBHOOK - Processing checkout.session.completed');
+          const session = eventData;
+          const userId = parseInt(session.metadata?.userId);
+          const planId = session.metadata?.planId;
+          
+          if (!userId || !planId) {
+            throw new Error(`Missing userId or planId in metadata`);
+          }
+
+          console.log(`🚨 WEBHOOK - Activating subscription for user ${userId}, plan ${planId}`);
+          
+          // Activate subscription
+          const updateResult = await pool.query(
+            `UPDATE users SET 
+             subscription_plan = $1, 
+             subscription_status = 'active',
+             stripe_subscription_id = $2,
+             onboarding_step = 'auth_method_selection',
+             updated_at = CURRENT_TIMESTAMP
+             WHERE id = $3
+             RETURNING id, email`,
+            [planId, session.subscription, userId]
+          );
+          
+          if (updateResult.rows.length > 0) {
+            console.log(`✅ WEBHOOK - User ${userId} subscription activated successfully`);
+            processed = true;
+          } else {
+            throw new Error(`User ${userId} not found`);
+          }
+          break;
+        }
+
+        case 'customer.subscription.updated': {
+          console.log('🔄 WEBHOOK - Processing customer.subscription.updated');
+          const subscription = eventData;
+          
+          // Update subscription status if it changes (e.g., past_due, canceled)
+          await pool.query(
+            `UPDATE users SET 
+             subscription_status = $1,
+             updated_at = CURRENT_TIMESTAMP
+             WHERE stripe_subscription_id = $2`,
+            [subscription.status, subscription.id]
+          );
+          
+          console.log(`✅ WEBHOOK - Subscription ${subscription.id} status updated to ${subscription.status}`);
+          processed = true;
+          break;
+        }
+
+        case 'customer.subscription.deleted': {
+          console.log('❌ WEBHOOK - Processing customer.subscription.deleted');
+          const subscription = eventData;
+          
+          // Mark subscription as canceled
+          await pool.query(
+            `UPDATE users SET 
+             subscription_status = 'canceled',
+             updated_at = CURRENT_TIMESTAMP
+             WHERE stripe_subscription_id = $1`,
+            [subscription.id]
+          );
+          
+          console.log(`✅ WEBHOOK - Subscription ${subscription.id} marked as canceled`);
+          processed = true;
+          break;
+        }
+
+        case 'invoice.payment_succeeded': {
+          console.log('💰 WEBHOOK - Processing invoice.payment_succeeded');
+          processed = true; // Just log it for now
+          break;
+        }
+
+        case 'invoice.payment_failed': {
+          console.log('⚠️ WEBHOOK - Processing invoice.payment_failed');
+          const invoice = eventData;
+          
+          // Mark subscription status as past_due if payment fails
+          if (invoice.subscription) {
+            await pool.query(
+              `UPDATE users SET 
+               subscription_status = 'past_due',
+               updated_at = CURRENT_TIMESTAMP
+               WHERE stripe_subscription_id = $1`,
+              [invoice.subscription]
+            );
+            console.log(`⚠️ WEBHOOK - Subscription marked as past_due due to failed payment`);
+          }
+          processed = true;
+          break;
+        }
+
+        default:
+          console.log(`ℹ️ WEBHOOK - Unhandled event type: ${event.type}`);
+          processed = true; // Mark as processed even if not handled
+      }
+    } catch (error: any) {
+      console.error(`❌ WEBHOOK - Error processing ${event.type}:`, error);
+      processingError = error.message;
+    }
+
+    // Update event processing status
+    try {
+      await pool.query(
+        `UPDATE subscription_events 
+         SET processed = $1, processing_error = $2, processed_at = CURRENT_TIMESTAMP
+         WHERE event_id = $3`,
+        [processed, processingError, event.id]
+      );
+    } catch (updateError) {
+      console.error('⚠️ WEBHOOK - Failed to update event status:', updateError);
+    }
+
+    console.log(`✅ WEBHOOK - Response sent for event ${event.id}`);
+    res.json({ received: true, processed, event_id: event.id });
+    
+  } catch (error: any) {
+    console.error('❌ WEBHOOK - Fatal error:', error);
+    res.status(400).json({ error: `Webhook Error: ${error.message}` });
   }
 });
 
