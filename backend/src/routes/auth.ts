@@ -56,8 +56,8 @@ const loginValidation = [
     .withMessage('Password is required'),
   body('twoFactorToken')
     .optional()
-    .isLength({ min: 6, max: 6 })
-    .withMessage('2FA token must be 6 digits'),
+    .isLength({ min: 6, max: 8 })
+    .withMessage('2FA token must be 6 digits or 8-character backup code'),
 ];
 
 const forgotPasswordValidation = [
