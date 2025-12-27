@@ -54,51 +54,31 @@ export class EmailService {
     const mailOptions = {
       from: this.fromEmail,
       to: email,
-      subject: '🚀 Willkommen bei Stararc - Email bestätigen',
+      subject: 'Stararc - E-Mail bestätigen',
       html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background: linear-gradient(135deg, #1f2937 0%, #3b82f6 100%); color: white;">
-          <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="color: #60a5fa; font-size: 32px; margin: 0;">🚀 Stararc</h1>
-            <p style="color: #d1d5db; margin: 10px 0;">Zero-Knowledge Portfolio Management</p>
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px;">
+          <h2 style="color: #1f2937; margin-bottom: 20px;">E-Mail bestätigen</h2>
+          
+          <p style="color: #4b5563; line-height: 1.6; margin-bottom: 30px;">
+            Bitte bestätigen Sie Ihre E-Mail-Adresse, um Ihr Stararc-Konto zu aktivieren:
+          </p>
+          
+          <div style="margin: 30px 0;">
+            <a href="${verificationUrl}" 
+               style="display: inline-block; background: #3b82f6; color: white; padding: 12px 30px; 
+                      text-decoration: none; border-radius: 6px; font-weight: 500;">
+              E-Mail bestätigen
+            </a>
           </div>
           
-          <div style="background: rgba(255, 255, 255, 0.1); padding: 30px; border-radius: 10px; backdrop-filter: blur(10px);">
-            <h2 style="color: #f3f4f6; margin-bottom: 20px;">Willkommen ${alias}!</h2>
-            
-            <p style="color: #d1d5db; line-height: 1.6; margin-bottom: 25px;">
-              Vielen Dank für Ihre Registrierung bei Stararc. Um Ihr Konto zu aktivieren und 
-              unsere Privacy-by-Design Portfolio Management Plattform zu nutzen, bestätigen Sie 
-              bitte Ihre Email-Adresse.
-            </p>
-            
-            <div style="text-align: center; margin: 30px 0;">
-              <a href="${verificationUrl}" 
-                 style="display: inline-block; background: #10b981; color: white; padding: 12px 30px; 
-                        text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">
-                ✅ Email bestätigen
-              </a>
-            </div>
-            
-            <div style="background: rgba(0, 0, 0, 0.2); padding: 15px; border-radius: 8px; margin: 20px 0;">
-              <h3 style="color: #fbbf24; margin: 0 0 10px 0;">🛡️ Privacy-First Approach</h3>
-              <ul style="color: #d1d5db; margin: 0; padding-left: 20px;">
-                <li>Zero-Knowledge Authentifizierung</li>
-                <li>Keine Datenspeicherung sensibler Informationen</li>
-                <li>Swiss Privacy-by-Design Standards</li>
-                <li>End-to-End verschlüsselte Übertragung</li>
-              </ul>
-            </div>
-            
-            <p style="color: #9ca3af; font-size: 14px; margin-top: 25px;">
-              Falls Sie dieses Konto nicht erstellt haben, können Sie diese Email ignorieren.
-              Der Verifizierungslink läuft in 24 Stunden ab.
-            </p>
-          </div>
+          <p style="color: #6b7280; font-size: 14px; margin-top: 30px;">
+            Der Link ist 24 Stunden gültig.
+          </p>
           
-          <div style="text-align: center; margin-top: 20px; color: #6b7280; font-size: 12px;">
-            <p>🇨🇭 Made in Switzerland | Privacy-by-Design | Zero-Knowledge</p>
-            <p>© ${new Date().getFullYear()} Stararc.one - Alle Rechte vorbehalten</p>
-          </div>
+          <p style="color: #9ca3af; font-size: 12px; margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+            Falls der Button nicht funktioniert:<br>
+            <a href="${verificationUrl}" style="color: #3b82f6; word-break: break-all;">${verificationUrl}</a>
+          </p>
         </div>
       `
     };
