@@ -207,15 +207,15 @@ const TwoFactorManagement: React.FC = () => {
                 
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
-                    2FA-Code:
+                    2FA-Code oder Backup-Code:
                   </label>
                   <input
                     type="text"
                     value={disableForm.twoFactorToken}
-                    onChange={(e) => setDisableForm({ ...disableForm, twoFactorToken: e.target.value.replace(/\D/g, '').slice(0, 6) })}
-                    className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white"
-                    placeholder="123456"
-                    maxLength={6}
+                    onChange={(e) => setDisableForm({ ...disableForm, twoFactorToken: e.target.value.replace(/[^0-9A-Fa-f]/g, '').slice(0, 8) })}
+                    className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white font-mono"
+                    placeholder="123456 oder A1B2C3D4"
+                    maxLength={8}
                   />
                 </div>
               </div>

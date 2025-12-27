@@ -183,7 +183,7 @@ router.post('/disable', authMiddleware, async (req: AuthRequest, res): Promise<a
 
     // Verify password for security
     const user = await pool.query(
-      'SELECT password_hash, encrypted_two_factor_secret, two_factor_enabled FROM users WHERE id = $1',
+      'SELECT password_hash, encrypted_two_factor_secret, encrypted_backup_codes, two_factor_enabled FROM users WHERE id = $1',
       [userId]
     );
 
@@ -198,24 +198,49 @@ router.post('/disable', authMiddleware, async (req: AuthRequest, res): Promise<a
       return res.status(400).json({ error: 'Invalid password' });
     }
 
-    // Decrypt and verify 2FA token
+    // Check if token is a backup code or 2FA token
     const { UserEncryptionService } = require('../services/userEncryptionService');
-    let twoFactorSecret;
-    try {
-      twoFactorSecret = UserEncryptionService.decryptWithMasterKey(user.rows[0].encrypted_two_factor_secret);
-    } catch (error) {
-      return res.status(500).json({ error: 'Failed to decrypt 2FA secret' });
+    let verified = false;
+    const isBackupCode = /^[0-9A-Fa-f]{8}$/.test(token);
+
+    if (isBackupCode && user.rows[0].encrypted_backup_codes) {
+      // Try to verify as backup code
+      try {
+        const decryptedCodesJson = UserEncryptionService.decryptWithMasterKey(user.rows[0].encrypted_backup_codes);
+        const backupCodes: string[] = JSON.parse(decryptedCodesJson);
+        
+        const codeExists = backupCodes.some(code => 
+          code.toUpperCase() === token.toUpperCase()
+        );
+        
+        if (codeExists) {
+          verified = true;
+          console.log('✅ Backup code verified for 2FA disable');
+        }
+      } catch (error) {
+        console.error('Error verifying backup code:', error);
+      }
     }
 
-    const verified = speakeasy.totp.verify({
-      secret: twoFactorSecret,
-      encoding: 'base32',
-      token: token,
-      window: 1
-    });
+    // If not verified as backup code, try as regular 2FA token
+    if (!verified) {
+      let twoFactorSecret;
+      try {
+        twoFactorSecret = UserEncryptionService.decryptWithMasterKey(user.rows[0].encrypted_two_factor_secret);
+      } catch (error) {
+        return res.status(500).json({ error: 'Failed to decrypt 2FA secret' });
+      }
+
+      verified = speakeasy.totp.verify({
+        secret: twoFactorSecret,
+        encoding: 'base32',
+        token: token,
+        window: 1
+      });
+    }
 
     if (!verified) {
-      return res.status(400).json({ error: 'Invalid 2FA token' });
+      return res.status(400).json({ error: 'Invalid 2FA token or backup code' });
     }
 
     // Disable 2FA
