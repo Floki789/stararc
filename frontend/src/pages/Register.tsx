@@ -103,16 +103,24 @@ const Register: React.FC = () => {
       const data = await response.json();
 
       if (response.ok) {
-        // Since email verification is disabled for testing, we can log the user in immediately
-        if (data.user && data.token) {
-          // Store user data and token from backend
+        // Check if email verification is required
+        if (data.requiresVerification) {
+          // Email verification required - show message with email
+          setSuccessMessage(
+            data.message || 
+            `Registrierung erfolgreich! Wir haben eine Bestätigungs-E-Mail an ${data.email || 'Ihre E-Mail-Adresse'} gesendet. Bitte überprüfen Sie Ihr Postfach und klicken Sie auf den Bestätigungslink.`
+          );
+          // Clear form
+          setFormData({
+            email: '',
+            password: '',
+            confirmPassword: ''
+          });
+        } else if (data.user && data.token) {
+          // No email verification - log in immediately (fallback for testing)
           localStorage.setItem('user', JSON.stringify(data.user));
           localStorage.setItem('token', data.token);
-          
-          // Update AuthContext with real token from backend
           login(data.user, data.token);
-          
-          // New users always start with subscription selection
           navigate('/subscription-selection');
         } else {
           setSuccessMessage(t('auth.registerSuccess'));
