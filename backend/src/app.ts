@@ -83,9 +83,12 @@ app.use(cors({
     'http://localhost:3003',
     'https://spaceship.paymebits.com', // Production Spaceship domain
     'https://spaceship-app-05fdc7b20f43.herokuapp.com', // Production Spaceship Heroku domain
+    'https://spaceship.stararc.one', // Production Spaceship custom domain
     'https://paymebits.com', // Production StarArc domain
     'https://www.paymebits.com', // Production StarArc www domain
-    'https://stararc-app-e576e504324e.herokuapp.com' // Production StarArc Heroku domain
+    'https://stararc-app-e576e504324e.herokuapp.com', // Production StarArc Heroku domain
+    'https://stararc.one', // Production StarArc custom domain
+    'https://www.stararc.one' // Production StarArc custom www domain
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
