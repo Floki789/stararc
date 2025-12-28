@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import { Shield, Star, Crown } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
-import { useLanguage } from '../contexts/LanguageContext';
 import StripeAPIService from '../services/stripeService';
 import SpaceshipAccessButton from '../components/SpaceshipAccessButton';
 import ApexManagement from '../components/ApexManagement';
@@ -19,7 +18,6 @@ interface Subscription {
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const { t } = useLanguage();
   const [subscription, setSubscription] = useState<Subscription | null>(null);
   const [loading, setLoading] = useState(true);
   const [pollingError, setPollingError] = useState(false);
@@ -261,13 +259,8 @@ const Dashboard: React.FC = () => {
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <div className="text-white text-xl mb-2">
-            {isNewSubscription ? 'Aktiviere Subscription...' : 'Lädt...'}
+            Lädt...
           </div>
-          {isNewSubscription && (
-            <p className="text-slate-400 text-sm">
-              Bitte warten, dies kann bis zu 20 Sekunden dauern
-            </p>
-          )}
         </div>
       </div>
     );
