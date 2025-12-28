@@ -111,7 +111,8 @@ export class StripeService {
       email,
       metadata: {
         userId: userId.toString(),
-        mode: isProductionMode() ? 'live' : 'test'
+        mode: isProductionMode() ? 'live' : 'test',
+        source: 'stararc'
       }
     });
   }
@@ -140,6 +141,14 @@ export class StripeService {
       metadata: {
         userId: userId.toString(),
         planId: planId
+      },
+      subscription_data: {
+        metadata: {
+          userId: userId.toString(),
+          planId: planId,
+          source: 'stararc',
+          mode: isProductionMode() ? 'live' : 'test'
+        }
       },
       allow_promotion_codes: true,
     });

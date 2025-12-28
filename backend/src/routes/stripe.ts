@@ -447,7 +447,34 @@ router.post('/webhook', async (req, res): Promise<any> => {
 
         case 'invoice.payment_succeeded': {
           console.log('💰 WEBHOOK - Processing invoice.payment_succeeded');
-          processed = true; // Just log it for now
+          const invoice = eventData;
+          
+          // Get subscription details to access metadata
+          if (invoice.subscription) {
+            try {
+              const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+              const subscription = await stripe.subscriptions.retrieve(invoice.subscription);
+              const userId = subscription.metadata?.userId;
+              
+              if (userId) {
+                // Update last payment date for the user
+                await pool.query(
+                  `UPDATE users SET 
+                   subscription_status = 'active',
+                   updated_at = CURRENT_TIMESTAMP
+                   WHERE id = $1 AND stripe_subscription_id = $2`,
+                  [userId, invoice.subscription]
+                );
+                console.log(`💰 WEBHOOK - Payment confirmed for user ${userId}`);
+              } else {
+                console.warn(`⚠️ WEBHOOK - No userId in subscription metadata for ${invoice.subscription}`);
+              }
+            } catch (error) {
+              console.error('⚠️ WEBHOOK - Error retrieving subscription:', error);
+            }
+          }
+          
+          processed = true;
           break;
         }
 
