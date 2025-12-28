@@ -407,7 +407,7 @@ const Dashboard: React.FC = () => {
           </div>
           
           {/* Subscription Management Actions */}
-          {subscription.plan !== 'Free' && (
+          {subscription.plan && subscription.plan.toLowerCase() !== 'free' && (
             <div className="mt-4 pt-4 border-t border-slate-600/50 flex flex-wrap gap-3">
               <button
                 onClick={() => navigate('/subscription-selection')}
