@@ -163,8 +163,10 @@ const PlanCards: React.FC<PlanCardsProps> = ({
     {
       id: 'Apex',
       name: 'Apex',
-      price: 'Enterprise',
-      priceValue: 0, // Will be custom pricing
+      priceMonthly: 'Enterprise',
+      priceYearly: 'Enterprise',
+      priceValueMonthly: 0, // Will be custom pricing
+      priceValueYearly: 0, // Will be custom pricing
       currency: 'usd',
       description: 'Für Vermögensberater und -verwalter',
       icon: Crown,

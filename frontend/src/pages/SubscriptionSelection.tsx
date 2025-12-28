@@ -96,7 +96,7 @@ const SubscriptionSelection: React.FC = () => {
 
   
 
-  const handlePlanSelection = async (planId: string, priceValue: number, interval: 'month' | 'year' = 'month') => {
+  const handlePlanSelection = async (planId: string, _priceValue: number, interval: 'month' | 'year' = 'month') => {
     console.log('handlePlanSelection called with planId:', planId, 'interval:', interval);
     
     if (!user) {
