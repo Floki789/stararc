@@ -1,6 +1,5 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useLanguage } from '../contexts/LanguageContext';
 import { 
   Users,
   Calculator,
@@ -11,7 +10,6 @@ import {
 
 const BudgetShowcase: React.FC = () => {
   const navigate = useNavigate();
-  const { t } = useLanguage();
   
   const handleDemoLogin = async () => {
     // Set demo credentials and navigate to login page with auto-login
