@@ -633,22 +633,22 @@
         "part1": "Maximale Sicherheit",
         "part2": "& Datenschutz"
       },
-      "subtitle": "Bank-Level Sicherheit mit modernster Verschlüsselungstechnologie für alle Ihre digitalen und physischen Assets",
+      "subtitle": "Bank-Level Sicherheit mit Zero-Knowledge Architektur. Login- und Finanzdaten auf getrennten Servern mit sicherer Kommunikation.",
       "features": {
         "institutions": {
           "title": "Finanzinstitute",
-          "description": "Verwaltung von Banken, Brokern und Depots",
-          "details": "API-Verschlüsselung & OAuth 2.0"
+          "description": "Verwaltung von Banken, Brokern und Depots mit Trennung von Verwaltung und Aufbewahrung",
+          "details": "Fremd- & Selbstverwahrung"
         },
         "physicalVaults": {
-          "title": "Physische Tresore",
-          "description": "Verwaltung von Aufbewahrungsorten, Schliessfächern und Treuhand",
-          "details": "Standort-Tracking & Inventar"
+          "title": "Physische Vaults",
+          "description": "Management von Schl\u00fcsselboxen, Bankschliessfächern und physischen Aufbewahrungsorten",
+          "details": "Standort & Zugriffs-Tracking"
         },
         "digitalVaults": {
-          "title": "Digitale Tresore",
-          "description": "Verschlüsselte Cloud-Storage Integration",
-          "details": "AES-256 Verschlüsselung"
+          "title": "Digitale Vaults",
+          "description": "Sichere Speicherung sensibler Daten, Seeds und Passw\u00f6rter",
+          "details": "AES-256-GCM Verschl\u00fcsselung"
         },
         "singleSig": {
           "title": "Bitcoin SingleSig",
@@ -661,9 +661,9 @@
           "details": "2-of-3 bis 15-of-15 Setups"
         },
         "separation": {
-          "title": "User-Asset Trennung",
-          "description": "Strikte Datenisolation",
-          "details": "Zero-Knowledge Architektur"
+          "title": "Getrennte Server-Architektur",
+          "description": "Login-Server und Datenbank-Server sind getrennt mit sicherer Kommunikation",
+          "details": "Multi-Layer Security (JWT, TLS 1.3)"
         }
       },
       "privacy": {
@@ -671,20 +671,20 @@
         "subtitle": "Wir setzen die höchsten Standards für den Schutz Ihrer Privatsphäre um",
         "principles": {
           "noSales": {
-            "title": "Keine Datenverkäufe",
-            "description": "Ihre Daten gehören nur Ihnen"
+            "title": "Keine Datenweitergabe",
+            "description": "Kein Verkauf oder Weitergabe Ihrer Daten an Dritte"
           },
           "encryption": {
-            "title": "End-to-End Verschlüsselung",
-            "description": "Daten sind nur für Sie lesbar"
+            "title": "AES-256-GCM Verschl\u00fcsselung",
+            "description": "Client-seitig verschl\u00fcsselt - nur f\u00fcr Sie lesbar"
           },
           "local": {
-            "title": "Lokale Datenhaltung",
-            "description": "Server in der Schweiz"
+            "title": "Zero-Knowledge Architektur",
+            "description": "Wir k\u00f6nnen Ihre Daten nicht lesen"
           },
           "compliance": {
-            "title": "Compliance",
-            "description": "DSGVO & Swiss Banking Standards"
+            "title": "DSGVO-Compliant",
+            "description": "Schweizer Standards (bcrypt, PBKDF2, TLS 1.3)"
           }
         }
       },

@@ -11,8 +11,10 @@ export const isProductionMode = (): boolean => {
 
 export interface SubscriptionPlan {
   id: string;
-  stripeId?: string; // Test mode Stripe price ID
-  stripeIdLive?: string; // Production mode Stripe price ID
+  stripeId?: string; // Test mode Stripe price ID (monthly)
+  stripeIdLive?: string; // Production mode Stripe price ID (monthly)
+  stripeIdYearly?: string; // Test mode Stripe price ID (yearly)
+  stripeIdYearlyLive?: string; // Production mode Stripe price ID (yearly)
   name: string;
   price: number;
   currency: string;
@@ -35,7 +37,8 @@ export const SUBSCRIPTION_PLANS: Record<string, SubscriptionPlan> = {
   Spark: {
     id: 'Spark',
     stripeId: 'price_1SP7aDD1Ykg9qG9IPlotX2vt', // TEST MODE: Spark Plan $9/mo
-    stripeIdLive: process.env.STRIPE_PRICE_SPARK_LIVE || 'price_1SP7aDD1Ykg9qG9IPlotX2vt', // LIVE MODE: Set in env
+    stripeIdLive: process.env.STRIPE_PRICE_SPARK_LIVE || 'price_1SjH9TD1Ykg9qG9IIjNNkaiE', // LIVE MODE: $9/mo
+    stripeIdYearlyLive: process.env.STRIPE_PRICE_SPARK_YEARLY || 'price_1SjHA0D1Ykg9qG9IhVKXRtdj', // LIVE MODE: $90/yr
     name: 'Spark',
     price: 900, // $9.00 in cents
     currency: 'usd',
@@ -45,9 +48,37 @@ export const SUBSCRIPTION_PLANS: Record<string, SubscriptionPlan> = {
       'Small-Medium Portfolios'
     ]
   },
+  Nova: {
+    id: 'Nova',
+    stripeId: 'price_1SP7aED1Ykg9qG9IithW6lYq', // TEST MODE: Nova Plan $19/mo
+    stripeIdLive: process.env.STRIPE_PRICE_NOVA_LIVE || 'price_1Sj5YBD1Ykg9qG9I1BNJoGiu', // LIVE MODE: $19/mo
+    stripeIdYearlyLive: process.env.STRIPE_PRICE_NOVA_YEARLY || 'price_1SjH6VD1Ykg9qG9I1rm5STKQ', // LIVE MODE: $190/yr
+    name: 'Nova',
+    price: 1900, // $19.00 in cents
+    currency: 'usd',
+    interval: 'month',
+    features: [
+      'Complete Suite',
+      'Large Portfolios'
+    ]
+  },
+  Galaxy: {
+    id: 'Galaxy',
+    stripeId: 'price_1SP7aFD1Ykg9qG9IMgDFklF9', // TEST MODE: Galaxy Plan $39/mo
+    stripeIdLive: process.env.STRIPE_PRICE_GALAXY_LIVE || 'price_1SjHDfD1Ykg9qG9IQz6e6RrF', // LIVE MODE: $39/mo
+    stripeIdYearlyLive: process.env.STRIPE_PRICE_GALAXY_YEARLY || 'price_1SjHEeD1Ykg9qG9IPRUpYYfO', // LIVE MODE: $390/yr
+    name: 'Galaxy',
+    price: 3900, // $39.00 in cents
+    currency: 'usd',
+    interval: 'month',
+    features: [
+      'Complete Suite',
+      'Enterprise Level'
+    ]
+  },
   Core: {
     id: 'Core',
-    stripeId: 'price_1SP7aED1Ykg9qG9IithW6lYq', // TEST MODE: Core Plan $29/mo
+    stripeId: 'price_1SP7aED1Ykg9qG9IithW6lYq', // TEST MODE: Core Plan $29/mo (deprecated)
     stripeIdLive: process.env.STRIPE_PRICE_CORE_LIVE || 'price_1SP7aED1Ykg9qG9IithW6lYq', // LIVE MODE: Set in env
     name: 'Core',
     price: 2900, // $29.00 in cents

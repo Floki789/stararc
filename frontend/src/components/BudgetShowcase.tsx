@@ -122,56 +122,6 @@ const BudgetShowcase: React.FC = () => {
           })}
         </div>
 
-        {/* Key Benefits Section */}
-        <div className="bg-gradient-to-r from-slate-800/50 to-gray-800/50 backdrop-blur-sm rounded-3xl p-8 sm:p-12 md:p-16 border border-gray-700/50">
-          <div className="text-center mb-8 sm:mb-12">
-            <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-4">
-              Budget & Portfolio Cockpit
-            </h3>
-            <p className="text-base sm:text-lg md:text-xl text-gray-400 max-w-2xl mx-auto">
-              Visualisieren Sie Ihre Finanzen in einem übersichtlichen Cockpit
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            <div className="text-center">
-              <div className="inline-flex p-3 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 mb-4">
-                <Star className="w-6 h-6 text-white" />
-              </div>
-              <h4 className="text-lg font-semibold text-white mb-2">
-                Von Budgetplanung bis Portfolio-Übersicht
-              </h4>
-              <p className="text-gray-400">
-                Alles an einem Ort – nahtlose Integration zwischen Budget und Portfolio
-              </p>
-            </div>
-            
-            <div className="text-center">
-              <div className="inline-flex p-3 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 mb-4">
-                <Smartphone className="w-6 h-6 text-white" />
-              </div>
-              <h4 className="text-lg font-semibold text-white mb-2">
-                Echtzeit-Visualisierung
-              </h4>
-              <p className="text-gray-400">
-                Sehen Sie sofort, wo Ihr Geld hingeht und wie viel Sie sparen
-              </p>
-            </div>
-            
-            <div className="text-center md:col-span-2 lg:col-span-1">
-              <div className="inline-flex p-3 rounded-full bg-gradient-to-r from-purple-500 to-violet-500 mb-4">
-                <Target className="w-6 h-6 text-white" />
-              </div>
-              <h4 className="text-lg font-semibold text-white mb-2">
-                Sparrate-Berechnung
-              </h4>
-              <p className="text-gray-400">
-                Automatische Berechnung Ihrer monatlichen Sparrate und Trends
-              </p>
-            </div>
-          </div>
-        </div>
-
         {/* Bottom Call to Action */}
         <div className="text-center mt-12 sm:mt-16 md:mt-20">
           <p className="text-base sm:text-lg md:text-xl text-gray-400 mb-6 sm:mb-8">

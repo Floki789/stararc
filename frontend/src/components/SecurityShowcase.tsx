@@ -122,6 +122,40 @@ const SecurityShowcase: React.FC = () => {
           </p>
         </div>
 
+        {/* Privacy Principles Section */}
+        <div className="bg-gray-800/40 backdrop-blur-sm rounded-3xl p-8 sm:p-10 md:p-12 border border-gray-700/30 mb-16 sm:mb-20 md:mb-24">
+          <div className="text-center mb-8 sm:mb-10 md:mb-12">
+            <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-blue-400 mb-4">
+              {t('homepage.securityShowcase.privacy.title')}
+            </h3>
+            <p className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
+              {t('homepage.securityShowcase.privacy.subtitle')}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+            {privacyPrinciples.map((principle, index) => {
+              const Icon = principle.icon;
+              return (
+                <div
+                  key={index}
+                  className="flex flex-col items-center text-center group"
+                >
+                  <div className="bg-blue-500/20 p-3 sm:p-4 rounded-full mb-4 group-hover:scale-110 group-hover:bg-blue-500/30 transition-all duration-300">
+                    <Icon className="w-6 h-6 sm:w-7 sm:h-7 text-blue-400" />
+                  </div>
+                  <h4 className="text-base sm:text-lg md:text-xl font-semibold text-white mb-2">
+                    {t(principle.titleKey)}
+                  </h4>
+                  <p className="text-sm sm:text-base text-gray-400 leading-relaxed">
+                    {t(principle.descriptionKey)}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
         {/* Security Features Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 md:gap-10 mb-16 sm:mb-20 md:mb-24">
           {securityFeatures.map((feature, index) => {
@@ -141,12 +175,9 @@ const SecurityShowcase: React.FC = () => {
                   <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-2 sm:mb-3">
                     {t(feature.titleKey)}
                   </h3>
-                  <p className="text-sm sm:text-base md:text-lg text-gray-400 leading-relaxed mb-3 sm:mb-4">
+                  <p className="text-sm sm:text-base md:text-lg text-gray-400 leading-relaxed">
                     {t(feature.descriptionKey)}
                   </p>
-                  <div className="text-xs sm:text-sm text-gray-500 font-mono bg-gray-800/50 px-3 py-2 rounded-lg">
-                    {t(feature.detailsKey)}
-                  </div>
                 </div>
 
                 {/* Hover Effect Overlay */}
@@ -154,42 +185,6 @@ const SecurityShowcase: React.FC = () => {
               </div>
             );
           })}
-        </div>
-
-        {/* Privacy Principles Section */}
-        <div className="bg-gradient-to-r from-gray-800/50 to-gray-900/50 backdrop-blur-sm rounded-3xl p-8 sm:p-10 md:p-12 border border-gray-700/30">
-          <div className="text-center mb-8 sm:mb-10 md:mb-12">
-            <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500">
-                {t('homepage.securityShowcase.privacy.title')}
-              </span>
-            </h3>
-            <p className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
-              {t('homepage.securityShowcase.privacy.subtitle')}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-            {privacyPrinciples.map((principle, index) => {
-              const Icon = principle.icon;
-              return (
-                <div
-                  key={index}
-                  className="flex flex-col items-center text-center group"
-                >
-                  <div className="bg-gradient-to-r from-green-500 to-blue-500 p-3 sm:p-4 rounded-full mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                    <Icon className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
-                  </div>
-                  <h4 className="text-base sm:text-lg md:text-xl font-semibold text-white mb-2">
-                    {t(principle.titleKey)}
-                  </h4>
-                  <p className="text-sm sm:text-base text-gray-400 leading-relaxed">
-                    {t(principle.descriptionKey)}
-                  </p>
-                </div>
-              );
-            })}
-          </div>
         </div>
 
         {/* Bottom Call to Action */}

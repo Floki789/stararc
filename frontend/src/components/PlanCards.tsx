@@ -65,11 +65,11 @@ const PlanCards: React.FC<PlanCardsProps> = ({
       bgGradient: 'bg-gradient-to-r from-green-500 to-green-600',
       features: [
         '1 Familienmitglied',
-        '2 Liquidität-Konten',
         '7 Wertschriften (Aktien/ETFs)',
-        '2 Bitcoin & 2 Edelmetalle',
-        '1 Immobilie & 1 Hypothek',
+        '1 Bitcoin-Setup & 2 Edelmetalle',
+        '1 Immobilie & 0 Hypotheken',
         '1 Vorsorge-Konto',
+        '2 Liquidität-Konten',
         '3 Finanzinstitute (2+1 custom)',
         '3 Vaults (2 physisch, 1 digital)',
         'Budget & Portfolio Cockpit'
@@ -79,7 +79,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
     {
       id: 'Spark',
       name: 'Spark',
-      price: '$9/Monat',
+      price: '$9/Monat ($90/Jahr)',
       priceValue: 900, // $9 in cents
       currency: 'usd',
       description: 'Für kleine Familien mit einfacher Vermögenssituation',
@@ -88,11 +88,11 @@ const PlanCards: React.FC<PlanCardsProps> = ({
       bgGradient: 'bg-gradient-to-r from-orange-500 to-red-600',
       features: [
         '4 Familienmitglieder',
-        '6 Liquidität-Konten',
         '40 Wertschriften (Aktien/ETFs)',
-        '3 Bitcoin & 3 Edelmetalle',
+        '3 Bitcoin-Setups & 3 Edelmetalle',
         '2 Immobilien & 4 Hypotheken',
         '4 Vorsorge-Konten',
+        '5 Liquidität-Konten',
         '5 Finanzinstitute',
         '4 Vaults',
         'Budget & Portfolio Cockpit'
@@ -102,20 +102,20 @@ const PlanCards: React.FC<PlanCardsProps> = ({
     {
       id: 'Nova',
       name: 'Nova',
-      price: '$19/Monat',
+      price: '$19/Monat ($190/Jahr)',
       priceValue: 1900, // $19 in cents
       currency: 'usd',
-      description: 'Für wachsende Familien im guten Mittelstand',
+      description: 'Für wachsende Familien mit diversifizierten Portfolios',
       icon: Sparkles,
       color: 'text-blue-400',
       bgGradient: 'bg-gradient-to-r from-blue-500 to-cyan-600',
       features: [
         '6 Familienmitglieder',
-        '10 Liquidität-Konten',
-        '80 Wertschriften (Aktien/ETFs)',
-        '5 Bitcoin & 5 Edelmetalle',
-        '4 Immobilien & 8 Hypotheken',
+        '100 Wertschriften (Aktien/ETFs)',
+        '10 Bitcoin-Setups & 10 Edelmetalle',
+        '5 Immobilien & 10 Hypotheken',
         '6 Vorsorge-Konten',
+        '8 Liquidität-Konten',
         '8 Finanzinstitute',
         '8 Vaults',
         'Budget & Portfolio Cockpit'
@@ -126,7 +126,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
     {
       id: 'Galaxy',
       name: 'Galaxy',
-      price: '$39/Monat',
+      price: '$39/Monat ($390/Jahr)',
       priceValue: 3900, // $39 in cents
       currency: 'usd',
       description: 'Für vermögende Familien mit komplexen Strukturen',
@@ -135,11 +135,11 @@ const PlanCards: React.FC<PlanCardsProps> = ({
       bgGradient: 'bg-gradient-to-r from-purple-500 to-indigo-600',
       features: [
         'Unlimited Familienmitglieder',
-        'Unlimited Liquidität-Konten',
         'Unlimited Wertschriften (Aktien/ETFs)',
-        'Unlimited Bitcoin & Edelmetalle',
+        'Unlimited Bitcoin-Setups & Edelmetalle',
         'Unlimited Immobilien & Hypotheken',
         'Unlimited Vorsorge-Konten',
+        'Unlimited Liquidität-Konten',
         'Unlimited Finanzinstitute',
         'Unlimited Vaults',
         'Budget & Portfolio Cockpit',
@@ -235,9 +235,16 @@ const PlanCards: React.FC<PlanCardsProps> = ({
 
               {/* Price */}
               {showPricing && (
-                <p className={`text-2xl font-bold ${plan.color} mb-2`}>
-                  {plan.price}
-                </p>
+                <div className="mb-2">
+                  <p className={`text-2xl font-bold ${plan.color}`}>
+                    {plan.price.split('(')[0].trim()}
+                  </p>
+                  {plan.price.includes('(') && (
+                    <p className="text-sm text-gray-400 mt-1">
+                      {plan.price.match(/\(([^)]+)\)/)?.[1]}
+                    </p>
+                  )}
+                </div>
               )}
 
               {/* Description */}
