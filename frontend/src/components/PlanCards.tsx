@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Check, Crown, Shield, Star, Flame, Sparkles, Globe } from 'lucide-react';
+import { Check, Crown, Star, Flame, Sparkles, Globe } from 'lucide-react';
 
 interface PlanData {
   id: string;
@@ -23,7 +23,6 @@ interface PlanCardsProps {
   loading?: Record<string, boolean>;
   showPricing?: boolean;
   className?: string;
-  gridCols?: 'grid-cols-2' | 'grid-cols-3' | 'grid-cols-4';
   currentPlan?: string; // Current user's plan
 }
 
@@ -32,7 +31,6 @@ const PlanCards: React.FC<PlanCardsProps> = ({
   loading = {},
   showPricing = true,
   className = '',
-  gridCols = 'grid-cols-3',
   currentPlan
 }) => {
 

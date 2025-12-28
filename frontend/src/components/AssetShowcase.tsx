@@ -4,9 +4,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { 
   TrendingUp,
   Bitcoin,
-  Gem,
   Home,
-  Shield,
   PieChart,
   Zap,
   Globe,

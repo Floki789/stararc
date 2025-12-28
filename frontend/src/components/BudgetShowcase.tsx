@@ -5,10 +5,7 @@ import {
   Users,
   Calculator,
   TrendingUp,
-  Target,
   PieChart,
-  Calendar,
-  Smartphone,
   Star
 } from 'lucide-react';
 
