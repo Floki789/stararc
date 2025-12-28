@@ -74,6 +74,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
         '1 Immobilie & 0 Hypotheken',
         '1 Vorsorge-Konto',
         '2 Liquidität-Konten',
+        '10 Budget-Kategorien & 50 Budget-Items',
         '3 Finanzinstitute (2+1 custom)',
         '3 Vaults (2 physisch, 1 digital)',
         'Budget & Portfolio Cockpit'
@@ -100,6 +101,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
         '2 Immobilien & 4 Hypotheken',
         '4 Vorsorge-Konten',
         '5 Liquidität-Konten',
+        '15 Budget-Kategorien & 100 Budget-Items',
         '5 Finanzinstitute',
         '4 Vaults',
         'Budget & Portfolio Cockpit'
@@ -126,6 +128,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
         '5 Immobilien & 10 Hypotheken',
         '6 Vorsorge-Konten',
         '8 Liquidität-Konten',
+        '20 Budget-Kategorien & 150 Budget-Items',
         '8 Finanzinstitute',
         '8 Vaults',
         'Budget & Portfolio Cockpit'
@@ -153,6 +156,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
         'Unlimited Immobilien & Hypotheken',
         'Unlimited Vorsorge-Konten',
         'Unlimited Liquidität-Konten',
+        'Unlimited Budget-Kategorien & Items',
         'Unlimited Finanzinstitute',
         'Unlimited Vaults',
         'Budget & Portfolio Cockpit',
