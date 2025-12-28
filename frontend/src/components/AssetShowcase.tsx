@@ -7,9 +7,10 @@ import {
   Gem,
   Home,
   Shield,
-  Heart,
-  Palette,
-  Star
+  PieChart,
+  Zap,
+  Globe,
+  LockKeyhole
 } from 'lucide-react';
 
 const AssetShowcase: React.FC = () => {
@@ -23,59 +24,52 @@ const AssetShowcase: React.FC = () => {
   const assets = [
     {
       icon: TrendingUp,
-      titleKey: "homepage.assetShowcase.assets.securities.title",
-      descriptionKey: "homepage.assetShowcase.assets.securities.description",
+      title: "Alle Asset-Klassen",
+      description: "Liquidität, Aktien, ETFs, Bitcoin, Edelmetalle, Liegenschaften, Vorsorgekonten, Krypto, Obligationen, Darlehen, Schulden",
       gradient: "from-blue-500 to-cyan-500",
       bgGradient: "from-blue-500/10 to-cyan-500/10"
     },
     {
       icon: Bitcoin,
-      titleKey: "homepage.assetShowcase.assets.bitcoin.title",
-      descriptionKey: "homepage.assetShowcase.assets.bitcoin.description",
+      title: "Bitcoin Self-Custody Wizard",
+      description: "Vollständiger Wizard für SingleSig und MultiSig Setup mit Hardware Wallets",
       gradient: "from-orange-500 to-yellow-500",
       bgGradient: "from-orange-500/10 to-yellow-500/10"
     },
     {
-      icon: Gem,
-      titleKey: "homepage.assetShowcase.assets.metals.title",
-      descriptionKey: "homepage.assetShowcase.assets.metals.description",
-      gradient: "from-yellow-400 to-amber-500",
-      bgGradient: "from-yellow-400/10 to-amber-500/10"
-    },
-    {
       icon: Home,
-      titleKey: "homepage.assetShowcase.assets.realestate.title",
-      descriptionKey: "homepage.assetShowcase.assets.realestate.description",
+      title: "Immobilien",
+      description: "Verwaltung von Immobilien inklusive Hypotheken, Bewertungen und Rendite-Tracking",
       gradient: "from-green-500 to-emerald-500",
       bgGradient: "from-green-500/10 to-emerald-500/10"
     },
     {
-      icon: Shield,
-      titleKey: "homepage.assetShowcase.assets.pension.title",
-      descriptionKey: "homepage.assetShowcase.assets.pension.description",
+      icon: PieChart,
+      title: "Portfolio Cockpit",
+      description: "Gesamtportfolio-Übersicht mit detaillierten Asset-Breakdowns und Visualisierungen",
       gradient: "from-purple-500 to-indigo-500",
       bgGradient: "from-purple-500/10 to-indigo-500/10"
     },
     {
-      icon: Heart,
-      titleKey: "homepage.assetShowcase.assets.insurance.title",
-      descriptionKey: "homepage.assetShowcase.assets.insurance.description",
-      gradient: "from-red-500 to-pink-500",
-      bgGradient: "from-red-500/10 to-pink-500/10"
+      icon: Zap,
+      title: "Live & Tagesaktuelle Kurse",
+      description: "Live Kurse für Wertschriften, Aktien, ETFs, Bitcoin, Krypto. Tagesaktuelle Kurse für Edelmetalle",
+      gradient: "from-yellow-400 to-amber-500",
+      bgGradient: "from-yellow-400/10 to-amber-500/10"
     },
     {
-      icon: Palette,
-      titleKey: "homepage.assetShowcase.assets.art.title",
-      descriptionKey: "homepage.assetShowcase.assets.art.description",
+      icon: Globe,
+      title: "Multi-Währungs-Support",
+      description: "Assets in 11 Währungen erfassbar mit separater Währung für Portfolio-Berechnung",
+      gradient: "from-cyan-500 to-teal-500",
+      bgGradient: "from-cyan-500/10 to-teal-500/10"
+    },
+    {
+      icon: LockKeyhole,
+      title: "Fremd- & Selbstverwahrung",
+      description: "Klare Unterscheidung zwischen fremdverwahrten Assets (Banken) und selbstverwahrten Assets (Self-Custody)",
       gradient: "from-violet-500 to-purple-500",
       bgGradient: "from-violet-500/10 to-purple-500/10"
-    },
-    {
-      icon: Star,
-      titleKey: "homepage.assetShowcase.assets.collectibles.title",
-      descriptionKey: "homepage.assetShowcase.assets.collectibles.description",
-      gradient: "from-rose-500 to-orange-500",
-      bgGradient: "from-rose-500/10 to-orange-500/10"
     }
   ];
 
@@ -105,7 +99,7 @@ const AssetShowcase: React.FC = () => {
         </div>
 
         {/* Asset Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 md:gap-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 md:gap-10">
           {assets.map((asset, index) => {
             const Icon = asset.icon;
             return (
@@ -121,10 +115,10 @@ const AssetShowcase: React.FC = () => {
                 {/* Content */}
                 <div>
                   <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-2 sm:mb-3">
-                    {t(asset.titleKey)}
+                    {asset.title}
                   </h3>
                   <p className="text-sm sm:text-base md:text-lg text-gray-400 leading-relaxed">
-                    {t(asset.descriptionKey)}
+                    {asset.description}
                   </p>
                 </div>
 

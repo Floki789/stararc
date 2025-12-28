@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Check, Crown, Shield, Star } from 'lucide-react';
+import { Check, Crown, Shield, Star, Flame, Sparkles, Globe } from 'lucide-react';
 
 interface PlanData {
   id: string;
@@ -14,6 +14,7 @@ interface PlanData {
   bgGradient: string;
   features: string[];
   isPopular?: boolean;
+  comingSoon?: boolean;
   buttonText: string;
 }
 
@@ -31,18 +32,19 @@ const PlanCards: React.FC<PlanCardsProps> = ({
   loading = {},
   showPricing = true,
   className = '',
-  gridCols = 'grid-cols-4',
+  gridCols = 'grid-cols-3',
   currentPlan
 }) => {
 
   // Plan hierarchy for filtering (lower index = lower tier)
-  const planHierarchy = ['Free', 'Spark', 'Core', 'Apex'];
+  const planHierarchy = ['Free', 'Spark', 'Nova', 'Galaxy', 'Apex'];
   
   const getPlanTier = (planId: string): number => {
     return planHierarchy.indexOf(planId);
   };
 
-  const isPlanSelectable = (planId: string, currentPlan?: string): boolean => {
+  const isPlanSelectable = (planId: string, currentPlan?: string, plan?: PlanData): boolean => {
+    if (plan?.comingSoon) return false; // Coming Soon plans not selectable
     if (!currentPlan) return true; // No current plan, all plans available
     const currentTier = getPlanTier(currentPlan);
     const planTier = getPlanTier(planId);
@@ -62,14 +64,15 @@ const PlanCards: React.FC<PlanCardsProps> = ({
       color: 'text-gray-400',
       bgGradient: 'bg-gradient-to-r from-green-500 to-green-600',
       features: [
-        '2 Familienmitglieder',
-        '4 Vaults & Finanzinstitute', 
-        '1 Budget mit 80 Items',
-        '8 Budget-Kategorien',
-        'Wertschriften (20)',
-        'Bitcoin (2) & Edelmetalle (2)',
-        'Vorsorge (1)',
-        'Analysis & Perspective'
+        '1 Familienmitglied',
+        '2 Liquidität-Konten',
+        '7 Wertschriften (Aktien/ETFs)',
+        '2 Bitcoin & 2 Edelmetalle',
+        '1 Immobilie & 1 Hypothek',
+        '1 Vorsorge-Konto',
+        '3 Finanzinstitute (2+1 custom)',
+        '3 Vaults (2 physisch, 1 digital)',
+        'Budget & Portfolio Cockpit'
       ],
       buttonText: 'Kostenlos starten'
     },
@@ -80,44 +83,69 @@ const PlanCards: React.FC<PlanCardsProps> = ({
       priceValue: 900, // $9 in cents
       currency: 'usd',
       description: 'Für kleine Familien mit einfacher Vermögenssituation',
-      icon: Shield,
-      color: 'text-blue-400',
-      bgGradient: 'bg-gradient-to-r from-blue-500 to-blue-600',
+      icon: Flame,
+      color: 'text-orange-400',
+      bgGradient: 'bg-gradient-to-r from-orange-500 to-red-600',
       features: [
-        '5 Familienmitglieder',
-        'Unbegrenzt Vaults & Fin.Institute',
-        '1 Budget + 5 Archive',
-        '250 Budget-Items',
-        '10 Budget-Kategorien', 
-        'Wertschriften (100)',
-        'Bitcoin (5) & Edelmetalle (10)',
-        'Vorsorge (5) & Immobilien (3)',
-        'Analysis & Perspective'
+        '4 Familienmitglieder',
+        '6 Liquidität-Konten',
+        '40 Wertschriften (Aktien/ETFs)',
+        '3 Bitcoin & 3 Edelmetalle',
+        '2 Immobilien & 4 Hypotheken',
+        '4 Vorsorge-Konten',
+        '5 Finanzinstitute',
+        '4 Vaults',
+        'Budget & Portfolio Cockpit'
       ],
       buttonText: 'Spark wählen'
     },
     {
-      id: 'Core',
-      name: 'Core',
-      price: '$29/Monat',
-      priceValue: 2900, // $29 in cents
+      id: 'Nova',
+      name: 'Nova',
+      price: '$19/Monat',
+      priceValue: 1900, // $19 in cents
       currency: 'usd',
-      description: 'Für Familien mit anspruchsvollen Vermögenssituationen',
-      icon: Crown,
-      color: 'text-purple-400',
-      bgGradient: 'bg-gradient-to-r from-purple-500 to-purple-600',
+      description: 'Für wachsende Familien im guten Mittelstand',
+      icon: Sparkles,
+      color: 'text-blue-400',
+      bgGradient: 'bg-gradient-to-r from-blue-500 to-cyan-600',
       features: [
-        'Bis 12 Familienmitglieder',
-        'Unbegrenzt Vaults & Fin.Institute',
-        'Multiple Budgets + Archive',
-        'Unlimited Budget-Items',
-        'Unlimited Budget-Kategorien',
-        'Alle Assetklassen unlimited',
-        'Multi-Budget Simulationen',
-        'Erweiterte Analysis & Perspective'
+        '6 Familienmitglieder',
+        '10 Liquidität-Konten',
+        '80 Wertschriften (Aktien/ETFs)',
+        '5 Bitcoin & 5 Edelmetalle',
+        '4 Immobilien & 8 Hypotheken',
+        '6 Vorsorge-Konten',
+        '8 Finanzinstitute',
+        '8 Vaults',
+        'Budget & Portfolio Cockpit'
       ],
       isPopular: true,
-      buttonText: 'Core wählen'
+      buttonText: 'Nova wählen'
+    },
+    {
+      id: 'Galaxy',
+      name: 'Galaxy',
+      price: '$39/Monat',
+      priceValue: 3900, // $39 in cents
+      currency: 'usd',
+      description: 'Für vermögende Familien mit komplexen Strukturen',
+      icon: Globe,
+      color: 'text-purple-400',
+      bgGradient: 'bg-gradient-to-r from-purple-500 to-indigo-600',
+      features: [
+        'Unlimited Familienmitglieder',
+        'Unlimited Liquidität-Konten',
+        'Unlimited Wertschriften (Aktien/ETFs)',
+        'Unlimited Bitcoin & Edelmetalle',
+        'Unlimited Immobilien & Hypotheken',
+        'Unlimited Vorsorge-Konten',
+        'Unlimited Finanzinstitute',
+        'Unlimited Vaults',
+        'Budget & Portfolio Cockpit',
+        '* Technische Limits zum Missbrauchsschutz'
+      ],
+      buttonText: 'Galaxy wählen'
     },
     {
       id: 'Apex',
@@ -130,16 +158,11 @@ const PlanCards: React.FC<PlanCardsProps> = ({
       color: 'text-yellow-400',
       bgGradient: 'bg-gradient-to-r from-yellow-500 to-yellow-600',
       features: [
-        '30 Core Accounts inklusive',
-        'Alle Core Features',
-        'White-Label Optionen',
-        'API Zugang',
-        'Prioritäts-Support',
-        'Custom Integrations',
-        'Compliance Tools',
-        'Multi-Mandant Verwaltung'
+        '20 Galaxy Accounts',
+        'Management Cockpit'
       ],
-      buttonText: 'Kontakt aufnehmen'
+      comingSoon: true,
+      buttonText: 'Coming Soon'
     }
   ];
 
@@ -153,7 +176,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
   };
 
   return (
-    <div className={`grid md:${gridCols} gap-8 place-content-center ${className}`}>
+    <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 place-content-center ${className}`}>
       {plans.map((plan, index) => {
         const IconComponent = plan.icon;
         
@@ -170,7 +193,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
             } ${
               currentPlan === plan.id ? 'border-2 border-blue-500 opacity-75' : ''
             } ${
-              !isPlanSelectable(plan.id, currentPlan) ? 'opacity-50' : ''
+              !isPlanSelectable(plan.id, currentPlan, plan) ? 'opacity-50' : ''
             }`}
           >
             {/* Current Plan Badge */}
@@ -183,10 +206,19 @@ const PlanCards: React.FC<PlanCardsProps> = ({
             )}
 
             {/* Popular Badge */}
-            {plan.isPopular && currentPlan !== plan.id && (
+            {plan.isPopular && currentPlan !== plan.id && !plan.comingSoon && (
               <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
                 <span className="bg-purple-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
                   Beliebt
+                </span>
+              </div>
+            )}
+
+            {/* Coming Soon Badge */}
+            {plan.comingSoon && (
+              <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                <span className="bg-orange-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
+                  Coming Soon
                 </span>
               </div>
             )}
@@ -231,11 +263,11 @@ const PlanCards: React.FC<PlanCardsProps> = ({
               {onPlanSelect && (
                 <button 
                   onClick={() => handlePlanClick(plan)}
-                  disabled={loading[plan.id] || currentPlan === plan.id || !isPlanSelectable(plan.id, currentPlan)}
+                  disabled={loading[plan.id] || currentPlan === plan.id || !isPlanSelectable(plan.id, currentPlan, plan)}
                   className={`w-full py-3 text-white text-sm font-semibold rounded-lg transition-all duration-200 ${
                     currentPlan === plan.id 
                       ? 'bg-gray-500 cursor-not-allowed' 
-                      : !isPlanSelectable(plan.id, currentPlan)
+                      : !isPlanSelectable(plan.id, currentPlan, plan)
                         ? 'bg-gray-600 cursor-not-allowed'
                         : `${plan.bgGradient} hover:shadow-lg transform hover:scale-105`
                   } ${
@@ -244,8 +276,8 @@ const PlanCards: React.FC<PlanCardsProps> = ({
                 >
                   {currentPlan === plan.id 
                     ? 'Aktiver Plan' 
-                    : !isPlanSelectable(plan.id, currentPlan)
-                      ? 'Nicht verfügbar'
+                    : !isPlanSelectable(plan.id, currentPlan, plan)
+                      ? plan.comingSoon ? 'Coming Soon' : 'Nicht verfügbar'
                       : loading[plan.id] 
                         ? 'Lädt...' 
                         : plan.buttonText

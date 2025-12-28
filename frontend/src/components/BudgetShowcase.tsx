@@ -24,43 +24,43 @@ const BudgetShowcase: React.FC = () => {
   const budgetFeatures = [
     {
       icon: Users,
-      titleKey: "homepage.budgetShowcase.features.family.title",
-      descriptionKey: "homepage.budgetShowcase.features.family.description",
+      title: "Familienbudget-Planung",
+      description: "Budgetplanung für die ganze Familie mit automatischer rollenbasierter Verwaltung von Budgetpositionen",
       gradient: "from-pink-500 to-rose-500",
       bgGradient: "from-pink-500/10 to-rose-500/10"
     },
     {
       icon: Calculator,
-      titleKey: "homepage.budgetShowcase.features.automated.title",
-      descriptionKey: "homepage.budgetShowcase.features.automated.description",
+      title: "Intelligente Automatisierung",
+      description: "Automatische Erstellung von Budgetpositionen bei Miete oder Wohneigentum – je nach Lebenssituation",
       gradient: "from-blue-500 to-indigo-500",
       bgGradient: "from-blue-500/10 to-indigo-500/10"
     },
     {
-      icon: TrendingUp,
-      titleKey: "homepage.budgetShowcase.features.analytics.title",
-      descriptionKey: "homepage.budgetShowcase.features.analytics.description",
+      icon: PieChart,
+      title: "Standard-Kategorien",
+      description: "Wohnen, Lebenskosten, Mobilität, Versicherungen & Steuern, Bildung, Freizeit, Immobilien, Gehälter",
       gradient: "from-green-500 to-emerald-500",
       bgGradient: "from-green-500/10 to-emerald-500/10"
     },
     {
-      icon: Target,
-      titleKey: "homepage.budgetShowcase.features.goals.title",
-      descriptionKey: "homepage.budgetShowcase.features.goals.description",
+      icon: Star,
+      title: "Familien- & Individual-Kosten",
+      description: "Klare Unterscheidung zwischen gemeinsamen Familienkosten und individuellen Ausgaben",
       gradient: "from-purple-500 to-violet-500",
       bgGradient: "from-purple-500/10 to-violet-500/10"
     },
     {
       icon: PieChart,
-      titleKey: "homepage.budgetShowcase.features.categories.title", 
-      descriptionKey: "homepage.budgetShowcase.features.categories.description",
+      title: "Budget-Cockpit",
+      description: "Grafische Übersicht über Einnahmen und Ausgaben mit Berechnung der Sparrate",
       gradient: "from-cyan-500 to-teal-500",
       bgGradient: "from-cyan-500/10 to-teal-500/10"
     },
     {
-      icon: Calendar,
-      titleKey: "homepage.budgetShowcase.features.planning.title",
-      descriptionKey: "homepage.budgetShowcase.features.planning.description",
+      icon: TrendingUp,
+      title: "Multi-Währung & Custom Kategorien",
+      description: "Währung pro Budgetposition wählbar und eigene Budget-Kategorien nach individuellen Bedürfnissen",
       gradient: "from-orange-500 to-amber-500",
       bgGradient: "from-orange-500/10 to-amber-500/10"
     }
@@ -80,14 +80,14 @@ const BudgetShowcase: React.FC = () => {
         <div className="text-center mb-12 sm:mb-16 md:mb-20">
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6">
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
-              {t('homepage.budgetShowcase.title.part1')}
+              Intelligente Budget-Verwaltung
             </span>
             <span className="block mt-2">
-              {t('homepage.budgetShowcase.title.part2')}
+              für Familien
             </span>
           </h2>
           <p className="text-lg sm:text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            {t('homepage.budgetShowcase.subtitle')}
+            Planen Sie Ihr Familienbudget mit intelligenter Automatisierung und behalten Sie jederzeit den Überblick über Ihre Finanzen
           </p>
         </div>
 
@@ -108,10 +108,10 @@ const BudgetShowcase: React.FC = () => {
                 {/* Content */}
                 <div>
                   <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-2 sm:mb-3">
-                    {t(feature.titleKey)}
+                    {feature.title}
                   </h3>
                   <p className="text-sm sm:text-base md:text-lg text-gray-400 leading-relaxed">
-                    {t(feature.descriptionKey)}
+                    {feature.description}
                   </p>
                 </div>
 
@@ -126,10 +126,10 @@ const BudgetShowcase: React.FC = () => {
         <div className="bg-gradient-to-r from-slate-800/50 to-gray-800/50 backdrop-blur-sm rounded-3xl p-8 sm:p-12 md:p-16 border border-gray-700/50">
           <div className="text-center mb-8 sm:mb-12">
             <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-4">
-              {t('homepage.budgetShowcase.benefits.title')}
+              Budget & Portfolio Cockpit
             </h3>
             <p className="text-base sm:text-lg md:text-xl text-gray-400 max-w-2xl mx-auto">
-              {t('homepage.budgetShowcase.benefits.subtitle')}
+              Visualisieren Sie Ihre Finanzen in einem übersichtlichen Cockpit
             </p>
           </div>
 
@@ -139,10 +139,10 @@ const BudgetShowcase: React.FC = () => {
                 <Star className="w-6 h-6 text-white" />
               </div>
               <h4 className="text-lg font-semibold text-white mb-2">
-                {t('homepage.budgetShowcase.benefits.feature1.title')}
+                Von Budgetplanung bis Portfolio-Übersicht
               </h4>
               <p className="text-gray-400">
-                {t('homepage.budgetShowcase.benefits.feature1.description')}
+                Alles an einem Ort – nahtlose Integration zwischen Budget und Portfolio
               </p>
             </div>
             
@@ -151,10 +151,10 @@ const BudgetShowcase: React.FC = () => {
                 <Smartphone className="w-6 h-6 text-white" />
               </div>
               <h4 className="text-lg font-semibold text-white mb-2">
-                {t('homepage.budgetShowcase.benefits.feature2.title')}
+                Echtzeit-Visualisierung
               </h4>
               <p className="text-gray-400">
-                {t('homepage.budgetShowcase.benefits.feature2.description')}
+                Sehen Sie sofort, wo Ihr Geld hingeht und wie viel Sie sparen
               </p>
             </div>
             
@@ -163,10 +163,10 @@ const BudgetShowcase: React.FC = () => {
                 <Target className="w-6 h-6 text-white" />
               </div>
               <h4 className="text-lg font-semibold text-white mb-2">
-                {t('homepage.budgetShowcase.benefits.feature3.title')}
+                Sparrate-Berechnung
               </h4>
               <p className="text-gray-400">
-                {t('homepage.budgetShowcase.benefits.feature3.description')}
+                Automatische Berechnung Ihrer monatlichen Sparrate und Trends
               </p>
             </div>
           </div>
@@ -175,18 +175,18 @@ const BudgetShowcase: React.FC = () => {
         {/* Bottom Call to Action */}
         <div className="text-center mt-12 sm:mt-16 md:mt-20">
           <p className="text-base sm:text-lg md:text-xl text-gray-400 mb-6 sm:mb-8">
-            {t('homepage.budgetShowcase.cta.subtitle')}
+            Starten Sie noch heute mit Ihrer intelligenten Budget-Verwaltung
           </p>
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center">
             <button 
               onClick={() => navigate('/register')}
               className="w-full sm:w-auto px-6 sm:px-8 md:px-10 py-3 sm:py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-base sm:text-lg md:text-xl font-semibold rounded-lg transition-all duration-300 hover:shadow-2xl hover:scale-105 cursor-pointer max-w-xs sm:max-w-none">
-              {t('homepage.budgetShowcase.cta.start')}
+              Kostenlos starten
             </button>
             <button 
               onClick={handleDemoLogin}
               className="w-full sm:w-auto px-6 sm:px-8 md:px-10 py-3 sm:py-4 bg-transparent border-2 border-blue-500 text-blue-400 text-base sm:text-lg md:text-xl font-semibold rounded-lg transition-all duration-300 hover:bg-blue-500 hover:text-white hover:shadow-xl hover:scale-105 cursor-pointer max-w-xs sm:max-w-none">
-              {t('homepage.budgetShowcase.cta.demo')}
+              Demo ansehen
             </button>
           </div>
         </div>
