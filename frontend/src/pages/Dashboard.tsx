@@ -408,13 +408,7 @@ const Dashboard: React.FC = () => {
           
           {/* Subscription Management Actions */}
           {subscription.plan && subscription.plan.toLowerCase() !== 'free' && (
-            <div className="mt-4 pt-4 border-t border-slate-600/50 flex flex-wrap gap-3">
-              <button
-                onClick={() => navigate('/subscription-selection')}
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
-              >
-                Plan ändern
-              </button>
+            <div className="mt-4 pt-4 border-t border-slate-600/50">
               <button
                 onClick={handleManageSubscription}
                 className="px-4 py-2 bg-slate-600 hover:bg-slate-700 text-white rounded-lg font-medium transition-colors"
