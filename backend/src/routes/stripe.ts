@@ -75,8 +75,8 @@ router.post('/select-plan', authMiddleware, async (req, res): Promise<any> => {
       });
     }
 
-    // Paid plans (Spark, Core, Apex) - Stripe workflow
-    if (['Spark', 'Core', 'Apex'].includes(planId)) {
+    // Paid plans (Spark, Nova, Galaxy, Apex) - Stripe workflow
+    if (['Spark', 'Nova', 'Galaxy', 'Apex'].includes(planId)) {
       // Get or create Stripe customer
       let stripeCustomerId: string;
       
@@ -220,8 +220,8 @@ router.post('/create-checkout-session', authMiddleware, async (req, res): Promis
       return res.status(400).json({ error: 'Invalid plan selection - Free plan should use activate-free-plan endpoint' });
     }
 
-    // Only allow Spark, Core, and Apex for Stripe checkout
-    if (!['Spark', 'Core', 'Apex'].includes(planId)) {
+    // Only allow Spark, Nova, Galaxy, and Apex for Stripe checkout
+    if (!['Spark', 'Nova', 'Galaxy', 'Apex'].includes(planId)) {
       return res.status(400).json({ error: 'Invalid plan for Stripe checkout' });
     }
 

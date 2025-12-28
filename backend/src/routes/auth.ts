@@ -1047,7 +1047,7 @@ router.post('/create-apex-client', authMiddleware, [
       clientName.split(' ').slice(1).join(' ') || '',
       clientName,
       apexManager.id,
-      'Core', // Create as Core account - same functionality
+      'Galaxy', // Create as Galaxy account - unlimited features
       false,
       true, // Auto-verified for managed accounts
       'completed' // Skip onboarding
@@ -1060,7 +1060,7 @@ router.post('/create-apex-client', authMiddleware, [
     
     const spaceshipResponse = await createSpaceshipUser({
       authKey: authKey,  // Use raw auth key
-      subscriptionPlan: 'Core', // Create as Core account in Spaceship
+      subscriptionPlan: 'Galaxy', // Create as Galaxy account in Spaceship
       parentUserId: apexManager.id
     });
     
@@ -1128,7 +1128,7 @@ router.get('/managed-clients', authMiddleware, async (req: Request, res: Respons
         spaceship_auth_key IS NOT NULL as "hasSpaceshipAccess",
         spaceship_integration_completed as "spaceshipIntegrationCompleted"
       FROM users 
-      WHERE parent_user_id = $1 AND subscription_plan = 'Core'
+      WHERE parent_user_id = $1 AND subscription_plan = 'Galaxy'
       ORDER BY created_at DESC
     `, [apexManager.id]);
     
@@ -1160,7 +1160,7 @@ router.post('/generate-spaceship-token-for-client', authMiddleware, async (req: 
     // Validate: Manager can only access their own clients
     const client = await pool.query(
       'SELECT * FROM users WHERE id = $1 AND parent_user_id = $2 AND subscription_plan = $3',
-      [clientId, apexManager.id, 'Core']
+      [clientId, apexManager.id, 'Galaxy']
     );
     
     if (client.rows.length === 0) {
@@ -1191,7 +1191,7 @@ router.post('/generate-spaceship-token-for-client', authMiddleware, async (req: 
       {
         authKey,
         authMethod: 'stararc_key', 
-        subscriptionPlan: 'Core', // Access as Core account in Spaceship
+        subscriptionPlan: 'Galaxy', // Access as Galaxy account in Spaceship
         crossApp: true,
         source: 'stararc',
         userId: clientData.id,
@@ -1232,7 +1232,7 @@ router.delete('/managed-client/:clientId', authMiddleware, async (req: Request, 
     // Validate ownership and delete
     const deleteResult = await pool.query(
       'DELETE FROM users WHERE id = $1 AND parent_user_id = $2 AND subscription_plan = $3 RETURNING client_name',
-      [clientId, apexManager.id, 'Core']
+      [clientId, apexManager.id, 'Galaxy']
     );
     
     if (deleteResult.rows.length === 0) {
@@ -1263,7 +1263,7 @@ router.get('/apex-client-spaceship-details/:clientId', authMiddleware, async (re
     // Validate client ownership
     const client = await pool.query(
       'SELECT * FROM users WHERE id = $1 AND parent_user_id = $2 AND subscription_plan = $3',
-      [clientId, apexManager.id, 'Core']
+      [clientId, apexManager.id, 'Galaxy']
     );
     
     if (client.rows.length === 0) {

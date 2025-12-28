@@ -76,19 +76,6 @@ export const SUBSCRIPTION_PLANS: Record<string, SubscriptionPlan> = {
       'Enterprise Level'
     ]
   },
-  Core: {
-    id: 'Core',
-    stripeId: 'price_1SP7aED1Ykg9qG9IithW6lYq', // TEST MODE: Core Plan $29/mo (deprecated)
-    stripeIdLive: process.env.STRIPE_PRICE_CORE_LIVE || 'price_1SP7aED1Ykg9qG9IithW6lYq', // LIVE MODE: Set in env
-    name: 'Core',
-    price: 2900, // $29.00 in cents
-    currency: 'usd',
-    interval: 'month',
-    features: [
-      'Complete Suite',
-      'Large Portfolios'
-    ]
-  },
   Apex: {
     id: 'Apex',
     stripeId: 'price_1SP7aFD1Ykg9qG9IMgDFklF9', // TEST MODE: Apex Plan $199/mo
