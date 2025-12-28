@@ -387,17 +387,31 @@ router.post('/webhook', async (req, res): Promise<any> => {
 
           console.log(`🚨 WEBHOOK - Activating subscription for user ${userId}, plan ${planId}`);
           
+          // Get subscription details for period end date
+          let periodEnd = null;
+          if (session.subscription) {
+            try {
+              const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+              const subscription = await stripe.subscriptions.retrieve(session.subscription);
+              periodEnd = new Date(subscription.current_period_end * 1000);
+              console.log(`💳 WEBHOOK - Subscription expires at: ${periodEnd.toISOString()}`);
+            } catch (error) {
+              console.error('⚠️ WEBHOOK - Error retrieving subscription period:', error);
+            }
+          }
+          
           // Activate subscription
           const updateResult = await pool.query(
             `UPDATE users SET 
              subscription_plan = $1, 
              subscription_status = 'active',
              stripe_subscription_id = $2,
+             subscription_expires_at = $3,
              onboarding_step = 'auth_method_selection',
              updated_at = CURRENT_TIMESTAMP
-             WHERE id = $3
-             RETURNING id, email`,
-            [planId, session.subscription, userId]
+             WHERE id = $4
+             RETURNING id`,
+            [planId, session.subscription, periodEnd, userId]
           );
           
           if (updateResult.rows.length > 0) {
@@ -449,23 +463,25 @@ router.post('/webhook', async (req, res): Promise<any> => {
           console.log('💰 WEBHOOK - Processing invoice.payment_succeeded');
           const invoice = eventData;
           
-          // Get subscription details to access metadata
+          // Get subscription details to access metadata and period end
           if (invoice.subscription) {
             try {
               const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
               const subscription = await stripe.subscriptions.retrieve(invoice.subscription);
               const userId = subscription.metadata?.userId;
+              const periodEnd = new Date(subscription.current_period_end * 1000);
               
               if (userId) {
-                // Update last payment date for the user
+                // Update payment status and subscription expiry
                 await pool.query(
                   `UPDATE users SET 
                    subscription_status = 'active',
+                   subscription_expires_at = $1,
                    updated_at = CURRENT_TIMESTAMP
-                   WHERE id = $1 AND stripe_subscription_id = $2`,
-                  [userId, invoice.subscription]
+                   WHERE id = $2 AND stripe_subscription_id = $3`,
+                  [periodEnd, userId, invoice.subscription]
                 );
-                console.log(`💰 WEBHOOK - Payment confirmed for user ${userId}`);
+                console.log(`💰 WEBHOOK - Payment confirmed for user ${userId}, expires at ${periodEnd.toISOString()}`);
               } else {
                 console.warn(`⚠️ WEBHOOK - No userId in subscription metadata for ${invoice.subscription}`);
               }
@@ -482,16 +498,45 @@ router.post('/webhook', async (req, res): Promise<any> => {
           console.log('⚠️ WEBHOOK - Processing invoice.payment_failed');
           const invoice = eventData;
           
-          // Mark subscription status as past_due if payment fails
+          // Grace Period Logic: 3 attempts or 7 days before suspension
           if (invoice.subscription) {
-            await pool.query(
-              `UPDATE users SET 
-               subscription_status = 'past_due',
-               updated_at = CURRENT_TIMESTAMP
-               WHERE stripe_subscription_id = $1`,
-              [invoice.subscription]
-            );
-            console.log(`⚠️ WEBHOOK - Subscription marked as past_due due to failed payment`);
+            try {
+              const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+              const subscription = await stripe.subscriptions.retrieve(invoice.subscription);
+              const attemptCount = invoice.attempt_count || 1;
+              const userId = subscription.metadata?.userId;
+              
+              console.log(`⚠️ WEBHOOK - Payment failed for user ${userId}, attempt ${attemptCount}`);
+              
+              // Calculate days since subscription period started
+              const periodStart = new Date(subscription.current_period_start * 1000);
+              const now = new Date();
+              const daysSinceStart = Math.floor((now.getTime() - periodStart.getTime()) / (1000 * 60 * 60 * 24));
+              
+              // Suspend after 3 failed attempts OR 7 days past due
+              if (attemptCount >= 3 || daysSinceStart >= 7) {
+                await pool.query(
+                  `UPDATE users SET 
+                   subscription_status = 'suspended',
+                   updated_at = CURRENT_TIMESTAMP
+                   WHERE stripe_subscription_id = $1`,
+                  [invoice.subscription]
+                );
+                console.log(`🚫 WEBHOOK - Subscription SUSPENDED for user ${userId} (attempt ${attemptCount}, ${daysSinceStart} days past due)`);
+              } else {
+                // Grace period - keep active but mark as past_due
+                await pool.query(
+                  `UPDATE users SET 
+                   subscription_status = 'past_due',
+                   updated_at = CURRENT_TIMESTAMP
+                   WHERE stripe_subscription_id = $1`,
+                  [invoice.subscription]
+                );
+                console.log(`⏳ WEBHOOK - Subscription GRACE PERIOD for user ${userId} (attempt ${attemptCount}/${3}, ${daysSinceStart}/${7} days)`);
+              }
+            } catch (error) {
+              console.error('⚠️ WEBHOOK - Error processing failed payment:', error);
+            }
           }
           processed = true;
           break;

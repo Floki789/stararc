@@ -371,6 +371,29 @@ const Dashboard: React.FC = () => {
                 {subscription.plan} Plan
               </h2>
               <p className="text-green-400 font-semibold">● Aktiv</p>
+              
+              {/* Subscription Expiry Date */}
+              {subscription.plan && subscription.plan.toLowerCase() !== 'free' && subscription.expiresAt && (
+                <div className="mt-2 space-y-1">
+                  <p className="text-sm text-slate-300">
+                    Läuft bis: <span className="font-semibold text-white">
+                      {new Date(subscription.expiresAt).toLocaleDateString('de-DE', {
+                        day: '2-digit',
+                        month: 'long',
+                        year: 'numeric'
+                      })}
+                    </span>
+                  </p>
+                  {(() => {
+                    const daysLeft = Math.ceil((new Date(subscription.expiresAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+                    return daysLeft > 0 && (
+                      <p className="text-xs text-slate-400">
+                        {daysLeft === 1 ? 'Morgen wird verlängert' : `Noch ${daysLeft} Tage`}
+                      </p>
+                    );
+                  })()}
+                </div>
+              )}
             </div>
             
             {/* Upgrade Option */}
@@ -380,11 +403,11 @@ const Dashboard: React.FC = () => {
                 return (
                   <div className="flex items-center gap-3">
                     <div className="text-right">
-                      <p className="text-slate-400 text-sm">Nächstes Upgrade:</p>
+                      <p className="text-slate-200 text-sm">Nächstes Upgrade:</p>
                       <p className={`font-semibold ${
-                        nextUpgrade.color === 'blue' ? 'text-blue-400' :
-                        nextUpgrade.color === 'purple' ? 'text-purple-400' :
-                        nextUpgrade.color === 'yellow' ? 'text-yellow-400' : 'text-gray-400'
+                        nextUpgrade.color === 'blue' ? 'text-blue-200' :
+                        nextUpgrade.color === 'purple' ? 'text-purple-200' :
+                        nextUpgrade.color === 'yellow' ? 'text-yellow-200' : 'text-gray-200'
                       }`}>
                         {nextUpgrade.plan}
                       </p>
@@ -392,9 +415,9 @@ const Dashboard: React.FC = () => {
                     <button
                       onClick={handleUpgrade}
                       className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                        nextUpgrade.color === 'blue' ? 'bg-blue-500/20 text-blue-400 hover:bg-blue-500/30' :
-                        nextUpgrade.color === 'purple' ? 'bg-purple-500/20 text-purple-400 hover:bg-purple-500/30' :
-                        nextUpgrade.color === 'yellow' ? 'bg-yellow-500/20 text-yellow-400 hover:bg-yellow-500/30' : 'bg-gray-500/20 text-gray-400 hover:bg-gray-500/30'
+                        nextUpgrade.color === 'blue' ? 'bg-blue-500 text-white hover:bg-blue-600' :
+                        nextUpgrade.color === 'purple' ? 'bg-purple-500 text-white hover:bg-purple-600' :
+                        nextUpgrade.color === 'yellow' ? 'bg-yellow-500 text-white hover:bg-yellow-600' : 'bg-gray-500 text-white hover:bg-gray-600'
                       }`}
                     >
                       Upgrade
