@@ -96,8 +96,8 @@ const SubscriptionSelection: React.FC = () => {
 
   
 
-  const handlePlanSelection = async (planId: string) => {
-    console.log('handlePlanSelection called with planId:', planId);
+  const handlePlanSelection = async (planId: string, priceValue: number, interval: 'month' | 'year' = 'month') => {
+    console.log('handlePlanSelection called with planId:', planId, 'interval:', interval);
     
     if (!user) {
       alert('Sie müssen eingeloggt sein, um einen Plan auszuwählen.');
@@ -107,8 +107,8 @@ const SubscriptionSelection: React.FC = () => {
     setLoading(prev => ({ ...prev, [planId]: true }));
 
     try {
-      // Use the new unified plan selection endpoint
-      const result = await StripeAPIService.selectPlan(planId);
+      // Use the new unified plan selection endpoint with interval
+      const result = await StripeAPIService.selectPlan(planId, interval);
       
       if (result.success) {
         if (result.workflow === 'direct') {
@@ -130,7 +130,7 @@ const SubscriptionSelection: React.FC = () => {
           
         } else if (result.workflow === 'stripe') {
           // Paid plan - redirect to Stripe Checkout
-          console.log('Creating Stripe checkout for plan:', planId);
+          console.log('Creating Stripe checkout for plan:', planId, 'interval:', interval);
           if (result.sessionId) {
             await StripeAPIService.redirectToCheckout(result.sessionId);
           } else if (result.url) {
@@ -186,7 +186,7 @@ const SubscriptionSelection: React.FC = () => {
         {/* Plans Grid */}
         <div className="flex justify-center">
           <PlanCards 
-            onPlanSelect={(planId) => handlePlanSelection(planId)}
+            onPlanSelect={(planId, priceValue, interval) => handlePlanSelection(planId, priceValue, interval)}
             loading={loading}
             currentPlan={currentPlan || undefined}
             className="max-w-5xl"

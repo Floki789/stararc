@@ -92,16 +92,23 @@ export const SUBSCRIPTION_PLANS: Record<string, SubscriptionPlan> = {
 };
 
 export class StripeService {
-  // Get the correct price ID based on mode (test/live)
-  static getPriceId(plan: SubscriptionPlan): string {
+  // Get the correct price ID based on mode (test/live) and interval
+  static getPriceId(plan: SubscriptionPlan, interval: 'month' | 'year' = 'month'): string {
     const isLive = isProductionMode();
-    const priceId = isLive ? plan.stripeIdLive : plan.stripeId;
     
-    if (!priceId) {
-      throw new Error(`Missing price ID for plan ${plan.id} in ${isLive ? 'live' : 'test'} mode`);
+    // Select price ID based on interval and mode
+    let priceId: string | undefined;
+    if (interval === 'year') {
+      priceId = isLive ? plan.stripeIdYearlyLive : plan.stripeIdYearly;
+    } else {
+      priceId = isLive ? plan.stripeIdLive : plan.stripeId;
     }
     
-    console.log(`💳 Using ${isLive ? 'LIVE' : 'TEST'} price ID for ${plan.id}: ${priceId}`);
+    if (!priceId) {
+      throw new Error(`Missing ${interval}ly price ID for plan ${plan.id} in ${isLive ? 'live' : 'test'} mode`);
+    }
+    
+    console.log(`💳 Using ${isLive ? 'LIVE' : 'TEST'} ${interval}ly price ID for ${plan.id}: ${priceId}`);
     return priceId;
   }
 

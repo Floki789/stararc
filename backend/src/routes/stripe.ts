@@ -20,7 +20,7 @@ router.get('/plans', authMiddleware, async (req, res) => {
 // Plan selection endpoint - routes to appropriate workflow
 router.post('/select-plan', authMiddleware, async (req, res): Promise<any> => {
   try {
-    const { planId } = req.body;
+    const { planId, interval = 'month' } = req.body; // Default to monthly
     const userId = (req as any).user.id;
     const userEmail = (req as any).user.email;
 
@@ -102,8 +102,8 @@ router.post('/select-plan', authMiddleware, async (req, res): Promise<any> => {
       const successUrl = `${process.env.FRONTEND_URL || 'http://localhost:3003'}/dashboard?new=true&session_id={CHECKOUT_SESSION_ID}`;
       const cancelUrl = `${process.env.FRONTEND_URL || 'http://localhost:3003'}/subscription-selection?canceled=true`;
 
-      // Get correct price ID based on mode (test/live)
-      const priceId = StripeService.getPriceId(plan);
+      // Get correct price ID based on mode (test/live) and interval
+      const priceId = StripeService.getPriceId(plan, interval);
 
       const session = await StripeService.createCheckoutSession(
         stripeCustomerId,

@@ -81,10 +81,10 @@ export class StripeAPIService {
     };
   }
 
-  static async selectPlan(planId: string): Promise<{ success: boolean; workflow: 'direct' | 'stripe'; sessionId?: string; url?: string; plan?: string; status?: string; message?: string }> {
+  static async selectPlan(planId: string, interval: 'month' | 'year' = 'month'): Promise<{ success: boolean; workflow: 'direct' | 'stripe'; sessionId?: string; url?: string; plan?: string; status?: string; message?: string }> {
     const response = await this.fetchWithAuth('/select-plan', {
       method: 'POST',
-      body: JSON.stringify({ planId }),
+      body: JSON.stringify({ planId, interval }),
     });
 
     if (!response.ok) {

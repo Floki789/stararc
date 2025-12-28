@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Check, Crown, Star, Flame, Sparkles, Globe } from 'lucide-react';
 
 interface PlanData {
   id: string;
   name: string;
-  price: string;
-  priceValue: number; // For API calls (in cents)
+  priceMonthly: string;
+  priceYearly: string;
+  priceValueMonthly: number; // For API calls (in cents)
+  priceValueYearly: number; // For API calls (in cents)
   currency: string;
   description: string;
   icon: React.ComponentType<{ className?: string }>;
@@ -16,10 +18,11 @@ interface PlanData {
   isPopular?: boolean;
   comingSoon?: boolean;
   buttonText: string;
+  savingsPercent?: number; // Savings percentage for yearly billing
 }
 
 interface PlanCardsProps {
-  onPlanSelect?: (planId: string, priceValue: number) => void;
+  onPlanSelect?: (planId: string, priceValue: number, interval: 'month' | 'year') => void;
   loading?: Record<string, boolean>;
   showPricing?: boolean;
   className?: string;
@@ -33,6 +36,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
   className = '',
   currentPlan
 }) => {
+  const [billingInterval, setBillingInterval] = useState<'month' | 'year'>('year');
 
   // Plan hierarchy for filtering (lower index = lower tier)
   const planHierarchy = ['Free', 'Spark', 'Nova', 'Galaxy', 'Apex'];
@@ -54,8 +58,10 @@ const PlanCards: React.FC<PlanCardsProps> = ({
     {
       id: 'Free',
       name: 'Free',
-      price: 'Kostenlos',
-      priceValue: 0,
+      priceMonthly: 'Kostenlos',
+      priceYearly: 'Kostenlos',
+      priceValueMonthly: 0,
+      priceValueYearly: 0,
       currency: 'usd',
       description: 'Lernen Sie uns kennen',
       icon: Star,
@@ -77,13 +83,16 @@ const PlanCards: React.FC<PlanCardsProps> = ({
     {
       id: 'Spark',
       name: 'Spark',
-      price: '$9/Monat ($90/Jahr)',
-      priceValue: 900, // $9 in cents
+      priceMonthly: '$9',
+      priceYearly: '$90',
+      priceValueMonthly: 900, // $9 in cents
+      priceValueYearly: 9000, // $90 in cents
       currency: 'usd',
       description: 'Für kleine Familien mit einfacher Vermögenssituation',
       icon: Flame,
       color: 'text-orange-400',
       bgGradient: 'bg-gradient-to-r from-orange-500 to-red-600',
+      savingsPercent: 17,
       features: [
         '4 Familienmitglieder',
         '40 Wertschriften (Aktien/ETFs)',
@@ -100,13 +109,16 @@ const PlanCards: React.FC<PlanCardsProps> = ({
     {
       id: 'Nova',
       name: 'Nova',
-      price: '$19/Monat ($190/Jahr)',
-      priceValue: 1900, // $19 in cents
+      priceMonthly: '$19',
+      priceYearly: '$190',
+      priceValueMonthly: 1900, // $19 in cents
+      priceValueYearly: 19000, // $190 in cents
       currency: 'usd',
       description: 'Für wachsende Familien mit diversifizierten Portfolios',
       icon: Sparkles,
       color: 'text-blue-400',
       bgGradient: 'bg-gradient-to-r from-blue-500 to-cyan-600',
+      savingsPercent: 17,
       features: [
         '6 Familienmitglieder',
         '100 Wertschriften (Aktien/ETFs)',
@@ -124,13 +136,16 @@ const PlanCards: React.FC<PlanCardsProps> = ({
     {
       id: 'Galaxy',
       name: 'Galaxy',
-      price: '$39/Monat ($390/Jahr)',
-      priceValue: 3900, // $39 in cents
+      priceMonthly: '$39',
+      priceYearly: '$390',
+      priceValueMonthly: 3900, // $39 in cents
+      priceValueYearly: 39000, // $390 in cents
       currency: 'usd',
       description: 'Für vermögende Familien mit komplexen Strukturen',
       icon: Globe,
       color: 'text-purple-400',
       bgGradient: 'bg-gradient-to-r from-purple-500 to-indigo-600',
+      savingsPercent: 17,
       features: [
         'Unlimited Familienmitglieder',
         'Unlimited Wertschriften (Aktien/ETFs)',
@@ -169,14 +184,47 @@ const PlanCards: React.FC<PlanCardsProps> = ({
 
   const handlePlanClick = (plan: PlanData) => {
     if (onPlanSelect) {
-      onPlanSelect(plan.id, plan.priceValue);
+      const priceValue = billingInterval === 'month' ? plan.priceValueMonthly : plan.priceValueYearly;
+      onPlanSelect(plan.id, priceValue, billingInterval);
     }
   };
 
   return (
-    <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 place-content-center ${className}`}>
-      {plans.map((plan, index) => {
+    <div className={className}>
+      {/* Billing Toggle */}
+      <div className="flex justify-center mb-12">
+        <div className="bg-slate-800/60 backdrop-blur-sm border border-slate-600/50 rounded-full p-1.5 inline-flex">
+          <button
+            onClick={() => setBillingInterval('month')}
+            className={`px-8 py-3 rounded-full font-semibold transition-all duration-300 ${
+              billingInterval === 'month'
+                ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            Monatlich
+          </button>
+          <button
+            onClick={() => setBillingInterval('year')}
+            className={`px-8 py-3 rounded-full font-semibold transition-all duration-300 relative ${
+              billingInterval === 'year'
+                ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            Jährlich
+            <span className="absolute -top-2 -right-2 bg-green-500 text-white text-xs px-2 py-0.5 rounded-full font-bold">
+              -17%
+            </span>
+          </button>
+        </div>
+      </div>
+
+      {/* Plans Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 place-content-center">{plans.map((plan, index) => {
         const IconComponent = plan.icon;
+        const price = billingInterval === 'month' ? plan.priceMonthly : plan.priceYearly;
+        const priceValue = billingInterval === 'month' ? plan.priceValueMonthly : plan.priceValueYearly;
         
         return (
           <motion.div
@@ -234,13 +282,20 @@ const PlanCards: React.FC<PlanCardsProps> = ({
               {/* Price */}
               {showPricing && (
                 <div className="mb-2">
-                  <p className={`text-2xl font-bold ${plan.color}`}>
-                    {plan.price.split('(')[0].trim()}
+                  <p className={`text-3xl font-bold ${plan.color}`}>
+                    {price}
                   </p>
-                  {plan.price.includes('(') && (
+                  {priceValue > 0 && (
                     <p className="text-sm text-gray-400 mt-1">
-                      {plan.price.match(/\(([^)]+)\)/)?.[1]}
+                      pro {billingInterval === 'month' ? 'Monat' : 'Jahr'}
                     </p>
+                  )}
+                  {billingInterval === 'year' && plan.savingsPercent && (
+                    <div className="mt-2 inline-block">
+                      <span className="bg-green-500/20 text-green-400 px-2 py-1 rounded text-xs font-semibold">
+                        {plan.savingsPercent}% sparen
+                      </span>
+                    </div>
                   )}
                 </div>
               )}
@@ -293,6 +348,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
           </motion.div>
         );
       })}
+      </div>
     </div>
   );
 };
