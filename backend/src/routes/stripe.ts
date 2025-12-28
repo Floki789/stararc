@@ -591,7 +591,7 @@ router.post('/create-portal-session', authMiddleware, async (req, res): Promise<
     
     // Get user's Stripe customer ID
     const userResult = await pool.query(
-      'SELECT stripe_customer_id, email FROM users WHERE id = $1',
+      'SELECT stripe_customer_id FROM users WHERE id = $1',
       [userId]
     );
     
