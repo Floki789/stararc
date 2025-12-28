@@ -226,6 +226,30 @@ const Dashboard: React.FC = () => {
     }
   };
 
+  const handleManageSubscription = async () => {
+    try {
+      const apiUrl = (import.meta as any).env.VITE_API_URL || 'http://localhost:3004';
+      const response = await fetch(`${apiUrl}/api/stripe/create-portal-session`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create portal session');
+      }
+
+      const data = await response.json();
+      
+      // Redirect to Stripe Customer Portal
+      window.location.href = data.url;
+    } catch (error) {
+      console.error('Failed to open customer portal:', error);
+      alert('Fehler beim Öffnen der Subscription-Verwaltung. Bitte versuchen Sie es später erneut.');
+    }
+  };
 
   const getPlanIcon = (plan: string) => {
     switch (plan) {
@@ -381,6 +405,24 @@ const Dashboard: React.FC = () => {
               return null;
             })()}
           </div>
+          
+          {/* Subscription Management Actions */}
+          {subscription.plan !== 'Free' && (
+            <div className="mt-4 pt-4 border-t border-slate-600/50 flex flex-wrap gap-3">
+              <button
+                onClick={() => navigate('/subscription-selection')}
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
+              >
+                Plan ändern
+              </button>
+              <button
+                onClick={handleManageSubscription}
+                className="px-4 py-2 bg-slate-600 hover:bg-slate-700 text-white rounded-lg font-medium transition-colors"
+              >
+                Zahlung & Kündigung verwalten
+              </button>
+            </div>
+          )}
         </motion.div>
 
 

@@ -584,4 +584,52 @@ router.post('/activate-subscription', authMiddleware, async (req, res): Promise<
   }
 });
 
+// Create Stripe Customer Portal session for subscription management
+router.post('/create-portal-session', authMiddleware, async (req, res): Promise<any> => {
+  try {
+    const userId = (req as any).user.id;
+    
+    // Get user's Stripe customer ID
+    const userResult = await pool.query(
+      'SELECT stripe_customer_id, email FROM users WHERE id = $1',
+      [userId]
+    );
+    
+    if (!userResult.rows[0]) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    const stripeCustomerId = userResult.rows[0].stripe_customer_id;
+    
+    if (!stripeCustomerId) {
+      return res.status(400).json({ 
+        error: 'No Stripe customer found. Please purchase a subscription first.' 
+      });
+    }
+    
+    // Create portal session
+    const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    
+    const portalSession = await stripe.billingPortal.sessions.create({
+      customer: stripeCustomerId,
+      return_url: `${frontendUrl}/dashboard`,
+    });
+    
+    console.log(`✅ Created portal session for user ${userId}, customer ${stripeCustomerId}`);
+    
+    res.json({ 
+      url: portalSession.url,
+      sessionId: portalSession.id 
+    });
+    
+  } catch (error: any) {
+    console.error('Portal session error:', error);
+    res.status(500).json({ 
+      error: 'Failed to create portal session',
+      details: error.message 
+    });
+  }
+});
+
 export default router;
