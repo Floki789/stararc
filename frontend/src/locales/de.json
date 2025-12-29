@@ -167,7 +167,7 @@
     "animations": {
       "wealthManager": {
         "title": "Become your own wealth manager",
-        "subtitle": "Übernehmen Sie die Kontrolle über Ihr Vermögen"
+        "subtitle": "Übernehmen Sie die Kontrolle über Ihr Vermögen und Budget"
       },
       "assetOrganization": {
         "title": "Organize your wealth and security",
@@ -388,9 +388,9 @@
         "part1": "Werden Sie Ihr eigener",
         "part2": "Vermögensverwalter"
       },
-      "subtext": "Übernehmen Sie die Kontrolle über Ihr Vermögen. Verwahren sie dezentral, verwalten sie zentral.",
+      "subtext": "Übernehmen Sie die Kontrolle über Ihr Vermögen und Budget. Verwahren sie dezentral, verwalten sie zentral.",
       "features": {
-        "control": "Portfolio-Kontrolle",
+        "control": "Budget und Portfolio-Kontrolle",
         "strategy": "Strategische Planung", 
         "independence": "Finanzielle Unabhängigkeit"
       },
@@ -401,7 +401,7 @@
         "part1": "Halten und verwalten Sie ihr Vermögen",
         "part2": "für Generationen"
       },
-      "subtext": "Übernehmen Sie die Kontrolle über Ihr Vermögen mit unserer umfassenden Asset-Management-Plattform. Von Bitcoin-Verwahrung bis hin zu traditionellen Investitionen - alles in einem sicheren, privaten Dashboard.",
+      "subtext": "Übernehmen Sie die Kontrolle über Ihr Vermögen und Budget mit unserer umfassenden Asset-Management-Plattform. Von Bitcoin-Verwahrung bis hin zu traditionellen Investitionen - alles in einem sicheren, privaten Dashboard.",
       "features": {
         "security": "Bank-Level-Sicherheit",
         "privacy": "Vollständige Privatsphäre",
@@ -533,7 +533,7 @@
         "part1": "Ihre Assets",
         "part2": "Zentral verwaltet"
       },
-      "subtitle": "Verwalten Sie alle Ihre Vermögenswerte an einem Ort - von traditionellen Anlagen bis hin zu alternativen Investments",
+      "subtitle": "Verwalten Sie alle Ihre Vermögenswerte an einem Ort.",
       "assets": {
         "securities": {
           "title": "Wertschriften",
@@ -542,6 +542,46 @@
         "bitcoin": {
           "title": "Bitcoin", 
           "description": "Kryptowährungen & DeFi"
+        },
+        "bitcoinWizard": {
+          "title": "Bitcoin Dokumentation",
+          "description": "Vollständige Dokumentation von Bitcoin Assets und Backup Strategie."
+        },
+        "allAssets": {
+          "title": "Alle Asset-Klassen",
+          "description": "Aktien und ETFs, Immobilien, Vorsorgekonten, Bitcoin, Edelmetalle, Kunst, Währungen, Krypto, Obligationen."
+        },
+        "realEstate": {
+          "title": "Immobilien",
+          "description": "Verwaltung von Immobilien und deren Hypotheken."
+        },
+        "retirement": {
+          "title": "Vorsorge",
+          "description": "Einbezug von Vorsorgevermögen in die Portfolio Gesamtsicht."
+        },
+        "portfolio": {
+          "title": "Portfolio Cockpit",
+          "description": "Gesamtportfolio-Übersicht mit detaillierten Asset-Breakdowns und Visualisierungen"
+        },
+        "livePrices": {
+          "title": "Live & Tagesaktuelle Kurse",
+          "description": "Live Kurse für Wertschriften, Aktien, ETFs, Bitcoin, Edelmetalle, Krypto und Währungen."
+        },
+        "multiCurrency": {
+          "title": "Multi-Währungs-Support",
+          "description": "Unterstützung von elf weltweiten Währungen für Assets, Portfolio und Budget."
+        },
+        "custodyTypes": {
+          "title": "Fremd- & Selbstverwahrung",
+          "description": "Unterscheidung zwischen fremdverwahrten und selbstverwahrten Assets."
+        },
+        "financialInstitutions": {
+          "title": "Finanzinstitute",
+          "description": "Verwaltung von Banken, Brokern, Pensionskassen und Versicherungen."
+        },
+        "storageLocations": {
+          "title": "Aufbewahrungsorte",
+          "description": "Dokumentation und Verwaltung von physischen und digitalen Vaults."
         },
         "metals": {
           "title": "Edelmetalle",
@@ -576,34 +616,34 @@
     },
     "budgetShowcase": {
       "title": {
-        "part1": "Intelligente Budget-",
-        "part2": "Verwaltung für Familien"
+        "part1": "Intelligente Budget",
+        "part2": "Planung"
       },
-      "subtitle": "Verwalten Sie Ihr Familienbudget mit intelligenter Automatisierung und regelbasierten Einnahmen- und Ausgabenpositionen",
+      "subtitle": "Regelbasierte Erstellung von Ein- und Ausgaben für Familienmitglieder und Immobilien.",
       "features": {
-        "family": {
-          "title": "Familienmitglieder",
-          "description": "Erfassen Sie alle Familienmitglieder und deren individuelle Budgetpositionen"
+        "familyBudget": {
+          "title": "Familienbudget-Planung",
+          "description": "Planung von Einkommen und Ausgaben für alle Familienmitglieder."
         },
-        "automated": {
-          "title": "Regelbasierte Automatisierung",
-          "description": "Automatische Erstellung von Einnahmen- und Ausgabenpositionen basierend auf intelligenten Regeln"
-        },
-        "analytics": {
-          "title": "Budget-Analytics",
-          "description": "Detaillierte Auswertungen und Trends Ihrer Ausgaben und Einnahmen"
-        },
-        "goals": {
-          "title": "Finanzielle Ziele",
-          "description": "Setzen und verfolgen Sie Sparziele für Ihre Familie"
+        "automation": {
+          "title": "Miete und Wohneigentum",
+          "description": "Automatische Erstellung von Budgetpositionen bei Miete oder Wohneigentum."
         },
         "categories": {
-          "title": "Smart-Kategorien",
-          "description": "Intelligente Kategorisierung Ihrer Ausgaben mit anpassbaren Regeln"
+          "title": "Standard-Kategorien",
+          "description": "Wohnen, Lebenskosten, Mobilität, Versicherungen & Steuern, Bildung, Freizeit, Immobilien, Gehälter"
         },
-        "planning": {
-          "title": "Langzeit-Planung",
-          "description": "Planen Sie Ihr Budget für Monate und Jahre im Voraus"
+        "costTypes": {
+          "title": "Familien- & Individual-Kosten",
+          "description": "Klare Unterscheidung zwischen gemeinsamen Familienkosten und individuellen Ausgaben"
+        },
+        "cockpit": {
+          "title": "Budget-Cockpit",
+          "description": "Grafische Übersicht über Einnahmen und Ausgaben mit Berechnung der Sparrate"
+        },
+        "multiCurrency": {
+          "title": "Multi-Währung & Custom Kategorien",
+          "description": "Budgetpositionen in spezifischen Währungen mit erweiterbaren Kategorien."
         }
       },
       "benefits": {
@@ -623,9 +663,9 @@
         }
       },
       "cta": {
-        "subtitle": "Starten Sie noch heute mit Ihrer intelligenten Budgetplanung",
-        "start": "Budget Tool Testen",
-        "demo": "Demo Ansehen"
+        "subtitle": "Starten Sie noch heute mit Ihrer intelligenten Budget-Verwaltung",
+        "start": "Kostenlos starten",
+        "demo": "Demo ansehen"
       }
     },
     "securityShowcase": {
@@ -633,7 +673,7 @@
         "part1": "Maximale Sicherheit",
         "part2": "& Datenschutz"
       },
-      "subtitle": "Bank-Level Sicherheit mit Zero-Knowledge Architektur. Login- und Finanzdaten auf getrennten Servern mit sicherer Kommunikation.",
+      "subtitle": "Wir setzen die höchsten Standards für den Schutz Ihrer Privatsphäre um.",
       "features": {
         "institutions": {
           "title": "Finanzinstitute",
@@ -668,7 +708,6 @@
       },
       "privacy": {
         "title": "Datenschutz-Prinzipien",
-        "subtitle": "Wir setzen die höchsten Standards für den Schutz Ihrer Privatsphäre um",
         "principles": {
           "noSales": {
             "title": "Keine Datenweitergabe",

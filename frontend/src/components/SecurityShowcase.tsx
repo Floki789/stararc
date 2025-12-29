@@ -22,56 +22,7 @@ const SecurityShowcase: React.FC = () => {
     // Set demo credentials and navigate to login page with auto-login
     navigate('/login?demo=true');
   };
-  const securityFeatures = [
-    {
-      icon: Building2,
-      titleKey: "homepage.securityShowcase.features.institutions.title",
-      descriptionKey: "homepage.securityShowcase.features.institutions.description",
-      detailsKey: "homepage.securityShowcase.features.institutions.details",
-      gradient: "from-blue-600 to-indigo-600",
-      bgGradient: "from-blue-600/10 to-indigo-600/10"
-    },
-    {
-      icon: Vault,
-      titleKey: "homepage.securityShowcase.features.physicalVaults.title",
-      descriptionKey: "homepage.securityShowcase.features.physicalVaults.description",
-      detailsKey: "homepage.securityShowcase.features.physicalVaults.details",
-      gradient: "from-gray-600 to-slate-600",
-      bgGradient: "from-gray-600/10 to-slate-600/10"
-    },
-    {
-      icon: Smartphone,
-      titleKey: "homepage.securityShowcase.features.digitalVaults.title",
-      descriptionKey: "homepage.securityShowcase.features.digitalVaults.description",
-      detailsKey: "homepage.securityShowcase.features.digitalVaults.details",
-      gradient: "from-emerald-600 to-green-600",
-      bgGradient: "from-emerald-600/10 to-green-600/10"
-    },
-    {
-      icon: Key,
-      titleKey: "homepage.securityShowcase.features.singleSig.title",
-      descriptionKey: "homepage.securityShowcase.features.singleSig.description",
-      detailsKey: "homepage.securityShowcase.features.singleSig.details",
-      gradient: "from-orange-500 to-amber-500",
-      bgGradient: "from-orange-500/10 to-amber-500/10"
-    },
-    {
-      icon: ShieldCheck,
-      titleKey: "homepage.securityShowcase.features.multiSig.title",
-      descriptionKey: "homepage.securityShowcase.features.multiSig.description",
-      detailsKey: "homepage.securityShowcase.features.multiSig.details",
-      gradient: "from-red-600 to-orange-600",
-      bgGradient: "from-red-600/10 to-orange-600/10"
-    },
-    {
-      icon: Users,
-      titleKey: "homepage.securityShowcase.features.separation.title",
-      descriptionKey: "homepage.securityShowcase.features.separation.description",
-      detailsKey: "homepage.securityShowcase.features.separation.details",
-      gradient: "from-purple-600 to-violet-600",
-      bgGradient: "from-purple-600/10 to-violet-600/10"
-    }
-  ];
+  const securityFeatures = [];
 
   const privacyPrinciples = [
     {
@@ -128,9 +79,6 @@ const SecurityShowcase: React.FC = () => {
             <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-blue-400 mb-4">
               {t('homepage.securityShowcase.privacy.title')}
             </h3>
-            <p className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
-              {t('homepage.securityShowcase.privacy.subtitle')}
-            </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
@@ -154,37 +102,6 @@ const SecurityShowcase: React.FC = () => {
               );
             })}
           </div>
-        </div>
-
-        {/* Security Features Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 md:gap-10 mb-16 sm:mb-20 md:mb-24">
-          {securityFeatures.map((feature, index) => {
-            const Icon = feature.icon;
-            return (
-              <div
-                key={index}
-                className={`relative group bg-gradient-to-br ${feature.bgGradient} backdrop-blur-sm rounded-2xl p-6 sm:p-8 md:p-10 border border-gray-700/50 hover:border-gray-600/50 transition-all duration-500 hover:transform hover:scale-105 hover:shadow-2xl`}
-              >
-                {/* Icon */}
-                <div className={`inline-flex p-3 sm:p-4 rounded-xl bg-gradient-to-r ${feature.gradient} mb-4 sm:mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
-                  <Icon className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-white" />
-                </div>
-
-                {/* Content */}
-                <div>
-                  <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-2 sm:mb-3">
-                    {t(feature.titleKey)}
-                  </h3>
-                  <p className="text-sm sm:text-base md:text-lg text-gray-400 leading-relaxed">
-                    {t(feature.descriptionKey)}
-                  </p>
-                </div>
-
-                {/* Hover Effect Overlay */}
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-              </div>
-            );
-          })}
         </div>
 
         {/* Bottom Call to Action */}

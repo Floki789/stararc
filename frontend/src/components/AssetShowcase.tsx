@@ -8,7 +8,10 @@ import {
   PieChart,
   Zap,
   Globe,
-  LockKeyhole
+  LockKeyhole,
+  PiggyBank,
+  Building,
+  Archive
 } from 'lucide-react';
 
 const AssetShowcase: React.FC = () => {
@@ -22,50 +25,71 @@ const AssetShowcase: React.FC = () => {
   const assets = [
     {
       icon: TrendingUp,
-      title: "Alle Asset-Klassen",
-      description: "Liquidität, Aktien, ETFs, Bitcoin, Edelmetalle, Liegenschaften, Vorsorgekonten, Krypto, Obligationen, Darlehen, Schulden",
+      title: t('homepage.assetShowcase.assets.allAssets.title'),
+      description: t('homepage.assetShowcase.assets.allAssets.description'),
       gradient: "from-blue-500 to-cyan-500",
       bgGradient: "from-blue-500/10 to-cyan-500/10"
     },
     {
-      icon: Bitcoin,
-      title: "Bitcoin Self-Custody Wizard",
-      description: "Vollständiger Wizard für SingleSig und MultiSig Setup mit Hardware Wallets",
-      gradient: "from-orange-500 to-yellow-500",
-      bgGradient: "from-orange-500/10 to-yellow-500/10"
-    },
-    {
-      icon: Home,
-      title: "Immobilien",
-      description: "Verwaltung von Immobilien inklusive Hypotheken, Bewertungen und Rendite-Tracking",
-      gradient: "from-green-500 to-emerald-500",
-      bgGradient: "from-green-500/10 to-emerald-500/10"
-    },
-    {
       icon: PieChart,
-      title: "Portfolio Cockpit",
-      description: "Gesamtportfolio-Übersicht mit detaillierten Asset-Breakdowns und Visualisierungen",
+      title: t('homepage.assetShowcase.assets.portfolio.title'),
+      description: t('homepage.assetShowcase.assets.portfolio.description'),
       gradient: "from-purple-500 to-indigo-500",
       bgGradient: "from-purple-500/10 to-indigo-500/10"
     },
     {
       icon: Zap,
-      title: "Live & Tagesaktuelle Kurse",
-      description: "Live Kurse für Wertschriften, Aktien, ETFs, Bitcoin, Krypto. Tagesaktuelle Kurse für Edelmetalle",
+      title: t('homepage.assetShowcase.assets.livePrices.title'),
+      description: t('homepage.assetShowcase.assets.livePrices.description'),
       gradient: "from-yellow-400 to-amber-500",
       bgGradient: "from-yellow-400/10 to-amber-500/10"
     },
     {
+      icon: Home,
+      title: t('homepage.assetShowcase.assets.realEstate.title'),
+      description: t('homepage.assetShowcase.assets.realEstate.description'),
+      gradient: "from-green-500 to-emerald-500",
+      bgGradient: "from-green-500/10 to-emerald-500/10"
+    },
+    {
+      icon: PiggyBank,
+      title: t('homepage.assetShowcase.assets.retirement.title'),
+      description: t('homepage.assetShowcase.assets.retirement.description'),
+      gradient: "from-indigo-500 to-blue-500",
+      bgGradient: "from-indigo-500/10 to-blue-500/10"
+    },
+    {
+      icon: Bitcoin,
+      title: t('homepage.assetShowcase.assets.bitcoinWizard.title'),
+      description: t('homepage.assetShowcase.assets.bitcoinWizard.description'),
+      gradient: "from-orange-500 to-yellow-500",
+      bgGradient: "from-orange-500/10 to-yellow-500/10"
+    },
+    {
+      icon: Building,
+      title: t('homepage.assetShowcase.assets.financialInstitutions.title'),
+      description: t('homepage.assetShowcase.assets.financialInstitutions.description'),
+      gradient: "from-slate-500 to-gray-500",
+      bgGradient: "from-slate-500/10 to-gray-500/10"
+    },
+    {
+      icon: Archive,
+      title: t('homepage.assetShowcase.assets.storageLocations.title'),
+      description: t('homepage.assetShowcase.assets.storageLocations.description'),
+      gradient: "from-emerald-500 to-teal-500",
+      bgGradient: "from-emerald-500/10 to-teal-500/10"
+    },
+    {
       icon: Globe,
-      title: "Multi-Währungs-Support",
-      description: "Assets in 11 Währungen erfassbar mit separater Währung für Portfolio-Berechnung",
+      title: t('homepage.assetShowcase.assets.multiCurrency.title'),
+      description: t('homepage.assetShowcase.assets.multiCurrency.description'),
       gradient: "from-cyan-500 to-teal-500",
       bgGradient: "from-cyan-500/10 to-teal-500/10"
     },
     {
       icon: LockKeyhole,
-      title: "Fremd- & Selbstverwahrung",
-      description: "Klare Unterscheidung zwischen fremdverwahrten Assets (Banken) und selbstverwahrten Assets (Self-Custody)",
+      title: t('homepage.assetShowcase.assets.custodyTypes.title'),
+      description: t('homepage.assetShowcase.assets.custodyTypes.description'),
       gradient: "from-violet-500 to-purple-500",
       bgGradient: "from-violet-500/10 to-purple-500/10"
     }

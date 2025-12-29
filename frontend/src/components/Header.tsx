@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../hooks/useAuth';
 import { UserCircleIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/solid';
-import CassiopeiaIcon from './icons/CassiopeiaIcon';
 
 const Header: React.FC = () => {
   const { t, language, setLanguage } = useLanguage();
@@ -24,9 +23,6 @@ const Header: React.FC = () => {
             <span className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
               Stararc
             </span>
-            <div className="p-3">
-              <CassiopeiaIcon className="w-16 h-8 text-white" />
-            </div>
           </Link>
 
           {/* Desktop Navigation */}

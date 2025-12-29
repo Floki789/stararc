@@ -38,10 +38,6 @@ const Footer: React.FC = () => {
           <p className="text-gray-500 text-sm">
             © 2025 Stararc.one. All rights reserved.
           </p>
-          <div className="flex items-center space-x-6 mt-4 md:mt-0">
-            <span className="text-xs text-gray-500">🔐 Zero-Knowledge</span>
-            <span className="text-xs text-gray-500">🗑️ No Data Retention</span>
-          </div>
         </div>
       </div>
     </footer>

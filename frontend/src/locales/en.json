@@ -167,7 +167,7 @@
     "animations": {
       "wealthManager": {
         "title": "Become your own wealth manager",
-        "subtitle": "Take control of your wealth and manage investments independently"
+        "subtitle": "Take control of your wealth and budget and manage investments independently"
       },
       "assetOrganization": {
         "title": "Organize your wealth and security",
@@ -388,7 +388,7 @@
         "part1": "Become your own",
         "part2": "wealth manager"
       },
-      "subtext": "Take control of your wealth. Store decentrally, manage centrally.",
+      "subtext": "Take control of your wealth and budget. Store decentrally, manage centrally.",
       "features": {
         "control": "Portfolio Control",
         "strategy": "Strategic Planning",
@@ -401,7 +401,7 @@
         "part1": "Hodl and manage Assets",
         "part2": "for generations"
       },
-      "subtext": "Take control of your wealth with our comprehensive asset management platform. From Bitcoin custody to traditional investments - all in one secure, private dashboard.",
+      "subtext": "Take control of your wealth and budget with our comprehensive asset management platform. From Bitcoin custody to traditional investments - all in one secure, private dashboard.",
       "features": {
         "security": "Bank-level security",
         "privacy": "Complete privacy",
@@ -533,7 +533,7 @@
         "part1": "Your Assets",
         "part2": "Centrally Managed"
       },
-      "subtitle": "Manage all your assets in one place - from traditional investments to alternative assets",
+      "subtitle": "Manage all your assets in one place.",
       "assets": {
         "securities": {
           "title": "Securities",
@@ -542,6 +542,46 @@
         "bitcoin": {
           "title": "Bitcoin", 
           "description": "Cryptocurrencies & DeFi"
+        },
+        "bitcoinWizard": {
+          "title": "Bitcoin Documentation",
+          "description": "Complete documentation of Bitcoin assets and backup strategy."
+        },
+        "allAssets": {
+          "title": "All Asset Classes",
+          "description": "Stocks and ETFs, real estate, retirement accounts, Bitcoin, precious metals, art, currencies, crypto, bonds."
+        },
+        "realEstate": {
+          "title": "Real Estate",
+          "description": "Management of real estate and their mortgages."
+        },
+        "retirement": {
+          "title": "Retirement",
+          "description": "Integration of retirement assets into the overall portfolio view."
+        },
+        "portfolio": {
+          "title": "Portfolio Cockpit",
+          "description": "Complete portfolio overview with detailed asset breakdowns and visualizations"
+        },
+        "livePrices": {
+          "title": "Live & Daily Current Prices",
+          "description": "Live prices for securities, stocks, ETFs, Bitcoin, precious metals, crypto and currencies."
+        },
+        "multiCurrency": {
+          "title": "Multi-Currency Support",
+          "description": "Support for eleven global currencies for assets, portfolio and budget."
+        },
+        "custodyTypes": {
+          "title": "Third-Party & Self-Custody",
+          "description": "Distinction between third-party custodial and self-custodial assets."
+        },
+        "financialInstitutions": {
+          "title": "Financial Institutions",
+          "description": "Management of banks, brokers, pension funds and insurance companies."
+        },
+        "storageLocations": {
+          "title": "Storage Locations",
+          "description": "Documentation and management of physical and digital vaults."
         },
         "metals": {
           "title": "Precious Metals",
@@ -577,34 +617,39 @@
     "budgetShowcase": {
       "title": {
         "part1": "Intelligent Budget",
-        "part2": "Management for Families"
+        "part2": "Planning"
       },
-      "subtitle": "Manage your family budget with intelligent automation and rule-based income and expense positions",
+      "subtitle": "Rule-based creation of income and expenses for family members and real estate.",
       "features": {
-        "family": {
-          "title": "Family Members",
-          "description": "Capture all family members and their individual budget positions"
+        "familyBudget": {
+          "title": "Family Budget Planning",
+          "description": "Planning income and expenses for all family members."
         },
-        "automated": {
-          "title": "Rule-based Automation",
-          "description": "Automatic creation of income and expense positions based on intelligent rules"
-        },
-        "analytics": {
-          "title": "Budget Analytics",
-          "description": "Detailed analysis and trends of your expenses and income"
-        },
-        "goals": {
-          "title": "Financial Goals",
-          "description": "Set and track savings goals for your family"
+        "automation": {
+          "title": "Rent and Home Ownership",
+          "description": "Automatic creation of budget positions for rent or home ownership."
         },
         "categories": {
-          "title": "Smart Categories",
-          "description": "Intelligent categorization of your expenses with customizable rules"
+          "title": "Standard Categories",
+          "description": "Housing, living costs, mobility, insurance & taxes, education, leisure, real estate, salaries"
         },
-        "planning": {
-          "title": "Long-term Planning",
-          "description": "Plan your budget for months and years in advance"
+        "costTypes": {
+          "title": "Family & Individual Costs",
+          "description": "Clear distinction between shared family costs and individual expenses"
+        },
+        "cockpit": {
+          "title": "Budget Cockpit",
+          "description": "Graphical overview of income and expenses with savings rate calculation"
+        },
+        "multiCurrency": {
+          "title": "Multi-Currency & Custom Categories",
+          "description": "Budget positions in specific currencies with expandable categories."
         }
+      },
+      "cta": {
+        "subtitle": "Start your intelligent budget management today",
+        "start": "Get Started for Free",
+        "demo": "View Demo"
       },
       "benefits": {
         "title": "Why our Budget Tool?",
@@ -623,8 +668,8 @@
         }
       },
       "cta": {
-        "subtitle": "Start your intelligent budget planning today",
-        "start": "Test Budget Tool",
+        "subtitle": "Start your intelligent budget management today",
+        "start": "Get Started for Free",
         "demo": "View Demo"
       }
     },
@@ -668,7 +713,6 @@
       },
       "privacy": {
         "title": "Privacy Principles",
-        "subtitle": "We implement the highest standards for protecting your privacy",
         "principles": {
           "noSales": {
             "title": "No Data Sales",
