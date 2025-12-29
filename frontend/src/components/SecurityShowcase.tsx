@@ -4,14 +4,8 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { 
   Shield,
   Lock,
-  Building2,
-  Vault,
-  Smartphone,
-  Key,
-  Users,
   Database,
-  Eye,
-  ShieldCheck
+  Eye
 } from 'lucide-react';
 
 const SecurityShowcase: React.FC = () => {
@@ -22,7 +16,6 @@ const SecurityShowcase: React.FC = () => {
     // Set demo credentials and navigate to login page with auto-login
     navigate('/login?demo=true');
   };
-  const securityFeatures = [];
 
   const privacyPrinciples = [
     {
