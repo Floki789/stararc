@@ -715,20 +715,20 @@
         "title": "Privacy Principles",
         "principles": {
           "noSales": {
-            "title": "No Data Sales",
-            "description": "Your data belongs only to you"
+            "title": "No Data Sharing",
+            "description": "No sale or sharing of your data to third parties"
           },
           "encryption": {
-            "title": "End-to-End Encryption",
-            "description": "Data is only readable by you"
+            "title": "AES-256-GCM Encryption",
+            "description": "Client-side encrypted - readable only by you"
           },
           "local": {
-            "title": "Local Data Storage",
-            "description": "Servers in Switzerland"
+            "title": "Zero-Knowledge Architecture",
+            "description": "We cannot read your data"
           },
           "compliance": {
-            "title": "Compliance",
-            "description": "GDPR & Swiss Banking Standards"
+            "title": "GDPR-Compliant",
+            "description": "Swiss standards (bcrypt, PBKDF2, TLS 1.3)"
           }
         }
       },
