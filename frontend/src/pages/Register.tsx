@@ -9,6 +9,7 @@ interface RegisterFormData {
   email: string;
   password: string;
   confirmPassword: string;
+  termsAccepted: boolean;
 }
 
 const Register: React.FC = () => {
@@ -28,7 +29,8 @@ const Register: React.FC = () => {
   const [formData, setFormData] = useState<RegisterFormData>({
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    termsAccepted: false
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -39,10 +41,10 @@ const Register: React.FC = () => {
   const [showSuccessScreen, setShowSuccessScreen] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: type === 'checkbox' ? checked : value
     }));
     // Clear error when user starts typing
     if (errors[name]) {
@@ -74,6 +76,10 @@ const Register: React.FC = () => {
 
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = 'Passwörter stimmen nicht überein';
+    }
+
+    if (!formData.termsAccepted) {
+      newErrors.termsAccepted = t('auth.termsRequired');
     }
 
     setErrors(newErrors);
@@ -384,14 +390,43 @@ const Register: React.FC = () => {
             )}
           </div>
 
+          {/* AGB Checkbox */}
+          <div className="space-y-2">
+            <label className="flex items-start space-x-3 cursor-pointer">
+              <input
+                type="checkbox"
+                name="termsAccepted"
+                checked={formData.termsAccepted}
+                onChange={handleInputChange}
+                className={`mt-1 h-4 w-4 rounded border-2 ${
+                  errors.termsAccepted ? 'border-red-500' : 'border-gray-600'
+                } bg-gray-800/50 text-blue-600 focus:ring-blue-500 focus:ring-2`}
+                required
+              />
+              <span className="text-sm text-gray-300 leading-tight">
+                {t('auth.acceptTerms')}{' '}
+                <Link to="/agb" className="text-blue-400 hover:text-blue-300 underline" target="_blank">
+                  {t('nav.terms')}
+                </Link>
+                {' '}{t('auth.and')}{' '}
+                <Link to="/privacy" className="text-blue-400 hover:text-blue-300 underline" target="_blank">
+                  {t('nav.privacy')}
+                </Link>
+              </span>
+            </label>
+            {errors.termsAccepted && (
+              <p className="ml-7 text-sm text-red-400">{errors.termsAccepted}</p>
+            )}
+          </div>
+
           <div>
             <motion.button
-              whileHover={{ scale: isLoading ? 1 : 1.02 }}
-              whileTap={{ scale: isLoading ? 1 : 0.98 }}
+              whileHover={{ scale: isLoading || !formData.termsAccepted ? 1 : 1.02 }}
+              whileTap={{ scale: isLoading || !formData.termsAccepted ? 1 : 0.98 }}
               type="submit"
-              disabled={isLoading}
+              disabled={isLoading || !formData.termsAccepted}
               className={`group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white ${
-                isLoading
+                isLoading || !formData.termsAccepted
                   ? 'bg-gray-600 cursor-not-allowed'
                   : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700'
               } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200`}
@@ -405,20 +440,6 @@ const Register: React.FC = () => {
                 t('auth.register')
               )}
             </motion.button>
-          </div>
-
-          <div className="text-center">
-            <p className="text-xs text-gray-400">
-              {t('auth.agreementText')}{' '}
-              <Link to="/privacy" className="text-blue-400 hover:text-blue-300">
-                {t('auth.privacyPolicy')}
-              </Link>{' '}
-              {t('auth.and')}{' '}
-              <Link to="/terms" className="text-blue-400 hover:text-blue-300">
-                {t('auth.termsConditions')}
-              </Link>{' '}
-              {t('auth.agreementEnd')}
-            </p>
           </div>
         </motion.form>
       </motion.div>

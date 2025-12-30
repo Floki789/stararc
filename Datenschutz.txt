@@ -1,0 +1,117 @@
+Datenschutzerklärung für Stararc.one
+Stand: 30. Dezember 2025
+
+1. Verantwortliche Stelle
+1.1 Verantwortlich für die Datenverarbeitung im Sinne der Datenschutz-Grundverordnung (DSGVO) und des Schweizer Datenschutzgesetzes (DSG) ist:
+
+Archimedes SB
+[Adresse]
+Rapperswil-Jona, Schweiz
+E-Mail: [Kontakt-E-Mail]
+
+2. Grundsätze der Datenverarbeitung
+2.1 Privacy-by-Design: Stararc.one ist als privacy-fokussierte Metadaten-Verwaltungsplattform konzipiert, die bewusst auf die Speicherung sicherheitsrelevanter Informationen verzichtet.
+
+2.2 Datenminimierung: Wir verarbeiten nur die Daten, die für den Betrieb der Plattform technisch erforderlich sind.
+
+2.3 Client-seitige Verschlüsselung: Alle Nutzerdaten werden bereits auf Ihrem Gerät verschlüsselt, bevor sie an unsere Server übertragen werden.
+
+3. Art und Zweck der Datenverarbeitung
+3.1 Registrierung und Authentifizierung
+Verarbeitete Daten:
+
+E-Mail-Adresse
+Verschlüsselter Login-Code (BCrypt-Hash)
+Vor- und Nachname
+Zeitpunkt der AGB-Akzeptierung
+IP-Adresse bei Registrierung
+Rechtsgrundlage: Vertragserfüllung (Art. 6 Abs. 1 lit. b DSGVO)
+
+3.2 Metadaten-Verwaltung
+Verarbeitete Daten (verschlüsselt):
+
+Portfolio- und Asset-Bezeichnungen
+Budget-Kategorien und -Positionen
+Vault-Namen und Aufbewahrungsreferenzen
+Institutionen-Bezeichnungen
+Dokumenten-Referenzen (nicht Inhalte)
+Rechtsgrundlage: Vertragserfüllung (Art. 6 Abs. 1 lit. b DSGVO)
+
+3.3 Zahlungsabwicklung
+Verarbeitete Daten:
+
+Zahlungsinformationen (über externe Zahlungsdienstleister)
+Rechnungsadresse
+Abonnement-Status
+Rechtsgrundlage: Vertragserfüllung (Art. 6 Abs. 1 lit. b DSGVO)
+
+4. Ausdrücklich NICHT gespeicherte Daten
+4.1 Die Plattform ist ausdrücklich nicht für die Speicherung folgender sicherheitsrelevanter Informationen vorgesehen:
+
+Private Keys, Public Keys, Seeds oder Passphrases
+Login-Daten zu Banken, Brokern oder anderen Finanzdienstleistern
+Passwörter zu Drittanbietern
+Zugangscodes zu Tresoren oder Gebäuden
+Biometrische Daten oder PINs
+Wallet-Adressen oder Derivationspfade
+5. Verschlüsselung und technische Sicherheit
+5.1 Client-seitige Verschlüsselung: Alle sensiblen Daten werden bereits auf Ihrem Gerät verschlüsselt, bevor sie übertragen werden.
+
+5.2 Keine Klartext-Speicherung: Wir speichern grundsätzlich keine privacy-relevanten Daten im Klartext auf unseren Servern.
+
+5.3 Kein Zugriff: Selbst wir als Betreiber können Ihre verschlüsselten Daten nicht entschlüsseln, solange Sie Ihre Login-Daten nicht preisgeben.
+
+6. Empfänger und Drittanbieter
+6.1 Zahlungsdienstleister: Für die Zahlungsabwicklung nutzen wir externe, zertifizierte Zahlungsdienstleister.
+
+6.2 Hosting-Provider: Die Daten werden auf Servern in der Schweiz oder EU gehostet.
+
+6.3 Keine Datenvermarktung: Wir verkaufen, vermieten oder teilen Ihre Daten niemals mit Dritten zu kommerziellen Zwecken.
+
+7. Speicherdauer
+7.1 Aktive Accounts: Daten werden nur solange gespeichert, wie Ihr Account aktiv ist.
+
+7.2 Nach Kündigung: Bei Kündigung werden alle Ihre Daten unmittelbar und unwiderruflich gelöscht.
+
+7.3 Rechtliche Aufbewahrung: Nur gesetzlich vorgeschriebene Aufbewahrungsfristen (z.B. für Rechnungsdaten) bleiben bestehen.
+
+8. Ihre Rechte (DSGVO)
+8.1 Auskunftsrecht (Art. 15 DSGVO): Information über verarbeitete Daten
+
+8.2 Berichtigungsrecht (Art. 16 DSGVO): Korrektur falscher Daten
+
+8.3 Löschungsrecht (Art. 17 DSGVO): Löschung Ihrer Daten
+
+8.4 Einschränkung (Art. 18 DSGVO): Einschränkung der Verarbeitung
+
+8.5 Datenübertragbarkeit (Art. 20 DSGVO): Export Ihrer Daten
+
+8.6 Widerspruchsrecht (Art. 21 DSGVO): Widerspruch gegen Verarbeitung
+
+9. Cookies und Tracking
+9.1 Minimaler Einsatz: Wir verwenden nur technisch notwendige Cookies für die Funktionalität der Plattform.
+
+9.2 Kein Tracking: Wir setzen keine Tracking-Cookies oder Analytics-Tools ein, die Ihr Nutzungsverhalten verfolgen.
+
+9.3 Session-Management: Cookies dienen ausschließlich der Aufrechterhaltung Ihrer Sitzung.
+
+10. Internationale Datenübertragung
+10.1 Schweizer/EU-Standard: Datenverarbeitung erfolgt nach Schweizer und EU-Standards.
+
+10.2 Angemessenheitsbeschluss: Bei Übertragungen in Drittländer nur mit Angemessenheitsbeschluss oder geeigneten Garantien.
+
+11. Datenschutz-Folgenabschätzung
+11.1 Aufgrund unserer Privacy-by-Design-Architektur und der ausschließlichen Verarbeitung von Metadaten ist das Risiko für Ihre Privatsphäre minimiert.
+
+11.2 Die client-seitige Verschlüsselung stellt sicher, dass selbst bei einem Sicherheitsvorfall keine sensiblen Daten kompromittiert werden können.
+
+12. Änderungen dieser Datenschutzerklärung
+12.1 Änderungen dieser Datenschutzerklärung werden Ihnen mindestens 30 Tage im Voraus per E-Mail mitgeteilt.
+
+12.2 Bei wesentlichen Änderungen holen wir Ihre erneute Einwilligung ein.
+
+13. Kontakt und Beschwerden
+13.1 Datenschutzanfragen: [Kontakt-E-Mail]
+
+13.2 Beschwerdestelle: Sie haben das Recht, sich bei der zuständigen Datenschutzbehörde zu beschweren.
+

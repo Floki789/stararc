@@ -5,7 +5,9 @@
     "dashboard": "Dashboard",
     "login": "Login",
     "register": "Register",
-    "logout": "Logout"
+    "logout": "Logout",
+    "terms": "Terms & Conditions",
+    "privacy": "Privacy Policy"
   },
   "hero": {
     "title": "Your entire investment universe under one roof",
@@ -19,6 +21,113 @@
     "custody": "Custody Strategy",
     "services": "Services",
     "investmentTrends": "Investment Trends"
+  },
+  "terms": {
+    "title": "Terms and Conditions",
+    "subtitle": "Effective December 30, 2025",
+    "section1": {
+      "title": "§ 1 Scope and Contracting Party",
+      "p1": "These Terms and Conditions apply to all services of the Stararc.one platform, a web-based application for managing and organizing metadata related to assets, portfolio structures and security arrangements. Users of Stararc are explicitly instructed not to store security-relevant data such as authentication keys, private keys, access codes and other data that enable access to self-custody or third-party custody assets on the platform.",
+      "p2": "The contracting party is Archimedes SB, a company organized under Swiss law.",
+      "p3": "These Terms and Conditions apply exclusively. Deviating conditions of the customer are not recognized."
+    },
+    "section2": {
+      "title": "§ 2 Data Architecture and Metadata Management",
+      "p1": "Management Tool Character: Stararc.one is designed as a management tool for organizing metadata and not for direct storage of access information to assets.",
+      "p2": "Exclusion of Security-Relevant Data: The platform is explicitly not intended for storing the following security-relevant information:",
+      "list1": [
+        "Login data that enables access to banks, brokers and financial service providers of any kind",
+        "Login data for password managers and other applications",
+        "Usernames and passwords",
+        "Access data to vaults, buildings etc.",
+        "Private keys and public keys",
+        "Seed phrases, recovery phrases, passphrases",
+        "Authentication keys of all kinds such as PINs, biometric data etc."
+      ],
+      "p3": "Metadata Management: The platform exclusively manages metadata for organizing:",
+      "list2": [
+        "Portfolio structures",
+        "Metadata for securities, precious metals, crypto assets",
+        "Asset categories",
+        "Budget categories and budget items",
+        "Financial institutions",
+        "Storage locations (vaults)",
+        "Document references (not document contents)"
+      ]
+    },
+    "section5": {
+      "title": "§ 5 Privacy and Data Minimization",
+      "p1": "Core Principle: Privacy-focused metadata management with strict separation between organizational data and security-relevant access information.",
+      "p2": "Data Focus: The platform is limited to storing metadata and organizational structures without processing document contents or security-relevant information.",
+      "p3": "Encryption: All privacy-relevant data is encrypted on the user's client and securely transmitted to the Stararc server. The encrypted data is also unreadable to Stararc or third parties as long as you do not disclose your login data.",
+      "p4": "Data Protection Standards: Compliance with the highest Swiss and European data protection laws (DSG, EU-GDPR) as well as comparable international standards."
+    },
+    "section6": {
+      "title": "§ 6 Authentication and User Security",
+      "p1": "Secure Login Codes: Use of cryptographically secure login codes with encrypted storage according to industrial security standards.",
+      "p2": "Encrypted Data Storage: User data is encrypted client-side before being transmitted to and stored on the server. The platform fundamentally stores no privacy-relevant data in plain text. Examples of explicitly encrypted stored data include:",
+      "encryptedDataCategories": {
+        "assets": "Assets and Portfolios:",
+        "assetsList": [
+          "Designations of securities, stocks, ETFs, bonds",
+          "Bitcoin setup names and wallet descriptions",
+          "Precious metal positions and product designations",
+          "Hardware wallet names and serial numbers",
+          "Real estate designations and locations",
+          "Retirement accounts and provider names"
+        ],
+        "budget": "Budget and Financial Planning:",
+        "budgetList": [
+          "Budget categories and item names",
+          "Financial institution designations",
+          "Mortgage details and loan designations",
+          "Income and expense categories"
+        ],
+        "organization": "Organizational Structures:",
+        "organizationList": [
+          "Vault names and storage location details",
+          "Document references and notes",
+          "Asset categories and groupings",
+          "Custom institutions and providers"
+        ]
+      },
+      "p3": "Amounts, quantities, descriptions and comments are stored encrypted.",
+      "p4": "User Responsibility: The user bears full responsibility for securing their login data.",
+      "p5": "Limited Recovery Options: Account recovery is only possible if the user has access to their registered email address, passwords or two-factor authentication methods. If all authentication means are lost, recovery is technically impossible."
+    },
+    "section7": {
+      "title": "§ 7 Subscription Model and Pricing",
+      "p1": "The platform is offered through various subscription plans, whose current prices and scope of services can be viewed on the website.",
+      "p2": "Price changes will be communicated at least 30 days in advance."
+    },
+    "section8": {
+      "title": "§ 8 Payment Terms",
+      "p1": "Billing is conducted through proven payment services with support for Swiss and international banks as well as common payment methods.",
+      "p2": "Subscriptions renew automatically but can be cancelled at any time at the end of the current subscription period.",
+      "p3": "In case of payment default, access will be suspended after a reasonable grace period."
+    },
+    "section9": {
+      "title": "§ 9 Limitation of Liability",
+      "p1": "Liability Limitation: Liability for damages due to slight negligence is limited to the amount of the annual subscription fee actually paid by the affected user.",
+      "p2": "Metadata Character: Since Stararc.one only manages metadata and does not store security-relevant data, liability for data loss is correspondingly limited.",
+      "p3": "No Investment Advice: The platform does not provide investment advice."
+    },
+    "section10": {
+      "title": "§ 10 Termination and Data Deletion",
+      "p1": "Both parties may terminate the subscription at any time at the end of the current billing period.",
+      "p2": "Metadata Deletion: Upon termination, all user-specific data, metadata and organizational structures will be deleted.",
+      "p3": "After termination, there is no entitlement to restoration of user data from previous subscriptions."
+    },
+    "section11": {
+      "title": "§ 11 Technical Requirements and Availability",
+      "p1": "Browser Requirements: Modern, up-to-date browser with JavaScript support required.",
+      "p2": "Service Level: The service is provided \"as-is\" without guarantee of uninterrupted availability."
+    },
+    "section12": {
+      "title": "§ 12 Swiss Law and Jurisdiction",
+      "p1": "Swiss law applies exclusively.",
+      "p2": "Place of jurisdiction is Rapperswil-Jona, Switzerland."
+    }
   },
   "featuresDetails": {
     "assetManagement": {
@@ -105,7 +214,9 @@
     "privacyPolicy": "Privacy Policy",
     "and": "and",
     "termsConditions": "Terms & Conditions",
-    "agreementEnd": ".",
+    "agreementEnd": "",
+    "acceptTerms": "I accept the",
+    "termsRequired": "You must accept the Terms & Conditions and Privacy Policy",
     "createAccount": "create a new account",
     "loginToExisting": "sign in to your existing account",
     "earlyBetaTitle": "Early Beta Version",
@@ -737,6 +848,128 @@
         "start": "Get Started",
         "demo": "Demo Account"
       }
+    }
+  },
+  "privacy": {
+    "title": "Privacy Policy for Stararc.one",
+    "subtitle": "Effective: December 30, 2025",
+    "section1": {
+      "title": "1. Data Controller",
+      "p1": "The data controller responsible for data processing within the meaning of the General Data Protection Regulation (GDPR) and the Swiss Data Protection Act (DSG) is:",
+      "contact": "Archimedes SB\nSamuel Bumann\nRapperswil-Jona, Switzerland\nEmail: info@stararc.one",
+      "company": "Archimedes SB",
+      "person": "Samuel Bumann",
+      "location": "Rapperswil-Jona, Switzerland",
+      "email": "Email: info@stararc.one"
+    },
+    "section2": {
+      "title": "2. Data Processing Principles",
+      "p1": "Privacy-by-Design: Stararc.one is designed as a privacy-focused metadata management platform that explicitly warns against using the platform for storing security-relevant information.",
+      "p2": "Data Minimization: We only process data that is technically required for the operation of the platform.",
+      "p3": "Client-side Encryption: All user data is encrypted on your device before being transmitted to our servers."
+    },
+    "section3": {
+      "title": "3. Types and Purposes of Data Processing",
+      "registration": {
+        "title": "3.1 Registration and Authentication",
+        "intro": "Processed data:",
+        "list": [
+          "Email address (encrypted)",
+          "Encrypted login code (encrypted)",
+          "First and last name (encrypted)",
+          "Time of Terms acceptance",
+          "IP address during registration (encrypted)"
+        ],
+        "encryption": "Encryption: This data is encrypted with a Stararc master key and is unreadable to third parties. Even in the event of data access, the information cannot be decrypted without the corresponding key.",
+        "legal": "Legal basis: Contract performance (Art. 6 para. 1 lit. b GDPR)"
+      },
+      "metadata": {
+        "title": "3.2 Metadata Management",
+        "intro": "Processed data (encrypted):",
+        "list": [
+          "Portfolio and asset names",
+          "Budget categories and items",
+          "Vault names and custody references",
+          "Institution names",
+          "Document references (not contents)"
+        ],
+        "legal": "Legal basis: Contract performance (Art. 6 para. 1 lit. b GDPR)"
+      },
+      "payment": {
+        "title": "3.3 Payment Processing",
+        "intro": "Processed data:",
+        "list": [
+          "Payment information (via external payment processors)",
+          "Billing address",
+          "Subscription status"
+        ],
+        "legal": "Legal basis: Contract performance (Art. 6 para. 1 lit. b GDPR)"
+      }
+    },
+    "section4": {
+      "title": "4. Explicitly NOT Stored Data",
+      "p1": "The platform is explicitly not intended for storing the following security-relevant information:",
+      "list": [
+        "Private keys, public keys, seeds or passphrases",
+        "Login credentials for banks, brokers or other financial service providers",
+        "Third-party passwords",
+        "Access codes for vaults or buildings",
+        "Biometric data or PINs",
+        "Wallet addresses or derivation paths"
+      ]
+    },
+    "section5": {
+      "title": "5. Encryption and Technical Security",
+      "p1": "Client-side Encryption: All sensitive data is encrypted on your device before transmission.",
+      "p2": "No Plain Text Storage: We fundamentally do not store any privacy-relevant data in plain text on our servers.",
+      "p3": "No Access: Even we as operators cannot decrypt your encrypted data as long as you do not disclose your login credentials."
+    },
+    "section6": {
+      "title": "6. Recipients and Third Parties",
+      "p1": "Payment Processors: We use external, certified payment processors for payment handling.",
+      "p2": "Hosting Providers: Data is hosted on servers in Switzerland, EU or the United States.",
+      "p3": "No Data Commercialization: We never sell, rent or share your data with third parties for commercial purposes."
+    },
+    "section7": {
+      "title": "7. Storage Duration",
+      "p1": "Active Accounts: Data is only stored as long as your account is active.",
+      "p2": "After Cancellation: Upon cancellation, all your data will be immediately and irrevocably deleted, unless legal retention obligations exist.",
+      "p3": "Legal Retention: Only legally required retention periods (e.g., for invoice data) remain in effect."
+    },
+    "section8": {
+      "title": "8. Your Rights (GDPR)",
+      "p1": "Right of Access (Art. 15 GDPR): Information about processed data",
+      "p2": "Right of Rectification (Art. 16 GDPR): Correction of incorrect data",
+      "p3": "Right of Erasure (Art. 17 GDPR): Deletion of your data",
+      "p4": "Right of Restriction (Art. 18 GDPR): Restriction of processing",
+      "p5": "Right of Data Portability (Art. 20 GDPR): Export of your data",
+      "p6": "Right of Objection (Art. 21 GDPR): Objection to processing"
+    },
+    "section9": {
+      "title": "9. Cookies and Tracking",
+      "p1": "Minimal Use: We only use technically necessary cookies for platform functionality.",
+      "p2": "No Tracking: We do not use tracking cookies or analytics tools that monitor your usage behavior.",
+      "p3": "Session Management: Cookies serve exclusively to maintain your session."
+    },
+    "section10": {
+      "title": "10. International Data Transfer",
+      "p1": "Swiss/EU Standards: Data processing follows Swiss and EU standards.",
+      "p2": "Adequacy Decision: Transfers to third countries only with adequacy decision or appropriate safeguards."
+    },
+    "section11": {
+      "title": "11. Data Protection Impact Assessment",
+      "p1": "Due to our Privacy-by-Design architecture and exclusive processing of metadata, the risk to your privacy is minimized.",
+      "p2": "Client-side encryption ensures that even in case of a security incident, no sensitive data can be compromised."
+    },
+    "section12": {
+      "title": "12. Changes to this Privacy Policy",
+      "p1": "Changes to this privacy policy will be communicated to you at least 30 days in advance by email.",
+      "p2": "For significant changes, we will obtain your renewed consent."
+    },
+    "section13": {
+      "title": "13. Contact and Complaints",
+      "p1": "Privacy inquiries: info@stararc.one",
+      "p2": "Complaint Authority: You have the right to file a complaint with the competent data protection authority."
     }
   }
 }

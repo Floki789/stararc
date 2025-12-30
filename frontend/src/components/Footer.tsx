@@ -1,7 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const Footer: React.FC = () => {
+  const { t, language } = useLanguage();
+
+  // Language-specific routes
+  const termsRoute = language === 'de' ? '/agb' : '/terms';
+  const privacyRoute = language === 'de' ? '/datenschutz' : '/privacy';
+
   return (
     <footer className="bg-gray-900 border-t border-gray-800 py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -25,9 +32,10 @@ const Footer: React.FC = () => {
           </div>
 
           <div>
-            <h3 className="text-white font-semibold mb-4">Privacy</h3>
+            <h3 className="text-white font-semibold mb-4">Legal & Privacy</h3>
             <ul className="space-y-2">
-              <li><a href="#privacy-policy" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</a></li>
+              <li><Link to={termsRoute} className="text-gray-400 hover:text-white transition-colors">{t('nav.terms')}</Link></li>
+              <li><Link to={privacyRoute} className="text-gray-400 hover:text-white transition-colors">{t('nav.privacy')}</Link></li>
               <li><a href="#data-processing" className="text-gray-400 hover:text-white transition-colors">Data Processing</a></li>
               <li><a href="#zero-knowledge" className="text-gray-400 hover:text-white transition-colors">Zero-Knowledge</a></li>
             </ul>

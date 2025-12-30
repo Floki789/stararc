@@ -5,7 +5,9 @@
     "dashboard": "Dashboard",
     "login": "Anmelden",
     "register": "Registrieren",
-    "logout": "Abmelden"
+    "logout": "Abmelden",
+    "terms": "AGB",
+    "privacy": "Datenschutz"
   },
   "hero": {
     "title": "Ihr ganzes Anlageuniversum unter einem Dach",
@@ -19,6 +21,113 @@
     "custody": "Custody Strategie",
     "services": "Services",
     "investmentTrends": "Investment Trends"
+  },
+  "terms": {
+    "title": "Allgemeine Geschäftsbedingungen",
+    "subtitle": "Gültig ab 30. Dezember 2025",
+    "section1": {
+      "title": "§ 1 Geltungsbereich und Vertragspartner",
+      "p1": "Diese Allgemeinen Geschäftsbedingungen gelten für alle Leistungen der Stararc.one Plattform, einer webbasierten Anwendung zur Verwaltung und Organisation von Metadaten im Zusammenhang mit Vermögenswerten, Portfoliostrukturen und Sicherheitsdispositionen. Nutzer von Stararc sind ausdrücklich angewiesen, auf der Plattform keine sicherheitsrelevanten Daten wie Authentifizierungsschlüssel, private Schlüssel, Zugangscodes und andere Daten zu speichern, die den Zugang zu selbst- oder fremdverwahrten Assets ermöglichen.",
+      "p2": "Vertragspartner ist Archimedes SB, ein nach Schweizer Recht organisiertes Unternehmen.",
+      "p3": "Diese AGB gelten ausschließlich. Abweichende Bedingungen des Kunden werden nicht anerkannt."
+    },
+    "section2": {
+      "title": "§ 2 Datenarchitektur und Metadaten-Verwaltung",
+      "p1": "Verwaltungstool-Charakter: Stararc.one ist als Verwaltungstool für die Organisation von Metadaten konzipiert und nicht für die direkte Speicherung von Zugangsinformationen zu Assets.",
+      "p2": "Ausschluss sicherheitsrelevanter Daten: Die Plattform ist ausdrücklich nicht für die Speicherung folgender sicherheitsrelevanter Informationen vorgesehen:",
+      "list1": [
+        "Login-Daten, die Zugang zu Banken, Brokern und Finanzanbietern jeglicher Art ermöglichen",
+        "Login-Daten zu Passwort-Managern und anderen Applikationen",
+        "Benutzernamen und Passwörter",
+        "Zugangsdaten zu Tresoren, Gebäuden etc.",
+        "Private Keys und Public Keys",
+        "Seed-Phrasen, Recovery-Phrasen, Passphrasen",
+        "Authentifizierungsschlüssel aller Art wie PINs, biometrische Daten etc."
+      ],
+      "p3": "Metadaten-Management: Die Plattform verwaltet ausschließlich Metadaten zur Organisation von:",
+      "list2": [
+        "Portfoliostrukturen",
+        "Metadaten zu Wertschriften, Edelmetallen, Krypto-Assets",
+        "Asset-Kategorien",
+        "Budget-Kategorien und Budget-Positionen",
+        "Finanzinstituten",
+        "Aufbewahrungsorten (Vaults)",
+        "Dokumenten-Referenzen (nicht Dokumenteninhalte)"
+      ]
+    },
+    "section5": {
+      "title": "§ 5 Privacy und Datenminimierung",
+      "p1": "Grundprinzip: Privacy-fokussierte Metadatenverwaltung mit strikter Trennung zwischen Organisationsdaten und sicherheitsrelevanten Zugangsinformationen.",
+      "p2": "Datenfokus: Die Plattform beschränkt sich auf die Speicherung von Metadaten und Organisationsstrukturen ohne Verarbeitung von Dokumenteninhalten oder sicherheitsrelevanten Informationen.",
+      "p3": "Verschlüsselung: Alle privacy-relevanten Daten werden auf dem Client des Nutzers verschlüsselt und sicher an den Stararc Server übertragen. Die verschlüsselten Daten sind auch für Stararc oder Dritte nicht lesbar, solange Sie ihre Logindaten nicht preisgeben.",
+      "p4": "Datenschutzstandards: Einhaltung höchster Schweizer und europäischer Datenschutzgesetze (DSG, EU-DSGVO) sowie vergleichbarer internationaler Standards."
+    },
+    "section6": {
+      "title": "§ 6 Authentifizierung und Nutzersicherheit",
+      "p1": "Sichere Login-Codes: Verwendung kryptographisch sicherer Login-Codes mit verschlüsselter Speicherung nach industriellen Sicherheitsstandards.",
+      "p2": "Verschlüsselte Datenspeicherung: Nutzerdaten werden client-seitig verschlüsselt, bevor sie an den Server übertragen und gespeichert werden. Die Plattform speichert grundsätzlich keine privacy-relevanten Daten im Klartext. Explizit verschlüsselt gespeichert werden beispielsweise:",
+      "encryptedDataCategories": {
+        "assets": "Vermögenswerte und Portfolios:",
+        "assetsList": [
+          "Bezeichnungen von Wertschriften, Aktien, ETFs, Anleihen",
+          "Bitcoin-Setup-Namen und Wallet-Beschreibungen",
+          "Edelmetall-Positionen und Produktbezeichnungen",
+          "Hardware-Wallet-Namen und Seriennummern",
+          "Immobilien-Bezeichnungen und Standorte",
+          "Vorsorge-Konten und Anbieter-Namen"
+        ],
+        "budget": "Budget- und Finanzplanung:",
+        "budgetList": [
+          "Budget-Kategorien und Positionen-Namen",
+          "Finanzinstitutions-Bezeichnungen",
+          "Hypotheken-Details und Kreditbezeichnungen",
+          "Einnahmen- und Ausgaben-Kategorien"
+        ],
+        "organization": "Organisationsstrukturen:",
+        "organizationList": [
+          "Vault-Namen und Aufbewahrungsort-Details",
+          "Dokumenten-Referenzen und Notizen",
+          "Asset-Kategorien und Gruppierungen",
+          "Benutzerdefinierte Institutionen und Anbieter"
+        ]
+      },
+      "p3": "Beträge, Mengen, Beschreibungen und Kommentare werden verschlüsselt gespeichert.",
+      "p4": "Nutzerverantwortung: Der Nutzer trägt die vollständige Verantwortung für die Sicherung seiner Anmeldedaten.",
+      "p5": "Begrenzte Wiederherstellungsmöglichkeiten: Eine Kontowiederherstellung ist nur möglich, wenn der Nutzer Zugang zu seiner registrierten E-Mail-Adresse, seinen Passwörtern oder Zwei-Faktor-Authentifizierungsmöglichkeiten hat. Bei Verlust aller Authentifizierungsmittel ist eine Wiederherstellung technisch nicht möglich."
+    },
+    "section7": {
+      "title": "§ 7 Abonnement-Modell und Preisgestaltung",
+      "p1": "Die Plattform wird über verschiedene Abonnement-Pläne angeboten, deren aktuelle Preise und Leistungsumfang auf der Website einsehbar sind.",
+      "p2": "Preisänderungen werden mindestens 30 Tage im Voraus kommuniziert."
+    },
+    "section8": {
+      "title": "§ 8 Zahlungsbedingungen",
+      "p1": "Die Abrechnung erfolgt über bewährte Payment-Services mit Unterstützung für Schweizer und internationale Banken sowie gängige Zahlungsmethoden.",
+      "p2": "Abonnements verlängern sich automatisch, können aber jederzeit auf Ende der laufenden Subscription gekündigt werden.",
+      "p3": "Bei Zahlungsausfall erfolgt eine Sperrung nach angemessener Kulanzfrist."
+    },
+    "section9": {
+      "title": "§ 9 Haftungsbeschränkung",
+      "p1": "Haftungsbegrenzung: Die Schadenersatzpflicht ist bei leichter Fahrlässigkeit auf die Höhe der vom betroffenen Nutzer effektiv gezahlten jährlichen Abonnementgebühr beschränkt.",
+      "p2": "Metadaten-Charakter: Da Stararc.one nur Metadaten verwaltet und keine sicherheitsrelevanten Daten speichert, ist die Haftung für Datenverluste entsprechend begrenzt.",
+      "p3": "Keine Anlageberatung: Die Plattform bietet keine Anlageberatung."
+    },
+    "section10": {
+      "title": "§ 10 Kündigung und Datenlöschung",
+      "p1": "Beide Parteien können das Abonnement jederzeit zum Ende der laufenden Abrechnungsperiode kündigen.",
+      "p2": "Metadaten-Löschung: Bei Kündigung werden alle nutzerspezifischen Daten, Metadaten und Organisationsstrukturen gelöscht.",
+      "p3": "Nach der Kündigung besteht kein Anspruch auf Wiederherstellung von Nutzerdaten früherer Abonnements."
+    },
+    "section11": {
+      "title": "§ 11 Technische Anforderungen und Verfügbarkeit",
+      "p1": "Browser-Anforderungen: Moderner, aktueller Browser mit JavaScript-Unterstützung erforderlich.",
+      "p2": "Service-Level: Der Service wird \"as-is\" bereitgestellt ohne Garantie für ununterbrochene Verfügbarkeit."
+    },
+    "section12": {
+      "title": "§ 12 Schweizer Recht und Gerichtsstand",
+      "p1": "Es gilt ausschließlich Schweizer Recht.",
+      "p2": "Gerichtsstand ist Rapperswil-Jona, Schweiz."
+    }
   },
   "featuresDetails": {
     "assetManagement": {
@@ -105,7 +214,9 @@
     "privacyPolicy": "Datenschutzbestimmungen",
     "and": "und",
     "termsConditions": "Nutzungsbedingungen",
-    "agreementEnd": "zu.",
+    "agreementEnd": "zu",
+    "acceptTerms": "Ich akzeptiere die",
+    "termsRequired": "Sie müssen den AGB und der Datenschutzerklärung zustimmen",
     "createAccount": "erstellen Sie ein neues Konto",
     "loginToExisting": "melden Sie sich in Ihr bestehendes Konto an",
     "earlyBetaTitle": "Early Beta Version",
@@ -732,6 +843,128 @@
         "start": "Jetzt Starten",
         "demo": "Demo Account"
       }
+    }
+  },
+  "privacy": {
+    "title": "Datenschutzerklärung für Stararc.one",
+    "subtitle": "Stand: 30. Dezember 2025",
+    "section1": {
+      "title": "1. Verantwortliche Stelle",
+      "p1": "Verantwortlich für die Datenverarbeitung im Sinne der Datenschutz-Grundverordnung (DSGVO) und des Schweizer Datenschutzgesetzes (DSG) ist:",
+      "contact": "Archimedes SB\nSamuel Bumann\nRapperswil-Jona, Schweiz\nE-Mail: info@stararc.one",
+      "company": "Archimedes SB",
+      "person": "Samuel Bumann",
+      "location": "Rapperswil-Jona, Schweiz",
+      "email": "E-Mail: info@stararc.one"
+    },
+    "section2": {
+      "title": "2. Grundsätze der Datenverarbeitung",
+      "p1": "Privacy-by-Design: Stararc.one ist als privacy-fokussierte Metadaten-Verwaltungsplattform konzipiert, die explizit darauf aufmerksam macht, die Plattform nicht für die Speicherung sicherheitsrelevanter Informationen zu verwenden.",
+      "p2": "Datenminimierung: Wir verarbeiten nur die Daten, die für den Betrieb der Plattform technisch erforderlich sind.",
+      "p3": "Client-seitige Verschlüsselung: Alle Nutzerdaten werden bereits auf Ihrem Gerät verschlüsselt, bevor sie an unsere Server übertragen werden."
+    },
+    "section3": {
+      "title": "3. Art und Zweck der Datenverarbeitung",
+      "registration": {
+        "title": "3.1 Registrierung und Authentifizierung",
+        "intro": "Verarbeitete Daten:",
+        "list": [
+          "E-Mail-Adresse (verschlüsselt)",
+          "Verschlüsselter Login-Code (verschlüsselt)",
+          "Vor- und Nachname (verschlüsselt)",
+          "Zeitpunkt der AGB-Akzeptierung",
+          "IP-Adresse bei Registrierung (verschlüsselt)"
+        ],
+        "encryption": "Verschlüsselung: Diese Daten werden mit einem Stararc-Masterkey verschlüsselt und sind für Dritte nicht lesbar. Selbst bei einem Datenzugriff sind die Informationen ohne den entsprechenden Schlüssel nicht entschlüsselbar.",
+        "legal": "Rechtsgrundlage: Vertragserfüllung (Art. 6 Abs. 1 lit. b DSGVO)"
+      },
+      "metadata": {
+        "title": "3.2 Metadaten-Verwaltung",
+        "intro": "Verarbeitete Daten (verschlüsselt):",
+        "list": [
+          "Portfolio- und Asset-Bezeichnungen",
+          "Budget-Kategorien und -Positionen",
+          "Vault-Namen und Aufbewahrungsreferenzen",
+          "Institutionen-Bezeichnungen",
+          "Dokumenten-Referenzen (nicht Inhalte)"
+        ],
+        "legal": "Rechtsgrundlage: Vertragserfüllung (Art. 6 Abs. 1 lit. b DSGVO)"
+      },
+      "payment": {
+        "title": "3.3 Zahlungsabwicklung",
+        "intro": "Verarbeitete Daten:",
+        "list": [
+          "Zahlungsinformationen (über externe Zahlungsdienstleister)",
+          "Rechnungsadresse",
+          "Abonnement-Status"
+        ],
+        "legal": "Rechtsgrundlage: Vertragserfüllung (Art. 6 Abs. 1 lit. b DSGVO)"
+      }
+    },
+    "section4": {
+      "title": "4. Ausdrücklich NICHT gespeicherte Daten",
+      "p1": "Die Plattform ist ausdrücklich nicht für die Speicherung folgender sicherheitsrelevanter Informationen vorgesehen:",
+      "list": [
+        "Private Keys, Public Keys, Seeds oder Passphrases",
+        "Login-Daten zu Banken, Brokern oder anderen Finanzdienstleistern",
+        "Passwörter zu Drittanbietern",
+        "Zugangscodes zu Tresoren oder Gebäuden",
+        "Biometrische Daten oder PINs",
+        "Wallet-Adressen oder Derivationspfade"
+      ]
+    },
+    "section5": {
+      "title": "5. Verschlüsselung und technische Sicherheit",
+      "p1": "Client-seitige Verschlüsselung: Alle sensiblen Daten werden bereits auf Ihrem Gerät verschlüsselt, bevor sie übertragen werden.",
+      "p2": "Keine Klartext-Speicherung: Wir speichern grundsätzlich keine privacy-relevanten Daten im Klartext auf unseren Servern.",
+      "p3": "Kein Zugriff: Selbst wir als Betreiber können Ihre verschlüsselten Daten nicht entschlüsseln, solange Sie Ihre Login-Daten nicht preisgeben."
+    },
+    "section6": {
+      "title": "6. Empfänger und Drittanbieter",
+      "p1": "Zahlungsdienstleister: Für die Zahlungsabwicklung nutzen wir externe, zertifizierte Zahlungsdienstleister.",
+      "p2": "Hosting-Provider: Die Daten werden auf Servern in der Schweiz, EU oder den Vereinigten Staaten gehostet.",
+      "p3": "Keine Datenvermarktung: Wir verkaufen, vermieten oder teilen Ihre Daten niemals mit Dritten zu kommerziellen Zwecken."
+    },
+    "section7": {
+      "title": "7. Speicherdauer",
+      "p1": "Aktive Accounts: Daten werden nur solange gespeichert, wie Ihr Account aktiv ist.",
+      "p2": "Nach Kündigung: Bei Kündigung werden alle Ihre Daten sofort unwiderruflich gelöscht, soweit keine gesetzlichen Aufbewahrungspflichten bestehen.",
+      "p3": "Rechtliche Aufbewahrung: Nur gesetzlich vorgeschriebene Aufbewahrungsfristen (z.B. für Rechnungsdaten) bleiben bestehen."
+    },
+    "section8": {
+      "title": "8. Ihre Rechte (DSGVO)",
+      "p1": "Auskunftsrecht (Art. 15 DSGVO): Information über verarbeitete Daten",
+      "p2": "Berichtigungsrecht (Art. 16 DSGVO): Korrektur falscher Daten",
+      "p3": "Löschungsrecht (Art. 17 DSGVO): Löschung Ihrer Daten",
+      "p4": "Einschränkung (Art. 18 DSGVO): Einschränkung der Verarbeitung",
+      "p5": "Datenübertragbarkeit (Art. 20 DSGVO): Export Ihrer Daten",
+      "p6": "Widerspruchsrecht (Art. 21 DSGVO): Widerspruch gegen Verarbeitung"
+    },
+    "section9": {
+      "title": "9. Cookies und Tracking",
+      "p1": "Minimaler Einsatz: Wir verwenden nur technisch notwendige Cookies für die Funktionalität der Plattform.",
+      "p2": "Kein Tracking: Wir setzen keine Tracking-Cookies oder Analytics-Tools ein, die Ihr Nutzungsverhalten verfolgen.",
+      "p3": "Session-Management: Cookies dienen ausschließlich der Aufrechterhaltung Ihrer Sitzung."
+    },
+    "section10": {
+      "title": "10. Internationale Datenübertragung",
+      "p1": "Schweizer/EU-Standard: Datenverarbeitung erfolgt nach Schweizer und EU-Standards.",
+      "p2": "Angemessenheitsbeschluss: Bei Übertragungen in Drittländer nur mit Angemessenheitsbeschluss oder geeigneten Garantien."
+    },
+    "section11": {
+      "title": "11. Datenschutz-Folgenabschätzung",
+      "p1": "Aufgrund unserer Privacy-by-Design-Architektur und der ausschließlichen Verarbeitung von Metadaten ist das Risiko für Ihre Privatsphäre minimiert.",
+      "p2": "Die client-seitige Verschlüsselung stellt sicher, dass selbst bei einem Sicherheitsvorfall keine sensiblen Daten kompromittiert werden können."
+    },
+    "section12": {
+      "title": "12. Änderungen dieser Datenschutzerklärung",
+      "p1": "Änderungen dieser Datenschutzerklärung werden Ihnen mindestens 30 Tage im Voraus per E-Mail mitgeteilt.",
+      "p2": "Bei wesentlichen Änderungen holen wir Ihre erneute Einwilligung ein."
+    },
+    "section13": {
+      "title": "13. Kontakt und Beschwerden",
+      "p1": "Datenschutzanfragen: info@stararc.one",
+      "p2": "Beschwerdestelle: Sie haben das Recht, sich bei der zuständigen Datenschutzbehörde zu beschweren."
     }
   }
 }
