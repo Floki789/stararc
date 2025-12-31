@@ -3,6 +3,7 @@ import { body, validationResult } from 'express-validator';
 import rateLimit from 'express-rate-limit';
 import { AuthService } from '../services/authService';
 import { EmailService } from '../services/emailService';
+import { UserEncryptionService } from '../services/userEncryptionService';
 import { pool } from '../database/connection';
 import { authMiddleware } from '../middleware/auth';
 import * as crypto from 'crypto';
@@ -44,6 +45,26 @@ const registerValidation = [
     .trim()
     .isLength({ max: 50 })
     .withMessage('Alias must be max 50 characters'),
+  body('termsAccepted')
+    .isBoolean()
+    .custom(value => {
+      if (value !== true) {
+        throw new Error('Terms and Privacy Policy acceptance is required');
+      }
+      return true;
+    })
+    .withMessage('Terms and Privacy Policy acceptance is required'),
+  body('inviteCode')
+    .notEmpty()
+    .trim()
+    .custom(value => {
+      const validCodes = (process.env.INVITE_CODES || '').split(',').map(code => code.trim()).filter(Boolean);
+      if (validCodes.length === 0 || !validCodes.includes(value)) {
+        throw new Error('Valid invite code is required');
+      }
+      return true;
+    })
+    .withMessage('Valid invite code is required'),
 ];
 
 const loginValidation = [
@@ -90,10 +111,10 @@ router.post('/register', registerLimiter, registerValidation, async (req: Reques
       });
     }
 
-    const { email, password, alias = '' } = req.body;
+    const { email, password, alias = '', termsAccepted, inviteCode } = req.body;
 
     // Register user
-    const user = await authService.registerUser(email, password, alias);
+    const user = await authService.registerUser(email, password, alias, termsAccepted, req.ip);
 
     // Send email verification
     try {

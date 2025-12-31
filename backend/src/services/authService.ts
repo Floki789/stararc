@@ -58,7 +58,7 @@ export class AuthService {
   }
 
   // Register user
-  async registerUser(email: string, password: string, alias: string = ''): Promise<User> {
+  async registerUser(email: string, password: string, alias: string = '', termsAccepted: boolean = false, clientIp?: string): Promise<User> {
     const client = await this.pool.connect();
     
     try {
@@ -82,6 +82,23 @@ export class AuthService {
       const emailVerificationToken = this.generateEmailVerificationToken();
       const emailVerificationExpires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
 
+      // Prepare legal document acceptance data for master key encryption
+      let legalDocsData = null;
+      if (termsAccepted) {
+        const currentTime = new Date().toISOString();
+        const termsVersion = '1.0'; // Version should come from config/database
+        const privacyVersion = '1.0';
+        
+        legalDocsData = {
+          adminEncryptedTermsAcceptedAt: UserEncryptionService.encryptWithMasterKey(currentTime),
+          adminEncryptedTermsVersion: UserEncryptionService.encryptWithMasterKey(termsVersion),
+          adminEncryptedPrivacyAcceptedAt: UserEncryptionService.encryptWithMasterKey(currentTime),
+          adminEncryptedPrivacyVersion: UserEncryptionService.encryptWithMasterKey(privacyVersion),
+          adminEncryptedTermsIpAddress: clientIp ? UserEncryptionService.encryptWithMasterKey(clientIp) : null,
+          adminEncryptedPrivacyIpAddress: clientIp ? UserEncryptionService.encryptWithMasterKey(clientIp) : null,
+        };
+      }
+
       // Insert user with encrypted data
       const result = await client.query(
         `INSERT INTO users (
@@ -89,15 +106,23 @@ export class AuthService {
           email_hash, encrypted_email, encrypted_alias,
           admin_encrypted_email, admin_encrypted_alias,
           email_verification_token, email_verification_expires, 
-          email_verified, created_at, updated_at
+          email_verified, created_at, updated_at,
+          admin_encrypted_terms_accepted_at, admin_encrypted_terms_version, admin_encrypted_terms_ip_address,
+          admin_encrypted_privacy_accepted_at, admin_encrypted_privacy_version, admin_encrypted_privacy_ip_address
         )
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, NOW(), NOW())
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, NOW(), NOW(), $10, $11, $12, $13, $14, $15)
         RETURNING id, email_hash, email_verified, created_at`,
         [
           hashedPassword,
           encryptedData.emailHash, encryptedData.encryptedEmail, encryptedData.encryptedAlias,
           encryptedData.adminEncryptedEmail, encryptedData.adminEncryptedAlias,
-          emailVerificationToken, emailVerificationExpires, false // User must verify email
+          emailVerificationToken, emailVerificationExpires, false, // User must verify email
+          legalDocsData?.adminEncryptedTermsAcceptedAt,
+          legalDocsData?.adminEncryptedTermsVersion,
+          legalDocsData?.adminEncryptedTermsIpAddress,
+          legalDocsData?.adminEncryptedPrivacyAcceptedAt,
+          legalDocsData?.adminEncryptedPrivacyVersion,
+          legalDocsData?.adminEncryptedPrivacyIpAddress,
         ]
       );
 
