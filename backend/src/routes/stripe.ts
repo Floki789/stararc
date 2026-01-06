@@ -339,6 +339,23 @@ router.post('/webhook', async (req, res): Promise<any> => {
     const eventData = event.data.object as any;
     const metadata = eventData.metadata || {};
     
+    // Extract user_id from metadata or subscription
+    let userId = metadata.userId ? parseInt(metadata.userId) : null;
+    
+    // For invoice events, fetch user_id from subscription metadata
+    if (!userId && eventData.subscription && (event.type === 'invoice.payment_succeeded' || event.type === 'invoice.payment_failed')) {
+      try {
+        const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+        const subscription = await stripe.subscriptions.retrieve(eventData.subscription);
+        if (subscription.metadata?.userId) {
+          userId = parseInt(subscription.metadata.userId);
+          console.log(`✅ WEBHOOK - Extracted user_id ${userId} from subscription ${eventData.subscription}`);
+        }
+      } catch (subError) {
+        console.error('⚠️ WEBHOOK - Failed to retrieve subscription for user_id extraction:', subError);
+      }
+    }
+    
     try {
       await pool.query(
         `INSERT INTO subscription_events 
@@ -350,7 +367,7 @@ router.post('/webhook', async (req, res): Promise<any> => {
         [
           event.id,
           event.type,
-          metadata.userId ? parseInt(metadata.userId) : null,
+          userId,
           eventData.customer || null,
           eventData.subscription || null,
           eventData.id || null, // Session ID for checkout events
