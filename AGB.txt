@@ -1,0 +1,100 @@
+Allgemeine Geschäftsbedingungen (AGB) für Stararc.one
+
+§ 1 Geltungsbereich und Vertragspartner
+
+1.1 Diese Allgemeinen Geschäftsbedingungen gelten für alle Leistungen der Stararc.one Plattform, einer webbasierten Anwendung zur Verwaltung und Organisation von Metadaten im Zusammenhang mit Vermögenswerten, Portfoliostrukturen und Sicherheitsdispositionen. Nutzer von Stararc sind ausdrücklich angewiesen, auf der Plattform keine sicherheitsrelevanten Daten wie Authentifizierungsschlüssel, private Schlüssel, Zugangscodes und andere Daten zu speichern, die den Zugang zu selbst- oder fremdverwahrten Assets ermöglichen.
+
+1.2 Vertragspartner ist Archimedes SB, ein nach Schweizer Recht organisiertes Unternehmen.
+
+1.3 Diese AGB gelten ausschließlich. Abweichende Bedingungen des Kunden werden nicht anerkannt.
+
+§ 2 Datenarchitektur und Metadaten-Verwaltung
+
+2.1 Verwaltungstool-Charakter: Stararc.one ist als Verwaltungstool für die Organisation von Metadaten konzipiert und nicht für die direkte Speicherung von Zugangsinformationen zu Assets.
+
+2.2 Ausschluss sicherheitsrelevanter Daten: Die Plattform ist ausdrücklich nicht für die Speicherung folgender sicherheitsrelevanter Informationen vorgesehen:
+* Login-Daten, die Zugang zu Banken, Brokern und Finanzanbietern jeglicher Art ermöglichen
+* Login-Daten zu Passwort-Managern und anderen Applikationen
+* Benutzernamen und Passwörter
+* Zugangsdaten zu Tresoren, Gebäuden etc.
+* Private Keys und Public Keys
+* Seed-Phrasen, Recovery-Phrasen, Passphrasen
+* Authentifizierungsschlüssel aller Art wie PINs, biometrische Daten etc.
+
+2.3 Metadaten-Management: Die Plattform verwaltet ausschließlich Metadaten zur Organisation von:
+* Portfoliostrukturen
+* Metadaten zu Wertschriften, Edelmetallen, Krypto-Assets
+* Asset-Kategorien
+* Budget-Kategorien und Budget-Positionen
+* Finanzinstituten
+* Aufbewahrungsorten (Vaults)
+* Dokumenten-Referenzen (nicht Dokumenteninhalte)
+
+Kleine Anpassungen:
+* Bindestrich-Konsistenz bei "Login-Daten"
+* "PINs" statt "Pins"
+* Klarstellung bei Dokumenten-Referenzen: "(nicht Dokumenteninhalte)"
+* Zusammenfassung von Budget-Kategorien und -Positionen
+
+§ 5 Privacy und Datenminimierung
+
+5.1 Grundprinzip: Privacy-fokussierte Metadatenverwaltung mit strikter Trennung zwischen Organisationsdaten und sicherheitsrelevanten Zugangsinformationen.
+5.2 Datenfokus: Die Plattform beschränkt sich auf die Speicherung von Metadaten und Organisationsstrukturen ohne Verarbeitung von Dokumenteninhalten oder sicherheitsrelevanten Informationen.
+5.3 Verschlüsselung: Alle privacy-relevanten Daten werden auf dem Client des Nutzers verschlüsselt und sicher an den Stararc Server übertragen. Die verschlüsselten Daten sind auch für Starac oder Dritte nicht lesbar, solange Sie ihre Logindaten nicht preisgeben.
+5.4 Datenschutzstandards: Einhaltung höchster Schweizer und europäischer Datenschutzgesetze (DSG, EU-DSGVO) sowie vergleichbarer internationaler Standards.s.
+
+§ 6 Authentifizierung und Nutzersicherheit
+6.1 Sichere Login-Codes: Verwendung kryptographisch sicherer Login-Codes mit verschlüsselter Speicherung nach industriellen Sicherheitsstandards.
+6.2 Verschlüsselte Datenspeicherung: Nutzerdaten werden client-seitig verschlüsselt, bevor sie an den Server übertragen und gespeichert werden. Die Plattform speichert grundsätzlich keine privacy-relevanten Daten im Klartext. Explizit verschlüsselt gespeichert werden beispielsweise:
+
+Vermögenswerte und Portfolios:
+* Bezeichnungen von Wertschriften, Aktien, ETFs, Anleihen
+* Bitcoin-Setup-Namen und Wallet-Beschreibungen
+* Edelmetall-Positionen und Produktbezeichnungen
+* Hardware-Wallet-Namen und Seriennummern
+* Immobilien-Bezeichnungen und Standorte
+* Vorsorge-Konten und Anbieter-Namen
+
+Budget- und Finanzplanung:
+* Budget-Kategorien und Positionen-Namen
+* Finanzinstitutions-Bezeichnungen
+* Hypotheken-Details und Kreditbezeichnungen
+* Einnahmen- und Ausgaben-Kategorien
+
+Organisationsstrukturen:
+* Vault-Namen und Aufbewahrungsort-Details
+* Dokumenten-Referenzen und Notizen
+* Asset-Kategorien und Gruppierungen
+* Benutzerdefinierte Institutionen und Anbieter
+
+    Beträge, Mengen, Beschreibungen und Kommentare werden verschlüsselt gespeichert.
+
+6.3 Nutzerverantwortung: Der Nutzer trägt die vollständige Verantwortung für die Sicherung seiner Anmeldedaten.
+6.4 Begrenzte Wiederherstellungsmöglichkeiten: Eine Kontowiederherstellung ist nur möglich, wenn der Nutzer Zugang zu seiner registrierten E-Mail-Adresse, seinen Passwörtern oder Zwei-Faktor-Authentifizierungsmöglichkeiten hat. Bei Verlust aller Authentifizierungsmittel ist eine Wiederherstellung technisch nicht möglich.
+
+§ 7 Abonnement-Modell und Preisgestaltung
+7.1 Die Plattform wird über verschiedene Abonnement-Pläne angeboten, deren aktuelle Preise und Leistungsumfang auf der Website einsehbar sind.
+7.2 Preisänderungen werden mindestens 30 Tage im Voraus kommuniziert.
+
+§ 8 Zahlungsbedingungen und Stripe-Integration
+8.1 Die Abrechnung erfolgt über bewährte Payment-Services mit Unterstützung für Schweizer und internationale Banken sowie gängige Zahlungsmethoden.
+8.2 Abonnements verlängern sich automatisch, können aber jederzeit auf Ende der laufenden Subscription gekündigt werden.
+8.3 Bei Zahlungsausfall erfolgt eine Sperrung nach angemessener Kulanzfrist.
+
+§ 9 Haftungsbeschränkung
+9.1 Haftungsbegrenzung: Die Schadenersatzpflicht ist bei leichter Fahrlässigkeit auf die Höhe der vom betroffenen Nutzer effektiv gezahlten jährlichen Abonnementgebühr beschränkt.
+9.2 Metadaten-Charakter: Da Stararc.one nur Metadaten verwaltet und keine sicherheitsrelevanten Daten speichert, ist die Haftung für Datenverluste entsprechend begrenzt.
+9.3 Keine Anlageberatung: Die Plattform bietet keine Anlageberatung.
+
+§ 10 Kündigung und Datenlöschung
+10.1 Beide Parteien können das Abonnement jederzeit zum Ende der laufenden Abrechnungsperiode kündigen.
+10.2 Metadaten-Löschung: Bei Kündigung werden alle Nutzerspezifischen Daten Metadaten und Organisationsstrukturen gelöscht.
+10.3 Nach der Kündigung besteht kein Anspruch auf Wiederherstellung von Nutzerdaten fürherer Abonemente.
+
+§ 11 Technische Anforderungen und Verfügbarkeit
+11.1 Browser-Anforderungen: Moderner, aktueller Browser mit JavaScript-Unterstützung erforderlich.
+11.3 Service-Level: Der Service wird "as-is" bereitgestellt ohne Garantie für ununterbrochene Verfügbarkeit.
+
+§ 12 Schweizer Recht und Gerichtsstand
+12.1 Es gilt ausschließlich Schweizer Recht.
+12.2 Gerichtsstand ist Rapperswil-Jona, Schweiz.
