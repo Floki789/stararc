@@ -110,8 +110,54 @@ const PortfolioShowcase: React.FC = () => {
   };
 
   return (
-    <div className="py-20 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
-      <div className="max-w-6xl mx-auto px-6 lg:px-8">
+    <div className="relative py-20 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 overflow-hidden">
+      {/* Starfield Background */}
+      <div className="absolute inset-0">
+        {/* Stars layer 1 - small and dim */}
+        <div className="absolute inset-0" style={{
+          backgroundImage: `radial-gradient(2px 2px at 20% 30%, white, transparent),
+                           radial-gradient(2px 2px at 60% 70%, white, transparent),
+                           radial-gradient(1px 1px at 50% 50%, white, transparent),
+                           radial-gradient(1px 1px at 80% 10%, white, transparent),
+                           radial-gradient(2px 2px at 90% 60%, white, transparent),
+                           radial-gradient(1px 1px at 33% 85%, white, transparent),
+                           radial-gradient(1px 1px at 15% 45%, white, transparent)`,
+          backgroundSize: '200px 200px, 250px 250px, 150px 150px, 180px 180px, 220px 220px, 190px 190px, 160px 160px',
+          backgroundPosition: '0 0, 40px 60px, 130px 270px, 70px 100px, 20px 180px, 110px 50px, 150px 220px',
+          opacity: 0.3
+        }} />
+        
+        {/* Stars layer 2 - medium */}
+        <div className="absolute inset-0" style={{
+          backgroundImage: `radial-gradient(1.5px 1.5px at 10% 20%, rgba(147, 197, 253, 0.8), transparent),
+                           radial-gradient(1.5px 1.5px at 70% 80%, rgba(147, 197, 253, 0.8), transparent),
+                           radial-gradient(1.5px 1.5px at 40% 60%, rgba(147, 197, 253, 0.8), transparent),
+                           radial-gradient(1.5px 1.5px at 85% 35%, rgba(147, 197, 253, 0.8), transparent),
+                           radial-gradient(1.5px 1.5px at 25% 75%, rgba(147, 197, 253, 0.8), transparent)`,
+          backgroundSize: '300px 300px, 280px 280px, 320px 320px, 260px 260px, 290px 290px',
+          backgroundPosition: '50px 50px, 180px 180px, 20px 200px, 240px 80px, 130px 300px',
+          opacity: 0.4
+        }} />
+        
+        {/* Stars layer 3 - bright accent stars */}
+        <div className="absolute inset-0 animate-pulse" style={{
+          backgroundImage: `radial-gradient(3px 3px at 30% 40%, rgba(96, 165, 250, 1), transparent),
+                           radial-gradient(2px 2px at 75% 25%, rgba(96, 165, 250, 1), transparent),
+                           radial-gradient(2px 2px at 45% 90%, rgba(96, 165, 250, 1), transparent)`,
+          backgroundSize: '400px 400px, 350px 350px, 380px 380px',
+          backgroundPosition: '100px 100px, 200px 50px, 50px 250px',
+          opacity: 0.6,
+          animationDuration: '4s'
+        }} />
+      </div>
+
+      {/* Subtle background glow */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-900/20 via-transparent to-transparent"></div>
+      
+      {/* Grid pattern overlay */}
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:64px_64px]"></div>
+
+      <div className="relative z-10 max-w-6xl mx-auto px-6 lg:px-8">
         
         {/* Section Header */}
         <div className="text-center mb-12">

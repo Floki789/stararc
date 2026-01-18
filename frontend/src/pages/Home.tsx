@@ -3,6 +3,9 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import HeroSection from '../components/HeroSection';
 import PortfolioShowcase from '../components/PortfolioShowcase';
 import SecuritiesShowcase from '../components/SecuritiesShowcase';
+import BitcoinWizardShowcase from '../components/BitcoinWizardShowcase';
+import RealEstateShowcase from '../components/RealEstateShowcase';
+import ProfileShowcase from '../components/ProfileShowcase';
 import AssetShowcase from '../components/AssetShowcase';
 import BudgetShowcase from '../components/BudgetShowcase';
 import SecurityShowcase from '../components/SecurityShowcase';
@@ -48,6 +51,15 @@ const Home: React.FC = () => {
       
       {/* Securities Showcase Section */}
       <SecuritiesShowcase />
+      
+      {/* Bitcoin Self-Custody Wizard Showcase Section */}
+      <BitcoinWizardShowcase />
+      
+      {/* Real Estate Showcase Section */}
+      <RealEstateShowcase />
+      
+      {/* Profile & Management Showcase Section */}
+      <ProfileShowcase />
       
       {/* Asset Showcase Section */}
       <AssetShowcase />

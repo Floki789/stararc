@@ -96,14 +96,54 @@ const AssetShowcase: React.FC = () => {
   ];
 
   return (
-    <section className="relative bg-gradient-to-b from-gray-800 to-gray-900 py-16 sm:py-20 md:py-24 lg:py-32">
-      {/* Background decorative elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/3 left-0 w-64 h-64 sm:w-96 sm:h-96 rounded-full bg-gradient-to-r from-amber-500/5 to-yellow-500/5 blur-3xl -translate-x-1/2" />
-        <div className="absolute bottom-1/3 right-0 w-64 h-64 sm:w-96 sm:h-96 rounded-full bg-gradient-to-r from-blue-500/5 to-purple-500/5 blur-3xl translate-x-1/2" />
+    <div className="relative py-20 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 overflow-hidden">
+      {/* Starfield Background */}
+      <div className="absolute inset-0">
+        {/* Stars layer 1 - small and dim */}
+        <div className="absolute inset-0" style={{
+          backgroundImage: `radial-gradient(2px 2px at 20% 30%, white, transparent),
+                           radial-gradient(2px 2px at 60% 70%, white, transparent),
+                           radial-gradient(1px 1px at 50% 50%, white, transparent),
+                           radial-gradient(1px 1px at 80% 10%, white, transparent),
+                           radial-gradient(2px 2px at 90% 60%, white, transparent),
+                           radial-gradient(1px 1px at 33% 85%, white, transparent),
+                           radial-gradient(1px 1px at 15% 45%, white, transparent)`,
+          backgroundSize: '200px 200px, 250px 250px, 150px 150px, 180px 180px, 220px 220px, 190px 190px, 160px 160px',
+          backgroundPosition: '0 0, 40px 60px, 130px 270px, 70px 100px, 20px 180px, 110px 50px, 150px 220px',
+          opacity: 0.3
+        }} />
+        
+        {/* Stars layer 2 - medium */}
+        <div className="absolute inset-0" style={{
+          backgroundImage: `radial-gradient(1.5px 1.5px at 10% 20%, rgba(147, 197, 253, 0.8), transparent),
+                           radial-gradient(1.5px 1.5px at 70% 80%, rgba(147, 197, 253, 0.8), transparent),
+                           radial-gradient(1.5px 1.5px at 40% 60%, rgba(147, 197, 253, 0.8), transparent),
+                           radial-gradient(1.5px 1.5px at 85% 35%, rgba(147, 197, 253, 0.8), transparent),
+                           radial-gradient(1.5px 1.5px at 25% 75%, rgba(147, 197, 253, 0.8), transparent)`,
+          backgroundSize: '300px 300px, 280px 280px, 320px 320px, 260px 260px, 290px 290px',
+          backgroundPosition: '50px 50px, 180px 180px, 20px 200px, 240px 80px, 130px 300px',
+          opacity: 0.4
+        }} />
+        
+        {/* Stars layer 3 - bright accent stars */}
+        <div className="absolute inset-0 animate-pulse" style={{
+          backgroundImage: `radial-gradient(3px 3px at 30% 40%, rgba(96, 165, 250, 1), transparent),
+                           radial-gradient(2px 2px at 75% 25%, rgba(96, 165, 250, 1), transparent),
+                           radial-gradient(2px 2px at 45% 90%, rgba(96, 165, 250, 1), transparent)`,
+          backgroundSize: '400px 400px, 350px 350px, 380px 380px',
+          backgroundPosition: '100px 100px, 200px 50px, 50px 250px',
+          opacity: 0.6,
+          animationDuration: '4s'
+        }} />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
+      {/* Subtle background glow */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-amber-900/20 via-transparent to-transparent"></div>
+      
+      {/* Grid pattern overlay */}
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:64px_64px]"></div>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-16 sm:py-20 md:py-24 lg:py-32">
         
         {/* Section Header */}
         <div className="text-center mb-12 sm:mb-16 md:mb-20">
@@ -171,7 +211,7 @@ const AssetShowcase: React.FC = () => {
         </div>
 
       </div>
-    </section>
+    </div>
   );
 };
 
