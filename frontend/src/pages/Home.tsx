@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import HeroSection from '../components/HeroSection';
+import PortfolioShowcase from '../components/PortfolioShowcase';
+import SecuritiesShowcase from '../components/SecuritiesShowcase';
 import AssetShowcase from '../components/AssetShowcase';
 import BudgetShowcase from '../components/BudgetShowcase';
 import SecurityShowcase from '../components/SecurityShowcase';
@@ -40,6 +42,12 @@ const Home: React.FC = () => {
     <div className="min-h-screen">      
       {/* Hero Section */}
       <HeroSection />
+      
+      {/* Portfolio Breakdown Showcase */}
+      <PortfolioShowcase />
+      
+      {/* Securities Showcase Section */}
+      <SecuritiesShowcase />
       
       {/* Asset Showcase Section */}
       <AssetShowcase />

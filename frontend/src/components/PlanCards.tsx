@@ -112,15 +112,15 @@ const PlanCards: React.FC<PlanCardsProps> = ({
       id: 'Nova',
       name: 'Nova',
       priceMonthly: '$19',
-      priceYearly: '$190',
+      priceYearly: '$90',
       priceValueMonthly: 1900, // $19 in cents
-      priceValueYearly: 19000, // $190 in cents
+      priceValueYearly: 9000, // $90 in cents (Launch Special: first 100 subscriptions)
       currency: 'usd',
-      description: 'Für wachsende Familien mit diversifizierten Portfolios',
+      description: '🚀 Launch Special: 1 Monat kostenlos testen • Erste 100: $90 statt $380/Jahr',
       icon: Sparkles,
       color: 'text-blue-400',
       bgGradient: 'bg-gradient-to-r from-blue-500 to-cyan-600',
-      savingsPercent: 17,
+      savingsPercent: 76,
       features: [
         '6 Familienmitglieder',
         '100 Wertschriften (Aktien/ETFs)',
@@ -134,7 +134,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
         'Budget & Portfolio Cockpit'
       ],
       isPopular: true,
-      buttonText: 'Nova wählen'
+      buttonText: '1 Monat kostenlos testen'
     },
     {
       id: 'Galaxy',
