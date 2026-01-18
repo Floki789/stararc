@@ -99,6 +99,10 @@
     }
   },
   "portfolio": {
+    "title": "Visualisieren Sie Ihr komplettes Vermögen",
+    "subtitle": "Behalten Sie alle Anlageklassen mit detaillierten Aufschlüsselungen und interaktiven Visualisierungen im Überblick",
+    "assetClassesOverview": "Portfolio Anlageklassen Übersicht",
+    "totalPortfolioValue": "Gesamtportfolio-Wert",
     "totalValue": "Gesamtwert",
     "securities": {
       "title": "Ihre Wertschriften im Detail",
@@ -203,25 +207,80 @@
       }
     }
   },
-  "hero": {
-    "launchSpecial": "Launch Special",
-    "launchPrice": "Launch Preis",
-    "perYear": "pro Jahr",
-    "portfolioCockpit": "Portfolio & Budget Cockpit"
-  },
-  "profile": {
-    "addFamilyMember": "+ Familienmitglied hinzufügen",
-    "clickToAdd": {
-      "physicalVault": "Klicken Sie, um einen physischen Vault hinzuzufügen",
-      "digitalVault": "Klicken Sie, um einen digitalen Vault hinzuzufügen",
-      "financialInstitution": "Klicken Sie, um eine neue Finanzinstitution hinzuzufügen"
+  "currency": {
+    "badge": "Multi-Währungs-Support",
+    "title": "Globaler Währungs-Support",
+    "subtitle": "Verwalten Sie Ihr Portfolio in mehreren Währungen mit getrennten Budget- und Portfolio-Einstellungen. Live-Wechselkurse und automatische Umrechnungen.",
+    "currencySettings": "Währungseinstellungen",
+    "budgetCurrency": "Budget-Währung",
+    "portfolioCurrency": "Portfolio-Währung",
+    "availableCurrencies": "Verfügbare Währungen",
+    "currencies": {
+      "USD": "US-Dollar",
+      "EUR": "Euro",
+      "CHF": "Schweizer Franken",
+      "GBP": "Britisches Pfund",
+      "JPY": "Japanischer Yen",
+      "CAD": "Kanadischer Dollar",
+      "AUD": "Australischer Dollar",
+      "CNY": "Chinesischer Yuan",
+      "INR": "Indische Rupie",
+      "KRW": "Südkoreanischer Won",
+      "BTC": "Bitcoin"
+    },
+    "highlights": {
+      "currencies": "11+ Währungen",
+      "liveRates": "Live-Wechselkurse",
+      "separateBudgets": "Getrennte Budgets"
     }
   },
-  "privacy": {
-    "allKeysDeleted": "Alle Schlüssel gelöscht"
-  },
-  "currency": {
-    "currencySettings": "Währungseinstellungen"
+  "realEstate": {
+    "title": "Immobilien-Portfolio-Management",
+    "subtitle": "Verwalten Sie Ihre Immobilieninvestments zentral. Direktbesitz, REITs und Hypotheken-Tracking in einer integrierten Lösung.",
+    "features": {
+      "portfolio": {
+        "title": "Immobilien-Portfolio",
+        "description": "Verwalten Sie mehrere Immobilien mit detaillierten Finanzierungsstrukturen und Eigenkapital-Tracking"
+      },
+      "mortgageManagement": {
+        "title": "Hypotheken-Management",
+        "description": "Überblick über alle Hypotheken mit Zinssätzen, Laufzeiten und automatischer Kostenberechnung"
+      },
+      "equityTracking": {
+        "title": "Eigenkapital-Tracking",
+        "description": "Automatische Berechnung des Eigenkapitals basierend auf aktuellen Marktwerten und ausstehenden Hypotheken"
+      },
+      "reitIntegration": {
+        "title": "REIT-Integration",
+        "description": "Verwaltung von Real Estate Investment Trusts neben direkten Immobilieninvestments"
+      }
+    },
+    "types": {
+      "direct": "Direkte Immobilien",
+      "reits": "REITs",
+      "mixed": "Gemischtes Portfolio"
+    },
+    "budgetCurrency": "Budget-Währung",
+    "portfolioCurrency": "Portfolio-Währung",
+    "availableCurrencies": "Verfügbare Währungen",
+    "currencies": {
+      "USD": "US-Dollar",
+      "EUR": "Euro",
+      "CHF": "Schweizer Franken",
+      "GBP": "Britisches Pfund",
+      "JPY": "Japanischer Yen",
+      "CAD": "Kanadischer Dollar",
+      "AUD": "Australischer Dollar",
+      "CNY": "Chinesischer Yuan",
+      "INR": "Indische Rupie",
+      "KRW": "Südkoreanischer Won",
+      "BTC": "Bitcoin"
+    },
+    "highlights": {
+      "currencies": "11+ Währungen",
+      "liveRates": "Live-Wechselkurse",
+      "separateBudgets": "Getrennte Budgets"
+    }
   },
   "terms": {
     "title": "Allgemeine Geschäftsbedingungen",
@@ -479,22 +538,6 @@
     "demoLoginFailed": "Demo-Login fehlgeschlagen",
     "registerSuccess": "Registrierung erfolgreich! Sie können sich jetzt anmelden.",
     "registerFailed": "Registrierung fehlgeschlagen"
-  },
-  "subscription": {
-    "title": "Plan auswählen",
-    "free": "Kostenlos",
-    "basic": "Basic",
-    "premium": "Premium",
-    "selectPlan": "Plan wählen"
-  },
-  "common": {
-    "back": "Zurück",
-    "next": "Weiter",
-    "cancel": "Abbrechen",
-    "save": "Speichern",
-    "close": "Schließen",
-    "error": "Fehler",
-    "success": "Erfolg"
   },
   "assetOrganization": {
     "wealthAssetsTitle": "Vermögenswerte",
@@ -1213,33 +1256,6 @@
       "p2": "Beschwerdestelle: Sie haben das Recht, sich bei der zuständigen Datenschutzbehörde zu beschweren."
     }
   },
-  "currency": {
-    "badge": "Multi-Currency Support",
-    "title": "Globale Währungsunterstützung",
-    "subtitle": "Verwalten Sie Ihr Portfolio in mehreren Währungen mit separaten Budget- und Portfolio-Einstellungen. Live-Wechselkurse und automatische Umrechnungen.",
-    "currencySettings": "Currency Settings",
-    "budgetCurrency": "Budget Currency",
-    "portfolioCurrency": "Portfolio Currency",
-    "availableCurrencies": "Verfügbare Währungen",
-    "currencies": {
-      "USD": "US-Dollar",
-      "EUR": "Euro",
-      "CHF": "Schweizer Franken",
-      "GBP": "Britisches Pfund",
-      "JPY": "Japanischer Yen",
-      "CAD": "Kanadischer Dollar",
-      "AUD": "Australischer Dollar",
-      "CNY": "Chinesischer Yuan",
-      "INR": "Indische Rupie",
-      "KRW": "Südkoreanischer Won",
-      "BTC": "Bitcoin"
-    },
-    "highlights": {
-      "currencies": "11+ Währungen",
-      "liveRates": "Live Wechselkurse",
-      "separateBudgets": "Separate Budgets"
-    }
-  },
   "pension": {
     "badge": "Vorsorge & Versicherungen",
     "title": "Schweizer 3-Säulen-System",
@@ -1429,21 +1445,6 @@
     "save": "Speichern",
     "close": "Schließen"
   },
-  "portfolio": {
-    "title": "Visualisieren Sie Ihr gesamtes Vermögen",
-    "subtitle": "Behalten Sie den Überblick über alle Asset-Klassen mit detaillierten Aufschlüsselungen und interaktiven Visualisierungen",
-    "assetClassesOverview": "Portfolio Asset Classes Overview",
-    "totalPortfolioValue": "Total Portfolio Value",
-    "assetClasses": {
-      "realEstate": "Real Estate",
-      "bitcoin": "Bitcoin",
-      "preciousMetals": "Precious Metals",
-      "bonds": "Bonds",
-      "equity": "Equity",
-      "liquidity": "Liquidity",
-      "altcoins": "Altcoins"
-    }
-  },
   "securities": {
     "title": "Ihre Wertschriften im Detail",
     "subtitle": "Verwalten Sie Aktien, ETFs und Fonds mit Live-Kursen und professionellen Übersichten",
@@ -1493,41 +1494,6 @@
       "backupStrategy": {
         "title": "Backup-Strategie",
         "description": "Sichere Aufbewahrung und Dokumentation Ihrer Recovery-Phrasen"
-      }
-    }
-  },
-  "realEstate": {
-    "title": "Immobilien-Portfolio Management",
-    "subtitle": "Verwalten Sie Ihre Immobilien-Investitionen zentral. Direktbesitz, REITs und Hypotheken-Tracking in einer integrierten Lösung.",
-    "badge": "Real Estate Management",
-    "features": {
-      "directOwnership": {
-        "title": "Direktbesitz",
-        "description": "Verwaltung von direkt gehaltenen Immobilien mit Bewertungs-Tracking"
-      },
-      "mortgages": {
-        "title": "Hypotheken-Management",
-        "description": "Übersicht über Hypothekendarlehen, Zinssätze und Amortisation"
-      },
-      "reitTracking": {
-        "title": "REIT Portfolio",
-        "description": "Tracking von Real Estate Investment Trusts und Immobilienfonds"
-      }
-    }
-  },
-  "realEstate": {
-    "features": {
-      "portfolio": {
-        "title": "Immobilien-Portfolio",
-        "description": "Verwalten Sie mehrere Immobilien mit detaillierten Finanzierungsstrukturen und Equity-Tracking"
-      },
-      "mortgageManagement": {
-        "title": "Hypotheken-Management",
-        "description": "Übersicht über alle Hypotheken mit Zinssätzen, Laufzeiten und automatischer Kostenberechnung"
-      },
-      "equityTracking": {
-        "title": "Equity Tracking",
-        "description": "Visualisierung des Eigenkapitalanteils und automatische Berechnung des Nettovermögens"
       }
     }
   },

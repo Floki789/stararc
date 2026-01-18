@@ -344,6 +344,30 @@
     "toStararcLoginPage": "To StarArc Login Page",
     "starshipSynchronized": "Synchronized with Starship"
   },
+  "assetOrganization": {
+    "wealthAssetsTitle": "Wealth Assets",
+    "securityElementsTitle": "Security Elements",
+    "wealthAssets": {
+      "bitcoin": "Bitcoin",
+      "preciousMetals": "Precious Metals",
+      "art": "Art",
+      "liquidity": "Liquidity",
+      "securities": "Securities",
+      "retirement": "Retirement",
+      "realEstate": "Real Estate",
+      "insurance": "Insurance"
+    },
+    "securityAssets": {
+      "financialInstitutes": "Financial Institutions",
+      "physicalVaults": "Physical Vaults",
+      "digitalVaults": "Digital Vaults",
+      "seeds": "Seeds",
+      "descriptors": "Descriptors",
+      "passwordManager": "Password Manager",
+      "encryptionKeys": "Encryption Keys",
+      "passphrases": "Passphrases"
+    }
+  },
   "auth": {
     "login": "Login",
     "register": "Register",
@@ -384,46 +408,6 @@
     "demoLoginFailed": "Demo login failed",
     "registerSuccess": "Registration successful! You can now sign in.",
     "registerFailed": "Registration failed"
-  },
-  "subscription": {
-    "title": "Choose Your Plan",
-    "free": "Free",
-    "basic": "Basic",
-    "premium": "Premium",
-    "selectPlan": "Select Plan"
-  },
-  "common": {
-    "back": "Back",
-    "next": "Next",
-    "cancel": "Cancel",
-    "save": "Save",
-    "close": "Close",
-    "error": "Error",
-    "success": "Success"
-  },
-  "assetOrganization": {
-    "wealthAssetsTitle": "Wealth Assets",
-    "securityElementsTitle": "Security Elements",
-    "wealthAssets": {
-      "bitcoin": "Bitcoin",
-      "preciousMetals": "Precious Metals",
-      "art": "Art",
-      "liquidity": "Liquidity",
-      "securities": "Securities",
-      "retirement": "Retirement",
-      "realEstate": "Real Estate",
-      "insurance": "Insurance"
-    },
-    "securityAssets": {
-      "financialInstitutes": "Financial Institutes",
-      "physicalVaults": "Physical Vaults",
-      "digitalVaults": "Digital Vaults",
-      "seeds": "Seeds",
-      "descriptors": "Descriptors",
-      "passwordManager": "Password Manager",
-      "encryptionKeys": "Encryption Keys",
-      "passphrases": "Passphrases"
-    }
   },
   "heroSection": {
     "animations": {
@@ -1364,25 +1348,6 @@
       }
     }
   },
-  "profile": {
-    "title": "Profile & Management",
-    "subtitle": "Manage your StarArc profile, subscription settings and personal data centrally. Secure settings for maximum control.",
-    "badge": "Profile Management",
-    "features": {
-      "accountSettings": {
-        "title": "Account Settings",
-        "description": "Personal data, security settings and login management"
-      },
-      "subscriptionManagement": {
-        "title": "Subscription Management",
-        "description": "Manage plan changes, invoices and payment settings"
-      },
-      "dataPrivacy": {
-        "title": "Data Privacy & Security",
-        "description": "Encryption settings and privacy controls"
-      }
-    }
-  },
   "bitcoin": {
     "dashboard": "Bitcoin Dashboard",
     "walletManagement": "Wallet Management", 
@@ -1453,23 +1418,6 @@
     "volatility": "Volatility",
     "currencyFor": "Currency for portfolios, investments and assets",
     "managePhysicalDigital": "Manage physical and digital storage locations where you keep important information or assets"
-  },
-  "hero": {
-    "launchSpecial": "Launch Special",
-    "launchPrice": "Launch Price",
-    "perYear": "per year",
-    "portfolioCockpit": "Portfolio & Budget Cockpit"
-  },
-  "profile": {
-    "addFamilyMember": "+ Add Family Member",
-    "clickToAdd": {
-      "physicalVault": "Click to add a physical vault",
-      "digitalVault": "Click to add a digital vault", 
-      "financialInstitution": "Click to add a new financial institution"
-    }
-  },
-  "privacy": {
-    "allKeysDeleted": "All Keys Deleted"
   },
   "subscription": {
     "pricing": {
