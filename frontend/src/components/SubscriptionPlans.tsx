@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { CheckIcon, StarIcon } from '@heroicons/react/24/outline';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface SubscriptionPlan {
   id: number;
@@ -17,6 +18,7 @@ interface SubscriptionPlan {
 }
 
 const SubscriptionPlans: React.FC = () => {
+  const { t } = useLanguage();
   const plans: SubscriptionPlan[] = [
     {
       id: 1,
@@ -190,7 +192,7 @@ const SubscriptionPlans: React.FC = () => {
         {/* Billing Toggle */}
         <div className="flex items-center justify-center gap-4 mb-8">
           <span className={`${billingCycle === 'monthly' ? 'text-white' : 'text-gray-400'}`}>
-            Monthly
+            {t('subscription.pricing.monthly')}
           </span>
           <button
             onClick={() => setBillingCycle(billingCycle === 'monthly' ? 'yearly' : 'monthly')}
@@ -205,11 +207,11 @@ const SubscriptionPlans: React.FC = () => {
             />
           </button>
           <span className={`${billingCycle === 'yearly' ? 'text-white' : 'text-gray-400'}`}>
-            Yearly
+            {t('subscription.pricing.yearly')}
           </span>
           {billingCycle === 'yearly' && (
             <span className="privacy-badge ml-2">
-              Save 17%
+              {t('subscription.pricing.savePercent')}
             </span>
           )}
         </div>
@@ -311,11 +313,11 @@ const SubscriptionPlans: React.FC = () => {
                     : 'bg-gray-700 text-white hover:bg-gray-600'
                 }`}
               >
-                {plan.isPopular ? '🚀 Start with Pro' : 'Get Started'}
+                {plan.isPopular ? t('subscription.pricing.startWithPro') : t('subscription.pricing.getStarted')}
               </button>
 
               <p className="text-center text-xs text-gray-500 mt-4">
-                Cancel anytime • No hidden fees • Swiss privacy guaranteed
+                {t('subscription.pricing.cancelAnytime')}
               </p>
             </motion.div>
           );
@@ -330,13 +332,13 @@ const SubscriptionPlans: React.FC = () => {
         className="text-center mt-12"
       >
         <p className="text-gray-400 mb-4">
-          All plans include our Swiss Privacy-by-Design guarantee
+          {t('subscription.pricing.allPlansInclude')}
         </p>
         <div className="flex flex-wrap justify-center gap-6 text-sm text-gray-500">
-          <span>🔐 Zero-Knowledge Architecture</span>
-          <span>🗑️ Automatic Data Deletion</span>
-          <span>🇨🇭 Swiss Hosting</span>
-          <span>💾 No Data Sales</span>
+          <span>{t('subscription.pricing.features.zeroKnowledge')}</span>
+          <span>{t('subscription.pricing.features.dataDelation')}</span>
+          <span>{t('subscription.pricing.features.swissHosting')}</span>
+          <span>{t('subscription.pricing.features.noDataSales')}</span>
         </div>
       </motion.div>
     </div>

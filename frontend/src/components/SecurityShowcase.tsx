@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Lock, Shield, Eye, EyeOff, Key, Server, Sparkles, CheckCircle } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const SecurityShowcase: React.FC = () => {
+  const { t } = useLanguage();
   const [activeView, setActiveView] = useState<'user' | 'server'>('user');
 
   return (
@@ -51,14 +53,13 @@ const SecurityShowcase: React.FC = () => {
         <div className="text-center mb-16">
           <div className="inline-flex items-center space-x-2 px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full mb-6">
             <Sparkles className="w-5 h-5 text-blue-400" />
-            <span className="text-sm font-semibold text-blue-400">Client-Side Encryption</span>
+            <span className="text-sm font-semibold text-blue-400">{t('security.badge')}</span>
           </div>
           <h2 className="text-4xl lg:text-6xl font-bold text-white mb-6">
-            Ihre Daten bleiben privat
+            {t('security.title')}
           </h2>
           <p className="text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed">
-            End-to-End Verschlüsselung mit AES-256-GCM. Ihre Daten werden direkt in Ihrem Browser verschlüsselt. 
-            Niemand außer Ihnen kann sie lesen – nicht einmal wir.
+            {t('security.subtitle')}
           </p>
         </div>
 
@@ -74,7 +75,7 @@ const SecurityShowcase: React.FC = () => {
           >
             <div className="flex items-center space-x-2">
               <Eye className="w-5 h-5" />
-              <span>Was Sie sehen</span>
+              <span>{t('security.userView')}</span>
             </div>
           </button>
           <button
@@ -87,7 +88,7 @@ const SecurityShowcase: React.FC = () => {
           >
             <div className="flex items-center space-x-2">
               <EyeOff className="w-5 h-5" />
-              <span>Was wir sehen</span>
+              <span>{t('security.serverView')}</span>
             </div>
           </button>
         </div>
@@ -101,17 +102,17 @@ const SecurityShowcase: React.FC = () => {
                 <div className="p-2 bg-green-500/20 rounded-lg">
                   <CheckCircle className="w-6 h-6 text-green-400" />
                 </div>
-                <h3 className="text-2xl font-bold text-white">Ihre Assets</h3>
+                <h3 className="text-2xl font-bold text-white">{t('security.assetData')}</h3>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-slate-700">
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-slate-400">Name</th>
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-slate-400">Symbol</th>
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-slate-400">ISIN</th>
-                      <th className="text-right py-3 px-4 text-sm font-semibold text-slate-400">Menge</th>
-                      <th className="text-right py-3 px-4 text-sm font-semibold text-slate-400">Wert</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-slate-400">{t('security.tableHeaders.name')}</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-slate-400">{t('security.tableHeaders.symbol')}</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-slate-400">{t('security.tableHeaders.isin')}</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-slate-400">{t('security.tableHeaders.menge')}</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-slate-400">{t('security.tableHeaders.wert')}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -138,10 +139,9 @@ const SecurityShowcase: React.FC = () => {
               <div className="flex items-start space-x-3">
                 <Lock className="w-6 h-6 text-green-400 flex-shrink-0 mt-1" />
                 <div>
-                  <p className="text-green-400 font-semibold mb-2">Lesbar und zugänglich</p>
+                  <p className="text-green-400 font-semibold mb-2">{t('security.userInfo.title')}</p>
                   <p className="text-slate-300 leading-relaxed">
-                    In Ihrem Browser werden Ihre Daten entschlüsselt und lesbar dargestellt. 
-                    Nur Sie haben Zugriff auf Ihre Verschlüsselungs-Keys.
+                    {t('security.userInfo.description')}
                   </p>
                 </div>
               </div>
@@ -158,11 +158,11 @@ const SecurityShowcase: React.FC = () => {
                 <div className="p-2 bg-red-500/20 rounded-lg">
                   <Server className="w-6 h-6 text-red-400" />
                 </div>
-                <h3 className="text-2xl font-bold text-white">Verschlüsselte Assets</h3>
+                <h3 className="text-2xl font-bold text-white">{t('security.encryptedData.title')}</h3>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <p className="text-sm text-slate-400">Encrypted Asset Name</p>
+                  <p className="text-sm text-slate-400">{t('security.encryptedData.assetName')}</p>
                   <div className="bg-slate-950/50 rounded-lg p-3 border border-slate-800">
                     <code className="text-xs text-red-400 font-mono break-all">
                       B6d2xJG7USujRiFJOwwKDfMImuMP48B0cHMEkvKrot6fmX5KnTTjc6aNZul4OLQcsbDbUltf100uH8gd2GNdzSPNinTVBDw=
@@ -170,7 +170,7 @@ const SecurityShowcase: React.FC = () => {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <p className="text-sm text-slate-400">Encrypted Symbol</p>
+                  <p className="text-sm text-slate-400">{t('security.encryptedData.symbol')}</p>
                   <div className="bg-slate-950/50 rounded-lg p-3 border border-slate-800">
                     <code className="text-xs text-red-400 font-mono break-all">
                       DL1IKKQY2MbRamB5ejd134rVLHY6ygQJ7QSZtvg1IUNKf8egn9uYjM1Z5Zd318QkNcvPSkcZbcnv03MB
@@ -178,7 +178,7 @@ const SecurityShowcase: React.FC = () => {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <p className="text-sm text-slate-400">Encrypted ISIN</p>
+                  <p className="text-sm text-slate-400">{t('security.encryptedData.isin')}</p>
                   <div className="bg-slate-950/50 rounded-lg p-3 border border-slate-800">
                     <code className="text-xs text-red-400 font-mono break-all">
                       tAf9EQmvgI/O/G+xGoAv8zIDwqA/g1m04kq3zHcYCjre5q7eUL/q420AwlGaY7pLGiEF4o9qy9o8fuwt
@@ -186,7 +186,7 @@ const SecurityShowcase: React.FC = () => {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <p className="text-sm text-slate-400">Encrypted Quantity</p>
+                  <p className="text-sm text-slate-400">{t('security.encryptedData.quantity')}</p>
                   <div className="bg-slate-950/50 rounded-lg p-3 border border-slate-800">
                     <code className="text-xs text-red-400 font-mono break-all">
                       Jz/BS9iOOzOxn3l2WhoWM+P3HlAa9YAaH4pnFol+TVrXoQBciPqlsr31PhGI2/WIZuwfjAH35cWYVxEb
@@ -200,11 +200,9 @@ const SecurityShowcase: React.FC = () => {
               <div className="flex items-start space-x-3">
                 <Shield className="w-6 h-6 text-red-400 flex-shrink-0 mt-1" />
                 <div>
-                  <p className="text-red-400 font-semibold mb-2">Vollständig verschlüsselt und unleserlich</p>
+                  <p className="text-red-400 font-semibold mb-2">{t('security.serverInfo.title')}</p>
                   <p className="text-slate-300 leading-relaxed">
-                    Auf unseren Servern sind alle Daten mit AES-256-GCM verschlüsselt. 
-                    Selbst mit direktem Datenbankzugriff kann niemand Ihre Informationen lesen. 
-                    Nur Sie besitzen den Schlüssel – <span className="text-red-400 font-semibold">Zero-Knowledge Architecture</span>.
+                    {t('security.serverInfo.description')}
                   </p>
                 </div>
               </div>
@@ -219,10 +217,10 @@ const SecurityShowcase: React.FC = () => {
               <div className="p-3 bg-blue-500/20 rounded-lg">
                 <Lock className="w-6 h-6 text-blue-400" />
               </div>
-              <h4 className="text-lg font-bold text-white">AES-256-GCM</h4>
+              <h4 className="text-lg font-bold text-white">{t('security.highlights.aes256gcm')}</h4>
             </div>
             <p className="text-slate-400 leading-relaxed">
-              Militärische Verschlüsselung direkt in Ihrem Browser, bevor Daten übertragen werden
+              {t('security.highlights.aes256gcmDesc')}
             </p>
           </div>
 
@@ -231,10 +229,10 @@ const SecurityShowcase: React.FC = () => {
               <div className="p-3 bg-purple-500/20 rounded-lg">
                 <Key className="w-6 h-6 text-purple-400" />
               </div>
-              <h4 className="text-lg font-bold text-white">Ihre Schlüssel</h4>
+              <h4 className="text-lg font-bold text-white">{t('security.highlights.yourKeys')}</h4>
             </div>
             <p className="text-slate-400 leading-relaxed">
-              Nur Sie besitzen die Verschlüsselungs-Keys. Nicht einmal wir können Ihre Daten entschlüsseln
+              {t('security.highlights.yourKeysDesc')}
             </p>
           </div>
 
@@ -243,10 +241,10 @@ const SecurityShowcase: React.FC = () => {
               <div className="p-3 bg-green-500/20 rounded-lg">
                 <Shield className="w-6 h-6 text-green-400" />
               </div>
-              <h4 className="text-lg font-bold text-white">Privacy First</h4>
+              <h4 className="text-lg font-bold text-white">{t('security.highlights.privacyFirst')}</h4>
             </div>
             <p className="text-slate-400 leading-relaxed">
-              Zero-Knowledge Architektur bedeutet maximale Privatsphäre für Ihre sensiblen Finanzdaten
+              {t('security.highlights.privacyFirstDesc')}
             </p>
           </div>
         </div>

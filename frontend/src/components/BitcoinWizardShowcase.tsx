@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Bitcoin, Shield, CheckCircle, FileText, Key, Lock, Wallet, Edit2, Trash2, Plus, Smartphone } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const BitcoinWizardShowcase: React.FC = () => {
+  const { t } = useLanguage();
   const [activeView, setActiveView] = useState<'dashboard' | 'wizard' | 'wallets'>('dashboard');
 
   return (
@@ -57,10 +59,10 @@ const BitcoinWizardShowcase: React.FC = () => {
         {/* Section Header */}
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-white mb-4">
-            Bitcoin Self-Custody Management
+            {t('bitcoinWizard.title')}
           </h2>
           <p className="text-xl text-slate-400 max-w-3xl mx-auto">
-            Professionelle Verwaltung Ihrer Bitcoin-Bestände mit vollständiger Backup-Strategie und Sicherheitsübersicht
+            {t('bitcoinWizard.subtitle')}
           </p>
         </div>
 
@@ -76,7 +78,7 @@ const BitcoinWizardShowcase: React.FC = () => {
           >
             <div className="flex items-center space-x-2">
               <Bitcoin className="w-5 h-5" />
-              <span>Bitcoin Dashboard</span>
+              <span>{t('bitcoin.dashboard')}</span>
             </div>
           </button>
           <button
@@ -89,7 +91,7 @@ const BitcoinWizardShowcase: React.FC = () => {
           >
             <div className="flex items-center space-x-2">
               <Wallet className="w-5 h-5" />
-              <span>Wallet Management</span>
+              <span>{t('bitcoin.walletManagement')}</span>
             </div>
           </button>
           <button
@@ -102,7 +104,7 @@ const BitcoinWizardShowcase: React.FC = () => {
           >
             <div className="flex items-center space-x-2">
               <Shield className="w-5 h-5" />
-              <span>Backup Strategy</span>
+              <span>{t('bitcoin.backupStrategy')}</span>
             </div>
           </button>
         </div>
@@ -119,7 +121,7 @@ const BitcoinWizardShowcase: React.FC = () => {
                     <Bitcoin className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-white">Bitcoin</h3>
+                    <h3 className="text-xl font-bold text-white">{t('bitcoin.bitcoin')}</h3>
                     <p className="text-sm text-slate-400">1 BTC = 76,436.00 Fr</p>
                   </div>
                 </div>
@@ -230,11 +232,11 @@ const BitcoinWizardShowcase: React.FC = () => {
                   <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-purple-500 rounded-lg flex items-center justify-center">
                     <Wallet className="w-5 h-5 text-white" />
                   </div>
-                  <h3 className="text-xl font-bold text-white">Hardware Wallets</h3>
+                  <h3 className="text-xl font-bold text-white">{t('bitcoin.hardwareWallets')}</h3>
                 </div>
                 <button className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-lg transition-colors flex items-center space-x-2">
                   <Plus className="w-4 h-4" />
-                  <span>New Hardware Wallet</span>
+                  <span>{t('bitcoin.newHardwareWallet')}</span>
                 </button>
               </div>
               
@@ -304,11 +306,11 @@ const BitcoinWizardShowcase: React.FC = () => {
                   <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-500 rounded-lg flex items-center justify-center">
                     <Smartphone className="w-5 h-5 text-white" />
                   </div>
-                  <h3 className="text-xl font-bold text-white">Software Wallets</h3>
+                  <h3 className="text-xl font-bold text-white">{t('bitcoin.softwareWallets')}</h3>
                 </div>
                 <button className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition-colors flex items-center space-x-2">
                   <Plus className="w-4 h-4" />
-                  <span>New Software Wallet</span>
+                  <span>{t('bitcoin.newSoftwareWallet')}</span>
                 </button>
               </div>
               
@@ -415,7 +417,7 @@ const BitcoinWizardShowcase: React.FC = () => {
 
             {/* Backup List */}
             <div className="p-8">
-              <h3 className="text-2xl font-bold text-white mb-6">All Backups</h3>
+              <h3 className="text-2xl font-bold text-white mb-6">{t('bitcoin.allBackups')}</h3>
               
               <div className="space-y-4 mb-8">
                 {[
@@ -452,8 +454,8 @@ const BitcoinWizardShowcase: React.FC = () => {
                   <div className="flex flex-col items-center space-y-3">
                     <Key className="w-8 h-8 text-blue-400 group-hover:text-blue-300 transition-colors" />
                     <div className="text-center">
-                      <div className="font-semibold text-white mb-1">Create Seed Backup</div>
-                      <div className="text-xs text-slate-400">Paper or Steel</div>
+                      <div className="font-semibold text-white mb-1">{t('bitcoin.createSeedBackup')}</div>
+                      <div className="text-xs text-slate-400">{t('bitcoin.paperOrSteel')}</div>
                     </div>
                   </div>
                 </button>
@@ -462,7 +464,7 @@ const BitcoinWizardShowcase: React.FC = () => {
                   <div className="flex flex-col items-center space-y-3">
                     <FileText className="w-8 h-8 text-purple-400 group-hover:text-purple-300 transition-colors" />
                     <div className="text-center">
-                      <div className="font-semibold text-white mb-1">Create Descriptor Backup</div>
+                      <div className="font-semibold text-white mb-1">{t('bitcoin.backups.createDescriptorBackup')}</div>
                       <div className="text-xs text-slate-400">Paper or Digital</div>
                     </div>
                   </div>
@@ -472,7 +474,7 @@ const BitcoinWizardShowcase: React.FC = () => {
                   <div className="flex flex-col items-center space-y-3">
                     <Lock className="w-8 h-8 text-yellow-400 group-hover:text-yellow-300 transition-colors" />
                     <div className="text-center">
-                      <div className="font-semibold text-white mb-1">Create Passphrase Backup</div>
+                      <div className="font-semibold text-white mb-1">{t('bitcoin.backups.createPassphraseBackup')}</div>
                       <div className="text-xs text-slate-400">Various Media</div>
                     </div>
                   </div>
@@ -488,9 +490,9 @@ const BitcoinWizardShowcase: React.FC = () => {
             <div className="w-12 h-12 bg-orange-600/20 rounded-lg flex items-center justify-center mb-4">
               <Bitcoin className="w-6 h-6 text-orange-400" />
             </div>
-            <h3 className="text-lg font-semibold text-white mb-2">Multi-Wallet Management</h3>
+            <h3 className="text-lg font-semibold text-white mb-2">{t('bitcoin.features.multiWallet.title')}</h3>
             <p className="text-sm text-slate-400">
-              Verwalten Sie mehrere Bitcoin-Wallets mit verschiedenen Script-Types (P2PKH, P2WPKH, P2TR)
+              {t('bitcoin.features.multiWallet.description')}
             </p>
           </div>
           
@@ -498,9 +500,9 @@ const BitcoinWizardShowcase: React.FC = () => {
             <div className="w-12 h-12 bg-blue-600/20 rounded-lg flex items-center justify-center mb-4">
               <Shield className="w-6 h-6 text-blue-400" />
             </div>
-            <h3 className="text-lg font-semibold text-white mb-2">Comprehensive Backup Strategy</h3>
+            <h3 className="text-lg font-semibold text-white mb-2">{t('bitcoin.features.backupStrategy.title')}</h3>
             <p className="text-sm text-slate-400">
-              Seed, Descriptor und Passphrase Backups mit Vault-Tracking für maximale Sicherheit
+              {t('bitcoin.features.backupStrategy.description')}
             </p>
           </div>
           
@@ -508,9 +510,9 @@ const BitcoinWizardShowcase: React.FC = () => {
             <div className="w-12 h-12 bg-green-600/20 rounded-lg flex items-center justify-center mb-4">
               <CheckCircle className="w-6 h-6 text-green-400" />
             </div>
-            <h3 className="text-lg font-semibold text-white mb-2">Guided Setup Wizard</h3>
+            <h3 className="text-lg font-semibold text-white mb-2">{t('bitcoin.features.guidedSetup.title')}</h3>
             <p className="text-sm text-slate-400">
-              Schritt-für-Schritt Anleitung für sichere Bitcoin Self-Custody Setups
+              {t('bitcoin.features.guidedSetup.description')}
             </p>
           </div>
         </div>

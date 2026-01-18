@@ -22,6 +22,207 @@
     "services": "Services",
     "investmentTrends": "Investment Trends"
   },
+  "subscription": {
+    "pricing": {
+      "monthly": "Monatlich",
+      "yearly": "Jährlich",
+      "savePercent": "Sparen Sie 17%",
+      "getStarted": "Loslegen",
+      "startWithPro": "🚀 Mit Pro starten",
+      "cancelAnytime": "Jederzeit kündbar • Keine versteckten Gebühren • Schweizer Datenschutz garantiert",
+      "allPlansInclude": "Alle Pläne beinhalten unsere Schweizer Privacy-by-Design Garantie",
+      "features": {
+        "zeroKnowledge": "🔐 Zero-Knowledge Architektur",
+        "dataDelation": "🗑️ Automatische Datenlöschung",
+        "swissHosting": "🇨🇭 Schweizer Hosting",
+        "noDataSales": "💾 Keine Datenverkäufe"
+      }
+    }
+  },
+  "documentScanner": {
+    "badge": "OCR Document Scanner",
+    "title": "Automatisierter Wertschriften-Import",
+    "subtitle": "Scannen Sie Ihre Depotauszüge und importieren Sie Wertschriften automatisch mit unserer OCR-Technologie. Privacy-First Ansatz mit lokaler Bildverarbeitung.",
+    "cropDocument": "Dokument Zuschneiden",
+    "reviewConfirm": "Review & Confirm",
+    "tableHeaders": {
+      "type": "Typ",
+      "symbol": "Symbol",
+      "name": "Name",
+      "anzahl": "Anzahl",
+      "totalwert": "Totalwert",
+      "isin": "ISIN",
+      "price": "Preis"
+    },
+    "formFields": {
+      "symbol": "Symbol",
+      "name": "Name",
+      "menge": "Menge",
+      "preis": "Preis",
+      "waehrung": "Währung",
+      "typ": "Typ",
+      "boerse": "Börse",
+      "isin": "ISIN",
+      "category": "Kategorie"
+    },
+    "categories": {
+      "equity": "Equity",
+      "bonds": "Bonds",
+      "realEstate": "Real Estate",
+      "preciousMetals": "Precious Metals",
+      "bitcoin": "Bitcoin",
+      "altcoin": "Altcoin",
+      "other": "Other"
+    },
+    "privacyInfo": {
+      "title": "Privacy-First OCR",
+      "description": "Alle Dokumenten werden lokal in Ihrem Browser verarbeitet. Nur die erkannten Metadaten werden verschlüsselt übertragen."
+    },
+    "highlights": {
+      "ocrRecognition": "OCR Recognition",
+      "autoImport": "Auto-Import",
+      "privacyFirst": "Privacy-First"
+    },
+    "features": {
+      "ocrTechnology": {
+        "title": "OCR-Technologie",
+        "description": "Automatische Erkennung von Symbolen, ISIN-Nummern und Kursen aus Depotauszügen"
+      },
+      "privacyFirst": {
+        "title": "Datenschutz First",
+        "description": "Crop-Funktion zum Entfernen sensibler Daten wie Namen und Adressen vor dem Upload"
+      },
+      "intelligentValidation": {
+        "title": "Intelligente Validierung",
+        "description": "100% Match-Erkennung mit automatischer Vervollständigung fehlender Daten"
+      }
+    }
+  },
+  "portfolio": {
+    "totalValue": "Gesamtwert",
+    "securities": {
+      "title": "Ihre Wertschriften im Detail",
+      "subtitle": "Verwalten Sie Aktien, ETFs und Fonds mit Live-Kursen und professionellen Übersichten",
+      "stocks": "Aktien",
+      "etfs": "ETFs",
+      "funds": "Fonds",
+      "totalValue": "Gesamtwert",
+      "tableHeaders": {
+        "type": "Typ",
+        "quantity": "Menge",
+        "rate": "Kurs",
+        "custodianBank": "Depotbank",
+        "update": "Aktualisierung",
+        "sumCHF": "Summe CHF"
+      },
+      "performanceTracking": "Performance Tracking",
+      "features": {
+        "livePricing": {
+          "title": "Live Pricing",
+          "description": "Echtzeit-Kurse für alle Ihre Wertschriften mit automatischen Updates"
+        },
+        "multiCurrency": {
+          "title": "Multi-Currency",
+          "description": "Unterstützung für USD, CHF, EUR mit automatischer Währungsumrechnung"
+        },
+        "performanceTracking": {
+          "title": "Performance Tracking",
+          "description": "Detaillierte Performance-Analysen und historische Entwicklungen"
+        }
+      }
+    }
+  },
+  "tableHeaders": {
+    "nameSymbol": "Name & Symbol",
+    "isin": "ISIN",
+    "price": "Preis",
+    "marketValue": "Marktwert",
+    "lastUpdate": "Letzte Aktualisierung",
+    "change24h": "24h Änderung",
+    "allocation": "Allokation"
+  },
+  "financial": {
+    "investment": "Investment",
+    "investments": "Investments",
+    "assets": "Vermögenswerte",
+    "portfolios": "Portfolios",
+    "diversification": "Diversifikation",
+    "allocation": "Allokation",
+    "performance": "Performance",
+    "returns": "Rendite",
+    "risk": "Risiko",
+    "volatility": "Volatilität",
+    "currencyFor": "Währung für Portfolios, Investments und Vermögenswerte",
+    "managePhysicalDigital": "Verwalten Sie physische und digitale Speicherorte für wichtige Informationen oder Vermögenswerte"
+  },
+  "bitcoin": {
+    "dashboard": "Bitcoin Dashboard",
+    "walletManagement": "Wallet Management",
+    "backupStrategy": "Backup-Strategie",
+    "bitcoin": "Bitcoin",
+    "hardwareWallets": "Hardware Wallets",
+    "newHardwareWallet": "Neue Hardware Wallet",
+    "softwareWallets": "Software Wallets",
+    "newSoftwareWallet": "Neue Software Wallet",
+    "allBackups": "Alle Backups",
+    "createSeedBackup": "Seed Backup erstellen",
+    "paperOrSteel": "Papier oder Stahl",
+    "tableHeaders": {
+      "setupName": "Setup Name",
+      "scriptType": "Skript Typ",
+      "type": "Typ",
+      "passphrase": "Passphrase",
+      "hardwareWallet": "Hardware Wallet",
+      "backups": "Backups",
+      "balance": "Balance",
+      "name": "Name",
+      "seedUsage": "Seed Nutzung",
+      "bitcoinAssets": "Bitcoin Assets",
+      "vault": "Vault",
+      "notes": "Notizen",
+      "actions": "Aktionen",
+      "platform": "Plattform",
+      "version": "Version"
+    },
+    "backups": {
+      "createDescriptorBackup": "Descriptor Backup erstellen",
+      "createPassphraseBackup": "Passphrase Backup erstellen"
+    },
+    "features": {
+      "multiWallet": {
+        "title": "Multi-Wallet Management",
+        "description": "Verwalten Sie mehrere Bitcoin-Wallets mit verschiedenen Script-Types (P2PKH, P2WPKH, P2TR)"
+      },
+      "backupStrategy": {
+        "title": "Comprehensive Backup Strategy",
+        "description": "Seed, Descriptor und Passphrase Backups mit Vault-Tracking für maximale Sicherheit"
+      },
+      "guidedSetup": {
+        "title": "Guided Setup Wizard",
+        "description": "Schritt-für-Schritt Anleitung für sichere Bitcoin Self-Custody Setups"
+      }
+    }
+  },
+  "hero": {
+    "launchSpecial": "Launch Special",
+    "launchPrice": "Launch Preis",
+    "perYear": "pro Jahr",
+    "portfolioCockpit": "Portfolio & Budget Cockpit"
+  },
+  "profile": {
+    "addFamilyMember": "+ Familienmitglied hinzufügen",
+    "clickToAdd": {
+      "physicalVault": "Klicken Sie, um einen physischen Vault hinzuzufügen",
+      "digitalVault": "Klicken Sie, um einen digitalen Vault hinzuzufügen",
+      "financialInstitution": "Klicken Sie, um eine neue Finanzinstitution hinzuzufügen"
+    }
+  },
+  "privacy": {
+    "allKeysDeleted": "Alle Schlüssel gelöscht"
+  },
+  "currency": {
+    "currencySettings": "Währungseinstellungen"
+  },
   "terms": {
     "title": "Allgemeine Geschäftsbedingungen",
     "subtitle": "Gültig ab 30. Dezember 2025",
@@ -127,6 +328,51 @@
       "title": "§ 12 Schweizer Recht und Gerichtsstand",
       "p1": "Es gilt ausschließlich Schweizer Recht.",
       "p2": "Gerichtsstand ist Rapperswil-Jona, Schweiz."
+    }
+  },
+  "common": {
+    "buttons": {
+      "add": "Hinzufügen",
+      "edit": "Bearbeiten",
+      "delete": "Löschen",
+      "save": "Speichern",
+      "cancel": "Abbrechen",
+      "update": "Aktualisieren",
+      "create": "Erstellen",
+      "close": "Schließen",
+      "back": "Zurück",
+      "next": "Weiter",
+      "submit": "Absenden",
+      "loading": "Laden..."
+    },
+    "status": {
+      "success": "Erfolgreich",
+      "error": "Fehler",
+      "warning": "Warnung",
+      "info": "Information",
+      "loading": "Laden...",
+      "processing": "Verarbeitung..."
+    },
+    "form": {
+      "required": "Erforderlich",
+      "optional": "Optional",
+      "pleaseSelect": "Bitte auswählen",
+      "search": "Suchen",
+      "filter": "Filtern",
+      "sort": "Sortieren",
+      "clear": "Löschen",
+      "reset": "Zurücksetzen"
+    },
+    "time": {
+      "today": "Heute",
+      "yesterday": "Gestern",
+      "tomorrow": "Morgen",
+      "thisWeek": "Diese Woche",
+      "lastWeek": "Letzte Woche",
+      "thisMonth": "Diesen Monat",
+      "lastMonth": "Letzten Monat",
+      "thisYear": "Dieses Jahr",
+      "lastYear": "Letztes Jahr"
     }
   },
   "featuresDetails": {
@@ -965,6 +1211,355 @@
       "title": "13. Kontakt und Beschwerden",
       "p1": "Datenschutzanfragen: info@stararc.one",
       "p2": "Beschwerdestelle: Sie haben das Recht, sich bei der zuständigen Datenschutzbehörde zu beschweren."
+    }
+  },
+  "currency": {
+    "badge": "Multi-Currency Support",
+    "title": "Globale Währungsunterstützung",
+    "subtitle": "Verwalten Sie Ihr Portfolio in mehreren Währungen mit separaten Budget- und Portfolio-Einstellungen. Live-Wechselkurse und automatische Umrechnungen.",
+    "currencySettings": "Currency Settings",
+    "budgetCurrency": "Budget Currency",
+    "portfolioCurrency": "Portfolio Currency",
+    "availableCurrencies": "Verfügbare Währungen",
+    "currencies": {
+      "USD": "US-Dollar",
+      "EUR": "Euro",
+      "CHF": "Schweizer Franken",
+      "GBP": "Britisches Pfund",
+      "JPY": "Japanischer Yen",
+      "CAD": "Kanadischer Dollar",
+      "AUD": "Australischer Dollar",
+      "CNY": "Chinesischer Yuan",
+      "INR": "Indische Rupie",
+      "KRW": "Südkoreanischer Won",
+      "BTC": "Bitcoin"
+    },
+    "highlights": {
+      "currencies": "11+ Währungen",
+      "liveRates": "Live Wechselkurse",
+      "separateBudgets": "Separate Budgets"
+    }
+  },
+  "pension": {
+    "badge": "Vorsorge & Versicherungen",
+    "title": "Schweizer 3-Säulen-System",
+    "subtitle": "Verwalten Sie Ihre Altersvorsorge und Versicherungen zentral. Unterstützung für das Schweizer 3-Säulen-System mit mehreren Konten pro Familie.",
+    "pensionSection": "Pension Section",
+    "privateVorsorge": "Private Vorsorge",
+    "beruflicheVorsorge": "Berufliche Vorsorge",
+    "totalAmount": "Fr",
+    "accountsCount": "Kontos",
+    "tableHeaders": {
+      "planName": "Plan Name",
+      "provider": "Provider",
+      "pensionType": "Pension Type",
+      "currentBalance": "Current Balance",
+      "actions": "Actions"
+    },
+    "pensionTypes": {
+      "privateVorsorge": "Private Vorsorge",
+      "beruflicheVorsorge": "Berufliche Vorsorge"
+    },
+    "providers": {
+      "luzerner": "Luzerner Kantonalbank",
+      "pensionWilma": "Pension Wilma",
+      "pensionFred": "Pension Fred"
+    },
+    "accounts": {
+      "wilmaPilar3": "Wilma Pilar 3",
+      "fredPilar3": "Fred Pilar 3",
+      "wilmaPilar2": "Wilma Pilar 2",
+      "fredPilar2": "Fred Pilar 2"
+    },
+    "addAccount": "Add Account",
+    "highlights": {
+      "saeulenSystem": "3-Säulen-System",
+      "mehrereKonten": "Mehrere Konten",
+      "familiePartner": "Familie & Partner"
+    }
+  },
+  "security": {
+    "badge": "Client-Side Encryption",
+    "title": "Ihre Daten bleiben privat",
+    "subtitle": "End-to-End Verschlüsselung mit AES-256-GCM. Ihre Daten werden direkt in Ihrem Browser verschlüsselt. Niemand außer Ihnen kann sie lesen – nicht einmal wir.",
+    "userView": "Was Sie sehen",
+    "serverView": "Was wir sehen",
+    "assetData": "Ihre Assets",
+    "tableHeaders": {
+      "name": "Name",
+      "symbol": "Symbol",
+      "isin": "ISIN",
+      "menge": "Menge",
+      "wert": "Wert"
+    },
+    "encryptedData": {
+      "title": "Verschlüsselte Assets",
+      "assetName": "Encrypted Asset Name",
+      "symbol": "Encrypted Symbol",
+      "isin": "Encrypted ISIN",
+      "quantity": "Encrypted Quantity"
+    },
+    "userInfo": {
+      "title": "Lesbar und zugänglich",
+      "description": "In Ihrem Browser werden Ihre Daten entschlüsselt und lesbar dargestellt. Nur Sie haben Zugriff auf Ihre Verschlüsselungs-Keys."
+    },
+    "serverInfo": {
+      "title": "Vollständig verschlüsselt und unleserlich",
+      "description": "Auf unseren Servern sind alle Daten mit AES-256-GCM verschlüsselt. Selbst mit direktem Datenbankzugriff kann niemand Ihre Informationen lesen. Nur Sie besitzen den Schlüssel – Zero-Knowledge Architecture."
+    },
+    "highlights": {
+      "aes256gcm": "AES-256-GCM",
+      "aes256gcmDesc": "Militärische Verschlüsselung direkt in Ihrem Browser, bevor Daten übertragen werden",
+      "yourKeys": "Ihre Schlüssel",
+      "yourKeysDesc": "Nur Sie besitzen die Verschlüsselungs-Keys. Nicht einmal wir können Ihre Daten entschlüsseln",
+      "privacyFirst": "Privacy First",
+      "privacyFirstDesc": "Zero-Knowledge Architektur bedeutet maximale Privatsphäre für Ihre sensiblen Finanzdaten"
+    }
+  },
+  "dataArchitecture": {
+    "badge": "Multi-Layer Security Architecture",
+    "title": "Zwei Verschlüsselungsebenen",
+    "subtitle": "StarArc \"Public\" schützt Ihre Identität mit Admin-Verschlüsselung. StarArc \"Spaceship\" verschlüsselt Ihre Finanzdaten client-seitig. Sichere Autorisierung verbindet beide Systeme.",
+    "stararcIdentity": "StarArc: Identität",
+    "authorization": "Autorisierung",
+    "spaceshipAppData": "Spaceship: App-Daten",
+    "stararcUserData": {
+      "title": "StarArc: Benutzerdaten",
+      "adminEncryption": "Admin-Key Verschlüsselung",
+      "description": "Ihre Identitätsdaten (Email, Alias, etc.) werden in StarArc mit einem Master-Admin-Key verschlüsselt. Dies ermöglicht Support und Account-Recovery, während Ihre Finanzdaten komplett privat bleiben.",
+      "whatStored": "Was wird gespeichert?",
+      "whyAdminEncryption": "Warum Admin-Verschlüsselung?",
+      "storedItems": [
+        "Email (admin-verschlüsselt)",
+        "Alias (admin-verschlüsselt)",
+        "Subscription Plan (plain)",
+        "Spaceship Auth Key (verschlüsselt)"
+      ],
+      "adminReasons": [
+        "Account Recovery möglich",
+        "Support kann bei Login-Problemen helfen",
+        "Email-Hash für eindeutige Konten",
+        "Finanzdaten bleiben client-verschlüsselt"
+      ]
+    },
+    "authorizationData": {
+      "title": "Cross-App Authorization",
+      "jwtToken": "Short-Lived JWT Token (5 Minuten)",
+      "decodedPayload": "Decoded JWT Payload",
+      "authKeyHash": "Auth Key Hash (HMAC-SHA256) in Spaceship DB",
+      "howItWorksTitle": "Wie funktioniert die Autorisierung?",
+      "steps": [
+        "StarArc generiert einen sicheren Auth-Key (256-bit Entropie) bei Account-Erstellung",
+        "Auth-Key wird mit AES-256-GCM verschlüsselt in StarArc gespeichert",
+        "Beim Login zu Spaceship: StarArc erstellt short-lived JWT Token (5 Min) mit Auth-Key",
+        "Spaceship validiert JWT, erstellt HMAC-SHA256 Hash vom Auth-Key",
+        "User wird authentifiziert mit subscription_plan und parent_stararc_user_id"
+      ]
+    },
+    "spaceshipData": {
+      "title": "Spaceship: Finanzdaten",
+      "clientSideEncryption": "Client-Side Verschlüsselung",
+      "description": "Alle Finanzdaten werden direkt in Ihrem Browser mit Ihrem persönlichen User-Key verschlüsselt, bevor sie an den Server gesendet werden. Zero-Knowledge Architecture - niemand außer Ihnen kann die Daten entschlüsseln.",
+      "whatEncrypted": "Was wird verschlüsselt?",
+      "yourPrivateKey": "Ihr privater Schlüssel",
+      "encryptedItems": [
+        "Asset Namen & Symbole",
+        "ISIN, Mengen, Preise",
+        "Budget Kategorien & Beträge",
+        "Vault Namen & Inhalte",
+        "Alle sensiblen Finanzdaten"
+      ],
+      "privateKeyFeatures": [
+        "Wird aus Ihrem Login-Code generiert",
+        "Verlässt nie Ihren Browser",
+        "Wird nie an Server gesendet",
+        "Maximale Privatsphäre garantiert",
+        "Zero-Knowledge Architektur"
+      ]
+    },
+    "comparisonTable": {
+      "title": "Sicherheitsvergleich",
+      "aspect": "Aspekt",
+      "stararcIdentity": "StarArc (Identität)",
+      "spaceshipFinance": "Spaceship (Finanzen)",
+      "encryption": "Verschlüsselung",
+      "purpose": "Zweck",
+      "data": "Daten",
+      "algorithm": "Algorithmus",
+      "supportAccess": "Support Zugriff",
+      "serverSide": "Admin-Key (Server-Side)",
+      "clientSide": "User-Key (Client-Side)",
+      "accountRecovery": "Account Recovery möglich",
+      "zeroKnowledge": "Zero-Knowledge Privacy",
+      "identityData": "Email, Alias, Client Name",
+      "financeData": "Assets, Budgets, Vaults",
+      "supportYes": "✅ Für Account-Hilfe",
+      "supportNo": "❌ Nie möglich"
+    },
+    "highlights": {
+      "secure": "Sicher",
+      "secureDesc": "JWT Token nur 5 Minuten gültig. Auth-Key niemals in plain text gespeichert.",
+      "isolated": "Isoliert",
+      "isolatedDesc": "Separate Datenbanken. Subscription Plan wird synchronisiert.",
+      "hashBased": "Hash-basiert",
+      "hashBasedDesc": "HMAC-SHA256 für rainbow table Resistenz. Kein plaintext auth key in DB."
+    }
+  },
+  "overview": {
+    "title": "Entdecken Sie alle Features",
+    "subtitle": "Klicken Sie auf ein Feature, um direkt zur detaillierten Ansicht zu springen",
+    "features": {
+      "portfolioManagement": "Portfolio Management",
+      "securitiesManagement": "Securities Management",
+      "bitcoinCrypto": "Bitcoin & Crypto",
+      "immobilien": "Immobilien",
+      "profileManagement": "Profile & Management",
+      "documentScanner": "Document Scanner",
+      "multiCurrency": "Multi-Currency",
+      "pensionInsurance": "Pension & Insurance",
+      "clientSideEncryption": "Client-Side Encryption",
+      "twoLayerSecurity": "Two-Layer Security"
+    }
+  },
+  "general": {
+    "edit": "Bearbeiten",
+    "delete": "Löschen",
+    "add": "Hinzufügen",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "close": "Schließen"
+  },
+  "portfolio": {
+    "title": "Visualisieren Sie Ihr gesamtes Vermögen",
+    "subtitle": "Behalten Sie den Überblick über alle Asset-Klassen mit detaillierten Aufschlüsselungen und interaktiven Visualisierungen",
+    "assetClassesOverview": "Portfolio Asset Classes Overview",
+    "totalPortfolioValue": "Total Portfolio Value",
+    "assetClasses": {
+      "realEstate": "Real Estate",
+      "bitcoin": "Bitcoin",
+      "preciousMetals": "Precious Metals",
+      "bonds": "Bonds",
+      "equity": "Equity",
+      "liquidity": "Liquidity",
+      "altcoins": "Altcoins"
+    }
+  },
+  "securities": {
+    "title": "Ihre Wertschriften im Detail",
+    "subtitle": "Verwalten Sie Aktien, ETFs und Fonds mit Live-Kursen und professionellen Übersichten",
+    "tabStocks": "Stocks",
+    "tabETFs": "ETFs",
+    "tabFunds": "Funds",
+    "tableHeaders": {
+      "nameSymbol": "NAME & SYMBOL",
+      "type": "TYPE",
+      "quantity": "QUANTITY",
+      "rate": "RATE",
+      "custodianBank": "CUSTODIAN BANK",
+      "update": "UPDATE",
+      "sumCHF": "SUM CHF"
+    },
+    "totalValue": "Total Value",
+    "lastUpdate": "Last update",
+    "total": "Total",
+    "features": {
+      "livePricing": {
+        "title": "Live Pricing",
+        "description": "Echtzeit-Kurse für alle Ihre Wertschriften mit automatischer Aktualisierung"
+      },
+      "multiCurrency": {
+        "title": "Multi-Currency",
+        "description": "Unterstützung für USD, CHF, EUR mit automatischer Währungsumrechnung"
+      },
+      "performanceTracking": {
+        "title": "Performance Tracking",
+        "description": "Detaillierte Performance-Analysen und historische Entwicklungen"
+      }
+    }
+  },
+  "bitcoinWizard": {
+    "title": "Bitcoin Self-Custody Management",
+    "subtitle": "Dokumentieren und verwalten Sie Ihre Bitcoin-Setups sicher mit unserem Schritt-für-Schritt Assistenten. Von SingleSig bis MultiSig – alles unter Kontrolle.",
+    "badge": "Bitcoin Self-Custody",
+    "features": {
+      "singleSig": {
+        "title": "SingleSig Setup",
+        "description": "Einfache Bitcoin-Wallet Verwaltung mit Hardware Wallet Integration"
+      },
+      "multiSig": {
+        "title": "MultiSig Konfiguration",
+        "description": "Erweiterte Sicherheit mit Multi-Signatur Wallet-Setups"
+      },
+      "backupStrategy": {
+        "title": "Backup-Strategie",
+        "description": "Sichere Aufbewahrung und Dokumentation Ihrer Recovery-Phrasen"
+      }
+    }
+  },
+  "realEstate": {
+    "title": "Immobilien-Portfolio Management",
+    "subtitle": "Verwalten Sie Ihre Immobilien-Investitionen zentral. Direktbesitz, REITs und Hypotheken-Tracking in einer integrierten Lösung.",
+    "badge": "Real Estate Management",
+    "features": {
+      "directOwnership": {
+        "title": "Direktbesitz",
+        "description": "Verwaltung von direkt gehaltenen Immobilien mit Bewertungs-Tracking"
+      },
+      "mortgages": {
+        "title": "Hypotheken-Management",
+        "description": "Übersicht über Hypothekendarlehen, Zinssätze und Amortisation"
+      },
+      "reitTracking": {
+        "title": "REIT Portfolio",
+        "description": "Tracking von Real Estate Investment Trusts und Immobilienfonds"
+      }
+    }
+  },
+  "realEstate": {
+    "features": {
+      "portfolio": {
+        "title": "Immobilien-Portfolio",
+        "description": "Verwalten Sie mehrere Immobilien mit detaillierten Finanzierungsstrukturen und Equity-Tracking"
+      },
+      "mortgageManagement": {
+        "title": "Hypotheken-Management",
+        "description": "Übersicht über alle Hypotheken mit Zinssätzen, Laufzeiten und automatischer Kostenberechnung"
+      },
+      "equityTracking": {
+        "title": "Equity Tracking",
+        "description": "Visualisierung des Eigenkapitalanteils und automatische Berechnung des Nettovermögens"
+      }
+    }
+  },
+  "profile": {
+    "title": "Profil & Verwaltung",
+    "subtitle": "Verwalten Sie Ihr StarArc-Profil, Subscription-Einstellungen und Ihre persönlichen Daten zentral. Sichere Einstellungen für maximale Kontrolle.",
+    "badge": "Profile Management",
+    "features": {
+      "accountSettings": {
+        "title": "Account-Einstellungen",
+        "description": "Persönliche Daten, Sicherheitseinstellungen und Login-Verwaltung"
+      },
+      "subscriptionManagement": {
+        "title": "Subscription-Verwaltung",
+        "description": "Plan-Änderungen, Rechnungen und Zahlungseinstellungen verwalten"
+      },
+      "dataPrivacy": {
+        "title": "Datenschutz & Sicherheit",
+        "description": "Verschlüsselungseinstellungen und Privatsphäre-Kontrollen"
+      },
+      "vaultManagement": {
+        "title": "Vault Management",
+        "description": "Verwalten Sie physische und digitale Speicherorte für wichtige Dokumente und Assets"
+      },
+      "familyManagement": {
+        "title": "Family Management",
+        "description": "Zentrale Verwaltung aller Familienmitglieder mit Rollen und Geburtsjahren"
+      },
+      "institutionTracking": {
+        "title": "Institution Tracking",
+        "description": "Übersicht über alle Finanzinstitutionen mit vordefinierter und benutzerdefinierter Verwaltung"
+      }
     }
   }
 }

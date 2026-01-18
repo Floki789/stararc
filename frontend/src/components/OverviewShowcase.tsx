@@ -11,63 +11,66 @@ import {
   Shield, 
   Layers
 } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface FeatureItem {
   icon: React.ElementType;
-  title: string;
+  titleKey: string;
   sectionId: string;
 }
 
 const OverviewShowcase: React.FC = () => {
+  const { t } = useLanguage();
+  
   const features: FeatureItem[] = [
     {
       icon: TrendingUp,
-      title: 'Portfolio Management',
+      titleKey: 'overview.features.portfolioManagement',
       sectionId: 'portfolio'
     },
     {
       icon: Package,
-      title: 'Securities Management',
+      titleKey: 'overview.features.securitiesManagement',
       sectionId: 'securities'
     },
     {
       icon: Bitcoin,
-      title: 'Bitcoin & Crypto',
+      titleKey: 'overview.features.bitcoinCrypto',
       sectionId: 'bitcoin'
     },
     {
       icon: Building2,
-      title: 'Immobilien',
+      titleKey: 'overview.features.immobilien',
       sectionId: 'realestate'
     },
     {
       icon: Users,
-      title: 'Profile & Management',
+      titleKey: 'overview.features.profileManagement',
       sectionId: 'profile'
     },
     {
       icon: ScanLine,
-      title: 'Document Scanner',
+      titleKey: 'overview.features.documentScanner',
       sectionId: 'scanner'
     },
     {
       icon: Coins,
-      title: 'Multi-Currency',
+      titleKey: 'overview.features.multiCurrency',
       sectionId: 'currency'
     },
     {
       icon: Umbrella,
-      title: 'Pension & Insurance',
+      titleKey: 'overview.features.pensionInsurance',
       sectionId: 'pension'
     },
     {
       icon: Shield,
-      title: 'Client-Side Encryption',
+      titleKey: 'overview.features.clientSideEncryption',
       sectionId: 'security'
     },
     {
       icon: Layers,
-      title: 'Two-Layer Security',
+      titleKey: 'overview.features.twoLayerSecurity',
       sectionId: 'architecture'
     }
   ];
@@ -127,10 +130,10 @@ const OverviewShowcase: React.FC = () => {
         {/* Section Header */}
         <div className="text-center mb-12">
           <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4">
-            Entdecken Sie alle Features
+            {t('overview.title')}
           </h2>
           <p className="text-lg text-slate-400 max-w-2xl mx-auto">
-            Klicken Sie auf ein Feature, um direkt zur detaillierten Ansicht zu springen
+            {t('overview.subtitle')}
           </p>
         </div>
 
@@ -151,7 +154,7 @@ const OverviewShowcase: React.FC = () => {
                 </div>
                 
                 <h3 className="text-sm font-semibold text-white group-hover:text-blue-400 transition-colors">
-                  {feature.title}
+                  {t(feature.titleKey)}
                 </h3>
               </button>
             );

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Home, Building } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface Mortgage {
   bank: string;
@@ -11,6 +12,7 @@ interface Mortgage {
 }
 
 const RealEstateShowcase: React.FC = () => {
+  const { t } = useLanguage();
   const [hoveredSegment, setHoveredSegment] = useState<string | null>(null);
 
   const formatCurrency = (value: number) => {
@@ -136,10 +138,10 @@ const RealEstateShowcase: React.FC = () => {
         {/* Section Header */}
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-white mb-4">
-            Immobilien-Portfolio Management
+            {t('realEstate.title')}
           </h2>
           <p className="text-xl text-slate-400 max-w-3xl mx-auto">
-            Verwalten Sie Ihre Immobilien mit detaillierten Finanzierungsübersichten und automatischer Hypotheken-Verwaltung
+            {t('realEstate.subtitle')}
           </p>
         </div>
 
@@ -297,9 +299,9 @@ const RealEstateShowcase: React.FC = () => {
             <div className="w-12 h-12 bg-teal-600/20 rounded-lg flex items-center justify-center mb-4">
               <Home className="w-6 h-6 text-teal-400" />
             </div>
-            <h3 className="text-lg font-semibold text-white mb-2">Immobilien-Portfolio</h3>
+            <h3 className="text-lg font-semibold text-white mb-2">{t('realEstate.features.portfolio.title')}</h3>
             <p className="text-sm text-slate-400">
-              Verwalten Sie mehrere Immobilien mit detaillierten Finanzierungsstrukturen und Equity-Tracking
+              {t('realEstate.features.portfolio.description')}
             </p>
           </div>
           
@@ -307,9 +309,9 @@ const RealEstateShowcase: React.FC = () => {
             <div className="w-12 h-12 bg-orange-600/20 rounded-lg flex items-center justify-center mb-4">
               <Building className="w-6 h-6 text-orange-400" />
             </div>
-            <h3 className="text-lg font-semibold text-white mb-2">Hypotheken-Management</h3>
+            <h3 className="text-lg font-semibold text-white mb-2">{t('realEstate.features.mortgageManagement.title')}</h3>
             <p className="text-sm text-slate-400">
-              Übersicht über alle Hypotheken mit Zinssätzen, Laufzeiten und automatischer Kostenberechnung
+              {t('realEstate.features.mortgageManagement.description')}
             </p>
           </div>
           
@@ -319,9 +321,9 @@ const RealEstateShowcase: React.FC = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
               </svg>
             </div>
-            <h3 className="text-lg font-semibold text-white mb-2">Equity Tracking</h3>
+            <h3 className="text-lg font-semibold text-white mb-2">{t('realEstate.features.equityTracking.title')}</h3>
             <p className="text-sm text-slate-400">
-              Visualisierung des Eigenkapitalanteils und automatische Berechnung des Nettovermögens
+              {t('realEstate.features.equityTracking.description')}
             </p>
           </div>
         </div>

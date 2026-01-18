@@ -107,10 +107,10 @@ const Home: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-12">
             <h2 className="text-3xl font-bold text-white text-center mb-4">
-              Wählen Sie Ihren Plan
+              Choose Your Plan
             </h2>
             <p className="text-xl text-gray-400 text-center mb-12">
-              Wählen Sie den passenden Plan für Ihre Bedürfnisse
+              Select the plan that fits your needs
             </p>
             
             {/* Main Plans */}

@@ -1,22 +1,24 @@
 import React, { useState } from 'react';
 import { Coins, DollarSign, TrendingUp, Sparkles, Check } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const CurrencyShowcase: React.FC = () => {
-  const [budgetCurrency, setBudgetCurrency] = useState('CHF - Schweizer Franken');
-  const [portfolioCurrency, setPortfolioCurrency] = useState('CHF - Schweizer Franken');
+  const { t } = useLanguage();
+  const [budgetCurrency, setBudgetCurrency] = useState(`CHF - ${t('currency.currencies.CHF')}`);
+  const [portfolioCurrency, setPortfolioCurrency] = useState(`CHF - ${t('currency.currencies.CHF')}`);
 
   const currencies = [
-    { code: 'USD', name: 'US Dollar' },
-    { code: 'EUR', name: 'Euro' },
-    { code: 'CHF', name: 'Schweizer Franken' },
-    { code: 'GBP', name: 'Britisches Pfund' },
-    { code: 'JPY', name: 'Japanischer Yen' },
-    { code: 'CAD', name: 'Kanadischer Dollar' },
-    { code: 'AUD', name: 'Australischer Dollar' },
-    { code: 'CNY', name: 'Chinesischer Yuan' },
-    { code: 'INR', name: 'Indische Rupie' },
-    { code: 'KRW', name: 'Südkoreanischer Won' },
-    { code: 'BTC', name: 'Bitcoin' }
+    { code: 'USD', name: t('currency.currencies.USD') },
+    { code: 'EUR', name: t('currency.currencies.EUR') },
+    { code: 'CHF', name: t('currency.currencies.CHF') },
+    { code: 'GBP', name: t('currency.currencies.GBP') },
+    { code: 'JPY', name: t('currency.currencies.JPY') },
+    { code: 'CAD', name: t('currency.currencies.CAD') },
+    { code: 'AUD', name: t('currency.currencies.AUD') },
+    { code: 'CNY', name: t('currency.currencies.CNY') },
+    { code: 'INR', name: t('currency.currencies.INR') },
+    { code: 'KRW', name: t('currency.currencies.KRW') },
+    { code: 'BTC', name: t('currency.currencies.BTC') }
   ];
 
   return (
@@ -66,14 +68,13 @@ const CurrencyShowcase: React.FC = () => {
         <div className="text-center mb-16">
           <div className="inline-flex items-center space-x-2 px-4 py-2 bg-amber-500/10 border border-amber-500/20 rounded-full mb-6">
             <Sparkles className="w-5 h-5 text-amber-400" />
-            <span className="text-sm font-semibold text-amber-400">Multi-Currency Support</span>
+            <span className="text-sm font-semibold text-amber-400">{t('currency.badge')}</span>
           </div>
           <h2 className="text-4xl lg:text-6xl font-bold text-white mb-6">
-            Separate Währungen für Portfolio & Budget
+            {t('currency.title')}
           </h2>
           <p className="text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed">
-            Verwalten Sie Ihr Portfolio in einer Währung und Ihr Budget in einer anderen. 
-            Automatische Umrechnung mit aktuellen Wechselkursen.
+            {t('currency.subtitle')}
           </p>
         </div>
 
@@ -85,7 +86,7 @@ const CurrencyShowcase: React.FC = () => {
                 <div className="w-10 h-10 bg-gradient-to-br from-amber-600 to-amber-500 rounded-lg flex items-center justify-center">
                   <Coins className="w-5 h-5 text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-white">Currency Settings</h3>
+                <h3 className="text-xl font-bold text-white">{t('currency.currencySettings')}</h3>
               </div>
             </div>
 
@@ -98,7 +99,7 @@ const CurrencyShowcase: React.FC = () => {
               <div>
                 <label className="flex items-center space-x-2 text-sm font-semibold text-slate-300 mb-3">
                   <DollarSign className="w-4 h-4" />
-                  <span>Budget Currency *</span>
+                  <span>{t('currency.budgetCurrency')} *</span>
                 </label>
                 <div className="relative">
                   <select 
@@ -126,7 +127,7 @@ const CurrencyShowcase: React.FC = () => {
               <div>
                 <label className="flex items-center space-x-2 text-sm font-semibold text-slate-300 mb-3">
                   <TrendingUp className="w-4 h-4" />
-                  <span>Portfolio Currency *</span>
+                  <span>{t('currency.portfolioCurrency')} *</span>
                 </label>
                 <div className="relative">
                   <select 
@@ -147,7 +148,7 @@ const CurrencyShowcase: React.FC = () => {
                     </svg>
                   </div>
                 </div>
-                <p className="text-xs text-slate-500 mt-2">Currency for portfolios, investments and assets</p>
+                <p className="text-xs text-slate-500 mt-2">{t('financial.currencyFor')}</p>
               </div>
             </div>
           </div>
@@ -159,7 +160,7 @@ const CurrencyShowcase: React.FC = () => {
                 <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-500 rounded-lg flex items-center justify-center">
                   <Coins className="w-5 h-5 text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-white">Verfügbare Währungen</h3>
+                <h3 className="text-xl font-bold text-white">{t('currency.availableCurrencies')}</h3>
               </div>
             </div>
 
@@ -193,7 +194,7 @@ const CurrencyShowcase: React.FC = () => {
             <div className="w-12 h-12 bg-amber-600/20 rounded-lg flex items-center justify-center mb-4">
               <Coins className="w-6 h-6 text-amber-400" />
             </div>
-            <h3 className="text-lg font-semibold text-white mb-2">11+ Währungen</h3>
+            <h3 className="text-lg font-semibold text-white mb-2">{t('currency.highlights.currencies')}</h3>
             <p className="text-sm text-slate-400">
               Unterstützung für USD, EUR, CHF, GBP, JPY und mehr - inklusive Bitcoin
             </p>
@@ -203,7 +204,7 @@ const CurrencyShowcase: React.FC = () => {
             <div className="w-12 h-12 bg-blue-600/20 rounded-lg flex items-center justify-center mb-4">
               <TrendingUp className="w-6 h-6 text-blue-400" />
             </div>
-            <h3 className="text-lg font-semibold text-white mb-2">Live Wechselkurse</h3>
+            <h3 className="text-lg font-semibold text-white mb-2">{t('currency.highlights.liveRates')}</h3>
             <p className="text-sm text-slate-400">
               Automatische Umrechnung mit aktuellen Wechselkursen in Echtzeit
             </p>
@@ -213,7 +214,7 @@ const CurrencyShowcase: React.FC = () => {
             <div className="w-12 h-12 bg-green-600/20 rounded-lg flex items-center justify-center mb-4">
               <DollarSign className="w-6 h-6 text-green-400" />
             </div>
-            <h3 className="text-lg font-semibold text-white mb-2">Separate Budgets</h3>
+            <h3 className="text-lg font-semibold text-white mb-2">{t('currency.highlights.separateBudgets')}</h3>
             <p className="text-sm text-slate-400">
               Verwalten Sie Portfolio und Budget in unterschiedlichen Währungen
             </p>

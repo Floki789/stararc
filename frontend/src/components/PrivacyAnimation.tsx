@@ -143,7 +143,7 @@ const PrivacyAnimation: React.FC<PrivacyAnimationProps> = ({ className = "", isA
                         <div className="flex items-center gap-2 text-sm">
                           <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full min-w-[20px] h-5 flex items-center justify-center">6</span>
                           <Trash2 className="w-4 h-4 text-red-400" />
-                          <span className="text-white">All Keys Deleted</span>
+                          <span className="text-white">{t('privacy.allKeysDeleted')}</span>
                         </div>
                       </motion.div>
                     )}

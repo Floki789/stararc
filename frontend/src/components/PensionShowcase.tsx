@@ -1,7 +1,9 @@
 import React from 'react';
 import { Shield, Users, TrendingUp, Sparkles, Plus, Edit2, Trash2, ChevronDown } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const PensionShowcase: React.FC = () => {
+  const { t } = useLanguage();
   return (
     <div className="relative bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 py-24 overflow-hidden">
       {/* Starfield Background */}
@@ -49,14 +51,13 @@ const PensionShowcase: React.FC = () => {
         <div className="text-center mb-16">
           <div className="inline-flex items-center space-x-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full mb-6">
             <Sparkles className="w-5 h-5 text-emerald-400" />
-            <span className="text-sm font-semibold text-emerald-400">Retirement Planning</span>
+            <span className="text-sm font-semibold text-emerald-400">{t('pension.badge')}</span>
           </div>
           <h2 className="text-4xl lg:text-6xl font-bold text-white mb-6">
-            Pension and Insurance
+            {t('pension.title')}
           </h2>
           <p className="text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed">
-            Verwalten Sie Ihre Altersvorsorge und Versicherungen zentral. 
-            Pilar 2 (beruflich) und Pilar 3 (privat) im Überblick.
+            {t('pension.subtitle')}
           </p>
         </div>
 
@@ -70,14 +71,14 @@ const PensionShowcase: React.FC = () => {
                   <Shield className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-white">Pension and Insurance</h3>
+                  <h3 className="text-xl font-bold text-white">{t('pension.pensionSection')}</h3>
                   <p className="text-sm text-slate-400">Retirement provisions, insurance & security</p>
                 </div>
               </div>
               <div className="text-right">
                 <div className="text-sm text-slate-400 mb-1">
-                  <span className="inline-block mr-4">Private: <span className="text-white font-semibold">34,000.00 Fr</span></span>
-                  <span className="inline-block">Berufliche: <span className="text-white font-semibold">800,000.00 Fr</span></span>
+                  <span className="inline-block mr-4">{t('pension.privateVorsorge')}: <span className="text-white font-semibold">34,000.00 {t('pension.totalAmount')}</span></span>
+                  <span className="inline-block">{t('pension.beruflicheVorsorge')}: <span className="text-white font-semibold">800,000.00 {t('pension.totalAmount')}</span></span>
                 </div>
                 <ChevronDown className="w-5 h-5 text-emerald-400 ml-auto" />
               </div>
@@ -97,8 +98,8 @@ const PensionShowcase: React.FC = () => {
                 </div>
               </div>
               <div className="text-right">
-                <div className="text-2xl font-bold text-white">834,000.00 Fr</div>
-                <div className="text-xs text-slate-400">4 Kontos</div>
+                <div className="text-2xl font-bold text-white">834,000.00 {t('pension.totalAmount')}</div>
+                <div className="text-xs text-slate-400">4 {t('pension.accountsCount')}</div>
               </div>
             </div>
           </div>
@@ -110,7 +111,7 @@ const PensionShowcase: React.FC = () => {
                 <tr>
                   <th className="text-left py-4 px-8 text-xs font-semibold text-slate-400 uppercase">
                     <div className="flex items-center space-x-2">
-                      <span>Plan Name</span>
+                      <span>{t('pension.tableHeaders.planName')}</span>
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
                       </svg>
@@ -118,7 +119,7 @@ const PensionShowcase: React.FC = () => {
                   </th>
                   <th className="text-left py-4 px-6 text-xs font-semibold text-slate-400 uppercase">
                     <div className="flex items-center space-x-2">
-                      <span>Provider</span>
+                      <span>{t('pension.tableHeaders.provider')}</span>
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
                       </svg>
@@ -126,7 +127,7 @@ const PensionShowcase: React.FC = () => {
                   </th>
                   <th className="text-left py-4 px-6 text-xs font-semibold text-slate-400 uppercase">
                     <div className="flex items-center space-x-2">
-                      <span>Pension Type</span>
+                      <span>{t('pension.tableHeaders.pensionType')}</span>
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
                       </svg>
@@ -134,21 +135,21 @@ const PensionShowcase: React.FC = () => {
                   </th>
                   <th className="text-right py-4 px-6 text-xs font-semibold text-slate-400 uppercase">
                     <div className="flex items-center justify-end space-x-2">
-                      <span>Current Balance</span>
+                      <span>{t('pension.tableHeaders.currentBalance')}</span>
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
                       </svg>
                     </div>
                   </th>
-                  <th className="text-center py-4 px-8 text-xs font-semibold text-slate-400 uppercase">Actions</th>
+                  <th className="text-center py-4 px-8 text-xs font-semibold text-slate-400 uppercase">{t('pension.tableHeaders.actions')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-800/50">
                 {[
-                  { name: 'Wilma Pilar 3', provider: 'Luzerner Kantonalbank', type: 'Private Vorsorge', balance: '12,000.00 Fr', typeColor: 'text-green-400 bg-green-900/30 border-green-800/50' },
-                  { name: 'Fred Pilar 3', provider: 'Luzerner Kantonalbank', type: 'Private Vorsorge', balance: '22,000.00 Fr', typeColor: 'text-green-400 bg-green-900/30 border-green-800/50' },
-                  { name: 'Wilma Pilar 2', provider: 'Pension Wilma', type: 'Berufliche Vorsorge', balance: '500,000.00 Fr', typeColor: 'text-green-400 bg-green-900/30 border-green-800/50' },
-                  { name: 'Fred Pilar 2', provider: 'Pension Fred', type: 'Berufliche Vorsorge', balance: '300,000.00 Fr', typeColor: 'text-green-400 bg-green-900/30 border-green-800/50' }
+                  { name: t('pension.accounts.wilmaPilar3'), provider: t('pension.providers.luzerner'), type: t('pension.pensionTypes.privateVorsorge'), balance: '12,000.00 Fr', typeColor: 'text-green-400 bg-green-900/30 border-green-800/50' },
+                  { name: t('pension.accounts.fredPilar3'), provider: t('pension.providers.luzerner'), type: t('pension.pensionTypes.privateVorsorge'), balance: '22,000.00 Fr', typeColor: 'text-green-400 bg-green-900/30 border-green-800/50' },
+                  { name: t('pension.accounts.wilmaPilar2'), provider: t('pension.providers.pensionWilma'), type: t('pension.pensionTypes.beruflicheVorsorge'), balance: '500,000.00 Fr', typeColor: 'text-green-400 bg-green-900/30 border-green-800/50' },
+                  { name: t('pension.accounts.fredPilar2'), provider: t('pension.providers.pensionFred'), type: t('pension.pensionTypes.beruflicheVorsorge'), balance: '300,000.00 Fr', typeColor: 'text-green-400 bg-green-900/30 border-green-800/50' }
                 ].map((account, index) => (
                   <tr key={index} className="hover:bg-slate-800/30 transition-colors">
                     <td className="py-4 px-8">
@@ -185,7 +186,7 @@ const PensionShowcase: React.FC = () => {
           <div className="border-t border-dashed border-slate-700 p-6">
             <button className="w-full py-3 bg-slate-800/50 hover:bg-slate-800 border border-slate-700 rounded-xl transition-colors flex items-center justify-center space-x-2 text-slate-300 hover:text-white">
               <Plus className="w-5 h-5" />
-              <span className="font-semibold">Add Account</span>
+              <span className="font-semibold">{t('pension.addAccount')}</span>
             </button>
           </div>
         </div>
@@ -196,7 +197,7 @@ const PensionShowcase: React.FC = () => {
             <div className="w-12 h-12 bg-emerald-600/20 rounded-lg flex items-center justify-center mb-4">
               <Shield className="w-6 h-6 text-emerald-400" />
             </div>
-            <h3 className="text-lg font-semibold text-white mb-2">3-Säulen-System</h3>
+            <h3 className="text-lg font-semibold text-white mb-2">{t('pension.highlights.saeulenSystem')}</h3>
             <p className="text-sm text-slate-400">
               Überblick über Pilar 1 (AHV), Pilar 2 (beruflich) und Pilar 3 (privat)
             </p>
@@ -206,7 +207,7 @@ const PensionShowcase: React.FC = () => {
             <div className="w-12 h-12 bg-blue-600/20 rounded-lg flex items-center justify-center mb-4">
               <TrendingUp className="w-6 h-6 text-blue-400" />
             </div>
-            <h3 className="text-lg font-semibold text-white mb-2">Mehrere Konten</h3>
+            <h3 className="text-lg font-semibold text-white mb-2">{t('pension.highlights.mehrereKonten')}</h3>
             <p className="text-sm text-slate-400">
               Verwalten Sie verschiedene Pensionskassen und 3a-Konten zentral
             </p>
@@ -216,7 +217,7 @@ const PensionShowcase: React.FC = () => {
             <div className="w-12 h-12 bg-purple-600/20 rounded-lg flex items-center justify-center mb-4">
               <Users className="w-6 h-6 text-purple-400" />
             </div>
-            <h3 className="text-lg font-semibold text-white mb-2">Familie & Partner</h3>
+            <h3 className="text-lg font-semibold text-white mb-2">{t('pension.highlights.familiePartner')}</h3>
             <p className="text-sm text-slate-400">
               Gemeinsame Übersicht über alle Altersvorsorge-Konten der Familie
             </p>

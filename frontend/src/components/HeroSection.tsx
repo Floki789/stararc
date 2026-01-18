@@ -94,7 +94,7 @@ const HeroSection: React.FC = () => {
                 <div className="mb-6 text-center">
                   <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full mb-4">
                     <Sparkles className="w-5 h-5 text-blue-400" />
-                    <span className="text-base font-semibold text-blue-400">Launch Special</span>
+                    <span className="text-base font-semibold text-blue-400">{t('hero.launchSpecial')}</span>
                   </div>
                   <h3 className="text-4xl font-bold text-white mb-3">Nova</h3>
                   <div className="inline-block px-6 py-3 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-xl mb-4">
@@ -129,11 +129,11 @@ const HeroSection: React.FC = () => {
                     </div>
                     <div className="text-4xl text-blue-400 font-bold">→</div>
                     <div className="text-center">
-                      <div className="text-blue-400 text-sm mb-1 font-semibold">Launch Preis</div>
+                      <div className="text-blue-400 text-sm mb-1 font-semibold">{t('hero.launchPrice')}</div>
                       <div className="text-5xl font-bold text-white">$90</div>
                     </div>
                   </div>
-                  <p className="text-center text-slate-400 text-sm mt-3">pro Jahr</p>
+                  <p className="text-center text-slate-400 text-sm mt-3">{t('hero.perYear')}</p>
                 </div>
 
                 {/* Key Features */}
@@ -143,7 +143,7 @@ const HeroSection: React.FC = () => {
                     '100 Wertschriften',
                     '10 Bitcoin-Setups & 10 Edelmetalle',
                     '5 Immobilien & 10 Hypotheken',
-                    'Portfolio & Budget Cockpit'
+                    '{t("hero.portfolioCockpit")}'
                   ].map((feature, i) => (
                     <div key={i} className="flex items-start gap-3">
                       <div className="mt-0.5 p-0.5 rounded-full bg-blue-500/20">

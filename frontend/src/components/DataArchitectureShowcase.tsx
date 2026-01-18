@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Database, Key, Shield, ArrowRight, Lock, Server, CheckCircle, Layers } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const DataArchitectureShowcase: React.FC = () => {
+  const { t } = useLanguage();
   const [activeView, setActiveView] = useState<'stararc' | 'authorization' | 'spaceship'>('stararc');
 
   return (
@@ -51,15 +53,13 @@ const DataArchitectureShowcase: React.FC = () => {
         <div className="text-center mb-16">
           <div className="inline-flex items-center space-x-2 px-4 py-2 bg-purple-500/10 border border-purple-500/20 rounded-full mb-6">
             <Layers className="w-5 h-5 text-purple-400" />
-            <span className="text-sm font-semibold text-purple-400">Multi-Layer Security Architecture</span>
+            <span className="text-sm font-semibold text-purple-400">{t('dataArchitecture.badge')}</span>
           </div>
           <h2 className="text-4xl lg:text-6xl font-bold text-white mb-6">
-            Zwei Verschlüsselungsebenen
+            {t('dataArchitecture.title')}
           </h2>
           <p className="text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed">
-            StarArc "Public" schützt Ihre Identität mit Admin-Verschlüsselung. 
-            StarArc "Spaceship" verschlüsselt Ihre Finanzdaten client-seitig. 
-            Sichere Autorisierung verbindet beide Systeme.
+            {t('dataArchitecture.subtitle')}
           </p>
         </div>
 
@@ -75,7 +75,7 @@ const DataArchitectureShowcase: React.FC = () => {
           >
             <div className="flex items-center space-x-2">
               <Database className="w-5 h-5" />
-              <span>StarArc: Identität</span>
+              <span>{t('dataArchitecture.stararcIdentity')}</span>
             </div>
           </button>
           <button
@@ -88,7 +88,7 @@ const DataArchitectureShowcase: React.FC = () => {
           >
             <div className="flex items-center space-x-2">
               <ArrowRight className="w-5 h-5" />
-              <span>Autorisierung</span>
+              <span>{t('dataArchitecture.authorization')}</span>
             </div>
           </button>
           <button
@@ -101,7 +101,7 @@ const DataArchitectureShowcase: React.FC = () => {
           >
             <div className="flex items-center space-x-2">
               <Shield className="w-5 h-5" />
-              <span>Spaceship: App-Daten</span>
+              <span>{t('dataArchitecture.spaceshipAppData')}</span>
             </div>
           </button>
         </div>

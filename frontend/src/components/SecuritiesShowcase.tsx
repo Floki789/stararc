@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { TrendingUp, BarChart3, PieChart } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface Security {
   name: string;
@@ -15,6 +16,7 @@ interface Security {
 }
 
 const SecuritiesShowcase: React.FC = () => {
+  const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState<'stocks' | 'etfs' | 'funds'>('stocks');
 
   const formatCurrency = (value: number, currency: string = 'CHF') => {
@@ -111,10 +113,10 @@ const SecuritiesShowcase: React.FC = () => {
         {/* Section Header */}
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-white mb-4">
-            Ihre Wertschriften im Detail
+            {t('portfolio.securities.title')}
           </h2>
           <p className="text-xl text-slate-400 max-w-3xl mx-auto">
-            Verwalten Sie Aktien, ETFs und Fonds mit Live-Kursen und professionellen Übersichten
+            {t('portfolio.securities.subtitle')}
           </p>
         </div>
 
@@ -130,7 +132,7 @@ const SecuritiesShowcase: React.FC = () => {
           >
             <div className="flex items-center space-x-2">
               <TrendingUp className="w-5 h-5" />
-              <span>Stocks</span>
+              <span>{t('portfolio.securities.stocks')}</span>
             </div>
           </button>
           <button
@@ -143,7 +145,7 @@ const SecuritiesShowcase: React.FC = () => {
           >
             <div className="flex items-center space-x-2">
               <BarChart3 className="w-5 h-5" />
-              <span>ETFs</span>
+              <span>{t('portfolio.securities.etfs')}</span>
             </div>
           </button>
           <button
@@ -156,7 +158,7 @@ const SecuritiesShowcase: React.FC = () => {
           >
             <div className="flex items-center space-x-2">
               <PieChart className="w-5 h-5" />
-              <span>Funds</span>
+              <span>{t('portfolio.securities.funds')}</span>
             </div>
           </button>
         </div>
@@ -187,7 +189,7 @@ const SecuritiesShowcase: React.FC = () => {
                 </div>
               </div>
               <div className="text-right">
-                <div className="text-sm text-slate-400">Total Value</div>
+                <div className="text-sm text-slate-400">{t('portfolio.securities.totalValue')}</div>
                 <div className="text-2xl font-bold text-white">
                   {formatCurrency(activeData.total, 'CHF')}
                 </div>
@@ -200,13 +202,13 @@ const SecuritiesShowcase: React.FC = () => {
             <table className="w-full">
               <thead className="bg-slate-800/50">
                 <tr>
-                  <th className="text-left py-4 px-6 text-xs font-semibold text-slate-400 uppercase tracking-wider">Name & Symbol</th>
-                  <th className="text-center py-4 px-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Type</th>
-                  <th className="text-center py-4 px-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Quantity</th>
-                  <th className="text-center py-4 px-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Rate</th>
-                  <th className="text-center py-4 px-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Custodian Bank</th>
-                  <th className="text-center py-4 px-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Update</th>
-                  <th className="text-right py-4 px-6 text-xs font-semibold text-slate-400 uppercase tracking-wider">Sum CHF</th>
+                  <th className="text-left py-4 px-6 text-xs font-semibold text-slate-400 uppercase tracking-wider">{t('tableHeaders.nameSymbol')}</th>
+                  <th className="text-center py-4 px-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">{t('portfolio.securities.tableHeaders.type')}</th>
+                  <th className="text-center py-4 px-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">{t('portfolio.securities.tableHeaders.quantity')}</th>
+                  <th className="text-center py-4 px-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">{t('portfolio.securities.tableHeaders.rate')}</th>
+                  <th className="text-center py-4 px-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">{t('portfolio.securities.tableHeaders.custodianBank')}</th>
+                  <th className="text-center py-4 px-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">{t('portfolio.securities.tableHeaders.update')}</th>
+                  <th className="text-right py-4 px-6 text-xs font-semibold text-slate-400 uppercase tracking-wider">{t('portfolio.securities.tableHeaders.sumCHF')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-800/50">
@@ -282,9 +284,9 @@ const SecuritiesShowcase: React.FC = () => {
             <div className="w-12 h-12 bg-blue-600/20 rounded-lg flex items-center justify-center mb-4">
               <TrendingUp className="w-6 h-6 text-blue-400" />
             </div>
-            <h3 className="text-lg font-semibold text-white mb-2">Live Pricing</h3>
+            <h3 className="text-lg font-semibold text-white mb-2">{t('securities.features.livePricing.title')}</h3>
             <p className="text-sm text-slate-400">
-              Echtzeit-Kurse für alle Ihre Wertschriften mit automatischer Aktualisierung
+              {t('securities.features.livePricing.description')}
             </p>
           </div>
           
@@ -292,9 +294,9 @@ const SecuritiesShowcase: React.FC = () => {
             <div className="w-12 h-12 bg-purple-600/20 rounded-lg flex items-center justify-center mb-4">
               <BarChart3 className="w-6 h-6 text-purple-400" />
             </div>
-            <h3 className="text-lg font-semibold text-white mb-2">Multi-Currency</h3>
+            <h3 className="text-lg font-semibold text-white mb-2">{t('securities.features.multiCurrency.title')}</h3>
             <p className="text-sm text-slate-400">
-              Unterstützung für USD, CHF, EUR mit automatischer Währungsumrechnung
+              {t('securities.features.multiCurrency.description')}
             </p>
           </div>
           
@@ -302,9 +304,9 @@ const SecuritiesShowcase: React.FC = () => {
             <div className="w-12 h-12 bg-green-600/20 rounded-lg flex items-center justify-center mb-4">
               <PieChart className="w-6 h-6 text-green-400" />
             </div>
-            <h3 className="text-lg font-semibold text-white mb-2">Performance Tracking</h3>
+            <h3 className="text-lg font-semibold text-white mb-2">{t('portfolio.securities.performanceTracking')}</h3>
             <p className="text-sm text-slate-400">
-              Detaillierte Performance-Analysen und historische Entwicklungen
+              {t('securities.features.performanceTracking.description')}
             </p>
           </div>
         </div>

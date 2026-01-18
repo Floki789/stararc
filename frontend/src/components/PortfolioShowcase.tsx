@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { BarChart3 } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface BreakdownSource {
   source: string;
@@ -16,6 +17,7 @@ interface AssetClass {
 }
 
 const PortfolioShowcase: React.FC = () => {
+  const { t } = useLanguage();
   const [hoveredBreakdownSource, setHoveredBreakdownSource] = useState<{ assetClass: string; source: string } | null>(null);
   const [hoveredOverviewClass, setHoveredOverviewClass] = useState<string | null>(null);
 
@@ -162,10 +164,10 @@ const PortfolioShowcase: React.FC = () => {
         {/* Section Header */}
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-white mb-4">
-            Visualisieren Sie Ihr gesamtes Vermögen
+            {t('portfolio.title')}
           </h2>
           <p className="text-xl text-slate-400 max-w-3xl mx-auto">
-            Behalten Sie den Überblick über alle Asset-Klassen mit detaillierten Aufschlüsselungen und interaktiven Visualisierungen
+            {t('portfolio.subtitle')}
           </p>
         </div>
 
@@ -176,7 +178,7 @@ const PortfolioShowcase: React.FC = () => {
               <BarChart3 className="w-5 h-5 text-white" />
             </div>
             <h3 className="text-2xl font-bold text-white">
-              Portfolio Asset Classes Overview
+              {t('portfolio.assetClassesOverview')}
             </h3>
           </div>
 
@@ -244,7 +246,7 @@ const PortfolioShowcase: React.FC = () => {
 
           {/* Total Value */}
           <div className="pt-6 border-t border-slate-800 flex items-center justify-between">
-            <span className="text-lg font-bold text-white">Total Value</span>
+            <span className="text-lg font-bold text-white">{t('portfolio.totalValue')}</span>
             <span className="text-2xl font-bold text-white">{formatCurrency(totalValue)}</span>
           </div>
         </div>
@@ -256,7 +258,7 @@ const PortfolioShowcase: React.FC = () => {
               <BarChart3 className="w-5 h-5 text-white" />
             </div>
             <h3 className="text-2xl font-bold text-white">
-              Portfolio Asset Classes Breakdown
+              {t('portfolio.assetClassesOverview')}
             </h3>
           </div>
 

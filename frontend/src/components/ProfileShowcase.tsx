@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Shield, Users, Building2, Lock, Home, Vault, Edit2, Trash2, Plus } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const ProfileShowcase: React.FC = () => {
+  const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState<'vaults' | 'family' | 'institutions'>('vaults');
 
   return (
@@ -57,10 +59,10 @@ const ProfileShowcase: React.FC = () => {
         {/* Section Header */}
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-white mb-4">
-            Profil & Verwaltung
+            {t('profile.title')}
           </h2>
           <p className="text-xl text-slate-400 max-w-3xl mx-auto">
-            Verwalten Sie Ihre Vaults, Familienmitglieder und Finanzinstitutionen zentral an einem Ort
+            {t('profile.subtitle')}
           </p>
         </div>
 
@@ -118,7 +120,7 @@ const ProfileShowcase: React.FC = () => {
                   <Shield className="w-6 h-6 text-blue-400" />
                   <div>
                     <h3 className="text-2xl font-bold text-white">Storage Locations (Vaults)</h3>
-                    <p className="text-sm text-slate-400">Manage physical and digital storage locations where you keep important information or assets</p>
+                    <p className="text-sm text-slate-400">{t('financial.managePhysicalDigital')}</p>
                   </div>
                 </div>
               </div>
@@ -168,7 +170,7 @@ const ProfileShowcase: React.FC = () => {
                     <Plus className="w-5 h-5" />
                     <div className="text-left">
                       <div className="font-semibold">New Physical Vault</div>
-                      <div className="text-xs text-slate-400">Click to add a physical vault</div>
+                      <div className="text-xs text-slate-400">{t('profile.clickToAdd.physicalVault')}</div>
                     </div>
                   </button>
                 </div>
@@ -216,7 +218,7 @@ const ProfileShowcase: React.FC = () => {
                     <Plus className="w-5 h-5" />
                     <div className="text-left">
                       <div className="font-semibold">New Digital Vault</div>
-                      <div className="text-xs text-slate-400">Click to add a digital vault</div>
+                      <div className="text-xs text-slate-400">{t('profile.clickToAdd.digitalVault')}</div>
                     </div>
                   </button>
                 </div>
@@ -236,7 +238,7 @@ const ProfileShowcase: React.FC = () => {
                   </div>
                 </div>
                 <button className="px-6 py-3 bg-gradient-to-r from-pink-600 to-pink-500 text-white rounded-xl font-semibold hover:from-pink-700 hover:to-pink-600 transition-all shadow-lg">
-                  + Add Family Member
+                  {t('profile.addFamilyMember')}
                 </button>
               </div>
 
@@ -324,7 +326,7 @@ const ProfileShowcase: React.FC = () => {
                   <Plus className="w-5 h-5" />
                   <div className="text-left">
                     <div className="font-semibold">New Financial Institution</div>
-                    <div className="text-xs text-slate-400">Click to add a new financial institution</div>
+                    <div className="text-xs text-slate-400">{t('profile.clickToAdd.financialInstitution')}</div>
                   </div>
                 </button>
               </div>
@@ -338,9 +340,9 @@ const ProfileShowcase: React.FC = () => {
             <div className="w-12 h-12 bg-blue-600/20 rounded-lg flex items-center justify-center mb-4">
               <Shield className="w-6 h-6 text-blue-400" />
             </div>
-            <h3 className="text-lg font-semibold text-white mb-2">Vault Management</h3>
+            <h3 className="text-lg font-semibold text-white mb-2">{t('profile.features.vaultManagement.title')}</h3>
             <p className="text-sm text-slate-400">
-              Verwalten Sie physische und digitale Speicherorte für wichtige Dokumente und Assets
+              {t('profile.features.vaultManagement.description')}
             </p>
           </div>
           
@@ -348,9 +350,9 @@ const ProfileShowcase: React.FC = () => {
             <div className="w-12 h-12 bg-pink-600/20 rounded-lg flex items-center justify-center mb-4">
               <Users className="w-6 h-6 text-pink-400" />
             </div>
-            <h3 className="text-lg font-semibold text-white mb-2">Family Management</h3>
+            <h3 className="text-lg font-semibold text-white mb-2">{t('profile.features.familyManagement.title')}</h3>
             <p className="text-sm text-slate-400">
-              Zentrale Verwaltung aller Familienmitglieder mit Rollen und Geburtsjahren
+              {t('profile.features.familyManagement.description')}
             </p>
           </div>
           
@@ -358,9 +360,9 @@ const ProfileShowcase: React.FC = () => {
             <div className="w-12 h-12 bg-green-600/20 rounded-lg flex items-center justify-center mb-4">
               <Building2 className="w-6 h-6 text-green-400" />
             </div>
-            <h3 className="text-lg font-semibold text-white mb-2">Institution Tracking</h3>
+            <h3 className="text-lg font-semibold text-white mb-2">{t('profile.features.institutionTracking.title')}</h3>
             <p className="text-sm text-slate-400">
-              Übersicht über alle Finanzinstitutionen mit vordefinierter und benutzerdefinierter Verwaltung
+              {t('profile.features.institutionTracking.description')}
             </p>
           </div>
         </div>

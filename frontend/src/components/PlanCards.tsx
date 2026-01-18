@@ -58,28 +58,28 @@ const PlanCards: React.FC<PlanCardsProps> = ({
     {
       id: 'Free',
       name: 'Free',
-      priceMonthly: 'Kostenlos',
-      priceYearly: 'Kostenlos',
+      priceMonthly: 'Free',
+      priceYearly: 'Free',
       priceValueMonthly: 0,
       priceValueYearly: 0,
       currency: 'usd',
-      description: 'Lernen Sie uns kennen',
+      description: 'Get to know us',
       icon: Star,
       color: 'text-gray-400',
       bgGradient: 'bg-gradient-to-r from-green-500 to-green-600',
       features: [
-        '1 Familienmitglied',
-        '7 Wertschriften (Aktien/ETFs)',
-        '1 Bitcoin-Setup & 2 Edelmetalle',
-        '1 Immobilie & 0 Hypotheken',
-        '1 Vorsorge-Konto',
-        '2 Liquidität-Konten',
-        '10 Budget-Kategorien & 50 Budget-Items',
-        '3 Finanzinstitute (2+1 custom)',
-        '3 Vaults (2 physisch, 1 digital)',
+        '1 Family member',
+        '7 Securities (Stocks/ETFs)',
+        '1 Bitcoin setup & 2 Precious metals',
+        '1 Real estate & 0 Mortgages',
+        '1 Pension account',
+        '2 Liquidity accounts',
+        '10 Budget categories & 50 Budget items',
+        '3 Financial institutions (2+1 custom)',
+        '3 Vaults (2 physical, 1 digital)',
         'Budget & Portfolio Cockpit'
       ],
-      buttonText: 'Kostenlos starten'
+      buttonText: 'Start Free'
     },
     {
       id: 'Spark',
@@ -89,24 +89,24 @@ const PlanCards: React.FC<PlanCardsProps> = ({
       priceValueMonthly: 900, // $9 in cents
       priceValueYearly: 9000, // $90 in cents
       currency: 'usd',
-      description: 'Für kleine Familien mit einfacher Vermögenssituation',
+      description: 'For small families with simple financial situations',
       icon: Flame,
       color: 'text-orange-400',
       bgGradient: 'bg-gradient-to-r from-orange-500 to-red-600',
       savingsPercent: 17,
       features: [
-        '4 Familienmitglieder',
-        '40 Wertschriften (Aktien/ETFs)',
-        '3 Bitcoin-Setups & 3 Edelmetalle',
-        '2 Immobilien & 4 Hypotheken',
-        '4 Vorsorge-Konten',
-        '5 Liquidität-Konten',
-        '15 Budget-Kategorien & 100 Budget-Items',
-        '5 Finanzinstitute',
+        '4 Family members',
+        '40 Securities (Stocks/ETFs)',
+        '3 Bitcoin setups & 3 Precious metals',
+        '2 Real estate & 4 Mortgages',
+        '4 Pension accounts',
+        '5 Liquidity accounts',
+        '15 Budget categories & 100 Budget items',
+        '5 Financial institutions',
         '4 Vaults',
         'Budget & Portfolio Cockpit'
       ],
-      buttonText: 'Spark wählen'
+      buttonText: 'Choose Spark'
     },
     {
       id: 'Nova',
@@ -116,25 +116,25 @@ const PlanCards: React.FC<PlanCardsProps> = ({
       priceValueMonthly: 1900, // $19 in cents
       priceValueYearly: 9000, // $90 in cents (Launch Special: first 100 subscriptions)
       currency: 'usd',
-      description: '🚀 Launch Special: 1 Monat kostenlos testen • Erste 100: $90 statt $380/Jahr',
+      description: '🚀 Launch Special: Try 1 month free • First 100: $90 instead of $380/year',
       icon: Sparkles,
       color: 'text-blue-400',
       bgGradient: 'bg-gradient-to-r from-blue-500 to-cyan-600',
       savingsPercent: 76,
       features: [
-        '6 Familienmitglieder',
-        '100 Wertschriften (Aktien/ETFs)',
-        '10 Bitcoin-Setups & 10 Edelmetalle',
-        '5 Immobilien & 10 Hypotheken',
-        '6 Vorsorge-Konten',
-        '8 Liquidität-Konten',
-        '20 Budget-Kategorien & 150 Budget-Items',
-        '8 Finanzinstitute',
+        '6 Family members',
+        '100 Securities (Stocks/ETFs)',
+        '10 Bitcoin setups & 10 Precious metals',
+        '5 Real estate & 10 Mortgages',
+        '6 Pension accounts',
+        '8 Liquidity accounts',
+        '20 Budget categories & 150 Budget items',
+        '8 Financial institutions',
         '8 Vaults',
         'Budget & Portfolio Cockpit'
       ],
       isPopular: true,
-      buttonText: '1 Monat kostenlos testen'
+      buttonText: 'Try 1 Month Free'
     },
     {
       id: 'Galaxy',
@@ -144,25 +144,25 @@ const PlanCards: React.FC<PlanCardsProps> = ({
       priceValueMonthly: 3900, // $39 in cents
       priceValueYearly: 39000, // $390 in cents
       currency: 'usd',
-      description: 'Für vermögende Familien mit komplexen Strukturen',
+      description: 'For wealthy families with complex structures',
       icon: Globe,
       color: 'text-purple-400',
       bgGradient: 'bg-gradient-to-r from-purple-500 to-indigo-600',
       savingsPercent: 17,
       features: [
-        'Unlimited Familienmitglieder',
-        'Unlimited Wertschriften (Aktien/ETFs)',
-        'Unlimited Bitcoin-Setups & Edelmetalle',
-        'Unlimited Immobilien & Hypotheken',
-        'Unlimited Vorsorge-Konten',
-        'Unlimited Liquidität-Konten',
-        'Unlimited Budget-Kategorien & Items',
-        'Unlimited Finanzinstitute',
+        'Unlimited Family members',
+        'Unlimited Securities (Stocks/ETFs)',
+        'Unlimited Bitcoin setups & Precious metals',
+        'Unlimited Real estate & Mortgages',
+        'Unlimited Pension accounts',
+        'Unlimited Liquidity accounts',
+        'Unlimited Budget categories & Items',
+        'Unlimited Financial institutions',
         'Unlimited Vaults',
         'Budget & Portfolio Cockpit',
-        '* Technische Limits zum Missbrauchsschutz'
+        '* Technical limits for abuse protection'
       ],
-      buttonText: 'Galaxy wählen'
+      buttonText: 'Choose Galaxy'
     },
     {
       id: 'Apex',
@@ -172,7 +172,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
       priceValueMonthly: 0, // Will be custom pricing
       priceValueYearly: 0, // Will be custom pricing
       currency: 'usd',
-      description: 'Für Vermögensberater und -verwalter',
+      description: 'For wealth advisors and managers',
       icon: Crown,
       color: 'text-yellow-400',
       bgGradient: 'bg-gradient-to-r from-yellow-500 to-yellow-600',
@@ -208,7 +208,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
                 : 'text-slate-400 hover:text-white'
             }`}
           >
-            Monatlich
+            Monthly
           </button>
           <button
             onClick={() => setBillingInterval('year')}
@@ -218,7 +218,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
                 : 'text-slate-400 hover:text-white'
             }`}
           >
-            Jährlich
+            Yearly
             <span className="absolute -top-2 -right-2 bg-green-500 text-white text-xs px-2 py-0.5 rounded-full font-bold">
               -17%
             </span>
@@ -252,7 +252,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
             {currentPlan === plan.id && (
               <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
                 <span className="bg-blue-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
-                  Aktueller Plan
+                  Current Plan
                 </span>
               </div>
             )}
@@ -261,7 +261,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
             {plan.isPopular && currentPlan !== plan.id && !plan.comingSoon && (
               <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
                 <span className="bg-purple-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
-                  Beliebt
+                  Popular
                 </span>
               </div>
             )}
@@ -293,13 +293,13 @@ const PlanCards: React.FC<PlanCardsProps> = ({
                   </p>
                   {priceValue > 0 && (
                     <p className="text-sm text-gray-400 mt-1">
-                      pro {billingInterval === 'month' ? 'Monat' : 'Jahr'}
+                      per {billingInterval === 'month' ? 'month' : 'year'}
                     </p>
                   )}
                   {billingInterval === 'year' && plan.savingsPercent && (
                     <div className="mt-2 inline-block">
                       <span className="bg-green-500/20 text-green-400 px-2 py-1 rounded text-xs font-semibold">
-                        {plan.savingsPercent}% sparen
+                        Save {plan.savingsPercent}%
                       </span>
                     </div>
                   )}
@@ -341,11 +341,11 @@ const PlanCards: React.FC<PlanCardsProps> = ({
                   }`}
                 >
                   {currentPlan === plan.id 
-                    ? 'Aktiver Plan' 
+                    ? 'Active Plan' 
                     : !isPlanSelectable(plan.id, currentPlan, plan)
-                      ? plan.comingSoon ? 'Coming Soon' : 'Nicht verfügbar'
+                      ? plan.comingSoon ? 'Coming Soon' : 'Not available'
                       : loading[plan.id] 
-                        ? 'Lädt...' 
+                        ? 'Loading...' 
                         : plan.buttonText
                   }
                 </button>

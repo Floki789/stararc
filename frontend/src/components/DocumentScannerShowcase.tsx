@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { FileText, ScanLine, CheckCircle, Shield, Sparkles } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const DocumentScannerShowcase: React.FC = () => {
+  const { t } = useLanguage();
   const [activeView, setActiveView] = useState<'crop' | 'review'>('crop');
 
   return (
@@ -54,11 +56,10 @@ const DocumentScannerShowcase: React.FC = () => {
             <span className="text-sm font-semibold text-green-400">Intelligent Document Processing</span>
           </div>
           <h2 className="text-4xl lg:text-6xl font-bold text-white mb-6">
-            Scannen Sie Ihre Depotauszüge
+            {t('documentScanner.title')}
           </h2>
           <p className="text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed">
-            Importieren Sie Ihre Wertschriften automatisch mit unserem intelligenten Document Scanner. 
-            OCR-Technologie erkennt Symbole, ISIN und Kurse automatisch.
+            {t('documentScanner.subtitle')}
           </p>
         </div>
 
@@ -321,9 +322,9 @@ const DocumentScannerShowcase: React.FC = () => {
             <div className="w-12 h-12 bg-green-600/20 rounded-lg flex items-center justify-center mb-4">
               <ScanLine className="w-6 h-6 text-green-400" />
             </div>
-            <h3 className="text-lg font-semibold text-white mb-2">OCR-Technologie</h3>
+            <h3 className="text-lg font-semibold text-white mb-2">{t('documentScanner.features.ocrTechnology.title')}</h3>
             <p className="text-sm text-slate-400">
-              Automatische Erkennung von Symbolen, ISIN-Nummern und Kursen aus Depotauszügen
+              {t('documentScanner.features.ocrTechnology.description')}
             </p>
           </div>
           
@@ -331,9 +332,9 @@ const DocumentScannerShowcase: React.FC = () => {
             <div className="w-12 h-12 bg-blue-600/20 rounded-lg flex items-center justify-center mb-4">
               <Shield className="w-6 h-6 text-blue-400" />
             </div>
-            <h3 className="text-lg font-semibold text-white mb-2">Datenschutz First</h3>
+            <h3 className="text-lg font-semibold text-white mb-2">{t('documentScanner.features.privacyFirst.title')}</h3>
             <p className="text-sm text-slate-400">
-              Crop-Funktion zum Entfernen sensibler Daten wie Namen und Adressen vor dem Upload
+              {t('documentScanner.features.privacyFirst.description')}
             </p>
           </div>
           
@@ -341,9 +342,9 @@ const DocumentScannerShowcase: React.FC = () => {
             <div className="w-12 h-12 bg-purple-600/20 rounded-lg flex items-center justify-center mb-4">
               <CheckCircle className="w-6 h-6 text-purple-400" />
             </div>
-            <h3 className="text-lg font-semibold text-white mb-2">Intelligente Validierung</h3>
+            <h3 className="text-lg font-semibold text-white mb-2">{t('documentScanner.features.intelligentValidation.title')}</h3>
             <p className="text-sm text-slate-400">
-              100% Match-Erkennung mit automatischer Vervollständigung fehlender Daten
+              {t('documentScanner.features.intelligentValidation.description')}
             </p>
           </div>
         </div>
