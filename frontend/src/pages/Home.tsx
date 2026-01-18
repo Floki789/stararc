@@ -1,14 +1,19 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import HeroSection from '../components/HeroSection';
+import OverviewShowcase from '../components/OverviewShowcase';
 import PortfolioShowcase from '../components/PortfolioShowcase';
 import SecuritiesShowcase from '../components/SecuritiesShowcase';
 import BitcoinWizardShowcase from '../components/BitcoinWizardShowcase';
 import RealEstateShowcase from '../components/RealEstateShowcase';
 import ProfileShowcase from '../components/ProfileShowcase';
+import DocumentScannerShowcase from '../components/DocumentScannerShowcase';
+import CurrencyShowcase from '../components/CurrencyShowcase';
+import PensionShowcase from '../components/PensionShowcase';
 import AssetShowcase from '../components/AssetShowcase';
 import BudgetShowcase from '../components/BudgetShowcase';
 import SecurityShowcase from '../components/SecurityShowcase';
+import DataArchitectureShowcase from '../components/DataArchitectureShowcase';
 import PlanCards from '../components/PlanCards';
 
 const Home: React.FC = () => {
@@ -46,29 +51,68 @@ const Home: React.FC = () => {
       {/* Hero Section */}
       <HeroSection />
       
+      {/* Overview Section */}
+      <OverviewShowcase />
+      
       {/* Portfolio Breakdown Showcase */}
-      <PortfolioShowcase />
+      <div id="portfolio">
+        <PortfolioShowcase />
+      </div>
       
       {/* Securities Showcase Section */}
-      <SecuritiesShowcase />
+      <div id="securities">
+        <SecuritiesShowcase />
+      </div>
       
       {/* Bitcoin Self-Custody Wizard Showcase Section */}
-      <BitcoinWizardShowcase />
+      <div id="bitcoin">
+        <BitcoinWizardShowcase />
+      </div>
       
       {/* Real Estate Showcase Section */}
-      <RealEstateShowcase />
+      <div id="realestate">
+        <RealEstateShowcase />
+      </div>
       
       {/* Profile & Management Showcase Section */}
-      <ProfileShowcase />
+      <div id="profile">
+        <ProfileShowcase />
+      </div>
+      
+      {/* Document Scanner Showcase Section */}
+      <div id="scanner">
+        <DocumentScannerShowcase />
+      </div>
+      
+      {/* Multi-Currency Showcase Section */}
+      <div id="currency">
+        <CurrencyShowcase />
+      </div>
+      
+      {/* Pension & Insurance Showcase Section */}
+      <div id="pension">
+        <PensionShowcase />
+      </div>
       
       {/* Asset Showcase Section */}
-      <AssetShowcase />
+      <div id="assets">
+        <AssetShowcase />
+      </div>
       
       {/* Budget Showcase Section */}
-      <BudgetShowcase />
+      <div id="budget">
+        <BudgetShowcase />
+      </div>
       
       {/* Security & Privacy Showcase Section */}
-      <SecurityShowcase />
+      <div id="security">
+        <SecurityShowcase />
+      </div>
+      
+      {/* Data Architecture Showcase Section */}
+      <div id="architecture">
+        <DataArchitectureShowcase />
+      </div>
 
       {/* Subscription Plans - No Animation */}
       <div id="plans" className="py-20 bg-gray-900">

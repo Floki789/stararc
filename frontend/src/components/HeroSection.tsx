@@ -11,7 +11,7 @@ const HeroSection: React.FC = () => {
   const remainingSubscriptions = 87; // Out of 100
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center overflow-hidden">
+    <div className="relative min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center overflow-hidden pt-20">
       {/* Starfield Background */}
       <div className="absolute inset-0">
         {/* Stars layer 1 - small and dim */}
