@@ -10,8 +10,6 @@ import ProfileShowcase from '../components/ProfileShowcase';
 import DocumentScannerShowcase from '../components/DocumentScannerShowcase';
 import CurrencyShowcase from '../components/CurrencyShowcase';
 import PensionShowcase from '../components/PensionShowcase';
-import AssetShowcase from '../components/AssetShowcase';
-import BudgetShowcase from '../components/BudgetShowcase';
 import SecurityShowcase from '../components/SecurityShowcase';
 import DataArchitectureShowcase from '../components/DataArchitectureShowcase';
 import PlanCards from '../components/PlanCards';
@@ -92,16 +90,6 @@ const Home: React.FC = () => {
       {/* Pension & Insurance Showcase Section */}
       <div id="pension">
         <PensionShowcase />
-      </div>
-      
-      {/* Asset Showcase Section */}
-      <div id="assets">
-        <AssetShowcase />
-      </div>
-      
-      {/* Budget Showcase Section */}
-      <div id="budget">
-        <BudgetShowcase />
       </div>
       
       {/* Security & Privacy Showcase Section */}
