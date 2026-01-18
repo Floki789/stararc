@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FileText, ScanLine, CheckCircle, Shield, Sparkles } from 'lucide-react';
+import { ScanLine, CheckCircle, Shield, Sparkles } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 
 const DocumentScannerShowcase: React.FC = () => {

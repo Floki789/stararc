@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Coins, DollarSign, TrendingUp, Sparkles, Check } from 'lucide-react';
+import { Coins, DollarSign, TrendingUp, Sparkles } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 
 const CurrencyShowcase: React.FC = () => {
@@ -166,7 +166,7 @@ const CurrencyShowcase: React.FC = () => {
 
             <div className="p-8">
               <div className="grid grid-cols-2 gap-2">
-                {currencies.map((curr, index) => (
+                {currencies.map((curr, _) => (
                   <div 
                     key={curr.code}
                     className="flex items-center space-x-3 p-2.5 bg-slate-800/50 hover:bg-slate-800 border border-slate-700/50 rounded-lg transition-all duration-200 hover:scale-[1.01]"
