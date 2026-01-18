@@ -137,7 +137,7 @@ const RealEstateShowcase: React.FC = () => {
         
         {/* Section Header */}
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-white mb-4">
+          <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4">
             {t('realEstate.title')}
           </h2>
           <p className="text-xl text-slate-400 max-w-3xl mx-auto">

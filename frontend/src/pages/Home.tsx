@@ -8,6 +8,7 @@ import BitcoinWizardShowcase from '../components/BitcoinWizardShowcase';
 import RealEstateShowcase from '../components/RealEstateShowcase';
 import ProfileShowcase from '../components/ProfileShowcase';
 import DocumentScannerShowcase from '../components/DocumentScannerShowcase';
+import SelfCustodyShowcase from '../components/SelfCustodyShowcase';
 import CurrencyShowcase from '../components/CurrencyShowcase';
 import PensionShowcase from '../components/PensionShowcase';
 import SecurityShowcase from '../components/SecurityShowcase';
@@ -80,6 +81,11 @@ const Home: React.FC = () => {
       {/* Document Scanner Showcase Section */}
       <div id="scanner">
         <DocumentScannerShowcase />
+      </div>
+      
+      {/* Self Custody Showcase Section */}
+      <div id="selfcustody">
+        <SelfCustodyShowcase />
       </div>
       
       {/* Multi-Currency Showcase Section */}

@@ -55,7 +55,7 @@ const DataArchitectureShowcase: React.FC = () => {
             <Layers className="w-5 h-5 text-purple-400" />
             <span className="text-sm font-semibold text-purple-400">{t('dataArchitecture.badge')}</span>
           </div>
-          <h2 className="text-4xl lg:text-6xl font-bold text-white mb-6">
+          <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
             {t('dataArchitecture.title')}
           </h2>
           <p className="text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed">

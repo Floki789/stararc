@@ -12,7 +12,10 @@
   "hero": {
     "title": "Ihr ganzes Anlageuniversum unter einem Dach",
     "subtitle": "Privacy-First Portfolio Management mit Zero-Knowledge Architektur",
-    "cta": "Kostenlos starten"
+    "cta": "Kostenlos starten",
+    "launchSpecial": "Launch Special",
+    "launchPrice": "Launch-Preis",
+    "perYear": "pro Jahr"
   },
   "features": {
     "assetManagement": "Asset Management",
@@ -646,6 +649,92 @@
       }
     }
   },
+  "selfCustody": {
+    "badge": "Bitcoin Self Custody Standard",
+    "title": "Bitcoin Self Custody - Der neue Standard",
+    "subtitle": "Übernehmen Sie die vollständige Kontrolle über Ihre Bitcoin. Erfahren Sie, wie richtig umgesetzte Bitcoin Self-Custody-Lösungen Ihre finanzielle Souveränität und Privatsphäre revolutionieren.",
+    "tabs": {
+      "overview": "Übersicht",
+      "comparison": "Vergleich",
+      "benefits": "Vorteile"
+    },
+    "wealthOverview": {
+      "title": "Wealth Overview",
+      "netWorth": "Nettovermögen",
+      "totalAssets": "Gesamtvermögen",
+      "totalLiabilities": "Gesamtverbindlichkeiten",
+      "assetDistribution": "Vermögensverteilung",
+      "selfCustody": "Self Custody",
+      "thirdPartyCustody": "Third Party Custody",
+      "pension": "Pension",
+      "realEstate": "Immobilien (Netto)"
+    },
+    "comparison": {
+      "title": "Bitcoin Self Custody vs. Bitcoin Third Party Custody",
+      "headers": {
+        "aspect": "Aspekt",
+        "selfCustody": "Bitcoin Self Custody",
+        "thirdParty": "Bitcoin Third Party Custody"
+      },
+      "control": {
+        "aspect": "Private Key Kontrolle",
+        "self": "Sie besitzen Ihre Private Keys - Not your keys, not your Bitcoin",
+        "thirdParty": "Exchange/Custodian kontrolliert Ihre Private Keys"
+      },
+      "privacy": {
+        "aspect": "Transaktionsprivatsphäre",
+        "self": "Pseudonyme Transaktionen, keine KYC bei Wallets",
+        "thirdParty": "Vollständige KYC-Überwachung aller Transaktionen"
+      },
+      "costs": {
+        "aspect": "Kosten & Gebühren",
+        "self": "Nur Mining-Gebühren, einmalige Hardware-Kosten",
+        "thirdParty": "Trading-Gebühren, Withdrawal-Gebühren, Custody-Gebühren"
+      },
+      "security": {
+        "aspect": "Sicherheitsrisiken",
+        "self": "Persönliche Verantwortung für Seed-Phrase & Hardware",
+        "thirdParty": "Exchange-Hacks, Insolvenz, Regulatory Shutdowns"
+      },
+      "complexity": {
+        "aspect": "Technische Komplexität",
+        "self": "Hardware Wallet Setup, Seed Backup, UTXO Management",
+        "thirdParty": "Einfaches Web-Interface wie Banking"
+      },
+      "censorship": {
+        "aspect": "Zensurresistenz",
+        "self": "Vollständige Zensurresistenz, niemand kann Sie stoppen",
+        "thirdParty": "Account kann gesperrt/eingefroren werden"
+      }
+    },
+    "benefits": {
+      "title": "Warum Bitcoin Self Custody?",
+      "fullControl": {
+        "title": "Not Your Keys, Not Your Bitcoin",
+        "description": "Nur wer die Private Keys kontrolliert, besitzt wirklich Bitcoin. Bei Exchanges sind Sie nur ein Gläubiger mit einem IOU."
+      },
+      "privacy": {
+        "title": "Bitcoin Privacy Standards",
+        "description": "Echte Bitcoin-Privacy durch eigene Full Nodes, CoinJoin und pseudonyme Transaktionen ohne KYC-Überwachung."
+      },
+      "noCounterparty": {
+        "title": "Kein Counterparty-Risiko",
+        "description": "Bitcoin wurde für Peer-to-Peer-Transaktionen ohne Intermediäre geschaffen. Self Custody eliminiert das Risiko von Exchange-Pleiten."
+      },
+      "sovereignty": {
+        "title": "Monetäre Souveränität",
+        "description": "Bitcoin Self Custody ist die ultimative Form monetärer Souveränität. 24/7 Zugriff ohne Erlaubnis, Grenzen oder Bankfeiertage."
+      },
+      "inheritance": {
+        "title": "Vererbung & Generationenwealth",
+        "description": "Mit MultiSig-Setups und Seed-Phrase-Vererbung können Sie Bitcoin sicher an die nächste Generation weitergeben."
+      },
+      "technology": {
+        "title": "Hardware Wallet Innovation",
+        "description": "Moderne Hardware Wallets wie Coldcard, Jade oder Bitbox bieten Air-Gapped Sicherheit auf militärischem Niveau."
+      }
+    }
+  },
   "wholeEnchilada": {
     "centerTitle": "Ganzheitliches Vermögens- und Sicherheitsmanagement",
     "centerSubtitle": "Komplette Vermögensökosystem-Übersicht mit totaler Kontrolle und Transparenz",
@@ -1258,8 +1347,8 @@
   },
   "pension": {
     "badge": "Vorsorge & Versicherungen",
-    "title": "Schweizer 3-Säulen-System",
-    "subtitle": "Verwalten Sie Ihre Altersvorsorge und Versicherungen zentral. Unterstützung für das Schweizer 3-Säulen-System mit mehreren Konten pro Familie.",
+    "title": "Berufliche und Private Vorsorge",
+    "subtitle": "Verwalten Sie Ihre Altersvorsorge und Versicherungen zentral. Berufliche und private Vorsorge mit mehreren Konten pro Familie.",
     "pensionSection": "Pension Section",
     "privateVorsorge": "Private Vorsorge",
     "beruflicheVorsorge": "Berufliche Vorsorge",
@@ -1289,7 +1378,7 @@
     },
     "addAccount": "Add Account",
     "highlights": {
-      "saeulenSystem": "3-Säulen-System",
+      "saeulenSystem": "Vorsorge-System",
       "mehrereKonten": "Mehrere Konten",
       "familiePartner": "Familie & Partner"
     }
@@ -1428,6 +1517,7 @@
       "portfolioManagement": "Portfolio Management",
       "securitiesManagement": "Securities Management",
       "bitcoinCrypto": "Bitcoin & Crypto",
+      "selfCustody": "Bitcoin Self Custody",
       "immobilien": "Immobilien",
       "profileManagement": "Profile & Management",
       "documentScanner": "Document Scanner",

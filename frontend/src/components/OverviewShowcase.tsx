@@ -9,7 +9,8 @@ import {
   Umbrella, 
   Package, 
   Shield, 
-  Layers
+  Layers,
+  Key
 } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -17,6 +18,7 @@ interface FeatureItem {
   icon: React.ElementType;
   titleKey: string;
   sectionId: string;
+  colorScheme: 'blue' | 'green' | 'orange' | 'purple' | 'red' | 'indigo' | 'yellow' | 'pink' | 'teal' | 'cyan' | 'emerald';
 }
 
 const OverviewShowcase: React.FC = () => {
@@ -26,52 +28,68 @@ const OverviewShowcase: React.FC = () => {
     {
       icon: TrendingUp,
       titleKey: 'overview.features.portfolioManagement',
-      sectionId: 'portfolio'
+      sectionId: 'portfolio',
+      colorScheme: 'blue'
     },
     {
       icon: Package,
       titleKey: 'overview.features.securitiesManagement',
-      sectionId: 'securities'
+      sectionId: 'securities',
+      colorScheme: 'green'
     },
     {
       icon: Bitcoin,
       titleKey: 'overview.features.bitcoinCrypto',
-      sectionId: 'bitcoin'
+      sectionId: 'bitcoin',
+      colorScheme: 'orange'
     },
     {
       icon: Building2,
       titleKey: 'overview.features.immobilien',
-      sectionId: 'realestate'
+      sectionId: 'realestate',
+      colorScheme: 'indigo'
     },
     {
       icon: Users,
       titleKey: 'overview.features.profileManagement',
-      sectionId: 'profile'
+      sectionId: 'profile',
+      colorScheme: 'pink'
     },
     {
       icon: ScanLine,
       titleKey: 'overview.features.documentScanner',
-      sectionId: 'scanner'
+      sectionId: 'scanner',
+      colorScheme: 'teal'
+    },
+    {
+      icon: Key,
+      titleKey: 'overview.features.selfCustody',
+      sectionId: 'selfcustody',
+      colorScheme: 'purple'
     },
     {
       icon: Coins,
       titleKey: 'overview.features.multiCurrency',
-      sectionId: 'currency'
+      sectionId: 'currency',
+      colorScheme: 'yellow'
     },
     {
       icon: Umbrella,
       titleKey: 'overview.features.pensionInsurance',
-      sectionId: 'pension'
+      sectionId: 'pension',
+      colorScheme: 'cyan'
     },
     {
       icon: Shield,
       titleKey: 'overview.features.clientSideEncryption',
-      sectionId: 'security'
+      sectionId: 'security',
+      colorScheme: 'emerald'
     },
     {
       icon: Layers,
       titleKey: 'overview.features.twoLayerSecurity',
-      sectionId: 'architecture'
+      sectionId: 'architecture',
+      colorScheme: 'red'
     }
   ];
 
@@ -82,6 +100,89 @@ const OverviewShowcase: React.FC = () => {
       const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
       window.scrollTo({ top: y, behavior: 'smooth' });
     }
+  };
+
+  const getColorClasses = (colorScheme: string) => {
+    const colors = {
+      blue: {
+        bg: 'bg-blue-500/20 group-hover:bg-blue-500/30',
+        icon: 'text-blue-400',
+        border: 'hover:border-blue-500/50',
+        shadow: 'hover:shadow-blue-500/10',
+        text: 'group-hover:text-blue-400'
+      },
+      green: {
+        bg: 'bg-green-500/20 group-hover:bg-green-500/30',
+        icon: 'text-green-400',
+        border: 'hover:border-green-500/50',
+        shadow: 'hover:shadow-green-500/10',
+        text: 'group-hover:text-green-400'
+      },
+      orange: {
+        bg: 'bg-orange-500/20 group-hover:bg-orange-500/30',
+        icon: 'text-orange-400',
+        border: 'hover:border-orange-500/50',
+        shadow: 'hover:shadow-orange-500/10',
+        text: 'group-hover:text-orange-400'
+      },
+      purple: {
+        bg: 'bg-purple-500/20 group-hover:bg-purple-500/30',
+        icon: 'text-purple-400',
+        border: 'hover:border-purple-500/50',
+        shadow: 'hover:shadow-purple-500/10',
+        text: 'group-hover:text-purple-400'
+      },
+      indigo: {
+        bg: 'bg-indigo-500/20 group-hover:bg-indigo-500/30',
+        icon: 'text-indigo-400',
+        border: 'hover:border-indigo-500/50',
+        shadow: 'hover:shadow-indigo-500/10',
+        text: 'group-hover:text-indigo-400'
+      },
+      pink: {
+        bg: 'bg-pink-500/20 group-hover:bg-pink-500/30',
+        icon: 'text-pink-400',
+        border: 'hover:border-pink-500/50',
+        shadow: 'hover:shadow-pink-500/10',
+        text: 'group-hover:text-pink-400'
+      },
+      teal: {
+        bg: 'bg-teal-500/20 group-hover:bg-teal-500/30',
+        icon: 'text-teal-400',
+        border: 'hover:border-teal-500/50',
+        shadow: 'hover:shadow-teal-500/10',
+        text: 'group-hover:text-teal-400'
+      },
+      yellow: {
+        bg: 'bg-yellow-500/20 group-hover:bg-yellow-500/30',
+        icon: 'text-yellow-400',
+        border: 'hover:border-yellow-500/50',
+        shadow: 'hover:shadow-yellow-500/10',
+        text: 'group-hover:text-yellow-400'
+      },
+      cyan: {
+        bg: 'bg-cyan-500/20 group-hover:bg-cyan-500/30',
+        icon: 'text-cyan-400',
+        border: 'hover:border-cyan-500/50',
+        shadow: 'hover:shadow-cyan-500/10',
+        text: 'group-hover:text-cyan-400'
+      },
+      emerald: {
+        bg: 'bg-emerald-500/20 group-hover:bg-emerald-500/30',
+        icon: 'text-emerald-400',
+        border: 'hover:border-emerald-500/50',
+        shadow: 'hover:shadow-emerald-500/10',
+        text: 'group-hover:text-emerald-400'
+      },
+      red: {
+        bg: 'bg-red-500/20 group-hover:bg-red-500/30',
+        icon: 'text-red-400',
+        border: 'hover:border-red-500/50',
+        shadow: 'hover:shadow-red-500/10',
+        text: 'group-hover:text-red-400'
+      }
+    };
+    return colors[colorScheme as keyof typeof colors] || colors.blue;
   };
 
   return (
@@ -138,24 +239,27 @@ const OverviewShowcase: React.FC = () => {
         </div>
 
         {/* Features Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
           {features.map((feature, index) => {
             const Icon = feature.icon;
+            const colors = getColorClasses(feature.colorScheme);
             return (
               <button
                 key={index}
                 onClick={() => scrollToSection(feature.sectionId)}
-                className="bg-slate-900/80 backdrop-blur-xl rounded-xl p-6 border border-slate-800/50 hover:border-blue-500/50 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/10 text-center group"
+                className={`bg-slate-900/80 backdrop-blur-xl rounded-xl p-6 border border-slate-800/50 ${colors.border} ${colors.shadow} transition-all duration-300 hover:scale-105 hover:shadow-lg text-center group h-32 flex flex-col justify-between`}
               >
-                <div className="flex justify-center mb-4">
-                  <div className="p-3 bg-blue-500/20 rounded-lg group-hover:bg-blue-500/30 transition-colors">
-                    <Icon className="w-6 h-6 text-blue-400" />
+                <div className="flex justify-center">
+                  <div className={`p-3 ${colors.bg} rounded-lg transition-colors`}>
+                    <Icon className={`w-6 h-6 ${colors.icon}`} />
                   </div>
                 </div>
                 
-                <h3 className="text-sm font-semibold text-white group-hover:text-blue-400 transition-colors">
-                  {t(feature.titleKey)}
-                </h3>
+                <div className="mt-2">
+                  <h3 className={`text-sm font-semibold text-white ${colors.text} transition-colors leading-tight`}>
+                    {t(feature.titleKey)}
+                  </h3>
+                </div>
               </button>
             );
           })}
