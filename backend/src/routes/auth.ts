@@ -128,7 +128,8 @@ router.post('/register', registerLimiter, registerValidation, async (req: Reques
       console.log(`✅ Verification email sent to ${email}`);
       
       // Send admin notification
-      emailService.sendAdminNotification('Neue Registrierung', {
+      const userIdentifier = alias || email;
+      emailService.sendAdminNotification(`User ${userIdentifier} hat sich registriert`, {
         'Email': email,
         'Alias': alias || 'User',
         'Zeitpunkt': new Date().toLocaleString('de-CH', { timeZone: 'Europe/Zurich' }),
@@ -506,7 +507,8 @@ router.post('/verify-email', async (req: Request, res: Response): Promise<any> =
     await emailService.sendWelcomeEmail(user.email, (user as any).alias);
     
     // Send admin notification
-    emailService.sendAdminNotification('Email verifiziert', {
+    const userIdentifier = (user as any).alias || user.email;
+    emailService.sendAdminNotification(`User ${userIdentifier} hat Email verifiziert`, {
       'Email': user.email,
       'Alias': (user as any).alias,
       'User-ID': user.id,
@@ -630,7 +632,8 @@ router.post('/reset-password', authLimiter, resetPasswordValidation, async (req:
     const user = await authService.resetPassword(token, password, twoFactorCode);
     
     // Send admin notification
-    emailService.sendAdminNotification('Passwort geändert', {
+    const userIdentifier = (user as any).alias || user.email;
+    emailService.sendAdminNotification(`User ${userIdentifier} hat Passwort geändert`, {
       'User-ID': user.id,
       'Email': user.email,
       'Alias': (user as any).alias || 'N/A',
