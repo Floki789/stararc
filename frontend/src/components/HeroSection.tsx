@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
-import { Check, Sparkles } from 'lucide-react';
+import { Check, Sparkles, Calendar } from 'lucide-react';
 
 const HeroSection: React.FC = () => {
   const { t } = useLanguage();
@@ -9,6 +9,24 @@ const HeroSection: React.FC = () => {
   
   // Launch offer counter - Update this manually or connect to backend
   const remainingSubscriptions = 87; // Out of 100
+
+  // Countdown to March 1, 2026
+  const [daysUntilLaunch, setDaysUntilLaunch] = useState(0);
+
+  useEffect(() => {
+    const calculateDaysUntilLaunch = () => {
+      const launchDate = new Date('2026-03-01');
+      const today = new Date();
+      const timeDifference = launchDate.getTime() - today.getTime();
+      const daysDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
+      setDaysUntilLaunch(daysDifference);
+    };
+
+    calculateDaysUntilLaunch();
+    const interval = setInterval(calculateDaysUntilLaunch, 86400000); // Update daily
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center overflow-hidden pt-20">
@@ -64,6 +82,18 @@ const HeroSection: React.FC = () => {
           
           {/* Left Column - Main Message (3 columns) */}
           <div className="lg:col-span-3 space-y-8">
+            {/* Launch Banner */}
+            <div className="text-center mb-8">
+              <div className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-purple-600/20 to-blue-600/20 border border-purple-500/30 rounded-full mb-4">
+                <Calendar className="w-5 h-5 text-purple-400" />
+                <span className="text-purple-300 font-semibold text-lg">{t('hero.officialLaunch')}</span>
+              </div>
+              <div className="text-center">
+                <div className="text-4xl font-bold text-white mb-2">{daysUntilLaunch}</div>
+                <div className="text-slate-400 text-sm uppercase tracking-wider">{t('hero.daysRemaining')}</div>
+              </div>
+            </div>
+
             {/* Headline */}
             <div className="space-y-4">
               <h1 className="text-5xl lg:text-8xl xl:text-8xl font-bold" style={{ lineHeight: '1.2' }}>
@@ -78,6 +108,23 @@ const HeroSection: React.FC = () => {
               <p className="text-2xl text-slate-400 max-w-2xl leading-relaxed">
                 {t('animations.wealthManager.subtext')}
               </p>
+
+              {/* Prominent Free Trial CTA */}
+              <div className="flex justify-center max-w-2xl">
+                <button
+                  onClick={() => navigate('/register')}
+                  className="group relative inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-blue-600 via-cyan-600 to-blue-600 hover:from-blue-500 hover:via-cyan-500 hover:to-blue-500 text-white font-bold text-xl rounded-2xl transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/40 transform hover:scale-[1.02] border border-blue-400/30"
+                >
+                  <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-300"></div>
+                  <div className="relative flex items-center gap-3">
+                    <Sparkles className="w-6 h-6 text-white animate-pulse" />
+                    <div className="text-left">
+                      <div className="text-xl font-bold">{t('hero.freeTrialButton')}</div>
+                      <div className="text-blue-100 text-sm font-medium">{t('hero.registerAndStart')}</div>
+                    </div>
+                  </div>
+                </button>
+              </div>
             </div>
           </div>
 
@@ -96,27 +143,35 @@ const HeroSection: React.FC = () => {
                     <Sparkles className="w-5 h-5 text-blue-400" />
                     <span className="text-base font-semibold text-blue-400">{t('hero.launchSpecial')}</span>
                   </div>
-                  <h3 className="text-4xl font-bold text-white mb-3">Nova</h3>
-                  <div className="inline-block px-6 py-3 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-xl mb-4">
-                    <div className="text-white font-bold text-2xl">76% Rabatt</div>
-                    <div className="text-amber-900 text-sm font-semibold">Erste 100 Subscriptions</div>
-                  </div>
-                  <p className="text-slate-300 text-lg">
-                    <span className="text-white font-semibold">1 Monat kostenlos</span> testen
-                  </p>
-                </div>
 
-                {/* Availability Counter */}
-                <div className="mb-6 p-4 bg-amber-500/10 border-2 border-amber-500/30 rounded-xl">
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-sm font-medium text-slate-300">Noch verfügbar:</span>
-                    <span className="text-2xl font-bold text-amber-400">{remainingSubscriptions} / 100</span>
+                  <h3 className="text-center text-4xl font-bold text-white mb-4">{t('hero.novaPlan')}</h3>
+
+                  {/* Startup Angebot Banner */}
+                  <div className="bg-amber-500/10 border-2 border-amber-500/30 rounded-xl p-4 mb-4">
+                    <div className="text-center">
+                      <div className="text-amber-400 font-bold text-lg mb-2">{t('hero.startupOffer')}</div>
+                      <div className="text-slate-300 text-lg font-semibold">
+                        {t('hero.limitedOffer')}
+                      </div>
+                    </div>
                   </div>
-                  <div className="h-3 bg-slate-800 rounded-full overflow-hidden">
-                    <div 
-                      className="h-full bg-gradient-to-r from-amber-500 to-yellow-500 transition-all duration-500 rounded-full"
-                      style={{ width: `${remainingSubscriptions}%` }}
-                    />
+
+                  {/* Availability Counter */}
+                  <div className="mb-6 p-4 bg-amber-500/10 border-2 border-amber-500/30 rounded-xl">
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-sm font-medium text-slate-300">{t('hero.stillAvailable')}</span>
+                      <span className="text-2xl font-bold text-amber-400">{remainingSubscriptions} / 100</span>
+                    </div>
+                    <div className="h-3 bg-slate-800 rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-gradient-to-r from-amber-500 to-yellow-500 transition-all duration-500 rounded-full"
+                        style={{ width: `${remainingSubscriptions}%` }}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="inline-block px-6 py-3 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-xl mb-4">
+                    <div className="text-white font-bold text-2xl">{t('hero.discount53')}</div>
                   </div>
                 </div>
 
@@ -124,8 +179,8 @@ const HeroSection: React.FC = () => {
                 <div className="mb-6 pb-6 border-b border-slate-800">
                   <div className="flex items-center justify-center gap-4">
                     <div className="text-center">
-                      <div className="text-slate-400 text-sm mb-1">Regulär</div>
-                      <div className="text-4xl text-slate-400 line-through font-bold">$380</div>
+                      <div className="text-slate-400 text-sm mb-1">{t('hero.regular')}</div>
+                      <div className="text-4xl text-slate-400 line-through font-bold">$190</div>
                     </div>
                     <div className="text-4xl text-blue-400 font-bold">→</div>
                     <div className="text-center">
@@ -136,30 +191,12 @@ const HeroSection: React.FC = () => {
                   <p className="text-center text-slate-400 text-sm mt-3">{t('hero.perYear')}</p>
                 </div>
 
-                {/* Key Features */}
-                <div className="space-y-3 mb-6">
-                  {[
-                    '6 Familienmitglieder',
-                    '100 Wertschriften',
-                    '10 Bitcoin-Setups & 10 Edelmetalle',
-                    '5 Immobilien & 10 Hypotheken',
-                    '{t("hero.portfolioCockpit")}'
-                  ].map((feature, i) => (
-                    <div key={i} className="flex items-start gap-3">
-                      <div className="mt-0.5 p-0.5 rounded-full bg-blue-500/20">
-                        <Check className="w-4 h-4 text-blue-400" />
-                      </div>
-                      <span className="text-slate-300 text-sm">{feature}</span>
-                    </div>
-                  ))}
-                </div>
-
                 {/* CTA Button */}
                 <button
                   onClick={() => navigate('/register?plan=nova')}
                   className="w-full py-4 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-semibold rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/30"
                 >
-                  Jetzt starten →
+                  {t('hero.getStartedNow')}
                 </button>
               </div>
             </div>

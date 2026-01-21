@@ -22,58 +22,63 @@ const SubscriptionPlans: React.FC = () => {
   const plans: SubscriptionPlan[] = [
     {
       id: 1,
-      name: 'Starship Free',
-      description: 'Get started with basic portfolio management',
+      name: 'Free',
+      description: 'Get to know us with basic portfolio overview',
       priceChf: 0,
       priceUsd: 0,
       priceEur: 0,
       billingCycle: 'monthly',
       maxPortfolios: 1,
       features: [
-        'Zero-Knowledge Login Code',
-        'Basic Portfolio View',
-        'Limited Assets',
-        'Swiss Privacy Standards',
-        'Client-Side Encryption'
+        '1 Family Member',
+        'CHF 500K Portfolio Limit', 
+        '7 Securities Maximum',
+        'CHF 80K Income Limit',
+        '1 Bitcoin setup & 2 Precious metals',
+        '1 Real estate & 0 Mortgages',
+        '1 Pension account',
+        'Basic Wealth Overview'
       ]
     },
     {
       id: 2,
-      name: 'Starship Basic',
-      description: 'Complete suite for small-medium portfolios',
+      name: 'Spark',
+      description: 'For individuals and growing families',
       priceChf: 9,
       priceUsd: 9,
       priceEur: 9,
       billingCycle: 'monthly',
       maxPortfolios: 1,
       features: [
-        'Zero-Knowledge Login Code',
-        'Complete Portfolio Suite',
-        '1 Portfolio Management',
-        'Basic OCR Document Processing',
-        'Swiss Privacy Standards',
-        'Automatic Document Deletion',
-        'Client-Side Encryption'
+        '2 Family Members',
+        'CHF 1M Portfolio Limit',
+        '12 Securities Maximum',
+        'CHF 100K Income Limit',
+        '2 Bitcoin assets & 1 Precious metals',
+        '1 Real estate & 1 Mortgage',
+        '2 Pension accounts',
+        'Complete Wealth Suite'
       ]
     },
     {
       id: 3,
-      name: 'Starship Pro',
-      description: 'Advanced features for large portfolios',
-      priceChf: 29,
-      priceUsd: 29,
-      priceEur: 29,
+      name: 'Nova',
+      description: 'Complete suite for larger portfolios',
+      priceChf: 19,
+      priceUsd: 19,
+      priceEur: 19,
       billingCycle: 'monthly',
-      maxPortfolios: 5,
+      maxPortfolios: 1,
       isPopular: true,
       features: [
-        'Zero-Knowledge Login Code',
-        'Complete Portfolio Suite',
-        '5 Portfolio Management',
-        'Advanced OCR Processing',
-        'Multi-Bank Integration',
-        'Real-time Market Data',
-        'Encrypted Vault System',
+        '4 Family Members',
+        'CHF 3M Portfolio Limit',
+        '50 Securities Maximum',
+        'CHF 300K Income Limit',
+        '4 Bitcoin assets & 6 Precious metals',
+        '3 Real estate & 5 Mortgages',
+        '4 Pension accounts',
+        'Complete Wealth Suite',
         'Priority Support'
       ]
     }
@@ -82,25 +87,28 @@ const SubscriptionPlans: React.FC = () => {
   const yearlyPlans: SubscriptionPlan[] = [
     {
       id: 4,
-      name: 'Starship Free',
-      description: 'Get started with basic portfolio management - always free',
+      name: 'Free',
+      description: 'Get to know us with basic portfolio overview - always free',
       priceChf: 0,
       priceUsd: 0,
       priceEur: 0,
       billingCycle: 'yearly',
       maxPortfolios: 1,
       features: [
-        'Zero-Knowledge Login Code',
-        'Basic Portfolio View',
-        'Limited Assets',
-        'Swiss Privacy Standards',
-        'Client-Side Encryption'
+        '1 Family Member',
+        'CHF 500K Portfolio Limit', 
+        '7 Securities Maximum',
+        'CHF 80K Income Limit',
+        '1 Bitcoin setup & 2 Precious metals',
+        '1 Real estate & 0 Mortgages',
+        '1 Pension account',
+        'Basic Wealth Overview'
       ]
     },
     {
       id: 5,
-      name: 'Starship Basic',
-      description: 'Complete suite for small-medium portfolios - 2 months free',
+      name: 'Spark',
+      description: 'For individuals and growing families - 2 months free',
       priceChf: 90,
       priceUsd: 90,
       priceEur: 90,
@@ -108,35 +116,37 @@ const SubscriptionPlans: React.FC = () => {
       maxPortfolios: 1,
       savings: '2 Monate gratis',
       features: [
-        'Zero-Knowledge Login Code',
-        'Complete Portfolio Suite',
-        '1 Portfolio Management',
-        'Basic OCR Document Processing',
-        'Swiss Privacy Standards',
-        'Automatic Document Deletion',
-        'Client-Side Encryption',
+        '2 Family Members',
+        'CHF 1M Portfolio Limit',
+        '12 Securities Maximum',
+        'CHF 100K Income Limit',
+        '2 Bitcoin assets & 1 Precious metals',
+        '1 Real estate & 1 Mortgage',
+        '2 Pension accounts',
+        'Complete Wealth Suite',
         '2 Months Free'
       ]
     },
     {
       id: 6,
-      name: 'Starship Pro',
-      description: 'Advanced features for large portfolios - 2 months free',
-      priceChf: 290,
-      priceUsd: 290,
-      priceEur: 290,
+      name: 'Nova',
+      description: 'Complete suite for larger portfolios - 2 months free',
+      priceChf: 190,
+      priceUsd: 190,
+      priceEur: 190,
       billingCycle: 'yearly',
-      maxPortfolios: 5,
+      maxPortfolios: 1,
       isPopular: true,
       savings: '2 Monate gratis',
       features: [
-        'Zero-Knowledge Login Code',
-        'Complete Portfolio Suite',
-        '5 Portfolio Management',
-        'Advanced OCR Processing',
-        'Multi-Bank Integration',
-        'Real-time Market Data',
-        'Encrypted Vault System',
+        '4 Family Members',
+        'CHF 3M Portfolio Limit',
+        '50 Securities Maximum',
+        'CHF 300K Income Limit',
+        '4 Bitcoin assets & 6 Precious metals',
+        '3 Real estate & 5 Mortgages',
+        '4 Pension accounts',
+        'Complete Wealth Suite',
         'Priority Support',
         '2 Months Free'
       ]
@@ -183,7 +193,7 @@ const SubscriptionPlans: React.FC = () => {
         className="text-center mb-12"
       >
         <h2 className="text-4xl font-bold text-white mb-4">
-          💳 Choose Your Starship Plan
+          💳 Choose Your StarArc Plan
         </h2>
         <p className="text-xl text-gray-300 mb-8">
           Start your privacy-focused portfolio management journey

@@ -15,7 +15,18 @@
     "cta": "Start for free",
     "launchSpecial": "Launch Special",
     "launchPrice": "Launch Price",
-    "perYear": "per year"
+    "perYear": "per year",
+    "freeTrialButton": "Try 1 month for free",
+    "registerAndStart": "Register now & get started",
+    "startupOffer": "Startup Offer!",
+    "limitedOffer": "First 100 subscriptions at special price of $90/year for two years, then $190",
+    "novaPlan": "Nova Plan",
+    "officialLaunch": "Official StarArc Launch on March 1, 2026",
+    "daysRemaining": "days remaining",
+    "stillAvailable": "Still available:",
+    "regular": "Regular",
+    "getStartedNow": "Get started now →",
+    "discount53": "53% Off"
   },
   "features": {
     "assetManagement": "Asset Management",

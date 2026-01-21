@@ -28,87 +28,98 @@ export const SUBSCRIPTION_PLANS: Record<string, SubscriptionPlan> = {
     name: 'Free',
     price: 0,
     currency: 'usd',
-    interval: 'month',
+    interval: 'year',
     features: [
-      'Basic Portfolio View',
-      'Limited Assets'
+      '1 Family Member',
+      'CHF 500K Portfolio Limit', 
+      '7 Securities Maximum',
+      'CHF 80K Income Limit',
+      'Basic Wealth Overview'
     ]
   },
   Spark: {
     id: 'Spark',
-    stripeId: 'price_1SP7aDD1Ykg9qG9IPlotX2vt', // TEST MODE: Spark Plan $9/mo
-    stripeIdLive: process.env.STRIPE_PRICE_SPARK_LIVE || 'price_1SjH9TD1Ykg9qG9IIjNNkaiE', // LIVE MODE: $9/mo
-    stripeIdYearlyLive: process.env.STRIPE_PRICE_SPARK_YEARLY || 'price_1SjHA0D1Ykg9qG9IhVKXRtdj', // LIVE MODE: $90/yr
+    stripeId: process.env.STRIPE_PRICE_SPARK_YEARLY || 'price_1SjHA0D1Ykg9qG9IhVKXRtdj', // YEARLY ONLY: $90/yr
+    stripeIdLive: process.env.STRIPE_PRICE_SPARK_YEARLY || 'price_1SjHA0D1Ykg9qG9IhVKXRtdj', // LIVE MODE: $90/yr
     name: 'Spark',
-    price: 900, // $9.00 in cents
+    price: 9000, // $90.00 in cents (yearly)
     currency: 'usd',
-    interval: 'month',
+    interval: 'year',
     features: [
-      'Complete Suite',
-      'Small-Medium Portfolios'
+      '2 Family Members',
+      'CHF 1M Portfolio Limit',
+      '12 Securities Maximum',
+      'CHF 100K Income Limit',
+      'Complete Wealth Suite'
     ]
   },
   Nova: {
     id: 'Nova',
-    stripeId: 'price_1SP7aED1Ykg9qG9IithW6lYq', // TEST MODE: Nova Plan $19/mo
-    stripeIdLive: process.env.STRIPE_PRICE_NOVA_LIVE || 'price_1Sj5YBD1Ykg9qG9I1BNJoGiu', // LIVE MODE: $19/mo
-    stripeIdYearlyLive: process.env.STRIPE_PRICE_NOVA_YEARLY || 'price_1SjH6VD1Ykg9qG9I1rm5STKQ', // LIVE MODE: $190/yr
+    stripeId: process.env.STRIPE_PRICE_NOVA_YEARLY || 'price_1SjH6VD1Ykg9qG9I1rm5STKQ', // YEARLY ONLY: $190/yr
+    stripeIdLive: process.env.STRIPE_PRICE_NOVA_YEARLY || 'price_1SjH6VD1Ykg9qG9I1rm5STKQ', // LIVE MODE: $190/yr
     name: 'Nova',
-    price: 1900, // $19.00 in cents
+    price: 19000, // $190.00 in cents (yearly)
     currency: 'usd',
-    interval: 'month',
+    interval: 'year',
     features: [
-      'Complete Suite',
-      'Large Portfolios'
+      '4 Family Members',
+      'CHF 3M Portfolio Limit',
+      '50 Securities Maximum',
+      'CHF 300K Income Limit',
+      'Complete Wealth Suite'
     ]
   },
   Galaxy: {
     id: 'Galaxy',
-    stripeId: 'price_1SP7aFD1Ykg9qG9IMgDFklF9', // TEST MODE: Galaxy Plan $39/mo
-    stripeIdLive: process.env.STRIPE_PRICE_GALAXY_LIVE || 'price_1SjHDfD1Ykg9qG9IQz6e6RrF', // LIVE MODE: $39/mo
-    stripeIdYearlyLive: process.env.STRIPE_PRICE_GALAXY_YEARLY || 'price_1SjHEeD1Ykg9qG9IPRUpYYfO', // LIVE MODE: $390/yr
+    stripeId: process.env.STRIPE_PRICE_GALAXY_YEARLY || 'price_1SjHEeD1Ykg9qG9IPRUpYYfO', // YEARLY ONLY: $390/yr
+    stripeIdLive: process.env.STRIPE_PRICE_GALAXY_YEARLY || 'price_1SjHEeD1Ykg9qG9IPRUpYYfO', // LIVE MODE: $390/yr
     name: 'Galaxy',
-    price: 3900, // $39.00 in cents
+    price: 39000, // $390.00 in cents (yearly)
     currency: 'usd',
-    interval: 'month',
+    interval: 'year',
     features: [
-      'Complete Suite',
-      'Enterprise Level'
+      'Unlimited Family Members',
+      'Unlimited Portfolio Value',
+      'Unlimited Securities',
+      'Complete Wealth Suite',
+      'Priority Support'
     ]
   },
   Apex: {
     id: 'Apex',
-    stripeId: 'price_1SP7aFD1Ykg9qG9IMgDFklF9', // TEST MODE: Apex Plan $199/mo
-    stripeIdLive: process.env.STRIPE_PRICE_APEX_LIVE || 'price_1SP7aFD1Ykg9qG9IMgDFklF9', // LIVE MODE: Set in env
+    stripeId: process.env.STRIPE_PRICE_APEX_YEARLY || 'price_1SP7aFD1Ykg9qG9IMgDFklF9', // YEARLY ONLY
+    stripeIdLive: process.env.STRIPE_PRICE_APEX_YEARLY || 'price_1SP7aFD1Ykg9qG9IMgDFklF9', // LIVE MODE: Set in env
     name: 'Apex',
-    price: 19900, // $199.00 in cents
+    price: 199000, // $1990.00 in cents (yearly)
     currency: 'usd',
-    interval: 'month',
+    interval: 'year',
     features: [
       'Family Offices',
-      'Wealth Advisors'
+      'Wealth Advisors',
+      '30+ Managed Accounts',
+      'White-Label Solutions',
+      'Dedicated Support'
     ]
   }
 };
 
 export class StripeService {
-  // Get the correct price ID based on mode (test/live) and interval
-  static getPriceId(plan: SubscriptionPlan, interval: 'month' | 'year' = 'month'): string {
+  // Get the correct price ID based on mode (yearly only)
+  static getPriceId(plan: SubscriptionPlan, interval: 'month' | 'year' = 'year'): string {
     const isLive = isProductionMode();
     
-    // Select price ID based on interval and mode
-    let priceId: string | undefined;
-    if (interval === 'year') {
-      priceId = isLive ? plan.stripeIdYearlyLive : plan.stripeIdYearly;
-    } else {
-      priceId = isLive ? plan.stripeIdLive : plan.stripeId;
+    // Only yearly subscriptions are supported
+    if (interval === 'month') {
+      console.warn(`⚠️ Monthly subscriptions not supported, using yearly for plan ${plan.id}`);
     }
+    
+    const priceId = isLive ? plan.stripeIdLive : plan.stripeId;
     
     if (!priceId) {
-      throw new Error(`Missing ${interval}ly price ID for plan ${plan.id} in ${isLive ? 'live' : 'test'} mode`);
+      throw new Error(`Missing yearly price ID for plan ${plan.id} in ${isLive ? 'live' : 'test'} mode`);
     }
     
-    console.log(`💳 Using ${isLive ? 'LIVE' : 'TEST'} ${interval}ly price ID for ${plan.id}: ${priceId}`);
+    console.log(`💳 Using ${isLive ? 'LIVE' : 'TEST'} yearly price ID for ${plan.id}: ${priceId}`);
     return priceId;
   }
 

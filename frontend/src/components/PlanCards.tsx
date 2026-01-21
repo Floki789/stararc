@@ -36,7 +36,8 @@ const PlanCards: React.FC<PlanCardsProps> = ({
   className = '',
   currentPlan
 }) => {
-  const [billingInterval, setBillingInterval] = useState<'month' | 'year'>('year');
+  // Only yearly plans available now
+  const billingInterval = 'year';
 
   // Plan hierarchy for filtering (lower index = lower tier)
   const planHierarchy = ['Free', 'Spark', 'Nova', 'Galaxy', 'Apex'];
@@ -69,7 +70,9 @@ const PlanCards: React.FC<PlanCardsProps> = ({
       bgGradient: 'bg-gradient-to-r from-green-500 to-green-600',
       features: [
         '1 Family member',
-        '7 Securities (Stocks/ETFs)',
+        'CHF 500K Portfolio Limit',
+        '7 Securities Maximum',
+        'CHF 80K Income Limit',
         '1 Bitcoin setup & 2 Precious metals',
         '1 Real estate & 0 Mortgages',
         '1 Pension account',
@@ -77,81 +80,87 @@ const PlanCards: React.FC<PlanCardsProps> = ({
         '10 Budget categories & 50 Budget items',
         '3 Financial institutions (2+1 custom)',
         '3 Vaults (2 physical, 1 digital)',
-        'Budget & Portfolio Cockpit'
+        'Basic Wealth Overview'
       ],
       buttonText: 'Start Free'
     },
     {
       id: 'Spark',
       name: 'Spark',
-      priceMonthly: '$9',
+      priceMonthly: '$90',
       priceYearly: '$90',
-      priceValueMonthly: 900, // $9 in cents
-      priceValueYearly: 9000, // $90 in cents
+      priceValueMonthly: 9000, // $90 yearly in cents
+      priceValueYearly: 9000, // $90 yearly in cents
       currency: 'usd',
-      description: 'For small families with simple financial situations',
+      description: 'For individuals and growing families',
       icon: Flame,
       color: 'text-orange-400',
       bgGradient: 'bg-gradient-to-r from-orange-500 to-red-600',
-      savingsPercent: 17,
+      yearlyOnly: true,
       features: [
-        '4 Family members',
-        '40 Securities (Stocks/ETFs)',
-        '3 Bitcoin setups & 3 Precious metals',
-        '2 Real estate & 4 Mortgages',
-        '4 Pension accounts',
-        '5 Liquidity accounts',
-        '15 Budget categories & 100 Budget items',
-        '5 Financial institutions',
-        '4 Vaults',
-        'Budget & Portfolio Cockpit'
+        '2 Family members',
+        'CHF 1M Portfolio Limit',
+        '12 Securities Maximum',
+        'CHF 100K Income Limit',
+        '2 Bitcoin setups & 1 Precious metal',
+        '1 Real estate & 1 Mortgage',
+        '2 Pension accounts',
+        '4 Liquidity accounts',
+        '10 Budget categories & 70 Budget items',
+        '4 Financial institutions',
+        '4 Vaults (2 physical, 2 digital)',
+        'Complete Wealth Suite'
       ],
       buttonText: 'Choose Spark'
     },
     {
       id: 'Nova',
       name: 'Nova',
-      priceMonthly: '$19',
-      priceYearly: '$90',
-      priceValueMonthly: 1900, // $19 in cents
-      priceValueYearly: 9000, // $90 in cents (Launch Special: first 100 subscriptions)
+      priceMonthly: '$190',
+      priceYearly: '$190',
+      priceValueMonthly: 19000, // $190 yearly in cents
+      priceValueYearly: 19000, // $190 yearly in cents
       currency: 'usd',
-      description: '🚀 Launch Special: Try 1 month free • First 100: $90 instead of $380/year',
+      description: 'Complete suite for larger portfolios',
       icon: Sparkles,
       color: 'text-blue-400',
       bgGradient: 'bg-gradient-to-r from-blue-500 to-cyan-600',
-      savingsPercent: 76,
+      yearlyOnly: true,
       features: [
-        '6 Family members',
-        '100 Securities (Stocks/ETFs)',
-        '10 Bitcoin setups & 10 Precious metals',
-        '5 Real estate & 10 Mortgages',
-        '6 Pension accounts',
+        '4 Family members',
+        'CHF 3M Portfolio Limit',
+        '50 Securities Maximum',
+        'CHF 300K Income Limit',
+        '4 Bitcoin setups & 6 Precious metals',
+        '3 Real estate & 5 Mortgages',
+        '4 Pension accounts',
         '8 Liquidity accounts',
-        '20 Budget categories & 150 Budget items',
+        '12 Budget categories & 100 Budget items',
         '8 Financial institutions',
-        '8 Vaults',
-        'Budget & Portfolio Cockpit'
+        '8 Vaults (4 physical, 4 digital)',
+        'Complete Wealth Suite',
+        'Priority Support'
       ],
       isPopular: true,
-      buttonText: 'Try 1 Month Free'
+      buttonText: 'Choose Nova'
     },
     {
       id: 'Galaxy',
       name: 'Galaxy',
-      priceMonthly: '$39',
+      priceMonthly: '$390',
       priceYearly: '$390',
-      priceValueMonthly: 3900, // $39 in cents
-      priceValueYearly: 39000, // $390 in cents
+      priceValueMonthly: 39000, // $390 yearly in cents
+      priceValueYearly: 39000, // $390 yearly in cents
       currency: 'usd',
       description: 'For wealthy families with complex structures',
       icon: Globe,
       color: 'text-purple-400',
       bgGradient: 'bg-gradient-to-r from-purple-500 to-indigo-600',
-      savingsPercent: 17,
+      yearlyOnly: true,
       features: [
         'Unlimited Family members',
-        'Unlimited Securities (Stocks/ETFs)',
+        'Unlimited Portfolio Value',
+        'Unlimited Securities',
         'Unlimited Bitcoin setups & Precious metals',
         'Unlimited Real estate & Mortgages',
         'Unlimited Pension accounts',
@@ -159,7 +168,8 @@ const PlanCards: React.FC<PlanCardsProps> = ({
         'Unlimited Budget categories & Items',
         'Unlimited Financial institutions',
         'Unlimited Vaults',
-        'Budget & Portfolio Cockpit',
+        'Complete Wealth Suite',
+        'Priority Support',
         '* Technical limits for abuse protection'
       ],
       buttonText: 'Choose Galaxy'
@@ -167,17 +177,22 @@ const PlanCards: React.FC<PlanCardsProps> = ({
     {
       id: 'Apex',
       name: 'Apex',
-      priceMonthly: 'Enterprise',
-      priceYearly: 'Enterprise',
-      priceValueMonthly: 0, // Will be custom pricing
-      priceValueYearly: 0, // Will be custom pricing
+      priceMonthly: '$1990',
+      priceYearly: '$1990',
+      priceValueMonthly: 199000, // $1990 yearly in cents
+      priceValueYearly: 199000, // $1990 yearly in cents
       currency: 'usd',
-      description: 'For wealth advisors and managers',
+      description: 'For wealth advisors and family offices',
       icon: Crown,
       color: 'text-yellow-400',
       bgGradient: 'bg-gradient-to-r from-yellow-500 to-yellow-600',
+      yearlyOnly: true,
       features: [
-        '20 Galaxy Accounts',
+        'Family Offices',
+        'Wealth Advisors',
+        '30+ Managed Accounts',
+        'White-Label Solutions',
+        'Dedicated Support',
         'Management Cockpit'
       ],
       comingSoon: true,
@@ -197,40 +212,18 @@ const PlanCards: React.FC<PlanCardsProps> = ({
 
   return (
     <div className={className}>
-      {/* Billing Toggle */}
-      <div className="flex justify-center mb-12">
-        <div className="bg-slate-800/60 backdrop-blur-sm border border-slate-600/50 rounded-full p-1.5 inline-flex">
-          <button
-            onClick={() => setBillingInterval('month')}
-            className={`px-8 py-3 rounded-full font-semibold transition-all duration-300 ${
-              billingInterval === 'month'
-                ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg'
-                : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            Monthly
-          </button>
-          <button
-            onClick={() => setBillingInterval('year')}
-            className={`px-8 py-3 rounded-full font-semibold transition-all duration-300 relative ${
-              billingInterval === 'year'
-                ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg'
-                : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            Yearly
-            <span className="absolute -top-2 -right-2 bg-green-500 text-white text-xs px-2 py-0.5 rounded-full font-bold">
-              -17%
-            </span>
-          </button>
-        </div>
+      {/* Header Text - Yearly Plans Only */}
+      <div className="text-center mb-8">
+        <p className="text-gray-400 text-lg">
+          All plans are billed annually • Cancel anytime
+        </p>
       </div>
 
       {/* Plans Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 place-content-center">{plans.map((plan, index) => {
         const IconComponent = plan.icon;
-        const price = billingInterval === 'month' ? plan.priceMonthly : plan.priceYearly;
-        const priceValue = billingInterval === 'month' ? plan.priceValueMonthly : plan.priceValueYearly;
+        const price = plan.priceYearly; // Always show yearly price
+        const priceValue = plan.priceValueYearly; // Always use yearly value
         
         return (
           <motion.div
@@ -293,13 +286,13 @@ const PlanCards: React.FC<PlanCardsProps> = ({
                   </p>
                   {priceValue > 0 && (
                     <p className="text-sm text-gray-400 mt-1">
-                      per {billingInterval === 'month' ? 'month' : 'year'}
+                      per year
                     </p>
                   )}
-                  {billingInterval === 'year' && plan.savingsPercent && (
+                  {plan.yearlyOnly && (
                     <div className="mt-2 inline-block">
-                      <span className="bg-green-500/20 text-green-400 px-2 py-1 rounded text-xs font-semibold">
-                        Save {plan.savingsPercent}%
+                      <span className="bg-blue-500/20 text-blue-400 px-2 py-1 rounded text-xs font-semibold">
+                        Annual billing only
                       </span>
                     </div>
                   )}
