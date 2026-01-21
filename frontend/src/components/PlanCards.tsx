@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { Check, Crown, Star, Flame, Sparkles, Globe } from 'lucide-react';
 
@@ -19,6 +19,7 @@ interface PlanData {
   comingSoon?: boolean;
   buttonText: string;
   savingsPercent?: number; // Savings percentage for yearly billing
+  yearlyOnly?: boolean; // Indicates if plan is only available for yearly billing
 }
 
 interface PlanCardsProps {
@@ -205,7 +206,8 @@ const PlanCards: React.FC<PlanCardsProps> = ({
 
   const handlePlanClick = (plan: PlanData) => {
     if (onPlanSelect) {
-      const priceValue = billingInterval === 'month' ? plan.priceValueMonthly : plan.priceValueYearly;
+      // Only yearly billing available now
+      const priceValue = plan.priceValueYearly;
       onPlanSelect(plan.id, priceValue, billingInterval);
     }
   };

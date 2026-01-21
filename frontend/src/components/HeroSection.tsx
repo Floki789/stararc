@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
-import { Check, Sparkles, Calendar } from 'lucide-react';
+import { Sparkles, Calendar } from 'lucide-react';
 
 const HeroSection: React.FC = () => {
   const { t } = useLanguage();
