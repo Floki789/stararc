@@ -47,6 +47,52 @@ export class EmailService {
     }
   }
 
+  // Send admin notification for important user events
+  async sendAdminNotification(subject: string, details: Record<string, any>): Promise<void> {
+    const adminEmail = 'info@stararc.one';
+    
+    // Format details as HTML table
+    const detailsHtml = Object.entries(details)
+      .map(([key, value]) => `
+        <tr>
+          <td style="padding: 8px; border-bottom: 1px solid #e5e7eb; font-weight: 600; color: #374151;">${key}</td>
+          <td style="padding: 8px; border-bottom: 1px solid #e5e7eb; color: #6b7280;">${value}</td>
+        </tr>
+      `)
+      .join('');
+
+    const mailOptions = {
+      from: this.fromEmail,
+      to: adminEmail,
+      subject: `🔔 Stararc Admin: ${subject}`,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+          <div style="background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); padding: 20px; border-radius: 8px 8px 0 0;">
+            <h2 style="color: white; margin: 0;">🔔 ${subject}</h2>
+          </div>
+          
+          <div style="background: #f9fafb; padding: 20px; border-radius: 0 0 8px 8px;">
+            <table style="width: 100%; border-collapse: collapse;">
+              ${detailsHtml}
+            </table>
+            
+            <p style="color: #9ca3af; font-size: 12px; margin-top: 20px; text-align: center;">
+              Automatische Benachrichtigung • ${new Date().toLocaleString('de-CH', { timeZone: 'Europe/Zurich' })} CET
+            </p>
+          </div>
+        </div>
+      `
+    };
+
+    try {
+      await this.transporter.sendMail(mailOptions);
+      console.log(`✅ Admin notification sent: ${subject}`);
+    } catch (error) {
+      console.error('❌ Failed to send admin notification:', error);
+      // Don't throw - admin notifications shouldn't break user flows
+    }
+  }
+
   // Send email verification
   async sendEmailVerification(email: string, alias: string, verificationToken: string): Promise<void> {
     const verificationUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/verify-email?token=${verificationToken}`;

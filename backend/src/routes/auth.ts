@@ -127,6 +127,15 @@ router.post('/register', registerLimiter, registerValidation, async (req: Reques
       
       console.log(`✅ Verification email sent to ${email}`);
       
+      // Send admin notification
+      emailService.sendAdminNotification('Neue Registrierung', {
+        'Email': email,
+        'Alias': alias || 'User',
+        'Zeitpunkt': new Date().toLocaleString('de-CH', { timeZone: 'Europe/Zurich' }),
+        'IP-Adresse': req.ip || 'unknown',
+        'User-ID': user.id
+      }).catch(err => console.error('Admin notification failed:', err));
+      
       // Return success WITHOUT token (user must verify email first)
       res.status(201).json({
         message: 'Registrierung erfolgreich! Bitte bestätigen Sie Ihre E-Mail-Adresse. Wir haben Ihnen einen Bestätigungslink gesendet.',
@@ -495,6 +504,14 @@ router.post('/verify-email', async (req: Request, res: Response): Promise<any> =
 
     // Send welcome email
     await emailService.sendWelcomeEmail(user.email, (user as any).alias);
+    
+    // Send admin notification
+    emailService.sendAdminNotification('Email verifiziert', {
+      'Email': user.email,
+      'Alias': (user as any).alias,
+      'User-ID': user.id,
+      'Zeitpunkt': new Date().toLocaleString('de-CH', { timeZone: 'Europe/Zurich' })
+    }).catch(err => console.error('Admin notification failed:', err));
 
     res.json({
       message: 'Email verified successfully! Welcome to Stararc.',
@@ -611,6 +628,16 @@ router.post('/reset-password', authLimiter, resetPasswordValidation, async (req:
 
     // Reset password (with optional 2FA)
     const user = await authService.resetPassword(token, password, twoFactorCode);
+    
+    // Send admin notification
+    emailService.sendAdminNotification('Passwort geändert', {
+      'User-ID': user.id,
+      'Email': user.email,
+      'Alias': (user as any).alias || 'N/A',
+      'Zeitpunkt': new Date().toLocaleString('de-CH', { timeZone: 'Europe/Zurich' }),
+      'IP-Adresse': req.ip || 'unknown',
+      'Methode': 'Password Reset'
+    }).catch(err => console.error('Admin notification failed:', err));
 
     res.json({
       message: 'Password reset successful! You can now log in with your new password.',
