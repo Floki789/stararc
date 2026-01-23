@@ -434,6 +434,17 @@ router.post('/webhook', async (req, res): Promise<any> => {
           if (updateResult.rows.length > 0) {
             console.log(`✅ WEBHOOK - User ${userId} subscription activated successfully`);
             processed = true;
+            
+            // Send admin notification
+            const emailService = require('../services/emailService').default;
+            emailService.sendAdminNotification(`User hat Subscription abgeschlossen`, {
+              'User-ID': userId,
+              'Plan': planId,
+              'Subscription-ID': session.subscription,
+              'Session-ID': session.id,
+              'Status': 'active',
+              'Zeitpunkt': new Date().toLocaleString('de-CH', { timeZone: 'Europe/Zurich' })
+            }).catch((err: any) => console.error('Admin notification failed:', err));
           } else {
             throw new Error(`User ${userId} not found`);
           }

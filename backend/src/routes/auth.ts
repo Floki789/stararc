@@ -212,7 +212,7 @@ router.get('/verify-email', async (req: Request, res: Response): Promise<any> =>
     const user = result.rows[0];
     console.log(`✅ Email verified for user ID: ${user.id}`);
     
-    // Optionally send welcome email
+    // Optionally send welcome email and admin notification
     try {
       // Decrypt email for welcome message
       const adminKey = process.env.ADMIN_ENCRYPTION_KEY;
@@ -228,6 +228,13 @@ router.get('/verify-email', async (req: Request, res: Response): Promise<any> =>
         
         await emailService.sendWelcomeEmail(email, 'User');
         console.log(`📧 Welcome email sent to user ${user.id}`);
+        
+        // Send admin notification
+        emailService.sendAdminNotification(`User hat Email verifiziert`, {
+          'Email': email,
+          'User-ID': user.id,
+          'Zeitpunkt': new Date().toLocaleString('de-CH', { timeZone: 'Europe/Zurich' })
+        }).catch(err => console.error('Admin notification failed:', err));
       }
     } catch (welcomeError) {
       console.error('❌ Failed to send welcome email:', welcomeError);
