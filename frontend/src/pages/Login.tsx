@@ -26,14 +26,6 @@ const Login: React.FC = () => {
     }, 50);
   }, [location.pathname, location.key]);
   
-  // Check for demo parameter and trigger demo login
-  useEffect(() => {
-    const urlParams = new URLSearchParams(location.search);
-    if (urlParams.get('demo') === 'true') {
-      handleDemoLogin();
-    }
-  }, [location.search]);
-  
   // Get the intended destination from the location state, default to dashboard
   const from = location.state?.from?.pathname || '/dashboard';
   const [formData, setFormData] = useState<LoginFormData>({
@@ -168,69 +160,6 @@ const Login: React.FC = () => {
           setErrors(backendErrors);
         } else {
           setErrors({ general: data.error || t('auth.loginFailed') });
-        }
-      }
-    } catch (error) {
-      setErrors({ general: t('auth.networkError') });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleDemoLogin = async () => {
-    // Set demo credentials in the form
-    setFormData({
-      email: 'demo@stararc.one',
-      password: 'Demo@Stararc.1',
-      twoFactorToken: ''
-    });
-    
-    // Clear any existing errors
-    setErrors({});
-    setIsLoading(true);
-
-    try {
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
-      
-      const response = await fetch(`${apiUrl}/api/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: 'demo@stararc.one',
-          password: 'Demo@Stararc.1'
-        }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        login(data.user, data.token);
-        
-        // For demo account, go to dashboard (no automatic Spaceship login)
-        
-        // Handle different user states for regular users
-        switch (data.user.status) {
-          case 'onboarding_completed':
-            // User has completed onboarding - go to dashboard first
-            navigate(from, { replace: true });
-            break;
-            
-          default:
-            // Fallback to subscription selection
-            navigate('/subscription-selection', { replace: true });
-        }
-      } else {
-        if (data.errors && Array.isArray(data.errors)) {
-          // Handle validation errors from backend
-          const backendErrors: { [key: string]: string } = {};
-          data.errors.forEach((error: any) => {
-            backendErrors[error.path] = error.msg;
-          });
-          setErrors(backendErrors);
-        } else {
-          setErrors({ general: data.message || t('auth.demoLoginFailed') });
         }
       }
     } catch (error) {
@@ -425,49 +354,6 @@ const Login: React.FC = () => {
             </motion.button>
           </div>
         </motion.form>
-
-        {/* Demo Login Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="mt-8 text-center"
-        >
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-600"></div>
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-slate-900 text-gray-400">{t('auth.demo')}</span>
-            </div>
-          </div>
-          
-          <div className="mt-6">
-            <motion.button
-              whileHover={{ scale: isLoading ? 1 : 1.02 }}
-              whileTap={{ scale: isLoading ? 1 : 0.98 }}
-              onClick={handleDemoLogin}
-              disabled={isLoading}
-              className={`w-full flex justify-center py-3 px-4 border-2 border-dashed text-sm font-medium rounded-lg transition-all duration-200 ${
-                isLoading
-                  ? 'border-gray-600 text-gray-500 cursor-not-allowed'
-                  : 'border-gray-500 text-gray-300 hover:border-blue-400 hover:text-blue-400 hover:bg-blue-400/5'
-              }`}
-            >
-              {isLoading ? (
-                <div className="flex items-center justify-center">
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                  {t('auth.demoLoading')}
-                </div>
-              ) : (
-                t('auth.demoButton')
-              )}
-            </motion.button>
-            <p className="text-xs text-gray-400 mt-2">
-              Direkter Zugang zu einem vorkonfigurierten Portfolio
-            </p>
-          </div>
-        </motion.div>
       </motion.div>
     </div>
   );
