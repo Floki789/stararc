@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Shield, Settings, Smartphone, AlertTriangle, CheckCircle } from 'lucide-react';
 import TwoFactorSetup from './TwoFactorSetup';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface TwoFactorStatus {
   enabled: boolean;
@@ -15,6 +16,7 @@ const TwoFactorManagement: React.FC = () => {
   const [showDisable, setShowDisable] = useState(false);
   const [disableForm, setDisableForm] = useState({ password: '', twoFactorToken: '' });
   const [error, setError] = useState('');
+  const { t } = useLanguage();
 
   const fetchStatus = async () => {
     setLoading(true);
@@ -40,7 +42,7 @@ const TwoFactorManagement: React.FC = () => {
 
   const disable2FA = async () => {
     if (!disableForm.password || !disableForm.twoFactorToken) {
-      setError('Bitte füllen Sie alle Felder aus');
+      setError(t('twoFactor.fillAllFields'));
       return;
     }
 
@@ -103,11 +105,11 @@ const TwoFactorManagement: React.FC = () => {
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center space-x-3">
             <Shield className="w-6 h-6 text-blue-400" />
-            <h3 className="text-xl font-bold text-white">Zwei-Faktor-Authentifizierung</h3>
+            <h3 className="text-xl font-bold text-white">{t('twoFactor.title')}</h3>
             {status.enabled && (
               <div className="flex items-center space-x-1 bg-green-500/20 px-2 py-1 rounded-full">
                 <CheckCircle className="w-4 h-4 text-green-400" />
-                <span className="text-green-400 text-xs font-medium">Aktiviert</span>
+                <span className="text-green-400 text-xs font-medium">{t('twoFactor.enabled')}</span>
               </div>
             )}
           </div>
@@ -117,10 +119,10 @@ const TwoFactorManagement: React.FC = () => {
         {status.enabled ? (
           <div>
             <p className="text-gray-300 mb-4">
-              Ihre 2FA ist aktiv und schützt Ihr Konto zusätzlich. 
+              {t('twoFactor.activeMessage')}
               {status.enabledAt && (
                 <span className="text-sm text-gray-400 block">
-                  Aktiviert am: {new Date(status.enabledAt).toLocaleDateString('de-DE')}
+                  {t('twoFactor.enabledOn')} {new Date(status.enabledAt).toLocaleDateString('de-DE')}
                 </span>
               )}
             </p>
@@ -129,9 +131,9 @@ const TwoFactorManagement: React.FC = () => {
               <div className="flex items-start space-x-2">
                 <CheckCircle className="w-5 h-5 text-green-400 mt-0.5" />
                 <div>
-                  <p className="text-green-300 text-sm font-semibold">Sicherheit erhöht</p>
+                  <p className="text-green-300 text-sm font-semibold">{t('twoFactor.securityIncreased')}</p>
                   <p className="text-green-300 text-xs">
-                    Ihr Konto und alle App-Zugriffe sind durch 2FA geschützt.
+                    {t('twoFactor.securityIncreasedMessage')}
                   </p>
                 </div>
               </div>
@@ -141,7 +143,7 @@ const TwoFactorManagement: React.FC = () => {
               onClick={() => setShowDisable(true)}
               className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors text-sm"
             >
-              2FA deaktivieren
+              {t('twoFactor.disable')}
             </button>
           </div>
         ) : (
@@ -152,10 +154,10 @@ const TwoFactorManagement: React.FC = () => {
                 className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors flex items-center space-x-2"
               >
                 <Smartphone className="w-4 h-4" />
-                <span>2FA einrichten</span>
+                <span>{t('twoFactor.setup')}</span>
               </button>
               <div className="text-xs text-gray-400">
-                Benötigt eine Authenticator-App
+                {t('twoFactor.requiresAuthenticator')}
               </div>
             </div>
           </div>
@@ -173,7 +175,7 @@ const TwoFactorManagement: React.FC = () => {
             <div className="p-6 border-b border-gray-700">
               <h2 className="text-lg font-bold text-white flex items-center">
                 <AlertTriangle className="w-5 h-5 text-red-400 mr-2" />
-                2FA deaktivieren
+                {t('twoFactor.disableTitle')}
               </h2>
             </div>
             
@@ -186,15 +188,14 @@ const TwoFactorManagement: React.FC = () => {
 
               <div className="bg-red-900/20 border border-red-500/30 rounded-lg p-4 mb-6">
                 <p className="text-red-300 text-sm">
-                  <strong>Warnung:</strong> Das Deaktivieren von 2FA reduziert die Sicherheit Ihres Kontos erheblich. 
-                  Nur Sie sollten Zugriff auf Ihre Authenticator-App haben.
+                  <strong>{t('twoFactor.disableWarning').split(':')[0]}:</strong> {t('twoFactor.disableWarning').split(':')[1]}
                 </p>
               </div>
 
               <div className="space-y-4 mb-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Aktuelles Passwort:
+                    {t('twoFactor.currentPassword')}
                   </label>
                   <input
                     type="password"

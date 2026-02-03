@@ -65,6 +65,10 @@ const registerValidation = [
       return true;
     })
     .withMessage('Valid invite code is required'),
+  body('languageCode')
+    .optional()
+    .isIn(['de', 'en'])
+    .withMessage('Language code must be either de or en'),
 ];
 
 const loginValidation = [
@@ -111,10 +115,10 @@ router.post('/register', registerLimiter, registerValidation, async (req: Reques
       });
     }
 
-    const { email, password, alias = '', termsAccepted, inviteCode } = req.body;
+    const { email, password, alias = '', termsAccepted, inviteCode, languageCode } = req.body;
 
     // Register user
-    const user = await authService.registerUser(email, password, alias, termsAccepted, req.ip);
+    const user = await authService.registerUser(email, password, alias, termsAccepted, req.ip, languageCode);
 
     // Send email verification
     try {
@@ -843,7 +847,7 @@ router.post('/generate-spaceship-token', authMiddleware, async (req: Request, re
     
     // Get encrypted auth key from database
     const result = await pool.query(
-      'SELECT spaceship_auth_key FROM users WHERE id = $1',
+      'SELECT spaceship_auth_key, language_code FROM users WHERE id = $1',
       [user.id]
     );
     
@@ -893,7 +897,8 @@ router.post('/generate-spaceship-token', authMiddleware, async (req: Request, re
         subscriptionPlan: user.subscription_plan || 'Free',
         crossApp: true,
         source: 'stararc',
-        userId: user.id
+        userId: user.id,
+        languageCode: result.rows[0].language_code || 'de'
       },
       crossAppSecret,
       { expiresIn: '5m' } // Short-lived for security

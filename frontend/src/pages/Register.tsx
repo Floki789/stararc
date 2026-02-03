@@ -17,7 +17,7 @@ const Register: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { login } = useAuth();
-  const { t } = useLanguage();
+  const { t, language, setLanguage } = useLanguage();
   
   // Scroll to top when register page loads or when navigating to register
   useEffect(() => {
@@ -103,6 +103,10 @@ const Register: React.FC = () => {
 
     try {
       const apiUrl = (import.meta as any).env.VITE_API_URL || 'http://localhost:3004';
+      
+      // Get current language from localStorage for cross-app sync
+      const currentLanguage = localStorage.getItem('stararc-language') || 'de';
+      
       const response = await fetch(`${apiUrl}/api/auth/register`, {
         method: 'POST',
         headers: {
@@ -112,7 +116,8 @@ const Register: React.FC = () => {
           email: formData.email,
           password: formData.password,
           termsAccepted: formData.termsAccepted,
-          inviteCode: formData.inviteCode
+          inviteCode: formData.inviteCode,
+          languageCode: currentLanguage // Send language for DB storage
         }),
       });
 
@@ -207,7 +212,7 @@ const Register: React.FC = () => {
                 transition={{ delay: 0.3 }}
                 className="text-2xl font-bold text-white mb-3"
               >
-                E-Mail versendet!
+                {t('auth.emailSent')}
               </motion.h2>
 
               {/* Message */}
@@ -218,7 +223,7 @@ const Register: React.FC = () => {
                 className="space-y-4"
               >
                 <p className="text-gray-300 text-sm leading-relaxed">
-                  Wir haben eine Bestätigungs-E-Mail an
+                  {t('auth.confirmationEmailSent')}
                 </p>
                 <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3">
                   <p className="text-blue-300 font-medium break-all">
@@ -226,7 +231,7 @@ const Register: React.FC = () => {
                   </p>
                 </div>
                 <p className="text-gray-300 text-sm leading-relaxed">
-                  gesendet. Bitte überprüfen Sie Ihr Postfach und klicken Sie auf den Bestätigungslink.
+                  {t('auth.pleaseCheckInbox')}
                 </p>
               </motion.div>
 
@@ -243,7 +248,7 @@ const Register: React.FC = () => {
                   </svg>
                   <div className="ml-3 text-left">
                     <p className="text-sm text-amber-200">
-                      Keine E-Mail erhalten? Prüfen Sie Ihren Spam-Ordner.
+                      {t('auth.noEmailReceived')}
                     </p>
                   </div>
                 </div>
@@ -260,7 +265,7 @@ const Register: React.FC = () => {
                   to="/login"
                   className="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors"
                 >
-                  Zurück zum Login
+                  {t('auth.backToLogin')}
                 </Link>
               </motion.div>
             </div>
@@ -308,7 +313,33 @@ const Register: React.FC = () => {
             </div>
           )}
 
-
+          {/* Language Switcher */}
+          <div className="flex justify-center">
+            <div className="flex space-x-1 bg-white/10 backdrop-blur-sm rounded-lg p-1 border border-white/20">
+              <button
+                type="button"
+                onClick={() => setLanguage('de')}
+                className={`px-4 py-2 text-sm font-medium rounded transition-colors ${
+                  language === 'de'
+                    ? 'bg-blue-600 text-white shadow-md'
+                    : 'text-gray-300 hover:text-white hover:bg-white/5'
+                }`}
+              >
+                DE
+              </button>
+              <button
+                type="button"
+                onClick={() => setLanguage('en')}
+                className={`px-4 py-2 text-sm font-medium rounded transition-colors ${
+                  language === 'en'
+                    ? 'bg-blue-600 text-white shadow-md'
+                    : 'text-gray-300 hover:text-white hover:bg-white/5'
+                }`}
+              >
+                EN
+              </button>
+            </div>
+          </div>
 
           <div>
             <label htmlFor="email" className="sr-only">

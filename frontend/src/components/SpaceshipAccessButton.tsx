@@ -8,6 +8,7 @@ import { motion } from 'framer-motion';
 import { RocketLaunchIcon, CogIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
 import { spaceshipService } from '../services/spaceshipService';
 import { useAuth } from '../hooks/useAuth';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface SpaceshipAccessButtonProps {
   className?: string;
@@ -26,6 +27,7 @@ const SpaceshipAccessButton: React.FC<SpaceshipAccessButtonProps> = ({
   const [hasAccess, setHasAccess] = useState<boolean | null>(null);
   const [error, setError] = useState<string>('');
   const { logout } = useAuth();
+  const { t } = useLanguage();
 
   // Check access status on component mount
   React.useEffect(() => {
@@ -74,7 +76,7 @@ const SpaceshipAccessButton: React.FC<SpaceshipAccessButtonProps> = ({
         logout();
       }
     } catch (error: any) {
-      setError(error.message || 'Fehler beim Zugriff auf die Spaceship App');
+      setError(error.message || t('spaceshipAccess.error'));
       setIsLoading(false);
     }
   };
@@ -107,7 +109,7 @@ const SpaceshipAccessButton: React.FC<SpaceshipAccessButtonProps> = ({
       return (
         <>
           <CogIcon className={`${iconSizes[size]} mr-2 animate-spin`} />
-          Wird geladen...
+          {t('spaceshipAccess.loading')}
         </>
       );
     }
@@ -116,7 +118,7 @@ const SpaceshipAccessButton: React.FC<SpaceshipAccessButtonProps> = ({
       return (
         <>
           {showIcon && <CheckCircleIcon className={`${iconSizes[size]} mr-2 text-green-300`} />}
-          Zum Stararc Portfolio
+          {t('spaceshipAccess.goToPortfolio')}
         </>
       );
     }
@@ -124,7 +126,7 @@ const SpaceshipAccessButton: React.FC<SpaceshipAccessButtonProps> = ({
     return (
       <>
         {showIcon && <RocketLaunchIcon className={`${iconSizes[size]} mr-2`} />}
-        App freischalten
+        {t('spaceshipAccess.unlockApp')}
       </>
     );
   };

@@ -4,9 +4,11 @@ import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import StripeAPIService from '../services/stripeService';
 import PlanCards from '../components/PlanCards';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const SubscriptionSelection: React.FC = () => {
   const { user } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const [loading, setLoading] = useState<Record<string, boolean>>({});
   const [currentPlan, setCurrentPlan] = useState<string | null>(null);
@@ -144,7 +146,7 @@ const SubscriptionSelection: React.FC = () => {
       }
     } catch (error) {
       console.error('Plan selection error:', error);
-      const errorMessage = error instanceof Error ? error.message : 'Fehler bei der Plan-Auswahl. Bitte versuchen Sie es erneut.';
+      const errorMessage = error instanceof Error ? error.message : t('subscriptionSelection.planSelectionError');
       alert(errorMessage);
     } finally {
       setLoading(prev => ({ ...prev, [planId]: false }));
@@ -164,7 +166,7 @@ const SubscriptionSelection: React.FC = () => {
           className="text-center mb-16"
         >
           <h1 className="text-5xl font-bold text-white mb-6">
-            Willkommen bei Stararc
+            {t('subscriptionSelection.welcome')}
           </h1>
         </motion.div>
 
@@ -176,10 +178,10 @@ const SubscriptionSelection: React.FC = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl font-bold text-white mb-4">
-            Wählen Sie Ihren Plan
+            {t('subscriptionSelection.choosePlan')}
           </h2>
           <p className="text-slate-400 text-lg">
-            Starten Sie kostenlos oder wählen Sie gleich einen Premium-Plan
+            {t('subscriptionSelection.choosePlanSubtitle')}
           </p>
         </motion.div>
 

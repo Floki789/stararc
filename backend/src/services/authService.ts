@@ -58,7 +58,7 @@ export class AuthService {
   }
 
   // Register user
-  async registerUser(email: string, password: string, alias: string = '', termsAccepted: boolean = false, clientIp?: string): Promise<User> {
+  async registerUser(email: string, password: string, alias: string = '', termsAccepted: boolean = false, clientIp?: string, languageCode?: string): Promise<User> {
     const client = await this.pool.connect();
     
     try {
@@ -108,9 +108,10 @@ export class AuthService {
           email_verification_token, email_verification_expires, 
           email_verified, created_at, updated_at,
           admin_encrypted_terms_accepted_at, admin_encrypted_terms_version, admin_encrypted_terms_ip_address,
-          admin_encrypted_privacy_accepted_at, admin_encrypted_privacy_version, admin_encrypted_privacy_ip_address
+          admin_encrypted_privacy_accepted_at, admin_encrypted_privacy_version, admin_encrypted_privacy_ip_address,
+          language_code
         )
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, NOW(), NOW(), $10, $11, $12, $13, $14, $15)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, NOW(), NOW(), $10, $11, $12, $13, $14, $15, $16)
         RETURNING id, email_hash, email_verified, created_at`,
         [
           hashedPassword,
@@ -123,6 +124,7 @@ export class AuthService {
           legalDocsData?.adminEncryptedPrivacyAcceptedAt,
           legalDocsData?.adminEncryptedPrivacyVersion,
           legalDocsData?.adminEncryptedPrivacyIpAddress,
+          languageCode || null, // Store user's preferred language from browser/localStorage
         ]
       );
 

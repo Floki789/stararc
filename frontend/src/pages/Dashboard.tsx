@@ -7,6 +7,7 @@ import StripeAPIService from '../services/stripeService';
 import SpaceshipAccessButton from '../components/SpaceshipAccessButton';
 import ApexManagement from '../components/ApexManagement';
 import TwoFactorManagement from '../components/TwoFactorManagement';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface Subscription {
   plan: string;
@@ -17,6 +18,7 @@ interface Subscription {
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const [subscription, setSubscription] = useState<Subscription | null>(null);
   const [loading, setLoading] = useState(true);
@@ -247,7 +249,7 @@ const Dashboard: React.FC = () => {
       window.location.href = data.url;
     } catch (error) {
       console.error('Failed to open customer portal:', error);
-      alert('Fehler beim Öffnen der Subscription-Verwaltung. Bitte versuchen Sie es später erneut.');
+      alert(t('dashboard.activationFailedMessage'));
     }
   };
 
@@ -283,7 +285,7 @@ const Dashboard: React.FC = () => {
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <div className="text-white text-xl mb-2">
-            Lädt...
+            {t('dashboard.loading')}
           </div>
         </div>
       </div>
@@ -295,16 +297,16 @@ const Dashboard: React.FC = () => {
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 flex items-center justify-center">
         <div className="max-w-md bg-red-900/20 border border-red-500 rounded-lg p-6 text-center">
           <div className="text-red-400 text-xl font-semibold mb-4">
-            Aktivierung fehlgeschlagen
+            {t('dashboard.activationFailed')}
           </div>
           <p className="text-slate-300 mb-6">
-            Die Subscription konnte nicht aktiviert werden. Bitte versuchen Sie es erneut oder kontaktieren Sie den Support.
+            {t('dashboard.activationFailedMessage')}
           </p>
           <button
             onClick={() => window.location.reload()}
             className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
           >
-            Seite neu laden
+            {t('dashboard.reload')}
           </button>
         </div>
       </div>
@@ -314,7 +316,7 @@ const Dashboard: React.FC = () => {
   if (!subscription) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 flex items-center justify-center">
-        <div className="text-white text-xl">Keine Subscription gefunden...</div>
+        <div className="text-white text-xl">{t('dashboard.noSubscription')}</div>
       </div>
     );
   }
@@ -368,15 +370,15 @@ const Dashboard: React.FC = () => {
             </div>
             <div className="flex-1">
               <h2 className="text-2xl font-bold text-white capitalize">
-                {subscription.plan} Plan
+                {subscription.plan} {t('dashboard.plan')}
               </h2>
-              <p className="text-green-400 font-semibold">● Aktiv</p>
+              <p className="text-green-400 font-semibold">● {t('dashboard.active')}</p>
               
               {/* Subscription Expiry Date */}
               {subscription.plan && subscription.plan.toLowerCase() !== 'free' && subscription.expiresAt && (
                 <div className="mt-2 space-y-1">
                   <p className="text-sm text-slate-300">
-                    Läuft bis: <span className="font-semibold text-white">
+                    {t('dashboard.expiresOn')} <span className="font-semibold text-white">
                       {new Date(subscription.expiresAt).toLocaleDateString('de-DE', {
                         day: '2-digit',
                         month: 'long',
@@ -388,7 +390,7 @@ const Dashboard: React.FC = () => {
                     const daysLeft = Math.ceil((new Date(subscription.expiresAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
                     return daysLeft > 0 && (
                       <p className="text-xs text-slate-400">
-                        {daysLeft === 1 ? 'Morgen wird verlängert' : `Noch ${daysLeft} Tage`}
+                        {daysLeft === 1 ? t('dashboard.renewsTomorrow') : t('dashboard.daysRemaining', { days: daysLeft })}
                       </p>
                     );
                   })()}
@@ -403,7 +405,7 @@ const Dashboard: React.FC = () => {
                 return (
                   <div className="flex items-center gap-3">
                     <div className="text-right">
-                      <p className="text-slate-200 text-sm">Nächstes Upgrade:</p>
+                      <p className="text-slate-200 text-sm">{t('dashboard.nextUpgrade')}</p>
                       <p className={`font-semibold ${
                         nextUpgrade.color === 'blue' ? 'text-blue-200' :
                         nextUpgrade.color === 'purple' ? 'text-purple-200' :
@@ -420,7 +422,7 @@ const Dashboard: React.FC = () => {
                         nextUpgrade.color === 'yellow' ? 'bg-yellow-500 text-white hover:bg-yellow-600' : 'bg-gray-500 text-white hover:bg-gray-600'
                       }`}
                     >
-                      Upgrade
+                      {t('dashboard.upgrade')}
                     </button>
                   </div>
                 );
@@ -436,7 +438,7 @@ const Dashboard: React.FC = () => {
                 onClick={handleManageSubscription}
                 className="px-4 py-2 bg-slate-600 hover:bg-slate-700 text-white rounded-lg font-medium transition-colors"
               >
-                Zahlung & Kündigung verwalten
+                {t('dashboard.manageSubscription')}
               </button>
             </div>
           )}

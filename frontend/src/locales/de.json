@@ -551,7 +551,54 @@
     "loginFailed": "Anmeldung fehlgeschlagen",
     "demoLoginFailed": "Demo-Login fehlgeschlagen",
     "registerSuccess": "Registrierung erfolgreich! Sie können sich jetzt anmelden.",
-    "registerFailed": "Registrierung fehlgeschlagen"
+    "registerFailed": "Registrierung fehlgeschlagen",
+    "emailSent": "E-Mail versendet!",
+    "confirmationEmailSent": "Wir haben eine Bestätigungs-E-Mail an",
+    "pleaseCheckInbox": "gesendet. Bitte überprüfen Sie Ihr Postfach und klicken Sie auf den Bestätigungslink.",
+    "noEmailReceived": "Keine E-Mail erhalten? Prüfen Sie Ihren Spam-Ordner.",
+    "backToLogin": "Zurück zum Login"
+  },
+  "dashboard": {
+    "loading": "Lädt...",
+    "activationFailed": "Aktivierung fehlgeschlagen",
+    "activationFailedMessage": "Die Subscription konnte nicht aktiviert werden. Bitte versuchen Sie es erneut oder kontaktieren Sie den Support.",
+    "reload": "Seite neu laden",
+    "noSubscription": "Keine Subscription gefunden...",
+    "plan": "Plan",
+    "active": "Aktiv",
+    "expiresOn": "Läuft bis:",
+    "renewsTomorrow": "Morgen wird verlängert",
+    "daysRemaining": "Noch {{days}} Tage",
+    "nextUpgrade": "Nächstes Upgrade:",
+    "upgrade": "Upgrade",
+    "manageSubscription": "Zahlung & Kündigung verwalten"
+  },
+  "subscriptionSelection": {
+    "welcome": "Willkommen bei Stararc",
+    "choosePlan": "Wählen Sie Ihren Plan",
+    "choosePlanSubtitle": "Starten Sie kostenlos oder wählen Sie gleich einen Premium-Plan",
+    "planSelectionError": "Fehler bei der Plan-Auswahl. Bitte versuchen Sie es erneut."
+  },
+  "spaceshipAccess": {
+    "unlockApp": "App freischalten",
+    "goToPortfolio": "Zum Stararc Portfolio",
+    "loading": "Wird geladen...",
+    "error": "Fehler beim Zugriff auf die Spaceship App"
+  },
+  "twoFactor": {
+    "title": "Zwei-Faktor-Authentifizierung",
+    "enabled": "Aktiviert",
+    "setup": "2FA einrichten",
+    "disable": "2FA deaktivieren",
+    "requiresAuthenticator": "Benötigt eine Authenticator-App",
+    "activeMessage": "Ihre 2FA ist aktiv und schützt Ihr Konto zusätzlich.",
+    "enabledOn": "Aktiviert am:",
+    "securityIncreased": "Sicherheit erhöht",
+    "securityIncreasedMessage": "Ihr Konto und alle App-Zugriffe sind durch 2FA geschützt.",
+    "disableTitle": "2FA deaktivieren",
+    "disableWarning": "Das Deaktivieren von 2FA reduziert die Sicherheit Ihres Kontos erheblich. Nur Sie sollten Zugriff auf Ihre Authenticator-App haben.",
+    "currentPassword": "Aktuelles Passwort:",
+    "fillAllFields": "Bitte füllen Sie alle Felder aus"
   },
   "assetOrganization": {
     "wealthAssetsTitle": "Vermögenswerte",

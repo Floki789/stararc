@@ -326,7 +326,7 @@ const Login: React.FC = () => {
                 to="/forgot-password"
                 className="font-medium text-blue-400 hover:text-blue-300 transition-colors"
               >
-                Passwort vergessen?
+                {t('auth.forgotPassword')}
               </Link>
             </div>
           </div>

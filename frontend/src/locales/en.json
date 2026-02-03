@@ -421,7 +421,54 @@
     "loginFailed": "Login failed",
     "demoLoginFailed": "Demo login failed",
     "registerSuccess": "Registration successful! You can now sign in.",
-    "registerFailed": "Registration failed"
+    "registerFailed": "Registration failed",
+    "emailSent": "Email Sent!",
+    "confirmationEmailSent": "We have sent a confirmation email to",
+    "pleaseCheckInbox": "Please check your inbox and click on the confirmation link.",
+    "noEmailReceived": "No email received? Check your spam folder.",
+    "backToLogin": "Back to Login"
+  },
+  "dashboard": {
+    "loading": "Loading...",
+    "activationFailed": "Activation Failed",
+    "activationFailedMessage": "The subscription could not be activated. Please try again or contact support.",
+    "reload": "Reload Page",
+    "noSubscription": "No subscription found...",
+    "plan": "Plan",
+    "active": "Active",
+    "expiresOn": "Expires on:",
+    "renewsTomorrow": "Renews tomorrow",
+    "daysRemaining": "{{days}} days remaining",
+    "nextUpgrade": "Next upgrade:",
+    "upgrade": "Upgrade",
+    "manageSubscription": "Manage Payment & Cancellation"
+  },
+  "subscriptionSelection": {
+    "welcome": "Welcome to Stararc",
+    "choosePlan": "Choose Your Plan",
+    "choosePlanSubtitle": "Start for free or choose a premium plan right away",
+    "planSelectionError": "Error selecting plan. Please try again."
+  },
+  "spaceshipAccess": {
+    "unlockApp": "Unlock App",
+    "goToPortfolio": "Go to Stararc Portfolio",
+    "loading": "Loading...",
+    "error": "Error accessing Spaceship App"
+  },
+  "twoFactor": {
+    "title": "Two-Factor Authentication",
+    "enabled": "Enabled",
+    "setup": "Setup 2FA",
+    "disable": "Disable 2FA",
+    "requiresAuthenticator": "Requires an Authenticator App",
+    "activeMessage": "Your 2FA is active and provides additional protection for your account.",
+    "enabledOn": "Enabled on:",
+    "securityIncreased": "Security Increased",
+    "securityIncreasedMessage": "Your account and all app access are protected by 2FA.",
+    "disableTitle": "Disable 2FA",
+    "disableWarning": "Disabling 2FA significantly reduces the security of your account. Only you should have access to your Authenticator app.",
+    "currentPassword": "Current Password:",
+    "fillAllFields": "Please fill in all fields"
   },
   "heroSection": {
     "animations": {
