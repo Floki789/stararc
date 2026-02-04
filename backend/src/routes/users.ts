@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 import { pool } from '../database/connection';
 import { authMiddleware } from '../middleware/auth';
@@ -6,12 +6,12 @@ import { authMiddleware } from '../middleware/auth';
 const router = Router();
 
 // GET /api/users/profile
-router.get('/profile', (req, res) => {
+router.get('/profile', (req: Request, res: Response) => {
   res.json({ message: 'Get user profile endpoint - coming soon' });
 });
 
 // PUT /api/users/profile
-router.put('/profile', (req, res) => {
+router.put('/profile', (req: Request, res: Response) => {
   res.json({ message: 'Update user profile endpoint - coming soon' });
 });
 
@@ -23,7 +23,7 @@ router.put('/language',
       .isIn(['de', 'en'])
       .withMessage('Language code must be either de or en'),
   ],
-  async (req, res) => {
+  async (req: Request, res: Response) => {
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
@@ -58,7 +58,7 @@ router.put('/language',
 );
 
 // DELETE /api/users/account
-router.delete('/account', (req, res) => {
+router.delete('/account', (req: Request, res: Response) => {
   res.json({ message: 'Delete user account endpoint - coming soon' });
 });
 
