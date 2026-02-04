@@ -326,37 +326,19 @@
     }
   },
   "dashboard": {
-    "title": "Dashboard",
-    "subscriptionStatus": "Subscription Status",
-    "activationSuccess": "Subscription successfully activated!",
-    "activationSuccessText": "Your subscription has been successfully activated. You can now use all features.",
-    "activationFailed": "Subscription activation failed",
-    "activationFailedText": "The subscription could not be activated. Please try again or contact support.",
-    "credentials": "Starship Credentials",
-    "username": "Username",
-    "password": "Password",
-    "credentialsGenerated": "Credentials successfully generated!",
-    "credentialsGeneratedText": "Your Starship credentials have been successfully generated and transferred.",
-    "starshipSyncFailed": "Starship synchronization failed",
-    "starshipSyncFailedText": "Your credentials were generated, but the transfer to Starship failed. Please contact support.",
-    "loginCode": "Your Login Code",
-    "copyCode": "Copy",
-    "copied": "Copied",
-    "securityConfirmation": "Security confirmation required",
-    "securityConfirmationText": "I have noted down the login code and stored it securely (e.g., bank vault, password manager).",
-    "verificationRequired": "For security reasons, please enter your login code for verification:",
-    "enterLoginCode": "Enter login code...",
-    "codeVerifiedCorrectly": "Login code verified correctly!",
-    "codeIncorrect": "Login code is incorrect. Please try again.",
-    "restartProcess": "Restart process",
-    "deletionWarning": "Important notice:",
-    "deletionWarningText": "The login code will now be permanently deleted and can no longer be displayed. StarArc cannot recover this code either. I confirm that I have stored the code securely.",
-    "deleteCodePermanently": "Permanently delete login code",
-    "codeDeletedSuccessfully": "Login code successfully deleted",
-    "codeSecured": "Login code secured",
-    "exclusiveOwnership": "You are now the sole owner of your login code. All data you enter in the StarArc app can only be decrypted with this login code.",
-    "toStararcLoginPage": "To StarArc Login Page",
-    "starshipSynchronized": "Synchronized with Starship"
+    "loading": "Loading...",
+    "activationFailed": "Activation Failed",
+    "activationFailedMessage": "The subscription could not be activated. Please try again or contact support.",
+    "reload": "Reload Page",
+    "noSubscription": "No subscription found...",
+    "plan": "Plan",
+    "active": "Active",
+    "expiresOn": "Expires on:",
+    "renewsTomorrow": "Renews tomorrow",
+    "daysRemaining": "{{days}} days remaining",
+    "nextUpgrade": "Next upgrade:",
+    "upgrade": "Upgrade",
+    "manageSubscription": "Manage Payment & Cancellation"
   },
   "assetOrganization": {
     "wealthAssetsTitle": "Wealth Assets",
@@ -427,21 +409,6 @@
     "pleaseCheckInbox": "Please check your inbox and click on the confirmation link.",
     "noEmailReceived": "No email received? Check your spam folder.",
     "backToLogin": "Back to Login"
-  },
-  "dashboard": {
-    "loading": "Loading...",
-    "activationFailed": "Activation Failed",
-    "activationFailedMessage": "The subscription could not be activated. Please try again or contact support.",
-    "reload": "Reload Page",
-    "noSubscription": "No subscription found...",
-    "plan": "Plan",
-    "active": "Active",
-    "expiresOn": "Expires on:",
-    "renewsTomorrow": "Renews tomorrow",
-    "daysRemaining": "{{days}} days remaining",
-    "nextUpgrade": "Next upgrade:",
-    "upgrade": "Upgrade",
-    "manageSubscription": "Manage Payment & Cancellation"
   },
   "subscriptionSelection": {
     "welcome": "Welcome to Stararc",
@@ -683,7 +650,7 @@
       "description": "Get to know us"
     },
     "spark": {
-      "name": "Spark", 
+      "name": "Spark",
       "description": "Complete suite for small and medium portfolios"
     },
     "nakamoto": {
@@ -810,7 +777,7 @@
       "subtext": "Both Physical and digital",
       "features": {
         "physical": "Physical",
-        "digital": "Digital", 
+        "digital": "Digital",
         "secure": "Secure"
       },
       "cta": "Setup Vault Management"
@@ -921,6 +888,76 @@
         "demo": "Demo Account"
       }
     },
+    "planningShowcase": {
+      "title": "Visualize Your Financial Future",
+      "subtitle": "Plan your wealth development with powerful scenarios and Monte Carlo simulations. Understand your financial possibilities and make informed decisions.",
+      "views": {
+        "capitalWithdrawals": "Capital Withdrawals",
+        "monteCarloSimulation": "Monte Carlo Simulation"
+      },
+      "capitalWithdrawals": {
+        "title": "Wealth Development with Capital Withdrawals",
+        "subtitle": "Visualize how your wealth develops over time, considering planned capital withdrawals and different growth scenarios.",
+        "controls": {
+          "growthScenario": "Growth Scenario",
+          "inflationScenario": "Inflation Scenario",
+          "timeframe": "Timeframe"
+        },
+        "legend": {
+          "liquidity": "Liquidity (Bank, Cash)",
+          "securities": "Securities",
+          "securities2": "Securities 2",
+          "pillar3": "Pillar 3",
+          "pillar2": "Pillar 2",
+          "bitcoin": "Bitcoin & Crypto",
+          "realEstate": "Real Estate"
+        },
+        "transactions": "{{count}} capital withdrawal events visualized"
+      },
+      "monteCarlo": {
+        "title": "Monte Carlo Simulation",
+        "subtitle": "1000 simulations show the range of possible wealth developments considering market volatility and uncertainty.",
+        "probabilityOfSuccess": "Probability of Success",
+        "simulationsCompleted": "{{count}} simulations completed",
+        "legend": {
+          "median": "Median",
+          "confidenceBand": "Confidence Band",
+          "optimisticRange": "Optimistic Range",
+          "extremeScenarios": "Extreme Scenarios"
+        }
+      },
+      "features": {
+        "scenarioPlanning": {
+          "title": "Scenario Planning",
+          "description": "Create different scenarios with various growth rates, inflation assumptions, and capital withdrawals."
+        },
+        "monteCarloAnalysis": {
+          "title": "Monte Carlo Analysis",
+          "description": "1000 simulations show the probability distribution of your future wealth development."
+        },
+        "capitalWithdrawals": {
+          "title": "Capital Withdrawal Planning",
+          "description": "Plan withdrawals from Pillar 2, Pillar 3, and other assets and visualize their impact."
+        },
+        "inflationAdjustment": {
+          "title": "Inflation Adjustment",
+          "description": "All calculations consider inflation for realistic planning in purchasing power."
+        },
+        "eventTimeline": {
+          "title": "Event Timeline",
+          "description": "Visualize important financial events such as retirement, real estate purchases, or capital withdrawals."
+        },
+        "volatilityAnalysis": {
+          "title": "Volatility Analysis",
+          "description": "Understand the impact of market volatility on your long-term wealth development."
+        }
+      },
+      "cta": {
+        "message": "Start your financial planning and visualize your future",
+        "startButton": "Get Started",
+        "plansButton": "View Plans"
+      }
+    },
     "assetShowcase": {
       "title": {
         "part1": "Your Assets",
@@ -933,7 +970,7 @@
           "description": "Stocks, ETFs and Funds"
         },
         "bitcoin": {
-          "title": "Bitcoin", 
+          "title": "Bitcoin",
           "description": "Cryptocurrencies & DeFi"
         },
         "bitcoinWizard": {
@@ -1059,11 +1096,6 @@
           "title": "Precise Planning",
           "description": "Accurate budget planning with intelligent predictions and recommendations"
         }
-      },
-      "cta": {
-        "subtitle": "Start your intelligent budget management today",
-        "start": "Get Started for Free",
-        "demo": "View Demo"
       }
     },
     "securityShowcase": {
@@ -1129,6 +1161,124 @@
         "subtitle": "Trust in Swiss-made security",
         "start": "Get Started",
         "demo": "Demo Account"
+      }
+    },
+    "gettingStartedShowcase": {
+      "title": "Getting Started Made Easy",
+      "subtitle": "Your personalized onboarding journey helps you set up your financial profile in minutes. Follow our guided three-step process to unlock the full potential of your wealth management.",
+      "tabs": {
+        "gettingStarted": "Getting Started",
+        "gettingBetter": "Getting Better"
+      },
+      "header": {
+        "title": "Follow these three steps for your initial setup",
+        "subtitle": "You can return to this view at any time via the \"Getting Started\" menu item."
+      },
+      "progress": {
+        "title": "Your Progress",
+        "completed": "5 / 7 completed",
+        "percentComplete": "71% complete"
+      },
+      "skipButton": "Skip Getting Started",
+      "step1": {
+        "title": "Create Profile",
+        "button": "Go to Profile",
+        "completed": "4 / 4 completed",
+        "tasks": {
+          "generalInfo": "capture General Information",
+          "familyMembers": "capture first Family Members",
+          "storageLocations": "capture first Storage Locations",
+          "financialInstitutions": "capture first Financial Institutions"
+        }
+      },
+      "step2": {
+        "title": "Create Budget",
+        "button": "+ Create Budget",
+        "completed": "1 / 1 completed",
+        "tasks": {
+          "createBudget": "Create a Budget"
+        },
+        "details": {
+          "incomePositions": "1 income position created",
+          "expensePositions": "20 expense positions created",
+          "forMembers": "for 1 family member"
+        }
+      },
+      "step3": {
+        "title": "Plan Budget",
+        "button": "Go to Budget",
+        "completed": "0 / 2 completed",
+        "tasks": {
+          "recordIncome": "Record Income",
+          "recordExpenses": "Record Expenses"
+        }
+      },
+      "gettingBetter": {
+        "header": {
+          "title": "Continuously optimize your profile and portfolio",
+          "subtitle": "Click on the blue info icons for information, tips and security guidelines for each item."
+        },
+        "progress": {
+          "title": "Progress",
+          "completed": "11 of 18 completed",
+          "percentComplete": "61% completed"
+        },
+        "skipButton": "Skip Getting Better",
+        "optimizeProfile": {
+          "title": "Optimize Profile",
+          "button": "Open",
+          "completed": "2 of 5 completed",
+          "tasks": {
+            "familyMembers": "Add all family members",
+            "physicalStorage": "Add physical storage locations",
+            "digitalStorage": "Add digital storage locations",
+            "banksPension": "Add banks, pension funds and insurance",
+            "budgetCurrency": "Set budget & portfolio currency"
+          }
+        },
+        "planBudget": {
+          "title": "Plan Budget",
+          "button": "Open",
+          "completed": "4 of 6 completed",
+          "tasks": {
+            "familyIncome": "Record family income",
+            "housingCosts": "Plan housing costs",
+            "mobilityCosts": "Plan mobility costs",
+            "livingExpenses": "Plan living expenses",
+            "insuranceTaxes": "Plan insurance & taxes",
+            "leisureCosts": "Plan leisure costs"
+          }
+        },
+        "buildPortfolio": {
+          "title": "Build Portfolio",
+          "button": "Open",
+          "completed": "5 of 7 completed",
+          "scanButton": "Scan",
+          "tasks": {
+            "liquidity": "Add liquidity",
+            "securities": "Securities added (stocks, ETFs, bonds, crypto)",
+            "bitcoin": "Bitcoin in self custody added",
+            "preciousMetals": "Precious metals in self custody added",
+            "pension": "Add pension accounts",
+            "realEstate": "Add real estate",
+            "debtsLiabilities": "Debts and liabilities added"
+          }
+        }
+      },
+      "benefits": {
+        "quickSetup": {
+          "title": "Quick & Guided Setup",
+          "description": "Our intelligent onboarding system guides you step-by-step through setting up your profile, creating your first budget, and planning your finances. Visual progress tracking keeps you motivated, while smart defaults and auto-populated budget items based on your family structure save you hours of manual data entry."
+        },
+        "continuousImprovement": {
+          "title": "Continuous Improvement",
+          "description": "As you use the app, you'll naturally expand and refine your financial profile. Add more assets, track detailed expenses, and build a comprehensive picture of your wealth over time. The system grows with you—returning to the Getting Started view anytime shows your progress and highlights areas where you can further optimize your financial management."
+        }
+      },
+      "cta": {
+        "message": "Start your journey to better financial clarity today",
+        "startButton": "Get Started Free",
+        "plansButton": "View Plans"
       }
     }
   },
@@ -1498,12 +1648,12 @@
   },
   "bitcoin": {
     "dashboard": "Bitcoin Dashboard",
-    "walletManagement": "Wallet Management", 
+    "walletManagement": "Wallet Management",
     "backupStrategy": "Backup Strategy",
     "bitcoin": "Bitcoin",
     "hardwareWallets": "Hardware Wallets",
     "newHardwareWallet": "New Hardware Wallet",
-    "softwareWallets": "Software Wallets", 
+    "softwareWallets": "Software Wallets",
     "newSoftwareWallet": "New Software Wallet",
     "allBackups": "All Backups",
     "createSeedBackup": "Create Seed Backup",
@@ -1512,14 +1662,14 @@
       "setupName": "Setup Name",
       "scriptType": "Script Type",
       "type": "Type",
-      "passphrase": "Passphrase", 
+      "passphrase": "Passphrase",
       "hardwareWallet": "Hardware Wallet",
       "backups": "Backups",
       "balance": "Balance",
       "name": "Name",
       "seedUsage": "Seed Usage",
       "bitcoinAssets": "Bitcoin Assets",
-      "vault": "Vault", 
+      "vault": "Vault",
       "notes": "Notes",
       "actions": "Actions",
       "platform": "Platform",
@@ -1548,7 +1698,7 @@
     "nameSymbol": "Name & Symbol",
     "isin": "ISIN",
     "price": "Price",
-    "marketValue": "Market Value", 
+    "marketValue": "Market Value",
     "lastUpdate": "Last Update",
     "change24h": "24h Change",
     "allocation": "Allocation"
@@ -1559,7 +1709,7 @@
     "assets": "Assets",
     "portfolios": "Portfolios",
     "diversification": "Diversification",
-    "allocation": "Allocation", 
+    "allocation": "Allocation",
     "performance": "Performance",
     "returns": "Returns",
     "risk": "Risk",
@@ -1573,7 +1723,7 @@
       "yearly": "Yearly",
       "savePercent": "Save 17%",
       "getStarted": "Get Started",
-      "startWithPro": "🚀 Start with Pro", 
+      "startWithPro": "🚀 Start with Pro",
       "cancelAnytime": "Cancel anytime • No hidden fees • Swiss privacy guaranteed",
       "allPlansInclude": "All plans include our Swiss Privacy-by-Design guarantee",
       "features": {
@@ -1589,7 +1739,7 @@
       "add": "Add",
       "edit": "Edit",
       "delete": "Delete",
-      "save": "Save", 
+      "save": "Save",
       "cancel": "Cancel",
       "update": "Update",
       "create": "Create",
@@ -1609,7 +1759,7 @@
     },
     "form": {
       "required": "Required",
-      "optional": "Optional", 
+      "optional": "Optional",
       "pleaseSelect": "Please select",
       "search": "Search",
       "filter": "Filter",
@@ -1622,7 +1772,7 @@
       "yesterday": "Yesterday",
       "tomorrow": "Tomorrow",
       "thisWeek": "This week",
-      "lastWeek": "Last week", 
+      "lastWeek": "Last week",
       "thisMonth": "This month",
       "lastMonth": "Last month",
       "thisYear": "This year",

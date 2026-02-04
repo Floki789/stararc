@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import HeroSection from '../components/HeroSection';
 import OverviewShowcase from '../components/OverviewShowcase';
 import PortfolioShowcase from '../components/PortfolioShowcase';
+import PlanningShowcase from '../components/PlanningShowcase';
 import SecuritiesShowcase from '../components/SecuritiesShowcase';
 import BitcoinWizardShowcase from '../components/BitcoinWizardShowcase';
 import RealEstateShowcase from '../components/RealEstateShowcase';
@@ -13,6 +14,7 @@ import CurrencyShowcase from '../components/CurrencyShowcase';
 import PensionShowcase from '../components/PensionShowcase';
 import SecurityShowcase from '../components/SecurityShowcase';
 import DataArchitectureShowcase from '../components/DataArchitectureShowcase';
+import GettingStartedShowcase from '../components/GettingStartedShowcase';
 import PlanCards from '../components/PlanCards';
 
 const Home: React.FC = () => {
@@ -56,6 +58,11 @@ const Home: React.FC = () => {
       {/* Portfolio Breakdown Showcase */}
       <div id="portfolio">
         <PortfolioShowcase />
+      </div>
+      
+      {/* Planning Showcase Section */}
+      <div id="planning">
+        <PlanningShowcase />
       </div>
       
       {/* Securities Showcase Section */}
@@ -106,6 +113,11 @@ const Home: React.FC = () => {
       {/* Data Architecture Showcase Section */}
       <div id="architecture">
         <DataArchitectureShowcase />
+      </div>
+
+      {/* Getting Started Showcase Section */}
+      <div id="gettingstarted">
+        <GettingStartedShowcase />
       </div>
 
       {/* Subscription Plans - No Animation */}

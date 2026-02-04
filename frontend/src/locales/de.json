@@ -480,37 +480,19 @@
     }
   },
   "dashboard": {
-    "title": "Dashboard",
-    "subscriptionStatus": "Subscription Status",
-    "activationSuccess": "Subscription erfolgreich aktiviert!",
-    "activationSuccessText": "Ihre Subscription wurde erfolgreich aktiviert. Sie können jetzt alle Features nutzen.",
-    "activationFailed": "Subscription-Aktivierung fehlgeschlagen",
-    "activationFailedText": "Die Subscription konnte nicht aktiviert werden. Bitte versuchen Sie es erneut oder kontaktieren Sie den Support.",
-    "credentials": "Starship Credentials",
-    "username": "Username",
-    "password": "Passwort",
-    "credentialsGenerated": "Credentials erfolgreich generiert!",
-    "credentialsGeneratedText": "Ihre Starship-Credentials wurden erfolgreich generiert und übertragen.",
-    "starshipSyncFailed": "Starship-Synchronisierung fehlgeschlagen",
-    "starshipSyncFailedText": "Ihre Credentials wurden generiert, aber die Übertragung zu Starship ist fehlgeschlagen. Bitte kontaktieren Sie den Support.",
-    "loginCode": "Ihr Login-Code",
-    "copyCode": "Kopieren",
-    "copied": "Kopiert",
-    "securityConfirmation": "Sicherheitsbestätigung erforderlich",
-    "securityConfirmationText": "Ich habe den Login-Code notiert und sicher verwahrt (z.B. Banktresor, Passwort-Manager).",
-    "verificationRequired": "Zur Sicherheit geben Sie bitte Ihren Login-Code zur Verifikation ein:",
-    "enterLoginCode": "Login-Code eingeben...",
-    "codeVerifiedCorrectly": "Login-Code korrekt verifiziert!",
-    "codeIncorrect": "Login-Code ist nicht korrekt. Bitte versuchen Sie es erneut.",
-    "restartProcess": "Prozess nochmals starten",
-    "deletionWarning": "Wichtiger Hinweis:",
-    "deletionWarningText": "Der Login-Code wird jetzt permanent gelöscht und kann nicht mehr angezeigt werden. Auch StarArc kann diesen Code nicht wiederherstellen. Ich bestätige, dass ich den Code sicher gespeichert habe.",
-    "deleteCodePermanently": "Login-Code permanent löschen",
-    "codeDeletedSuccessfully": "Login-Code erfolgreich gelöscht",
-    "codeSecured": "Login-Code gesichert",
-    "exclusiveOwnership": "Nur Sie sind jetzt im Besitz Ihres Login-Codes. Alle Daten, die Sie in der StarArc App erfassen, können nur mit diesem Login-Code entschlüsselt werden.",
-    "toStararcLoginPage": "Zur StarArc Login Page",
-    "starshipSynchronized": "Mit Starship synchronisiert"
+    "loading": "Lädt...",
+    "activationFailed": "Aktivierung fehlgeschlagen",
+    "activationFailedMessage": "Die Subscription konnte nicht aktiviert werden. Bitte versuchen Sie es erneut oder kontaktieren Sie den Support.",
+    "reload": "Seite neu laden",
+    "noSubscription": "Keine Subscription gefunden...",
+    "plan": "Plan",
+    "active": "Aktiv",
+    "expiresOn": "Läuft bis:",
+    "renewsTomorrow": "Morgen wird verlängert",
+    "daysRemaining": "Noch {{days}} Tage",
+    "nextUpgrade": "Nächstes Upgrade:",
+    "upgrade": "Upgrade",
+    "manageSubscription": "Zahlung & Kündigung verwalten"
   },
   "auth": {
     "login": "Anmelden",
@@ -557,21 +539,6 @@
     "pleaseCheckInbox": "gesendet. Bitte überprüfen Sie Ihr Postfach und klicken Sie auf den Bestätigungslink.",
     "noEmailReceived": "Keine E-Mail erhalten? Prüfen Sie Ihren Spam-Ordner.",
     "backToLogin": "Zurück zum Login"
-  },
-  "dashboard": {
-    "loading": "Lädt...",
-    "activationFailed": "Aktivierung fehlgeschlagen",
-    "activationFailedMessage": "Die Subscription konnte nicht aktiviert werden. Bitte versuchen Sie es erneut oder kontaktieren Sie den Support.",
-    "reload": "Seite neu laden",
-    "noSubscription": "Keine Subscription gefunden...",
-    "plan": "Plan",
-    "active": "Aktiv",
-    "expiresOn": "Läuft bis:",
-    "renewsTomorrow": "Morgen wird verlängert",
-    "daysRemaining": "Noch {{days}} Tage",
-    "nextUpgrade": "Nächstes Upgrade:",
-    "upgrade": "Upgrade",
-    "manageSubscription": "Zahlung & Kündigung verwalten"
   },
   "subscriptionSelection": {
     "welcome": "Willkommen bei Stararc",
@@ -938,7 +905,7 @@
       "subtext": "Übernehmen Sie die Kontrolle über Ihr Vermögen und Budget. Verwahren Sie dezentral, verwalten Sie zentral.",
       "features": {
         "control": "Budget und Portfolio-Kontrolle",
-        "strategy": "Strategische Planung", 
+        "strategy": "Strategische Planung",
         "independence": "Finanzielle Unabhängigkeit"
       },
       "cta": "Jetzt starten"
@@ -1075,6 +1042,76 @@
         "demo": "Demo Account"
       }
     },
+    "planningShowcase": {
+      "title": "Visualisieren Sie Ihre finanzielle Zukunft",
+      "subtitle": "Planen Sie Ihre Vermögensentwicklung mit leistungsstarken Szenarien und Monte-Carlo-Simulationen. Verstehen Sie Ihre finanziellen Möglichkeiten und treffen Sie fundierte Entscheidungen.",
+      "views": {
+        "capitalWithdrawals": "Kapitalbezüge",
+        "monteCarloSimulation": "Monte Carlo Simulation"
+      },
+      "capitalWithdrawals": {
+        "title": "Vermögensentwicklung mit Kapitalbezügen",
+        "subtitle": "Visualisieren Sie, wie sich Ihr Vermögen über die Zeit entwickelt, unter Berücksichtigung von geplanten Kapitalbezügen und unterschiedlichen Wachstumsszenarien.",
+        "controls": {
+          "growthScenario": "Wachstumsszenario",
+          "inflationScenario": "Inflationsszenario",
+          "timeframe": "Zeitraum"
+        },
+        "legend": {
+          "liquidity": "Liquidität (Bank, Kasse)",
+          "securities": "Wertschriften",
+          "securities2": "Wertschriften 2",
+          "pillar3": "3. Säule",
+          "pillar2": "2. Säule",
+          "bitcoin": "Bitcoin & Krypto",
+          "realEstate": "Immobilien"
+        },
+        "transactions": "{{count}} Kapitalbezugs-Ereignisse visualisiert"
+      },
+      "monteCarlo": {
+        "title": "Monte Carlo Simulation",
+        "subtitle": "1000 Simulationen zeigen die Bandbreite möglicher Vermögensentwicklungen unter Berücksichtigung von Marktvolatilität und Unsicherheit.",
+        "probabilityOfSuccess": "Erfolgswahrscheinlichkeit",
+        "simulationsCompleted": "{{count}} Simulationen abgeschlossen",
+        "legend": {
+          "median": "Median",
+          "confidenceBand": "Konfidenzband",
+          "optimisticRange": "Optimistischer Bereich",
+          "extremeScenarios": "Extreme Szenarien"
+        }
+      },
+      "features": {
+        "scenarioPlanning": {
+          "title": "Szenario-Planung",
+          "description": "Erstellen Sie unterschiedliche Szenarien mit verschiedenen Wachstumsraten, Inflationsannahmen und Kapitalbezügen."
+        },
+        "monteCarloAnalysis": {
+          "title": "Monte Carlo Analyse",
+          "description": "1000 Simulationen zeigen die Wahrscheinlichkeitsverteilung Ihrer zukünftigen Vermögensentwicklung."
+        },
+        "capitalWithdrawals": {
+          "title": "Kapitalbezugs-Planung",
+          "description": "Planen Sie Bezüge aus Säule 2, Säule 3 und anderen Vermögenswerten und visualisieren Sie deren Auswirkungen."
+        },
+        "inflationAdjustment": {
+          "title": "Inflationsanpassung",
+          "description": "Alle Berechnungen berücksichtigen Inflation für realistische Planungen in Kaufkraft."
+        },
+        "eventTimeline": {
+          "title": "Ereignis-Zeitstrahl",
+          "description": "Visualisieren Sie wichtige finanzielle Ereignisse wie Pensionierung, Immobilienkauf oder Kapitalbezüge."
+        },
+        "volatilityAnalysis": {
+          "title": "Volatilitäts-Analyse",
+          "description": "Verstehen Sie die Auswirkungen von Marktvolatilität auf Ihre langfristige Vermögensentwicklung."
+        }
+      },
+      "cta": {
+        "message": "Beginnen Sie Ihre Finanzplanung und visualisieren Sie Ihre Zukunft",
+        "startButton": "Jetzt Starten",
+        "plansButton": "Preise Ansehen"
+      }
+    },
     "assetShowcase": {
       "title": {
         "part1": "Ihre Assets",
@@ -1087,7 +1124,7 @@
           "description": "Aktien, ETFs und Fonds"
         },
         "bitcoin": {
-          "title": "Bitcoin", 
+          "title": "Bitcoin",
           "description": "Kryptowährungen & DeFi"
         },
         "bitcoinWizard": {
@@ -1229,13 +1266,13 @@
         },
         "physicalVaults": {
           "title": "Physische Vaults",
-          "description": "Management von Schl\u00fcsselboxen, Bankschliessfächern und physischen Aufbewahrungsorten",
+          "description": "Management von Schlüsselboxen, Bankschliessfächern und physischen Aufbewahrungsorten",
           "details": "Standort & Zugriffs-Tracking"
         },
         "digitalVaults": {
           "title": "Digitale Vaults",
-          "description": "Sichere Speicherung sensibler Daten, Seeds und Passw\u00f6rter",
-          "details": "AES-256-GCM Verschl\u00fcsselung"
+          "description": "Sichere Speicherung sensibler Daten, Seeds und Passwörter",
+          "details": "AES-256-GCM Verschlüsselung"
         },
         "singleSig": {
           "title": "Bitcoin SingleSig",
@@ -1261,12 +1298,12 @@
             "description": "Kein Verkauf oder Weitergabe Ihrer Daten an Dritte"
           },
           "encryption": {
-            "title": "AES-256-GCM Verschl\u00fcsselung",
-            "description": "Client-seitig verschl\u00fcsselt - nur f\u00fcr Sie lesbar"
+            "title": "AES-256-GCM Verschlüsselung",
+            "description": "Client-seitig verschlüsselt - nur für Sie lesbar"
           },
           "local": {
             "title": "Zero-Knowledge Architektur",
-            "description": "Wir k\u00f6nnen Ihre Daten nicht lesen"
+            "description": "Wir können Ihre Daten nicht lesen"
           },
           "compliance": {
             "title": "DSGVO-Compliant",
@@ -1278,6 +1315,124 @@
         "subtitle": "Vertrauen Sie auf Swiss-Made Sicherheit",
         "start": "Jetzt Starten",
         "demo": "Demo Account"
+      }
+    },
+    "gettingStartedShowcase": {
+      "title": "Einfacher Einstieg leicht gemacht",
+      "subtitle": "Ihre personalisierte Onboarding-Reise hilft Ihnen, Ihr Finanzprofil in wenigen Minuten einzurichten. Folgen Sie unserem geführten Drei-Schritte-Prozess, um das volle Potenzial Ihrer Vermögensverwaltung zu entfalten.",
+      "tabs": {
+        "gettingStarted": "Getting Started",
+        "gettingBetter": "Getting Better"
+      },
+      "header": {
+        "title": "Folgen Sie diesen drei Schritten für Ihre Ersteinrichtung",
+        "subtitle": "Sie können jederzeit über den Menüpunkt \"Getting Started\" zu dieser Ansicht zurückkehren."
+      },
+      "progress": {
+        "title": "Ihr Fortschritt",
+        "completed": "5 / 7 abgeschlossen",
+        "percentComplete": "71% abgeschlossen"
+      },
+      "skipButton": "Getting Started überspringen",
+      "step1": {
+        "title": "Profil erstellen",
+        "button": "Zum Profil",
+        "completed": "4 / 4 abgeschlossen",
+        "tasks": {
+          "generalInfo": "Allgemeine Informationen erfassen",
+          "familyMembers": "Erste Familienmitglieder erfassen",
+          "storageLocations": "Erste Aufbewahrungsorte erfassen",
+          "financialInstitutions": "Erste Finanzinstitute erfassen"
+        }
+      },
+      "step2": {
+        "title": "Budget erstellen",
+        "button": "+ Budget erstellen",
+        "completed": "1 / 1 abgeschlossen",
+        "tasks": {
+          "createBudget": "Budget erstellen"
+        },
+        "details": {
+          "incomePositions": "1 Einnahmeposition erstellt",
+          "expensePositions": "20 Ausgabenpositionen erstellt",
+          "forMembers": "für 1 Familienmitglied"
+        }
+      },
+      "step3": {
+        "title": "Budget planen",
+        "button": "Zum Budget",
+        "completed": "0 / 2 abgeschlossen",
+        "tasks": {
+          "recordIncome": "Einkommen erfassen",
+          "recordExpenses": "Ausgaben erfassen"
+        }
+      },
+      "gettingBetter": {
+        "header": {
+          "title": "Optimieren Sie Ihr Profil und Portfolio kontinuierlich",
+          "subtitle": "Klicken Sie auf die blauen Info-Symbole für Informationen, Tipps und Sicherheitsrichtlinien zu jedem Element."
+        },
+        "progress": {
+          "title": "Fortschritt",
+          "completed": "11 von 18 abgeschlossen",
+          "percentComplete": "61% abgeschlossen"
+        },
+        "skipButton": "Getting Better überspringen",
+        "optimizeProfile": {
+          "title": "Profil optimieren",
+          "button": "Öffnen",
+          "completed": "2 von 5 abgeschlossen",
+          "tasks": {
+            "familyMembers": "Alle Familienmitglieder hinzufügen",
+            "physicalStorage": "Physische Aufbewahrungsorte hinzufügen",
+            "digitalStorage": "Digitale Aufbewahrungsorte hinzufügen",
+            "banksPension": "Banken, Pensionskassen und Versicherungen hinzufügen",
+            "budgetCurrency": "Budget- & Portfolio-Währung festlegen"
+          }
+        },
+        "planBudget": {
+          "title": "Budget planen",
+          "button": "Öffnen",
+          "completed": "4 von 6 abgeschlossen",
+          "tasks": {
+            "familyIncome": "Familieneinkommen erfassen",
+            "housingCosts": "Wohnkosten planen",
+            "mobilityCosts": "Mobilitätskosten planen",
+            "livingExpenses": "Lebensunterhaltskosten planen",
+            "insuranceTaxes": "Versicherungen & Steuern planen",
+            "leisureCosts": "Freizeitkosten planen"
+          }
+        },
+        "buildPortfolio": {
+          "title": "Portfolio aufbauen",
+          "button": "Öffnen",
+          "completed": "5 von 7 abgeschlossen",
+          "scanButton": "Scannen",
+          "tasks": {
+            "liquidity": "Liquidität hinzufügen",
+            "securities": "Wertpapiere hinzugefügt (Aktien, ETFs, Anleihen, Krypto)",
+            "bitcoin": "Bitcoin in Eigenverwahrung hinzugefügt",
+            "preciousMetals": "Edelmetalle in Eigenverwahrung hinzugefügt",
+            "pension": "Pensionskonten hinzufügen",
+            "realEstate": "Immobilien hinzufügen",
+            "debtsLiabilities": "Schulden und Verbindlichkeiten hinzugefügt"
+          }
+        }
+      },
+      "benefits": {
+        "quickSetup": {
+          "title": "Schnelle & Geführte Einrichtung",
+          "description": "Unser intelligentes Onboarding-System führt Sie Schritt für Schritt durch die Einrichtung Ihres Profils, die Erstellung Ihres ersten Budgets und die Planung Ihrer Finanzen. Visuelle Fortschrittsverfolgung hält Sie motiviert, während intelligente Standards und automatisch ausgefüllte Budget-Positionen basierend auf Ihrer Familienstruktur Ihnen Stunden manueller Dateneingabe ersparen."
+        },
+        "continuousImprovement": {
+          "title": "Kontinuierliche Verbesserung",
+          "description": "Während Sie die App nutzen, erweitern und verfeinern Sie auf natürliche Weise Ihr Finanzprofil. Fügen Sie mehr Assets hinzu, verfolgen Sie detaillierte Ausgaben und bauen Sie im Laufe der Zeit ein umfassendes Bild Ihres Vermögens auf. Das System wächst mit Ihnen – die Rückkehr zur Getting Started-Ansicht zeigt Ihnen jederzeit Ihren Fortschritt und hebt Bereiche hervor, in denen Sie Ihre Finanzverwaltung weiter optimieren können."
+        }
+      },
+      "cta": {
+        "message": "Beginnen Sie heute Ihre Reise zu besserer finanzieller Klarheit",
+        "startButton": "Kostenlos starten",
+        "plansButton": "Pläne ansehen"
       }
     }
   },
