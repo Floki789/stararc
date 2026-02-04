@@ -23,16 +23,18 @@ router.put('/language',
       .isIn(['de', 'en'])
       .withMessage('Language code must be either de or en'),
   ],
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response): Promise<void> => {
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        res.status(400).json({ errors: errors.array() });
+        return;
       }
 
       const userId = (req as any).user?.id;
       if (!userId) {
-        return res.status(401).json({ error: 'Unauthorized' });
+        res.status(401).json({ error: 'Unauthorized' });
+        return;
       }
 
       const { languageCode } = req.body;
