@@ -390,7 +390,7 @@ const Dashboard: React.FC = () => {
                     const daysLeft = Math.ceil((new Date(subscription.expiresAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
                     return daysLeft > 0 && (
                       <p className="text-xs text-slate-400">
-                        {daysLeft === 1 ? t('dashboard.renewsTomorrow') : t('dashboard.daysRemaining', { days: daysLeft })}
+                        {daysLeft === 1 ? t('dashboard.renewsTomorrow') : `${t('dashboard.daysRemaining').replace('{{days}}', daysLeft.toString())}`}
                       </p>
                     );
                   })()}
