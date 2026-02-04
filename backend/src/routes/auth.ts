@@ -725,7 +725,7 @@ router.post('/create-spaceship-access', authMiddleware, async (req: Request, res
     
     // Get user with subscription plan (direct query to ensure we have current data)
     const userWithPlan = await pool.query(
-      'SELECT id, admin_encrypted_email, subscription_plan, spaceship_auth_key FROM users WHERE id = $1',
+      'SELECT id, admin_encrypted_email, subscription_plan, spaceship_auth_key, language_code FROM users WHERE id = $1',
       [user.id]
     );
     
@@ -734,7 +734,7 @@ router.post('/create-spaceship-access', authMiddleware, async (req: Request, res
     }
     
     const userData = userWithPlan.rows[0];
-    console.log('🔍 User data from DB:', { id: userData.id, email: userData.email, subscription_plan: userData.subscription_plan });
+    console.log('🔍 User data from DB:', { id: userData.id, email: userData.email, subscription_plan: userData.subscription_plan, language_code: userData.language_code });
     
     // Check if user already has spaceship access
     if (userData.spaceship_auth_key) {
@@ -755,7 +755,8 @@ router.post('/create-spaceship-access', authMiddleware, async (req: Request, res
     const spaceshipResponse = await createSpaceshipUser({
       authKey: authKey,  // Pass the raw auth key (will be used as JWT payload)
       subscriptionPlan: userData.subscription_plan || 'Free',
-      parentUserId: user.id
+      parentUserId: user.id,
+      languageCode: userData.language_code || 'de'
     });    if (!spaceshipResponse.success) {
       return res.status(500).json({ 
         error: 'Failed to create spaceship access',
@@ -925,10 +926,11 @@ router.post('/generate-spaceship-token', authMiddleware, async (req: Request, re
 });
 
 // Helper function: Create Spaceship user via StarArc token authentication
-async function createSpaceshipUser({ authKey, subscriptionPlan, parentUserId }: {
+async function createSpaceshipUser({ authKey, subscriptionPlan, parentUserId, languageCode }: {
   authKey: string;  // Raw auth key (will be used in JWT)
   subscriptionPlan: string;
   parentUserId?: number;
+  languageCode?: string;
 }): Promise<{ success: boolean; userId?: number; error?: string }> {
   try {
     const spaceshipApiUrl = process.env.SPACESHIP_API_URL || 'http://localhost:3001';
@@ -954,6 +956,7 @@ async function createSpaceshipUser({ authKey, subscriptionPlan, parentUserId }: 
       crossApp: true,
       source: 'stararc',
       userId: parentUserId,
+      languageCode: languageCode || 'de',
       iat: Math.floor(Date.now() / 1000),
       exp: Math.floor(Date.now() / 1000) + (5 * 60) // 5 minutes expiry
     }, CROSS_APP_JWT_SECRET);
@@ -963,6 +966,7 @@ async function createSpaceshipUser({ authKey, subscriptionPlan, parentUserId }: 
       userId: parentUserId,
       authKey: authKey.substring(0, 10) + '...', 
       subscriptionPlan,
+      languageCode: languageCode || 'de',
       endpoint: parsedUrl.pathname
     });
     
