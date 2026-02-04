@@ -38,11 +38,36 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }
   }, []);
 
-  const handleSetLanguage = (lang: Language) => {
+  const handleSetLanguage = async (lang: Language) => {
     console.log('🌐 Language change requested:', lang);
     console.log('🌐 Current language before change:', language);
     setLanguage(lang);
     localStorage.setItem(LANGUAGE_STORAGE_KEY, lang);
+    
+    // Update language in backend if user is authenticated
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      try {
+        const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3002';
+        const response = await fetch(`${API_BASE_URL}/api/users/language`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ languageCode: lang })
+        });
+        
+        if (response.ok) {
+          console.log('✅ Language preference saved to backend:', lang);
+        } else {
+          console.warn('⚠️ Failed to save language preference to backend');
+        }
+      } catch (error) {
+        console.error('❌ Error saving language preference:', error);
+      }
+    }
+    
     // Force re-render of all components
     forceUpdate(prev => prev + 1);
     console.log('🌐 Language changed to:', lang);
