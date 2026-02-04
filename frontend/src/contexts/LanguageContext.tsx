@@ -45,10 +45,16 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     localStorage.setItem(LANGUAGE_STORAGE_KEY, lang);
     
     // Update language in backend if user is authenticated
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem('token'); // StarArc uses 'token', not 'authToken'
+    console.log('🔐 Auth token found:', !!token);
+    
     if (token) {
       try {
-        const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3002';
+        const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3004';
+        console.log('🌐 API Base URL:', API_BASE_URL);
+        console.log('🌐 Sending PUT request to:', `${API_BASE_URL}/api/users/language`);
+        console.log('🌐 Request body:', { languageCode: lang });
+        
         const response = await fetch(`${API_BASE_URL}/api/users/language`, {
           method: 'PUT',
           headers: {
@@ -58,14 +64,20 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           body: JSON.stringify({ languageCode: lang })
         });
         
+        console.log('🌐 Response status:', response.status);
+        
         if (response.ok) {
-          console.log('✅ Language preference saved to backend:', lang);
+          const data = await response.json();
+          console.log('✅ Language preference saved to backend:', data);
         } else {
-          console.warn('⚠️ Failed to save language preference to backend');
+          const errorData = await response.json().catch(() => ({}));
+          console.warn('⚠️ Failed to save language preference to backend:', response.status, errorData);
         }
       } catch (error) {
         console.error('❌ Error saving language preference:', error);
       }
+    } else {
+      console.log('ℹ️ User not authenticated, language saved only to localStorage');
     }
     
     // Force re-render of all components

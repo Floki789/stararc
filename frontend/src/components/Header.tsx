@@ -60,7 +60,7 @@ const Header: React.FC = () => {
                       {user?.firstName} {user?.lastName}
                     </span>
                     <span className="text-xs text-slate-400">
-                      {user?.email}
+                      {user?.email} · ID: {user?.id}
                     </span>
                   </div>
                 </div>
@@ -156,7 +156,7 @@ const Header: React.FC = () => {
                           {user?.firstName} {user?.lastName}
                         </span>
                         <span className="text-xs text-slate-400">
-                          {user?.email}
+                          {user?.email} · ID: {user?.id}
                         </span>
                       </div>
                     </div>
