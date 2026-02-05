@@ -902,7 +902,7 @@
         "part1": "Auf dem Weg",
         "part2": "zu den Sternen"
       },
-      "subtext": "Übernehmen Sie die Kontrolle über Ihr Vermögen und Budget. Verwahren Sie dezentral, verwalten Sie zentral.",
+      "subtext": "Übernehmen Sie die Kontrolle über Ihr Vermögen und Budget. Entwerfen Sie Zukunftsszenarien. Verwahren Sie dezentral, verwalten Sie zentral.",
       "features": {
         "control": "Budget und Portfolio-Kontrolle",
         "strategy": "Strategische Planung",
@@ -1108,6 +1108,80 @@
       },
       "cta": {
         "message": "Beginnen Sie Ihre Finanzplanung und visualisieren Sie Ihre Zukunft",
+        "startButton": "Jetzt Starten",
+        "plansButton": "Preise Ansehen"
+      }
+    },
+    "retirementShowcase": {
+      "title": "Planen Sie Ihre Pensionierung",
+      "subtitle": "Professionelle Pensionierungsplanung mit Kapitalbezügen, Allokationssimulation und Lebensabschnitt-basierter Planung. Visualisieren Sie Ihre finanzielle Zukunft im Ruhestand.",
+      "timeline": {
+        "title": "Ihre Lebensabschnitte",
+        "phases": {
+          "accumulation": "Ansparphase",
+          "transition": "Übergangsphase",
+          "retirement": "Pensionierung"
+        },
+        "descriptions": {
+          "accumulation": "Aufbau von Vermögen in Säule 2, Säule 3 und privaten Anlagen während der Erwerbsphase.",
+          "transition": "Kritische Phase zwischen 58-65 Jahren mit strategischen Kapitalbezugsentscheidungen aus Säule 3 und 2.",
+          "retirement": "Ruhestandsphase mit geplanten Bezügen, optimaler Asset-Allokation und Vermögenserhalt."
+        }
+      },
+      "withdrawals": {
+        "title": "Kapitalbezüge",
+        "subtitle": "Planen Sie alle Bezüge strategisch",
+        "atAge": "Mit {{age}}",
+        "events": {
+          "pillar3": "3. Säule Bezug",
+          "pillar2_partial": "2. Säule Teilbezug",
+          "pillar2_full": "2. Säule Vollbezug",
+          "ahv_start": "AHV-Rente"
+        }
+      },
+      "allocation": {
+        "title": "Asset Allokation",
+        "subtitle": "Nach Kapitalbezügen",
+        "description": "Optimierte Vermögensaufteilung nach Pensionierung: Höhere Liquidität für laufende Ausgaben, stabile Anlagen für Kapitalerhalt, Wachstumskomponente für langfristige Wertsteigerung."
+      },
+      "events": {
+        "title": "Einzel-Events planen",
+        "subtitle": "Hypotheken, Darlehen und größere Anschaffungen",
+        "plannedAge": "Geplant mit {{age}}",
+        "types": {
+          "mortgagePayoff": "Hypothek abbezahlen",
+          "loanRepayment": "Darlehen zurückzahlen",
+          "propertyPurchase": "Immobilienkauf"
+        }
+      },
+      "features": {
+        "phaseBasedPlanning": {
+          "title": "Lebensabschnitt-Planung",
+          "description": "Planen Sie verschiedene Lebensabschnitte mit unterschiedlichen Kapitalbezügen und Allokationsstrategien."
+        },
+        "capitalWithdrawals": {
+          "title": "Kapitalbezugs-Strategien",
+          "description": "Optimieren Sie den Zeitpunkt und die Höhe Ihrer Säule 2 und Säule 3 Bezüge steuerlich und finanziell."
+        },
+        "allocationSimulation": {
+          "title": "Allokations-Simulation",
+          "description": "Simulieren Sie Ihre Asset-Allokation nach Kapitalbezügen und optimieren Sie für Ihre Risikotoleranz."
+        },
+        "eventPlanning": {
+          "title": "Event-Planung",
+          "description": "Planen Sie Hypothekenrückzahlungen, Immobilienkäufe und andere größere finanzielle Ereignisse."
+        },
+        "drawdownStrategy": {
+          "title": "Entnahme-Strategie",
+          "description": "Entwickeln Sie eine nachhaltige Strategie für Vermögensentnahmen während der Pensionierung."
+        },
+        "sustainabilityAnalysis": {
+          "title": "Nachhaltigkeits-Analyse",
+          "description": "Stellen Sie sicher, dass Ihr Vermögen über Ihre gesamte Ruhestandsphase ausreicht."
+        }
+      },
+      "cta": {
+        "message": "Starten Sie Ihre Pensionierungsplanung mit StarArc",
         "startButton": "Jetzt Starten",
         "plansButton": "Preise Ansehen"
       }
@@ -1728,6 +1802,8 @@
     "subtitle": "Klicken Sie auf ein Feature, um direkt zur detaillierten Ansicht zu springen",
     "features": {
       "portfolioManagement": "Portfolio Management",
+      "planning": "Finanzplanung",
+      "retirement": "Pensionierungsplanung",
       "securitiesManagement": "Securities Management",
       "bitcoinCrypto": "Bitcoin & Crypto",
       "selfCustody": "Bitcoin Self Custody",
@@ -1737,7 +1813,8 @@
       "multiCurrency": "Multi-Currency",
       "pensionInsurance": "Pension & Insurance",
       "clientSideEncryption": "Client-Side Encryption",
-      "twoLayerSecurity": "Two-Layer Security"
+      "twoLayerSecurity": "Two-Layer Security",
+      "gettingStarted": "Getting Started"
     }
   },
   "general": {

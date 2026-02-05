@@ -32,6 +32,18 @@ const OverviewShowcase: React.FC = () => {
       colorScheme: 'blue'
     },
     {
+      icon: TrendingUp,
+      titleKey: 'overview.features.planning',
+      sectionId: 'planning',
+      colorScheme: 'cyan'
+    },
+    {
+      icon: Umbrella,
+      titleKey: 'overview.features.retirement',
+      sectionId: 'retirement',
+      colorScheme: 'purple'
+    },
+    {
       icon: Package,
       titleKey: 'overview.features.securitiesManagement',
       sectionId: 'securities',
@@ -77,7 +89,7 @@ const OverviewShowcase: React.FC = () => {
       icon: Umbrella,
       titleKey: 'overview.features.pensionInsurance',
       sectionId: 'pension',
-      colorScheme: 'cyan'
+      colorScheme: 'yellow'
     },
     {
       icon: Shield,
@@ -90,6 +102,12 @@ const OverviewShowcase: React.FC = () => {
       titleKey: 'overview.features.twoLayerSecurity',
       sectionId: 'architecture',
       colorScheme: 'red'
+    },
+    {
+      icon: TrendingUp,
+      titleKey: 'overview.features.gettingStarted',
+      sectionId: 'gettingstarted',
+      colorScheme: 'indigo'
     }
   ];
 

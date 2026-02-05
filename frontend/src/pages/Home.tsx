@@ -4,6 +4,7 @@ import HeroSection from '../components/HeroSection';
 import OverviewShowcase from '../components/OverviewShowcase';
 import PortfolioShowcase from '../components/PortfolioShowcase';
 import PlanningShowcase from '../components/PlanningShowcase';
+import RetirementShowcase from '../components/RetirementShowcase';
 import SecuritiesShowcase from '../components/SecuritiesShowcase';
 import BitcoinWizardShowcase from '../components/BitcoinWizardShowcase';
 import RealEstateShowcase from '../components/RealEstateShowcase';
@@ -63,6 +64,11 @@ const Home: React.FC = () => {
       {/* Planning Showcase Section */}
       <div id="planning">
         <PlanningShowcase />
+      </div>
+      
+      {/* Retirement Planning Showcase Section */}
+      <div id="retirement">
+        <RetirementShowcase />
       </div>
       
       {/* Securities Showcase Section */}

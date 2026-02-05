@@ -748,7 +748,7 @@
         "part1": "Reaching for",
         "part2": "the stars"
       },
-      "subtext": "Take control of your wealth and budget. Store decentrally, manage centrally.",
+      "subtext": "Take control of your wealth and budget. Design future scenarios. Store decentrally, manage centrally.",
       "features": {
         "control": "Portfolio Control",
         "strategy": "Strategic Planning",
@@ -954,6 +954,80 @@
       },
       "cta": {
         "message": "Start your financial planning and visualize your future",
+        "startButton": "Get Started",
+        "plansButton": "View Plans"
+      }
+    },
+    "retirementShowcase": {
+      "title": "Plan Your Retirement",
+      "subtitle": "Professional retirement planning with capital withdrawals, allocation simulation, and life-phase based planning. Visualize your financial future in retirement.",
+      "timeline": {
+        "title": "Your Life Phases",
+        "phases": {
+          "accumulation": "Accumulation",
+          "transition": "Transition",
+          "retirement": "Retirement"
+        },
+        "descriptions": {
+          "accumulation": "Building wealth in Pillar 2, Pillar 3, and private investments during working years.",
+          "transition": "Critical phase between ages 58-65 with strategic capital withdrawal decisions from Pillar 3 and 2.",
+          "retirement": "Retirement phase with planned withdrawals, optimal asset allocation, and wealth preservation."
+        }
+      },
+      "withdrawals": {
+        "title": "Capital Withdrawals",
+        "subtitle": "Plan all withdrawals strategically",
+        "atAge": "At {{age}}",
+        "events": {
+          "pillar3": "Pillar 3 Withdrawal",
+          "pillar2_partial": "Pillar 2 Partial Withdrawal",
+          "pillar2_full": "Pillar 2 Full Withdrawal",
+          "ahv_start": "AHV Pension"
+        }
+      },
+      "allocation": {
+        "title": "Asset Allocation",
+        "subtitle": "After Capital Withdrawals",
+        "description": "Optimized asset allocation after retirement: Higher liquidity for ongoing expenses, stable investments for capital preservation, growth component for long-term appreciation."
+      },
+      "events": {
+        "title": "Plan Individual Events",
+        "subtitle": "Mortgages, loans, and major purchases",
+        "plannedAge": "Planned at {{age}}",
+        "types": {
+          "mortgagePayoff": "Pay Off Mortgage",
+          "loanRepayment": "Loan Repayment",
+          "propertyPurchase": "Property Purchase"
+        }
+      },
+      "features": {
+        "phaseBasedPlanning": {
+          "title": "Life Phase Planning",
+          "description": "Plan different life phases with varying capital withdrawals and allocation strategies."
+        },
+        "capitalWithdrawals": {
+          "title": "Capital Withdrawal Strategies",
+          "description": "Optimize the timing and amount of your Pillar 2 and Pillar 3 withdrawals for tax and financial efficiency."
+        },
+        "allocationSimulation": {
+          "title": "Allocation Simulation",
+          "description": "Simulate your asset allocation after capital withdrawals and optimize for your risk tolerance."
+        },
+        "eventPlanning": {
+          "title": "Event Planning",
+          "description": "Plan mortgage repayments, property purchases, and other major financial events."
+        },
+        "drawdownStrategy": {
+          "title": "Drawdown Strategy",
+          "description": "Develop a sustainable strategy for wealth withdrawals during retirement."
+        },
+        "sustainabilityAnalysis": {
+          "title": "Sustainability Analysis",
+          "description": "Ensure your wealth lasts throughout your entire retirement phase."
+        }
+      },
+      "cta": {
+        "message": "Start your retirement planning with StarArc",
         "startButton": "Get Started",
         "plansButton": "View Plans"
       }
@@ -1777,6 +1851,26 @@
       "lastMonth": "Last month",
       "thisYear": "This year",
       "lastYear": "Last year"
+    }
+  },
+  "overview": {
+    "title": "Discover All Features",
+    "subtitle": "Click on a feature to jump directly to the detailed view",
+    "features": {
+      "portfolioManagement": "Portfolio Management",
+      "planning": "Financial Planning",
+      "retirement": "Retirement Planning",
+      "securitiesManagement": "Securities Management",
+      "bitcoinCrypto": "Bitcoin & Crypto",
+      "selfCustody": "Bitcoin Self Custody",
+      "immobilien": "Real Estate",
+      "profileManagement": "Profile & Management",
+      "documentScanner": "Document Scanner",
+      "multiCurrency": "Multi-Currency",
+      "pensionInsurance": "Pension & Insurance",
+      "clientSideEncryption": "Client-Side Encryption",
+      "twoLayerSecurity": "Two-Layer Security",
+      "gettingStarted": "Getting Started"
     }
   },
   "profile": {
