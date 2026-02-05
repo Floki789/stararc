@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { TrendingUp, LineChart } from 'lucide-react';
+import ViewportAlert from './ViewportAlert';
 
 const PlanningShowcase: React.FC = () => {
   const { t } = useLanguage();
@@ -73,8 +74,16 @@ const PlanningShowcase: React.FC = () => {
         {/* Capital Withdrawals View */}
         {activeView === 'withdrawals' && (
           <div className="bg-slate-900/50 backdrop-blur-sm rounded-2xl border border-slate-700/50 overflow-hidden mb-16">
+            {/* Mobile Alert */}
+            <div className="p-4 md:p-6">
+              <ViewportAlert 
+                showOn="tablet"
+                message={t('common.chartsBetterOnDesktop', 'Financial charts are best viewed on larger screens for full detail.')}
+              />
+            </div>
+            
             {/* Chart Header - Blue Theme */}
-            <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-6">
+            <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-4 md:p-6">
               <div className="flex items-start gap-3">
                 <TrendingUp className="w-6 h-6 text-white flex-shrink-0 mt-1" />
                 <div>

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Shield, TrendingUp, Key, Lock, AlertTriangle, CheckCircle, BarChart3, PieChart, Wallet, Building } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
+import MobileOptimizedTable from './MobileOptimizedTable';
+import ViewportAlert from './ViewportAlert';
 
 const SelfCustodyShowcase: React.FC = () => {
   const { t } = useLanguage();
@@ -231,46 +233,55 @@ const SelfCustodyShowcase: React.FC = () => {
               <h3 className="text-2xl font-bold text-white">{t('selfCustody.comparison.title')}</h3>
             </div>
             
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b border-slate-700">
-                    <th className="text-left py-4 px-6 text-slate-400 font-semibold">{t('selfCustody.comparison.headers.aspect')}</th>
-                    <th className="text-left py-4 px-6 text-blue-400 font-semibold">
-                      <div className="flex items-center">
-                        <Shield className="w-5 h-5 mr-2" />
-                        {t('selfCustody.comparison.headers.selfCustody')}
-                      </div>
-                    </th>
-                    <th className="text-left py-4 px-6 text-green-400 font-semibold">
-                      <div className="flex items-center">
-                        <Building className="w-5 h-5 mr-2" />
-                        {t('selfCustody.comparison.headers.thirdParty')}
-                      </div>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {custodyComparison.map((item, index) => (
-                    <tr key={index} className="border-b border-slate-800 hover:bg-slate-800/30">
-                      <td className="py-4 px-6 font-semibold text-white">{item.aspect}</td>
-                      <td className={`py-4 px-6 ${
-                        item.advantage === 'self' ? 'text-blue-300 font-semibold' : 'text-slate-400'
-                      }`}>
-                        {item.selfCustody}
-                        {item.advantage === 'self' && <CheckCircle className="w-4 h-4 ml-2 inline text-blue-400" />}
-                      </td>
-                      <td className={`py-4 px-6 ${
-                        item.advantage === 'thirdParty' ? 'text-green-300 font-semibold' : 'text-slate-400'
-                      }`}>
-                        {item.thirdParty}
-                        {item.advantage === 'thirdParty' && <CheckCircle className="w-4 h-4 ml-2 inline text-green-400" />}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            {/* Mobile viewport alert */}
+            <ViewportAlert 
+              showOn="tablet" 
+              message={t('common.comparisonTableBetterOnDesktop', 'This comparison table is optimized for larger screens.')}
+              className="mb-6"
+            />
+            
+            <MobileOptimizedTable
+              columns={[
+                {
+                  header: t('selfCustody.comparison.headers.aspect'),
+                  key: 'aspect',
+                  mobileLabel: t('selfCustody.comparison.headers.aspect')
+                },
+                {
+                  header: (
+                    <div className="flex items-center">
+                      <Shield className="w-5 h-5 mr-2" />
+                      {t('selfCustody.comparison.headers.selfCustody')}
+                    </div>
+                  ) as any,
+                  key: 'selfCustody',
+                  mobileLabel: t('selfCustody.comparison.headers.selfCustody'),
+                  render: (value, row) => (
+                    <span className={row.advantage === 'self' ? 'text-blue-300 font-semibold' : 'text-slate-400'}>
+                      {value}
+                      {row.advantage === 'self' && <CheckCircle className="w-4 h-4 ml-2 inline text-blue-400" />}
+                    </span>
+                  )
+                },
+                {
+                  header: (
+                    <div className="flex items-center">
+                      <Building className="w-5 h-5 mr-2" />
+                      {t('selfCustody.comparison.headers.thirdParty')}
+                    </div>
+                  ) as any,
+                  key: 'thirdParty',
+                  mobileLabel: t('selfCustody.comparison.headers.thirdParty'),
+                  render: (value, row) => (
+                    <span className={row.advantage === 'thirdParty' ? 'text-green-300 font-semibold' : 'text-slate-400'}>
+                      {value}
+                      {row.advantage === 'thirdParty' && <CheckCircle className="w-4 h-4 ml-2 inline text-green-400" />}
+                    </span>
+                  )
+                }
+              ]}
+              data={custodyComparison}
+            />
           </div>
         )}
 
