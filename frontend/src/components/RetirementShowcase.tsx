@@ -40,8 +40,8 @@ const RetirementShowcase: React.FC = () => {
               {t('homepage.retirementShowcase.timeline.title')}
             </h3>
             
-            {/* Phase Selector */}
-            <div className="flex justify-center mb-8 gap-4">
+            {/* Phase Selector - Stacked on mobile */}
+            <div className="flex flex-col sm:flex-row justify-center mb-8 gap-3 sm:gap-4 max-w-2xl mx-auto">
               {[
                 { key: 'accumulation', icon: TrendingDown, color: 'from-green-600 to-emerald-600' },
                 { key: 'transition', icon: Calendar, color: 'from-yellow-600 to-orange-600' },
@@ -50,7 +50,7 @@ const RetirementShowcase: React.FC = () => {
                 <button
                   key={phase.key}
                   onClick={() => setActivePhase(phase.key as any)}
-                  className={`flex items-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all ${
+                  className={`flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all w-full sm:w-auto ${
                     activePhase === phase.key
                       ? `bg-gradient-to-r ${phase.color} text-white shadow-lg transform scale-105`
                       : 'bg-slate-800 text-gray-400 hover:text-white hover:bg-slate-700'

@@ -66,37 +66,37 @@ const ProfileShowcase: React.FC = () => {
           </p>
         </div>
 
-        {/* Tab Navigation */}
-        <div className="flex justify-center mb-8 space-x-4">
+        {/* Tab Navigation - Stacked on mobile */}
+        <div className="flex flex-col md:flex-row justify-center mb-8 gap-3 md:gap-4 max-w-2xl mx-auto">
           <button
             onClick={() => setActiveTab('vaults')}
-            className={`px-8 py-3 rounded-xl font-semibold transition-all duration-300 ${
+            className={`px-6 md:px-8 py-3 rounded-xl font-semibold transition-all duration-300 w-full md:w-auto ${
               activeTab === 'vaults'
                 ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-500/50 scale-105'
                 : 'bg-slate-800/50 text-slate-400 hover:bg-slate-800 hover:text-slate-300'
             }`}
           >
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center justify-center space-x-2">
               <Shield className="w-5 h-5" />
               <span>Vaults Management</span>
             </div>
           </button>
           <button
             onClick={() => setActiveTab('family')}
-            className={`px-8 py-3 rounded-xl font-semibold transition-all duration-300 ${
+            className={`px-6 md:px-8 py-3 rounded-xl font-semibold transition-all duration-300 w-full md:w-auto ${
               activeTab === 'family'
                 ? 'bg-gradient-to-r from-pink-600 to-pink-500 text-white shadow-lg shadow-pink-500/50 scale-105'
                 : 'bg-slate-800/50 text-slate-400 hover:bg-slate-800 hover:text-slate-300'
             }`}
           >
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center justify-center space-x-2">
               <Users className="w-5 h-5" />
               <span>Family Members</span>
             </div>
           </button>
           <button
             onClick={() => setActiveTab('institutions')}
-            className={`px-8 py-3 rounded-xl font-semibold transition-all duration-300 ${
+            className={`px-6 md:px-8 py-3 rounded-xl font-semibold transition-all duration-300 w-full md:w-auto ${
               activeTab === 'institutions'
                 ? 'bg-gradient-to-r from-green-600 to-green-500 text-white shadow-lg shadow-green-500/50 scale-105'
                 : 'bg-slate-800/50 text-slate-400 hover:bg-slate-800 hover:text-slate-300'

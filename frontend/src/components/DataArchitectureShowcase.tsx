@@ -63,43 +63,43 @@ const DataArchitectureShowcase: React.FC = () => {
           </p>
         </div>
 
-        {/* View Toggle */}
-        <div className="flex flex-wrap justify-center mb-8 gap-4">
+        {/* View Toggle - Already wrapped, just add responsive classes */}
+        <div className="flex flex-col sm:flex-row flex-wrap justify-center mb-8 gap-3 sm:gap-4">
           <button
             onClick={() => setActiveView('stararc')}
-            className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${
+            className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 w-full sm:w-auto ${
               activeView === 'stararc'
                 ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-500/50 scale-105'
                 : 'bg-slate-800/50 text-slate-400 hover:bg-slate-800 hover:text-slate-300'
             }`}
           >
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center justify-center space-x-2">
               <Database className="w-5 h-5" />
               <span>{t('dataArchitecture.stararcIdentity')}</span>
             </div>
           </button>
           <button
             onClick={() => setActiveView('authorization')}
-            className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${
+            className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 w-full sm:w-auto ${
               activeView === 'authorization'
                 ? 'bg-gradient-to-r from-purple-600 to-purple-500 text-white shadow-lg shadow-purple-500/50 scale-105'
                 : 'bg-slate-800/50 text-slate-400 hover:bg-slate-800 hover:text-slate-300'
             }`}
           >
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center justify-center space-x-2">
               <ArrowRight className="w-5 h-5" />
               <span>{t('dataArchitecture.authorization')}</span>
             </div>
           </button>
           <button
             onClick={() => setActiveView('spaceship')}
-            className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${
+            className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 w-full sm:w-auto ${
               activeView === 'spaceship'
                 ? 'bg-gradient-to-r from-green-600 to-emerald-500 text-white shadow-lg shadow-green-500/50 scale-105'
                 : 'bg-slate-800/50 text-slate-400 hover:bg-slate-800 hover:text-slate-300'
             }`}
           >
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center justify-center space-x-2">
               <Shield className="w-5 h-5" />
               <span>{t('dataArchitecture.spaceshipAppData')}</span>
             </div>

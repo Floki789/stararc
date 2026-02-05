@@ -66,37 +66,37 @@ const BitcoinWizardShowcase: React.FC = () => {
           </p>
         </div>
 
-        {/* View Toggle */}
-        <div className="flex justify-center mb-8 space-x-4">
+        {/* View Toggle - Stacked on mobile */}
+        <div className="flex flex-col md:flex-row justify-center mb-8 gap-3 md:gap-4 max-w-2xl mx-auto">
           <button
             onClick={() => setActiveView('dashboard')}
-            className={`px-8 py-3 rounded-xl font-semibold transition-all duration-300 ${
+            className={`px-6 md:px-8 py-3 rounded-xl font-semibold transition-all duration-300 w-full md:w-auto ${
               activeView === 'dashboard'
                 ? 'bg-gradient-to-r from-orange-600 to-orange-500 text-white shadow-lg shadow-orange-500/50 scale-105'
                 : 'bg-slate-800/50 text-slate-400 hover:bg-slate-800 hover:text-slate-300'
             }`}
           >
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center justify-center space-x-2">
               <Bitcoin className="w-5 h-5" />
               <span>{t('bitcoin.dashboard')}</span>
             </div>
           </button>
           <button
             onClick={() => setActiveView('wallets')}
-            className={`px-8 py-3 rounded-xl font-semibold transition-all duration-300 ${
+            className={`px-6 md:px-8 py-3 rounded-xl font-semibold transition-all duration-300 w-full md:w-auto ${
               activeView === 'wallets'
                 ? 'bg-gradient-to-r from-purple-600 to-purple-500 text-white shadow-lg shadow-purple-500/50 scale-105'
                 : 'bg-slate-800/50 text-slate-400 hover:bg-slate-800 hover:text-slate-300'
             }`}
           >
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center justify-center space-x-2">
               <Wallet className="w-5 h-5" />
               <span>{t('bitcoin.walletManagement')}</span>
             </div>
           </button>
           <button
             onClick={() => setActiveView('wizard')}
-            className={`px-8 py-3 rounded-xl font-semibold transition-all duration-300 ${
+            className={`px-6 md:px-8 py-3 rounded-xl font-semibold transition-all duration-300 w-full md:w-auto ${
               activeView === 'wizard'
                 ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-500/50 scale-105'
                 : 'bg-slate-800/50 text-slate-400 hover:bg-slate-800 hover:text-slate-300'
