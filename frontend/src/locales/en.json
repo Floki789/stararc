@@ -40,7 +40,8 @@
     "viewOnLargerScreen": "For the best experience, view this content on a larger screen.",
     "betterOnDesktop": "Better on Desktop",
     "chartsBetterOnDesktop": "Financial charts are best viewed on larger screens for full detail.",
-    "comparisonTableBetterOnDesktop": "This comparison table is optimized for larger screens."
+    "comparisonTableBetterOnDesktop": "This comparison table is optimized for larger screens.",
+    "securitiesTableBetterOnDesktop": "The detailed securities table is more readable on larger screens."
   },
   "portfolio": {
     "title": "Visualize Your Complete Wealth",

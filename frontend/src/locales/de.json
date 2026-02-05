@@ -40,7 +40,8 @@
     "viewOnLargerScreen": "Für das beste Erlebnis empfehlen wir einen größeren Bildschirm.",
     "betterOnDesktop": "Besser auf Desktop",
     "chartsBetterOnDesktop": "Finanzdiagramme werden auf größeren Bildschirmen optimal dargestellt.",
-    "comparisonTableBetterOnDesktop": "Diese Vergleichstabelle ist für größere Bildschirme optimiert."
+    "comparisonTableBetterOnDesktop": "Diese Vergleichstabelle ist für größere Bildschirme optimiert.",
+    "securitiesTableBetterOnDesktop": "Die detaillierte Wertschriftentabelle ist auf größeren Bildschirmen besser lesbar."
   },
   "subscription": {
     "pricing": {

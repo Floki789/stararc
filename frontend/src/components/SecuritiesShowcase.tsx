@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { TrendingUp, BarChart3, PieChart } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
+import ViewportAlert from './ViewportAlert';
+import MobileOptimizedTable from './MobileOptimizedTable';
 
 interface Security {
   name: string;
@@ -120,43 +122,43 @@ const SecuritiesShowcase: React.FC = () => {
           </p>
         </div>
 
-        {/* Tabs */}
-        <div className="flex justify-center mb-8 space-x-4">
+        {/* Tabs - Stacked on mobile, horizontal on tablet+ */}
+        <div className="flex flex-col md:flex-row justify-center mb-8 gap-3 md:gap-4 max-w-2xl mx-auto">
           <button
             onClick={() => setActiveTab('stocks')}
-            className={`px-8 py-3 rounded-xl font-semibold transition-all duration-300 ${
+            className={`px-6 md:px-8 py-3 rounded-xl font-semibold transition-all duration-300 w-full md:w-auto ${
               activeTab === 'stocks'
                 ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-500/50 scale-105'
                 : 'bg-slate-800/50 text-slate-400 hover:bg-slate-800 hover:text-slate-300'
             }`}
           >
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center justify-center space-x-2">
               <TrendingUp className="w-5 h-5" />
               <span>{t('portfolio.securities.stocks')}</span>
             </div>
           </button>
           <button
             onClick={() => setActiveTab('etfs')}
-            className={`px-8 py-3 rounded-xl font-semibold transition-all duration-300 ${
+            className={`px-6 md:px-8 py-3 rounded-xl font-semibold transition-all duration-300 w-full md:w-auto ${
               activeTab === 'etfs'
                 ? 'bg-gradient-to-r from-purple-600 to-purple-500 text-white shadow-lg shadow-purple-500/50 scale-105'
                 : 'bg-slate-800/50 text-slate-400 hover:bg-slate-800 hover:text-slate-300'
             }`}
           >
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center justify-center space-x-2">
               <BarChart3 className="w-5 h-5" />
               <span>{t('portfolio.securities.etfs')}</span>
             </div>
           </button>
           <button
             onClick={() => setActiveTab('funds')}
-            className={`px-8 py-3 rounded-xl font-semibold transition-all duration-300 ${
+            className={`px-6 md:px-8 py-3 rounded-xl font-semibold transition-all duration-300 w-full md:w-auto ${
               activeTab === 'funds'
                 ? 'bg-gradient-to-r from-green-600 to-green-500 text-white shadow-lg shadow-green-500/50 scale-105'
                 : 'bg-slate-800/50 text-slate-400 hover:bg-slate-800 hover:text-slate-300'
             }`}
           >
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center justify-center space-x-2">
               <PieChart className="w-5 h-5" />
               <span>{t('portfolio.securities.funds')}</span>
             </div>
@@ -166,9 +168,17 @@ const SecuritiesShowcase: React.FC = () => {
         {/* Securities Table Card */}
         <div className="bg-slate-900/80 backdrop-blur-xl border border-slate-800 rounded-2xl shadow-2xl overflow-hidden">
           
+          {/* Mobile Alert */}
+          <div className="p-4 lg:hidden">
+            <ViewportAlert 
+              showOn="tablet"
+              message={t('common.securitiesTableBetterOnDesktop')}
+            />
+          </div>
+          
           {/* Header */}
-          <div className="bg-gradient-to-r from-slate-800 to-slate-900 px-8 py-6 border-b border-slate-800">
-            <div className="flex items-center justify-between">
+          <div className="bg-gradient-to-r from-slate-800 to-slate-900 px-4 md:px-8 py-4 md:py-6 border-b border-slate-800">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div className="flex items-center space-x-3">
                 <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
                   activeTab === 'stocks' ? 'bg-gradient-to-br from-blue-600 to-blue-500' :
@@ -197,85 +207,67 @@ const SecuritiesShowcase: React.FC = () => {
             </div>
           </div>
 
-          {/* Table */}
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-slate-800/50">
-                <tr>
-                  <th className="text-left py-4 px-6 text-xs font-semibold text-slate-400 uppercase tracking-wider">{t('tableHeaders.nameSymbol')}</th>
-                  <th className="text-center py-4 px-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">{t('portfolio.securities.tableHeaders.type')}</th>
-                  <th className="text-center py-4 px-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">{t('portfolio.securities.tableHeaders.quantity')}</th>
-                  <th className="text-center py-4 px-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">{t('portfolio.securities.tableHeaders.rate')}</th>
-                  <th className="text-center py-4 px-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">{t('portfolio.securities.tableHeaders.custodianBank')}</th>
-                  <th className="text-center py-4 px-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">{t('portfolio.securities.tableHeaders.update')}</th>
-                  <th className="text-right py-4 px-6 text-xs font-semibold text-slate-400 uppercase tracking-wider">{t('portfolio.securities.tableHeaders.sumCHF')}</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-800/50">
-                {activeData.data.map((security, index) => (
-                  <tr 
-                    key={index}
-                    className="hover:bg-slate-800/30 transition-colors duration-150"
-                  >
-                    <td className="py-4 px-6">
-                      <div>
-                        <div className="font-semibold text-white text-sm">{security.name}</div>
-                        <div className="text-xs text-slate-500 font-mono">{security.symbol}</div>
-                        {security.isin && (
-                          <div className="text-xs text-slate-600 font-mono mt-0.5">{security.isin}</div>
-                        )}
-                      </div>
-                    </td>
-                    <td className="py-4 px-4 text-center">
-                      <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${
-                        security.type === 'Equity' ? 'bg-blue-900/30 text-blue-300 border border-blue-800/50' :
-                        security.type === 'P-Metals' ? 'bg-yellow-900/30 text-yellow-300 border border-yellow-800/50' :
-                        security.type === 'Moderate' ? 'bg-green-900/30 text-green-300 border border-green-800/50' :
-                        'bg-slate-800/50 text-slate-300 border border-slate-700/50'
-                      }`}>
-                        {security.type}
-                      </span>
-                    </td>
-                    <td className="py-4 px-4 text-center text-sm text-white font-mono">
-                      {security.quantity}
-                    </td>
-                    <td className="py-4 px-4 text-center">
-                      <div className="text-sm text-white font-mono">{security.rate.toFixed(2)}</div>
-                      <div className="text-xs text-slate-500">{security.currency}</div>
-                    </td>
-                    <td className="py-4 px-4 text-center">
-                      <span className="text-sm text-slate-300">{security.custodianBank}</span>
-                    </td>
-                    <td className="py-4 px-4 text-center">
-                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-900/30 text-green-400 border border-green-800/50">
-                        Live
-                      </span>
-                    </td>
-                    <td className="py-4 px-6 text-right">
-                      <div className="text-sm font-semibold text-white font-mono">
-                        {formatCurrency(security.sumCHF, 'CHF')}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {/* Footer */}
-          <div className="bg-slate-800/50 px-8 py-5 border-t border-slate-800">
-            <div className="flex items-center justify-between">
-              <div className="text-sm text-slate-400">
-                Last update: <span className="text-slate-300">10:52:46</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <span className="text-sm text-slate-400">Total:</span>
-                <span className="text-2xl font-bold text-white">
-                  {formatCurrency(activeData.total, 'CHF')}
-                </span>
-              </div>
-            </div>
-          </div>
+          {/* Table - Desktop table, Mobile cards */}
+          <MobileOptimizedTable
+            columns={[
+              {
+                header: t('tableHeaders.nameSymbol'),
+                key: 'name',
+                mobileLabel: 'Security',
+                render: (_value, row) => (
+                  <div>
+                    <div className="font-semibold text-white text-sm">{row.name}</div>
+                    <div className="text-xs text-slate-500 font-mono">{row.symbol}</div>
+                    {row.isin && (
+                      <div className="text-xs text-slate-600 font-mono mt-0.5">{row.isin}</div>
+                    )}
+                  </div>
+                )
+              },
+              {
+                header: t('portfolio.securities.tableHeaders.type'),
+                key: 'type',
+                render: (value) => (
+                  <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${
+                    value === 'Equity' ? 'bg-blue-900/30 text-blue-300 border border-blue-800/50' :
+                    value === 'P-Metals' ? 'bg-yellow-900/30 text-yellow-300 border border-yellow-800/50' :
+                    value === 'Moderate' ? 'bg-green-900/30 text-green-300 border border-green-800/50' :
+                    'bg-slate-800/50 text-slate-300 border border-slate-700/50'
+                  }`}>
+                    {value}
+                  </span>
+                )
+              },
+              {
+                header: t('portfolio.securities.tableHeaders.quantity'),
+                key: 'quantity',
+                render: (value) => <span className="font-mono">{value}</span>
+              },
+              {
+                header: t('portfolio.securities.tableHeaders.rate'),
+                key: 'rate',
+                render: (value, row) => (
+                  <div>
+                    <div className="font-mono">{value.toFixed(2)}</div>
+                    <div className="text-xs text-slate-500">{row.currency}</div>
+                  </div>
+                )
+              },
+              {
+                header: t('portfolio.securities.tableHeaders.custodianBank'),
+                key: 'custodianBank'
+              },
+              {
+                header: t('portfolio.securities.tableHeaders.sumCHF'),
+                key: 'sumCHF',
+                render: (value) => (
+                  <span className="font-semibold">{formatCurrency(value, 'CHF')}</span>
+                )
+              }
+            ]}
+            data={activeData.data}
+            className="px-4 md:px-0"
+          />
         </div>
 
         {/* Feature Highlights */}
