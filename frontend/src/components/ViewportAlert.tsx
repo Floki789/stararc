@@ -33,7 +33,7 @@ const ViewportAlert: React.FC<ViewportAlertProps> = ({
   const { t } = useLanguage();
 
   // Default messages from translation files
-  const defaultMessage = message || t('common.viewOnLargerScreen', 'For the best experience, view this content on a larger screen.');
+  const defaultMessage = message || t('common.viewOnLargerScreen');
 
   // Breakpoint classes
   const breakpointClass = showOn === 'mobile' ? 'md:hidden' : 'lg:hidden';
@@ -58,7 +58,7 @@ const ViewportAlert: React.FC<ViewportAlertProps> = ({
           </div>
           <div className="flex-1">
             <p className="text-sm font-medium mb-1">
-              {t('common.betterOnDesktop', 'Better on Desktop')}
+              {t('common.betterOnDesktop')}
             </p>
             <p className="text-xs opacity-90">
               {defaultMessage}

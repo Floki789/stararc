@@ -10,7 +10,7 @@ import {
 interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
-  t: (key: string) => string;
+  t: (key: string, options?: Record<string, any>) => string;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -86,11 +86,20 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     console.log('🌐 LocalStorage updated with:', localStorage.getItem(LANGUAGE_STORAGE_KEY));
   };
 
-  const t = (key: string): string => {
+  const t = (key: string, options?: Record<string, any>): string => {
     console.log('🔤 Translation requested for key:', key, 'in language:', language);
     const currentTranslations = translations[language];
     console.log('🔤 Available translations:', Object.keys(currentTranslations));
-    const result = getNestedValue(currentTranslations, key);
+    let result = getNestedValue(currentTranslations, key);
+    
+    // Handle interpolation if options are provided
+    if (options && typeof result === 'string') {
+      Object.keys(options).forEach(optionKey => {
+        const placeholder = `{{${optionKey}}}`;
+        result = result.replace(new RegExp(placeholder, 'g'), String(options[optionKey]));
+      });
+    }
+    
     console.log('🔤 Translation result:', result);
     return result;
   };

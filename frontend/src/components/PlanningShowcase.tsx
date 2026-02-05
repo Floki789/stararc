@@ -78,7 +78,7 @@ const PlanningShowcase: React.FC = () => {
             <div className="p-4 md:p-6">
               <ViewportAlert 
                 showOn="tablet"
-                message={t('common.chartsBetterOnDesktop', 'Financial charts are best viewed on larger screens for full detail.')}
+                message={t('common.chartsBetterOnDesktop')}
               />
             </div>
             

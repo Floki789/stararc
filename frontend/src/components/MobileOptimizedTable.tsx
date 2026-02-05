@@ -1,5 +1,4 @@
 import React from 'react';
-import { useLanguage } from '../contexts/LanguageContext';
 
 interface Column {
   header: string;
@@ -26,8 +25,6 @@ const MobileOptimizedTable: React.FC<MobileOptimizedTableProps> = ({
   highlightColumn,
   className = ''
 }) => {
-  const { t } = useLanguage();
-
   return (
     <>
       {/* Desktop Table View - Hidden on mobile */}
