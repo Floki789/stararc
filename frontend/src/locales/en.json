@@ -36,13 +36,6 @@
     "services": "Services",
     "investmentTrends": "Investment Trends"
   },
-  "common": {
-    "viewOnLargerScreen": "For the best experience, view this content on a larger screen.",
-    "betterOnDesktop": "Better on Desktop",
-    "chartsBetterOnDesktop": "Financial charts are best viewed on larger screens for full detail.",
-    "comparisonTableBetterOnDesktop": "This comparison table is optimized for larger screens.",
-    "securitiesTableBetterOnDesktop": "The detailed securities table is more readable on larger screens."
-  },
   "portfolio": {
     "title": "Visualize Your Complete Wealth",
     "subtitle": "Keep track of all asset classes with detailed breakdowns and interactive visualizations",
@@ -1816,6 +1809,11 @@
     }
   },
   "common": {
+    "viewOnLargerScreen": "For the best experience, view this content on a larger screen.",
+    "betterOnDesktop": "Better on Desktop",
+    "chartsBetterOnDesktop": "Financial charts are best viewed on larger screens for full detail.",
+    "comparisonTableBetterOnDesktop": "This comparison table is optimized for larger screens.",
+    "securitiesTableBetterOnDesktop": "The detailed securities table is more readable on larger screens.",
     "buttons": {
       "add": "Add",
       "edit": "Edit",

@@ -236,7 +236,7 @@ const SelfCustodyShowcase: React.FC = () => {
             {/* Mobile viewport alert */}
             <ViewportAlert 
               showOn="tablet" 
-              message={t('common.comparisonTableBetterOnDesktop')}
+              message="common.comparisonTableBetterOnDesktop"
               className="mb-6"
             />
             

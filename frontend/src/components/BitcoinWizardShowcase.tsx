@@ -137,7 +137,7 @@ const BitcoinWizardShowcase: React.FC = () => {
             <div className="p-4 lg:hidden">
               <ViewportAlert 
                 showOn="tablet"
-                message={t('common.securitiesTableBetterOnDesktop')}
+                message="common.securitiesTableBetterOnDesktop"
               />
             </div>
 
@@ -341,7 +341,7 @@ const BitcoinWizardShowcase: React.FC = () => {
               <div className="p-4 lg:hidden">
                 <ViewportAlert 
                   showOn="tablet"
-                  message={t('common.securitiesTableBetterOnDesktop')}
+                  message="common.securitiesTableBetterOnDesktop"
                 />
               </div>
 
@@ -478,7 +478,7 @@ const BitcoinWizardShowcase: React.FC = () => {
               <div className="p-4 lg:hidden">
                 <ViewportAlert 
                   showOn="tablet"
-                  message={t('common.securitiesTableBetterOnDesktop')}
+                  message="common.securitiesTableBetterOnDesktop"
                 />
               </div>
 

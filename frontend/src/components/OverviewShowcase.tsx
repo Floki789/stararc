@@ -265,15 +265,15 @@ const OverviewShowcase: React.FC = () => {
               <button
                 key={index}
                 onClick={() => scrollToSection(feature.sectionId)}
-                className={`bg-slate-900/80 backdrop-blur-xl rounded-xl p-6 border border-slate-800/50 ${colors.border} ${colors.shadow} transition-all duration-300 hover:scale-105 hover:shadow-lg text-center group h-32 flex flex-col justify-between`}
+                className={`bg-slate-900/80 backdrop-blur-xl rounded-xl p-6 border border-slate-800/50 ${colors.border} ${colors.shadow} transition-all duration-300 hover:scale-105 hover:shadow-lg text-center group h-32 flex flex-col items-center justify-between`}
               >
-                <div className="flex justify-center">
+                <div className="flex justify-center items-center">
                   <div className={`p-3 ${colors.bg} rounded-lg transition-colors`}>
                     <Icon className={`w-6 h-6 ${colors.icon}`} />
                   </div>
                 </div>
                 
-                <div className="mt-2">
+                <div className="w-full">
                   <h3 className={`text-sm font-semibold text-white ${colors.text} transition-colors leading-tight`}>
                     {t(feature.titleKey)}
                   </h3>

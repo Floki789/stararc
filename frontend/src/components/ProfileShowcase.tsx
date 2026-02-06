@@ -121,7 +121,7 @@ const ProfileShowcase: React.FC = () => {
               <div className="mb-4 md:hidden">
                 <ViewportAlert 
                   showOn="mobile"
-                  message={t('common.viewOnLargerScreen')}
+                  message="common.viewOnLargerScreen"
                 />
               </div>
 

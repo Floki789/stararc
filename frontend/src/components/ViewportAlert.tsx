@@ -10,7 +10,11 @@ interface ViewportAlertProps {
    */
   showOn?: 'mobile' | 'tablet';
   /**
-   * Custom message key or text
+   * Custom title (translation key or text)
+   */
+  title?: string;
+  /**
+   * Custom message (translation key or text)
    */
   message?: string;
   /**
@@ -26,14 +30,16 @@ interface ViewportAlertProps {
  */
 const ViewportAlert: React.FC<ViewportAlertProps> = ({
   showOn = 'mobile',
+  title,
   message,
   variant = 'info',
   className = ''
 }) => {
   const { t } = useLanguage();
 
-  // Default messages from translation files
-  const defaultMessage = message || t('common.viewOnLargerScreen');
+  // Default title and message from translation files
+  const displayTitle = title || 'common.betterOnDesktop';
+  const displayMessage = message || 'common.viewOnLargerScreen';
 
   // Breakpoint classes
   const breakpointClass = showOn === 'mobile' ? 'md:hidden' : 'lg:hidden';
@@ -58,10 +64,10 @@ const ViewportAlert: React.FC<ViewportAlertProps> = ({
           </div>
           <div className="flex-1">
             <p className="text-sm font-medium mb-1">
-              {t('common.betterOnDesktop')}
+              {t(displayTitle)}
             </p>
             <p className="text-xs opacity-90">
-              {defaultMessage}
+              {t(displayMessage)}
             </p>
           </div>
           <Smartphone className={`w-5 h-5 opacity-50 ${iconStyles[variant]}`} />
