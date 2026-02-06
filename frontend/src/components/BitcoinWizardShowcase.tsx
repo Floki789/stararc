@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Bitcoin, Shield, CheckCircle, FileText, Key, Lock, Wallet, Edit2, Trash2, Plus, Smartphone } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
+import ViewportAlert from './ViewportAlert';
 
 const BitcoinWizardShowcase: React.FC = () => {
   const { t } = useLanguage();
@@ -132,8 +133,16 @@ const BitcoinWizardShowcase: React.FC = () => {
               </div>
             </div>
 
-            {/* Table */}
-            <div className="overflow-x-auto">
+            {/* Mobile Alert */}
+            <div className="p-4 lg:hidden">
+              <ViewportAlert 
+                showOn="tablet"
+                message={t('common.securitiesTableBetterOnDesktop')}
+              />
+            </div>
+
+            {/* Desktop Table */}
+            <div className="overflow-x-auto hidden lg:block">
               <table className="w-full">
                 <thead className="bg-slate-800/50">
                   <tr>
@@ -219,6 +228,94 @@ const BitcoinWizardShowcase: React.FC = () => {
                 </tbody>
               </table>
             </div>
+
+            {/* Mobile Card View */}
+            <div className="lg:hidden space-y-4 p-4">
+              {[
+                { name: 'BTC Wilma', script: 'p2wpkh', type: 'Single-Sig', passphrase: 'Single', backups: { seed: '1° ✓ 2° ✓', descriptor: '1° ✓ 2° ✓', pass: '1° ✓ 2° ✓' }, balance: '1.00000000 BTC', balanceFr: '76,436.00 Fr' },
+                { name: 'BTC Fred', script: 'p2wpkh', type: 'Single-Sig', passphrase: 'Single', backups: { seed: '1° ✓ 2° ✓', descriptor: '1° ✗ 2° ✗', pass: '1° ✗ 2° ✗' }, balance: '1.00000000 BTC', balanceFr: '76,436.00 Fr' },
+                { name: 'BTC Pebbles', script: 'p2sh-p2wpkh', type: 'Single-Sig', passphrase: 'Single', backups: { seed: '1° ✓ 2° ✓', descriptor: '1° ✓ 2° ✓', pass: '1° ✓ 2° ✓' }, balance: '0.50000000 BTC', balanceFr: '38,218.00 Fr' },
+                { name: 'BTC Dino', script: 'p2tr', type: 'Single-Sig', passphrase: 'None', backups: { seed: '1° ✗ 2° ✗', descriptor: '1° ✓ 2° ✓', pass: '-' }, balance: '0.35000000 BTC', balanceFr: '26,752.60 Fr' },
+                { name: 'Relai Pebbles', script: 'p2wpkh', type: 'Single-Sig', passphrase: 'None', backups: { seed: '1° ✗ 2° ✗', descriptor: '1° ✗ 2° ✗', pass: '-' }, balance: '0.15000000 BTC', balanceFr: '11,465.40 Fr' }
+              ].map((wallet, index) => (
+                <div key={index} className="bg-slate-800/50 rounded-xl p-4 border border-slate-700 space-y-3">
+                  <div className="flex justify-between items-start mb-2">
+                    <div className="font-semibold text-white text-lg">{wallet.name}</div>
+                    <div className="text-right">
+                      <div className="font-mono text-sm text-white font-semibold">{wallet.balance}</div>
+                      <div className="text-xs text-slate-400">{wallet.balanceFr}</div>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-2 text-sm">
+                    <div>
+                      <span className="text-slate-400">Script:</span>
+                      <div className="mt-1">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-900/30 text-green-300 border border-green-800/50 font-mono">
+                          {wallet.script}
+                        </span>
+                      </div>
+                    </div>
+                    <div>
+                      <span className="text-slate-400">Type:</span>
+                      <div className="mt-1">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-900/30 text-blue-300 border border-blue-800/50">
+                          {wallet.type}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-slate-400">Passphrase:</span>
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700">
+                      {wallet.passphrase}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-slate-400">Hardware Wallet:</span>
+                    {wallet.passphrase !== 'None' ? (
+                      <CheckCircle className="w-5 h-5 text-green-500" />
+                    ) : (
+                      <span className="text-slate-600">✗</span>
+                    )}
+                  </div>
+
+                  <div className="border-t border-slate-700 pt-2">
+                    <div className="text-xs text-slate-400 mb-1">Backups:</div>
+                    <div className="space-y-1 text-xs">
+                      <div className="flex justify-between">
+                        <span className="text-slate-400">Seed:</span>
+                        <span className="font-mono" dangerouslySetInnerHTML={{
+                          __html: wallet.backups.seed
+                            .replace(/✓/g, '<span class="text-green-500">✓</span>')
+                            .replace(/✗/g, '<span class="text-red-500">✗</span>')
+                        }} />
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-slate-400">Descriptor:</span>
+                        <span className="font-mono" dangerouslySetInnerHTML={{
+                          __html: wallet.backups.descriptor
+                            .replace(/✓/g, '<span class="text-green-500">✓</span>')
+                            .replace(/✗/g, '<span class="text-red-500">✗</span>')
+                        }} />
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-slate-400">Passphrase:</span>
+                        <span className="font-mono" dangerouslySetInnerHTML={{
+                          __html: wallet.backups.pass === '-' 
+                            ? '<span class="text-white">-</span>'
+                            : wallet.backups.pass
+                              .replace(/✓/g, '<span class="text-green-500">✓</span>')
+                              .replace(/✗/g, '<span class="text-red-500">✗</span>')
+                        }} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
@@ -240,7 +337,16 @@ const BitcoinWizardShowcase: React.FC = () => {
                 </button>
               </div>
               
-              <div className="overflow-x-auto">
+              {/* Mobile Alert */}
+              <div className="p-4 lg:hidden">
+                <ViewportAlert 
+                  showOn="tablet"
+                  message={t('common.securitiesTableBetterOnDesktop')}
+                />
+              </div>
+
+              {/* Desktop Table */}
+              <div className="overflow-x-auto hidden lg:block">
                 <table className="w-full">
                   <thead className="bg-slate-800/50">
                     <tr>
@@ -297,6 +403,60 @@ const BitcoinWizardShowcase: React.FC = () => {
                   </tbody>
                 </table>
               </div>
+
+              {/* Mobile Card View */}
+              <div className="lg:hidden space-y-4 p-4">
+                {[
+                  { name: 'Trezor Pebbles', type: 'trezor', seed: 'Seed BTC Pebbles', assets: 'BTC Pebbles', vault: 'Home Vault', notes: '' },
+                  { name: 'BitBox Wilma', type: 'bitbox02', seed: 'Seed BTC Ju', assets: 'BTC Wilma', vault: 'Home Vault', notes: '' },
+                  { name: 'BitBox Fred', type: 'bitbox02', seed: 'Seed BTC Sam', assets: 'BTC Fred', vault: 'Home Vault', notes: '' }
+                ].map((wallet, index) => (
+                  <div key={index} className="bg-slate-800/50 rounded-xl p-4 border border-slate-700 space-y-3">
+                    <div className="flex justify-between items-start mb-2">
+                      <div className="font-semibold text-white text-lg">{wallet.name}</div>
+                      <div className="flex space-x-2">
+                        <button className="p-2 hover:bg-slate-700 rounded-lg transition-colors">
+                          <Edit2 className="w-4 h-4 text-slate-400" />
+                        </button>
+                        <button className="p-2 hover:bg-slate-700 rounded-lg transition-colors">
+                          <Trash2 className="w-4 h-4 text-slate-400" />
+                        </button>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-slate-400">Type:</span>
+                      <span className="inline-flex items-center px-2.5 py-1 rounded text-xs font-medium bg-purple-900/30 text-purple-300 border border-purple-800/50">
+                        {wallet.type}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-slate-400">Seed Usage:</span>
+                      <span className="inline-flex items-center px-2.5 py-1 rounded text-xs font-medium bg-green-900/30 text-green-300 border border-green-800/50">
+                        {wallet.seed}
+                      </span>
+                    </div>
+
+                    <div className="flex justify-between text-sm">
+                      <span className="text-slate-400">Bitcoin Assets:</span>
+                      <span className="text-white">{wallet.assets}</span>
+                    </div>
+
+                    <div className="flex justify-between text-sm">
+                      <span className="text-slate-400">Vault:</span>
+                      <span className="text-slate-300">{wallet.vault}</span>
+                    </div>
+
+                    {wallet.notes && (
+                      <div className="flex justify-between text-sm">
+                        <span className="text-slate-400">Notes:</span>
+                        <span className="text-slate-300">{wallet.notes}</span>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
 
             {/* Software Wallets */}
@@ -314,7 +474,16 @@ const BitcoinWizardShowcase: React.FC = () => {
                 </button>
               </div>
               
-              <div className="overflow-x-auto">
+              {/* Mobile Alert */}
+              <div className="p-4 lg:hidden">
+                <ViewportAlert 
+                  showOn="tablet"
+                  message={t('common.securitiesTableBetterOnDesktop')}
+                />
+              </div>
+
+              {/* Desktop Table */}
+              <div className="overflow-x-auto hidden lg:block">
                 <table className="w-full">
                   <thead className="bg-slate-800/50">
                     <tr>
@@ -373,6 +542,69 @@ const BitcoinWizardShowcase: React.FC = () => {
                     ))}
                   </tbody>
                 </table>
+              </div>
+
+              {/* Mobile Card View */}
+              <div className="lg:hidden space-y-4 p-4">
+                {[
+                  { name: 'Relai Pebbles', software: 'other_mobile', platform: '-', seed: 'Seed Relai Pebbles', assets: 'Relai Pebbles', version: '-', notes: '' },
+                  { name: 'Phoenix Fred', software: 'phoenix', platform: '-', seed: '-', assets: '-', version: '-', notes: '' },
+                  { name: 'Sparrow Dino', software: 'sparrow', platform: '-', seed: 'Seed BTC Dino', assets: 'BTC Dino', version: '-', notes: '' }
+                ].map((wallet, index) => (
+                  <div key={index} className="bg-slate-800/50 rounded-xl p-4 border border-slate-700 space-y-3">
+                    <div className="flex justify-between items-start mb-2">
+                      <div>
+                        <div className="font-semibold text-white text-lg">{wallet.name}</div>
+                        <div className="text-xs text-slate-400">{wallet.software}</div>
+                      </div>
+                      <div className="flex space-x-2">
+                        <button className="p-2 hover:bg-slate-700 rounded-lg transition-colors">
+                          <Edit2 className="w-4 h-4 text-slate-400" />
+                        </button>
+                        <button className="p-2 hover:bg-slate-700 rounded-lg transition-colors">
+                          <Trash2 className="w-4 h-4 text-slate-400" />
+                        </button>
+                      </div>
+                    </div>
+                    
+                    {wallet.platform !== '-' && (
+                      <div className="flex justify-between text-sm">
+                        <span className="text-slate-400">Platform:</span>
+                        <span className="text-slate-300">{wallet.platform}</span>
+                      </div>
+                    )}
+
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-slate-400">Seed Usage:</span>
+                      {wallet.seed !== '-' ? (
+                        <span className="inline-flex items-center px-2.5 py-1 rounded text-xs font-medium bg-green-900/30 text-green-300 border border-green-800/50">
+                          {wallet.seed}
+                        </span>
+                      ) : (
+                        <span className="text-slate-600">{wallet.seed}</span>
+                      )}
+                    </div>
+
+                    <div className="flex justify-between text-sm">
+                      <span className="text-slate-400">Bitcoin Assets:</span>
+                      <span className="text-white">{wallet.assets}</span>
+                    </div>
+
+                    {wallet.version !== '-' && (
+                      <div className="flex justify-between text-sm">
+                        <span className="text-slate-400">Version:</span>
+                        <span className="text-slate-300">{wallet.version}</span>
+                      </div>
+                    )}
+
+                    {wallet.notes && (
+                      <div className="flex justify-between text-sm">
+                        <span className="text-slate-400">Notes:</span>
+                        <span className="text-slate-300">{wallet.notes}</span>
+                      </div>
+                    )}
+                  </div>
+                ))}
               </div>
             </div>
           </div>

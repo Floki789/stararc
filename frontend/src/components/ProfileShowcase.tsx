@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Shield, Users, Building2, Lock, Home, Vault, Edit2, Trash2, Plus } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
+import ViewportAlert from './ViewportAlert';
 
 const ProfileShowcase: React.FC = () => {
   const { t } = useLanguage();
@@ -114,12 +115,21 @@ const ProfileShowcase: React.FC = () => {
           
           {/* Vaults Management View */}
           {activeTab === 'vaults' && (
-            <div className="p-8">
+            <div className="p-4 md:p-8">
+              
+              {/* Mobile Alert */}
+              <div className="mb-4 md:hidden">
+                <ViewportAlert 
+                  showOn="mobile"
+                  message={t('common.viewOnLargerScreen')}
+                />
+              </div>
+
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center space-x-3">
                   <Shield className="w-6 h-6 text-blue-400" />
                   <div>
-                    <h3 className="text-2xl font-bold text-white">Storage Locations (Vaults)</h3>
+                    <h3 className="text-xl md:text-2xl font-bold text-white">Storage Locations (Vaults)</h3>
                     <p className="text-sm text-slate-400">{t('financial.managePhysicalDigital')}</p>
                   </div>
                 </div>
@@ -141,7 +151,8 @@ const ProfileShowcase: React.FC = () => {
                     { name: 'Home Vault', location: 'Home', access: 'Code/Pin', objects: '8 Objekt(e)' }
                   ].map((vault, index) => (
                     <div key={index} className="bg-slate-800/50 border border-slate-700 rounded-lg p-4 hover:bg-slate-800 transition-colors">
-                      <div className="grid grid-cols-5 gap-4 items-center">
+                      {/* Desktop Grid Layout */}
+                      <div className="hidden md:grid grid-cols-5 gap-4 items-center">
                         <div className="flex items-center space-x-3">
                           <Building2 className="w-5 h-5 text-blue-400" />
                           <span className="font-semibold text-white">{vault.name}</span>
@@ -161,6 +172,41 @@ const ProfileShowcase: React.FC = () => {
                           <button className="p-2 hover:bg-slate-700 rounded-lg transition-colors">
                             <Trash2 className="w-4 h-4 text-red-400" />
                           </button>
+                        </div>
+                      </div>
+
+                      {/* Mobile Card Layout */}
+                      <div className="md:hidden space-y-3">
+                        <div className="flex items-start justify-between">
+                          <div className="flex items-center space-x-3 flex-1">
+                            <Building2 className="w-5 h-5 text-blue-400 flex-shrink-0" />
+                            <span className="font-semibold text-white text-lg">{vault.name}</span>
+                          </div>
+                          <div className="flex items-center space-x-2 flex-shrink-0">
+                            <button className="p-2 hover:bg-slate-700 rounded-lg transition-colors">
+                              <Edit2 className="w-4 h-4 text-blue-400" />
+                            </button>
+                            <button className="p-2 hover:bg-slate-700 rounded-lg transition-colors">
+                              <Trash2 className="w-4 h-4 text-red-400" />
+                            </button>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center space-x-2 text-sm">
+                          {vault.location === 'Bank' && <Building2 className="w-4 h-4 text-slate-400" />}
+                          {vault.location === 'Trust' && <Shield className="w-4 h-4 text-slate-400" />}
+                          {vault.location === 'Home' && <Home className="w-4 h-4 text-slate-400" />}
+                          <span className="text-slate-300">{vault.location}</span>
+                        </div>
+
+                        <div className="border-t border-slate-700 pt-2">
+                          <div className="text-xs text-slate-400 mb-1">Access:</div>
+                          <div className="text-sm text-slate-300 whitespace-pre-line">{vault.access}</div>
+                        </div>
+
+                        <div className="flex justify-between items-center pt-2 border-t border-slate-700">
+                          <span className="text-xs text-slate-400">Stored objects:</span>
+                          <span className="text-sm font-semibold text-blue-400">{vault.objects}</span>
                         </div>
                       </div>
                     </div>
@@ -191,7 +237,8 @@ const ProfileShowcase: React.FC = () => {
                     { name: 'Bitwarden Fred', location: 'Password Manager', access: 'Code/Pin', objects: '4 Objekt(e)' }
                   ].map((vault, index) => (
                     <div key={index} className="bg-slate-800/50 border border-slate-700 rounded-lg p-4 hover:bg-slate-800 transition-colors">
-                      <div className="grid grid-cols-5 gap-4 items-center">
+                      {/* Desktop Grid Layout */}
+                      <div className="hidden md:grid grid-cols-5 gap-4 items-center">
                         <div className="flex items-center space-x-3">
                           <Lock className="w-5 h-5 text-purple-400" />
                           <span className="font-semibold text-white">{vault.name}</span>
@@ -209,6 +256,39 @@ const ProfileShowcase: React.FC = () => {
                           <button className="p-2 hover:bg-slate-700 rounded-lg transition-colors">
                             <Trash2 className="w-4 h-4 text-red-400" />
                           </button>
+                        </div>
+                      </div>
+
+                      {/* Mobile Card Layout */}
+                      <div className="md:hidden space-y-3">
+                        <div className="flex items-start justify-between">
+                          <div className="flex items-center space-x-3 flex-1">
+                            <Lock className="w-5 h-5 text-purple-400 flex-shrink-0" />
+                            <span className="font-semibold text-white text-lg">{vault.name}</span>
+                          </div>
+                          <div className="flex items-center space-x-2 flex-shrink-0">
+                            <button className="p-2 hover:bg-slate-700 rounded-lg transition-colors">
+                              <Edit2 className="w-4 h-4 text-blue-400" />
+                            </button>
+                            <button className="p-2 hover:bg-slate-700 rounded-lg transition-colors">
+                              <Trash2 className="w-4 h-4 text-red-400" />
+                            </button>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center space-x-2 text-sm">
+                          <Lock className="w-4 h-4 text-slate-400" />
+                          <span className="text-slate-300">{vault.location}</span>
+                        </div>
+
+                        <div className="border-t border-slate-700 pt-2">
+                          <div className="text-xs text-slate-400 mb-1">Access:</div>
+                          <div className="text-sm text-slate-300">{vault.access}</div>
+                        </div>
+
+                        <div className="flex justify-between items-center pt-2 border-t border-slate-700">
+                          <span className="text-xs text-slate-400">Stored objects:</span>
+                          <span className="text-sm font-semibold text-blue-400">{vault.objects}</span>
                         </div>
                       </div>
                     </div>

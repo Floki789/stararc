@@ -1,6 +1,7 @@
 import React from 'react';
 import { Shield, Users, TrendingUp, Sparkles, Plus, Edit2, Trash2, ChevronDown } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
+import ViewportAlert from './ViewportAlert';
 
 const PensionShowcase: React.FC = () => {
   const { t } = useLanguage();
@@ -87,7 +88,7 @@ const PensionShowcase: React.FC = () => {
 
           {/* Pension Section */}
           <div className="bg-slate-800/30 border-b border-slate-700">
-            <div className="px-8 py-4 flex items-center justify-between">
+            <div className="px-4 md:px-8 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
               <div className="flex items-center space-x-3">
                 <div className="w-8 h-8 bg-emerald-600/20 rounded-lg flex items-center justify-center">
                   <Users className="w-4 h-4 text-emerald-400" />
@@ -97,15 +98,23 @@ const PensionShowcase: React.FC = () => {
                   <p className="text-xs text-slate-400">Individual securities, stocks, ETFs, etc.</p>
                 </div>
               </div>
-              <div className="text-right">
-                <div className="text-2xl font-bold text-white">834,000.00 {t('pension.totalAmount')}</div>
+              <div className="text-left sm:text-right">
+                <div className="text-xl md:text-2xl font-bold text-white">834,000.00 {t('pension.totalAmount')}</div>
                 <div className="text-xs text-slate-400">4 {t('pension.accountsCount')}</div>
               </div>
             </div>
           </div>
 
-          {/* Table */}
-          <div className="overflow-x-auto">
+          {/* Mobile Alert */}
+          <div className="p-4 lg:hidden">
+            <ViewportAlert 
+              showOn="tablet"
+              message={t('common.securitiesTableBetterOnDesktop')}
+            />
+          </div>
+
+          {/* Desktop Table */}
+          <div className="overflow-x-auto hidden lg:block">
             <table className="w-full">
               <thead className="bg-slate-800/50">
                 <tr>
@@ -180,6 +189,44 @@ const PensionShowcase: React.FC = () => {
                 ))}
               </tbody>
             </table>
+          </div>
+
+          {/* Mobile Card View */}
+          <div className="lg:hidden space-y-4 p-4">
+            {[
+              { name: t('pension.accounts.wilmaPilar3'), provider: t('pension.providers.luzerner'), type: t('pension.pensionTypes.privateVorsorge'), balance: '12,000.00 Fr', typeColor: 'text-green-400 bg-green-900/30 border-green-800/50' },
+              { name: t('pension.accounts.fredPilar3'), provider: t('pension.providers.luzerner'), type: t('pension.pensionTypes.privateVorsorge'), balance: '22,000.00 Fr', typeColor: 'text-green-400 bg-green-900/30 border-green-800/50' },
+              { name: t('pension.accounts.wilmaPilar2'), provider: t('pension.providers.pensionWilma'), type: t('pension.pensionTypes.beruflicheVorsorge'), balance: '500,000.00 Fr', typeColor: 'text-green-400 bg-green-900/30 border-green-800/50' },
+              { name: t('pension.accounts.fredPilar2'), provider: t('pension.providers.pensionFred'), type: t('pension.pensionTypes.beruflicheVorsorge'), balance: '300,000.00 Fr', typeColor: 'text-green-400 bg-green-900/30 border-green-800/50' }
+            ].map((account, index) => (
+              <div key={index} className="bg-slate-800/50 rounded-xl p-4 border border-slate-700 space-y-3 hover:bg-slate-800 transition-colors">
+                <div className="flex justify-between items-start">
+                  <div className="flex-1">
+                    <div className="font-semibold text-white text-lg mb-1">{account.name}</div>
+                    <div className="text-sm text-slate-300">{account.provider}</div>
+                  </div>
+                  <div className="flex items-center space-x-2 flex-shrink-0 ml-2">
+                    <button className="p-2 hover:bg-slate-700 rounded-lg transition-colors">
+                      <Edit2 className="w-4 h-4 text-blue-400" />
+                    </button>
+                    <button className="p-2 hover:bg-slate-700 rounded-lg transition-colors">
+                      <Trash2 className="w-4 h-4 text-red-400" />
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between pt-2 border-t border-slate-700">
+                  <span className={`inline-flex items-center px-3 py-1 rounded-lg text-xs font-medium border ${account.typeColor}`}>
+                    {account.type}
+                  </span>
+                </div>
+
+                <div className="flex justify-between items-center pt-2 border-t border-slate-700">
+                  <span className="text-sm text-slate-400">Current Balance:</span>
+                  <span className="font-mono text-lg font-semibold text-blue-400">{account.balance}</span>
+                </div>
+              </div>
+            ))}
           </div>
 
           {/* Add Account Button */}

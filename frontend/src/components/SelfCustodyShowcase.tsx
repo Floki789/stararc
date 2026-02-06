@@ -100,43 +100,43 @@ const SelfCustodyShowcase: React.FC = () => {
           </p>
         </div>
 
-        {/* View Toggle */}
-        <div className="flex justify-center mb-8 space-x-4">
+        {/* View Toggle - Stacked on mobile, horizontal on tablet+ */}
+        <div className="flex flex-col sm:flex-row justify-center mb-8 gap-3 sm:gap-4 max-w-2xl mx-auto">
           <button
             onClick={() => setActiveView('overview')}
-            className={`px-8 py-3 rounded-xl font-semibold transition-all duration-300 ${
+            className={`px-6 md:px-8 py-3 rounded-xl font-semibold transition-all duration-300 w-full sm:w-auto ${
               activeView === 'overview'
                 ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-500/50 scale-105'
                 : 'bg-slate-800/50 text-slate-400 hover:bg-slate-800 hover:text-slate-300'
             }`}
           >
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center justify-center space-x-2">
               <PieChart className="w-5 h-5" />
               <span>{t('selfCustody.tabs.overview')}</span>
             </div>
           </button>
           <button
             onClick={() => setActiveView('comparison')}
-            className={`px-8 py-3 rounded-xl font-semibold transition-all duration-300 ${
+            className={`px-6 md:px-8 py-3 rounded-xl font-semibold transition-all duration-300 w-full sm:w-auto ${
               activeView === 'comparison'
                 ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-500/50 scale-105'
                 : 'bg-slate-800/50 text-slate-400 hover:bg-slate-800 hover:text-slate-300'
             }`}
           >
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center justify-center space-x-2">
               <BarChart3 className="w-5 h-5" />
               <span>{t('selfCustody.tabs.comparison')}</span>
             </div>
           </button>
           <button
             onClick={() => setActiveView('benefits')}
-            className={`px-8 py-3 rounded-xl font-semibold transition-all duration-300 ${
+            className={`px-6 md:px-8 py-3 rounded-xl font-semibold transition-all duration-300 w-full sm:w-auto ${
               activeView === 'benefits'
                 ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-500/50 scale-105'
                 : 'bg-slate-800/50 text-slate-400 hover:bg-slate-800 hover:text-slate-300'
             }`}
           >
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center justify-center space-x-2">
               <CheckCircle className="w-5 h-5" />
               <span>{t('selfCustody.tabs.benefits')}</span>
             </div>

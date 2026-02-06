@@ -102,10 +102,10 @@ const RetirementShowcase: React.FC = () => {
         </div>
 
         {/* Capital Withdrawals Planning */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 mb-12 lg:mb-16">
           {/* Withdrawal Events */}
-          <div className="bg-slate-900/50 backdrop-blur-sm rounded-2xl border border-slate-700/50 p-8">
-            <div className="flex items-center gap-3 mb-6">
+          <div className="bg-slate-900/50 backdrop-blur-sm rounded-2xl border border-slate-700/50 p-4 md:p-8">
+            <div className="flex items-center gap-3 mb-4 md:mb-6">
               <div className="p-3 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600">
                 <Banknote className="w-6 h-6 text-white" />
               </div>
@@ -127,7 +127,7 @@ const RetirementShowcase: React.FC = () => {
                 { age: 63, type: 'pillar2_full', amount: '520\'000', color: 'indigo' },
                 { age: 65, type: 'ahv_start', amount: '2\'400/mo', color: 'blue' }
               ].map((event, idx) => (
-                <div key={idx} className="flex items-center justify-between p-4 bg-slate-800/50 rounded-lg border border-slate-700/50 hover:border-slate-600/50 transition-all">
+                <div key={idx} className="flex items-center justify-between p-3 md:p-4 bg-slate-800/50 rounded-lg border border-slate-700/50 hover:border-slate-600/50 transition-all">
                   <div className="flex items-center gap-3">
                     <div className={`w-2 h-12 rounded-full bg-${event.color}-500`}></div>
                     <div>
@@ -148,8 +148,8 @@ const RetirementShowcase: React.FC = () => {
           </div>
 
           {/* Asset Allocation After Withdrawal */}
-          <div className="bg-slate-900/50 backdrop-blur-sm rounded-2xl border border-slate-700/50 p-8">
-            <div className="flex items-center gap-3 mb-6">
+          <div className="bg-slate-900/50 backdrop-blur-sm rounded-2xl border border-slate-700/50 p-4 md:p-8">
+            <div className="flex items-center gap-3 mb-4 md:mb-6">
               <div className="p-3 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600">
                 <Target className="w-6 h-6 text-white" />
               </div>
@@ -193,8 +193,8 @@ const RetirementShowcase: React.FC = () => {
         </div>
 
         {/* Special Events */}
-        <div className="bg-slate-900/50 backdrop-blur-sm rounded-2xl border border-slate-700/50 p-8 mb-16">
-          <div className="flex items-center gap-3 mb-6">
+        <div className="bg-slate-900/50 backdrop-blur-sm rounded-2xl border border-slate-700/50 p-4 md:p-8 mb-12 lg:mb-16">
+          <div className="flex items-center gap-3 mb-4 md:mb-6">
             <div className="p-3 rounded-lg bg-gradient-to-r from-orange-600 to-red-600">
               <Home className="w-6 h-6 text-white" />
             </div>
