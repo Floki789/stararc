@@ -21,7 +21,7 @@
     "startupOffer": "Startup Offer!",
     "limitedOffer": "First 100 subscriptions at special price of $90/year for two years, then $190",
     "novaPlan": "Nova Plan",
-    "officialLaunch": "Official StarArc Launch on March 1, 2026",
+    "officialLaunch": "Official StarArc Launch on March 21, 2026",
     "daysRemaining": "days remaining",
     "stillAvailable": "Still available:",
     "regular": "Regular",
@@ -555,8 +555,8 @@
       },
       "privacy": {
         "aspect": "Transaction Privacy",
-        "self": "Pseudonymous transactions, no KYC on wallets",
-        "thirdParty": "Full KYC surveillance of all transactions"
+        "self": "On-chain transactions are pseudonymous, but initial purchase typically KYC-tracked",
+        "thirdParty": "Full KYC surveillance of all transactions and account activity"
       },
       "costs": {
         "aspect": "Costs & Fees",
@@ -586,8 +586,12 @@
         "description": "Only those who control the private keys truly own Bitcoin. On exchanges, you're just a creditor with an IOU."
       },
       "privacy": {
-        "title": "Bitcoin Privacy Standards",
-        "description": "True Bitcoin privacy through your own full nodes, CoinJoin, and pseudonymous transactions without KYC surveillance."
+        "title": "Enhanced Privacy Potential",
+        "description": "Self custody enables advanced privacy tools like CoinJoin and running your own node. However, most Bitcoin is initially purchased through KYC exchanges."
+      },
+      "noFees": {
+        "title": "No Ongoing Fees",
+        "description": "After initial hardware costs, only network transaction fees apply. No trading fees, withdrawal fees, or custody fees."
       },
       "noCounterparty": {
         "title": "No Counterparty Risk",
@@ -596,6 +600,10 @@
       "sovereignty": {
         "title": "Monetary Sovereignty",
         "description": "Bitcoin self custody is the ultimate form of monetary sovereignty. 24/7 access without permission, borders, or bank holidays."
+      },
+      "responsibility": {
+        "title": "Personal Responsibility",
+        "description": "Self custody requires careful seed phrase backup and security practices. You are your own bank - with all the responsibility that entails."
       },
       "inheritance": {
         "title": "Inheritance & Generational Wealth",
@@ -1520,7 +1528,7 @@
   "security": {
     "badge": "Client-Side Encryption",
     "title": "Your Data Stays Private",
-    "subtitle": "End-to-end encryption with AES-256-GCM. Your data is encrypted directly in your browser. Nobody but you can read it – not even us.",
+    "subtitle": "End-to-end encryption with Argon2id key derivation and AES-256-GCM. Your data is encrypted directly in your browser. Nobody but you can read it – not even us.",
     "userView": "What You See",
     "serverView": "What We See",
     "assetData": "Your Assets",
@@ -1544,11 +1552,11 @@
     },
     "serverInfo": {
       "title": "Fully encrypted and unreadable",
-      "description": "On our servers, all data is encrypted with AES-256-GCM. Even with direct database access, nobody can read your information. Only you possess the key – Zero-Knowledge Architecture."
+      "description": "Your encryption keys are derived using Argon2id (modern memory-hard algorithm). All data is then encrypted with AES-256-GCM. Even with direct database access, nobody can read your information. Only you possess the key – Zero-Knowledge Architecture."
     },
     "highlights": {
-      "aes256gcm": "AES-256-GCM",
-      "aes256gcmDesc": "Military-grade encryption directly in your browser, before data is transmitted",
+      "aes256gcm": "Argon2id + AES-256-GCM",
+      "aes256gcmDesc": "State-of-the-art key derivation (Argon2id) combined with military-grade encryption (AES-256-GCM) directly in your browser",
       "yourKeys": "Your Keys",
       "yourKeysDesc": "Only you possess the encryption keys. Not even we can decrypt your data",
       "privacyFirst": "Privacy First",
@@ -1598,7 +1606,7 @@
     "spaceshipData": {
       "title": "Spaceship: Financial Data",
       "clientSideEncryption": "Client-Side Encryption",
-      "description": "All financial data is encrypted directly in your browser with your personal user key before being sent to the server. Zero-Knowledge Architecture - nobody but you can decrypt the data.",
+      "description": "Your encryption keys are derived using Argon2id. All financial data is then encrypted with AES-256-GCM directly in your browser before being sent to the server. Zero-Knowledge Architecture - nobody but you can decrypt the data.",
       "whatEncrypted": "What is encrypted?",
       "yourPrivateKey": "Your private key",
       "encryptedItems": [

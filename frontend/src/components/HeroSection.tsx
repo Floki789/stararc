@@ -15,7 +15,7 @@ const HeroSection: React.FC = () => {
 
   useEffect(() => {
     const calculateDaysUntilLaunch = () => {
-      const launchDate = new Date('2026-03-01');
+      const launchDate = new Date('2026-03-21');
       const today = new Date();
       const timeDifference = launchDate.getTime() - today.getTime();
       const daysDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));

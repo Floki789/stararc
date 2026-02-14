@@ -39,7 +39,7 @@ const SelfCustodyShowcase: React.FC = () => {
       aspect: t('selfCustody.comparison.privacy.aspect'),
       selfCustody: t('selfCustody.comparison.privacy.self'),
       thirdParty: t('selfCustody.comparison.privacy.thirdParty'),
-      advantage: 'self'
+      advantage: 'depends'
     },
     {
       aspect: t('selfCustody.comparison.costs.aspect'),

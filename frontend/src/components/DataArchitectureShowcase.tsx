@@ -384,13 +384,11 @@ const DataArchitectureShowcase: React.FC = () => {
                   <div>
                     <p className="text-green-400 font-semibold mb-2">Client-Side Verschlüsselung</p>
                     <p className="text-slate-300 leading-relaxed mb-3">
-                      Alle Finanzdaten werden direkt in Ihrem Browser mit Ihrem persönlichen User-Key verschlüsselt, 
-                      bevor sie an den Server gesendet werden. <strong>Zero-Knowledge Architecture</strong> - 
-                      niemand außer Ihnen kann die Daten entschlüsseln.
+                      {t('dataArchitecture.spaceshipData.description')}
                     </p>
                     <div className="flex items-center space-x-2 text-sm text-slate-400">
                       <CheckCircle className="w-4 h-4" />
-                      <span>AES-256-GCM client-side encryption</span>
+                      <span>Argon2id + AES-256-GCM client-side encryption</span>
                     </div>
                   </div>
                 </div>
