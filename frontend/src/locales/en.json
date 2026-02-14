@@ -40,6 +40,7 @@
     "title": "Visualize Your Complete Wealth",
     "subtitle": "Keep track of all asset classes with detailed breakdowns and interactive visualizations",
     "assetClassesOverview": "Portfolio Asset Classes Overview",
+    "assetClassesOrigin": "Portfolio Asset Classes Origin",
     "totalPortfolioValue": "Total Portfolio Value",
     "totalValue": "Total Value",
     "securities": {

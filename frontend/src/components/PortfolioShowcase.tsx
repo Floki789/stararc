@@ -48,8 +48,8 @@ const PortfolioShowcase: React.FC = () => {
       value: 580267.64,
       percentage: 21.7,
       breakdown: [
-        { source: 'Krypto', value: 197365.80, percentage: 34, color: '#EF4444' },
-        { source: 'Bitcoin', value: 382901.84, percentage: 66, color: '#F97316' }
+        { source: 'Broker', value: 197365.80, percentage: 34, color: '#EF4444' },
+        { source: 'Bitcoin Self Custody', value: 382901.84, percentage: 66, color: '#F97316' }
       ]
     },
     {
@@ -258,7 +258,7 @@ const PortfolioShowcase: React.FC = () => {
               <BarChart3 className="w-5 h-5 text-white" />
             </div>
             <h3 className="text-2xl font-bold text-white">
-              {t('portfolio.assetClassesOverview')}
+              {t('portfolio.assetClassesOrigin')}
             </h3>
           </div>
 

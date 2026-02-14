@@ -116,6 +116,7 @@
     "title": "Visualisieren Sie Ihr komplettes Vermögen",
     "subtitle": "Behalten Sie alle Anlageklassen mit detaillierten Aufschlüsselungen und interaktiven Visualisierungen im Überblick",
     "assetClassesOverview": "Portfolio Anlageklassen Übersicht",
+    "assetClassesOrigin": "Portfolio Anlageklassen Herkunft",
     "totalPortfolioValue": "Gesamtportfolio-Wert",
     "totalValue": "Gesamtwert",
     "securities": {
