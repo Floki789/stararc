@@ -14,6 +14,11 @@ const Header: React.FC = () => {
     setIsMenuOpen(false);
   };
 
+  const handleHomeClick = () => {
+    // Always scroll to top when clicking home link
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-slate-900/80 backdrop-blur-md border-b border-slate-700/50">
       <div className="container mx-auto px-4 lg:px-8">
@@ -29,6 +34,7 @@ const Header: React.FC = () => {
           <nav className="hidden md:flex items-center space-x-8">
             <Link
               to="/"
+              onClick={handleHomeClick}
               className="text-slate-300 hover:text-white transition-colors font-medium"
             >
               {t('nav.home')}
@@ -134,7 +140,10 @@ const Header: React.FC = () => {
               <Link
                 to="/"
                 className="text-slate-300 hover:text-white transition-colors"
-                onClick={() => setIsMenuOpen(false)}
+                onClick={() => {
+                  handleHomeClick();
+                  setIsMenuOpen(false);
+                }}
               >
                 {t('nav.home')}
               </Link>
