@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import { Sparkles, Calendar } from 'lucide-react';
+import { TypewriterSubtitle } from './TypewriterSubtitle';
 
 const HeroSection: React.FC = () => {
   const { t } = useLanguage();
@@ -12,6 +13,15 @@ const HeroSection: React.FC = () => {
 
   // Countdown to March 1, 2026
   const [daysUntilLaunch, setDaysUntilLaunch] = useState(0);
+  const freeTrialText = t('hero.freeTrialButton');
+  const monthMarker = 'month';
+  const monthIndex = freeTrialText.indexOf(monthMarker);
+  const freeTrialLine1 = monthIndex >= 0
+    ? freeTrialText.slice(0, monthIndex + monthMarker.length)
+    : freeTrialText;
+  const freeTrialLine2 = monthIndex >= 0
+    ? freeTrialText.slice(monthIndex + monthMarker.length).trim()
+    : '';
 
   useEffect(() => {
     const calculateDaysUntilLaunch = () => {
@@ -84,13 +94,15 @@ const HeroSection: React.FC = () => {
           <div className="lg:col-span-3 space-y-8">
             {/* Launch Banner */}
             <div className="text-center mb-8">
-              <div className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-purple-600/20 to-blue-600/20 border border-purple-500/30 rounded-full mb-4">
-                <Calendar className="w-5 h-5 text-purple-400" />
-                <span className="text-purple-300 font-semibold text-lg">{t('hero.officialLaunch')}</span>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl font-bold text-white mb-2">{daysUntilLaunch}</div>
-                <div className="text-slate-400 text-sm uppercase tracking-wider">{t('hero.daysRemaining')}</div>
+              <div className="inline-flex flex-wrap items-center justify-center gap-4">
+                <div className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-purple-600/20 to-blue-600/20 border border-purple-500/30 rounded-full">
+                  <Calendar className="w-5 h-5 text-purple-400" />
+                  <span className="text-purple-300 font-semibold text-lg">{t('hero.officialLaunch')}</span>
+                </div>
+                <div className="inline-flex items-baseline gap-3 px-4 py-2 rounded-full bg-slate-900/60 border border-slate-700/60">
+                  <span className="text-3xl font-bold text-white">{daysUntilLaunch}</span>
+                  <span className="text-slate-400 text-sm uppercase tracking-wider">{t('hero.daysRemaining')}</span>
+                </div>
               </div>
             </div>
 
@@ -105,26 +117,8 @@ const HeroSection: React.FC = () => {
                 </span>
               </h1>
               
-              <p className="text-2xl text-slate-400 max-w-2xl leading-relaxed">
-                {t('animations.wealthManager.subtext')}
-              </p>
+              <TypewriterSubtitle />
 
-              {/* Prominent Free Trial CTA */}
-              <div className="flex justify-center max-w-2xl">
-                <button
-                  onClick={() => navigate('/register')}
-                  className="group relative inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-blue-600 via-cyan-600 to-blue-600 hover:from-blue-500 hover:via-cyan-500 hover:to-blue-500 text-white font-bold text-xl rounded-2xl transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/40 transform hover:scale-[1.02] border border-blue-400/30"
-                >
-                  <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-300"></div>
-                  <div className="relative flex items-center gap-3">
-                    <Sparkles className="w-6 h-6 text-white animate-pulse" />
-                    <div className="text-left">
-                      <div className="text-xl font-bold">{t('hero.freeTrialButton')}</div>
-                      <div className="text-blue-100 text-sm font-medium">{t('hero.registerAndStart')}</div>
-                    </div>
-                  </div>
-                </button>
-              </div>
             </div>
           </div>
 
@@ -170,8 +164,21 @@ const HeroSection: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="inline-block px-6 py-3 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-xl mb-4">
-                    <div className="text-white font-bold text-2xl">{t('hero.discount53')}</div>
+                  <div className="flex flex-wrap items-center justify-center gap-4 mb-4">
+                    <div className="inline-flex items-center justify-center w-36 px-3 py-2.5 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-xl">
+                      <div className="text-white font-bold text-2xl text-center">{t('hero.discount53')}</div>
+                    </div>
+                    <span className="text-slate-400 text-sm uppercase tracking-wider">or</span>
+                    <button
+                      onClick={() => navigate('/register')}
+                      className="group relative inline-flex items-center justify-center w-36 px-3 py-2 bg-gradient-to-r from-blue-600 via-cyan-600 to-blue-600 hover:from-blue-500 hover:via-cyan-500 hover:to-blue-500 text-white font-semibold rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/30 border border-blue-400/30"
+                    >
+                      <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-xl blur opacity-20 group-hover:opacity-40 transition duration-300"></div>
+                      <div className="relative text-center w-full whitespace-normal leading-tight">
+                        <span className="block">{freeTrialLine1}</span>
+                        {freeTrialLine2 && <span className="block">{freeTrialLine2}</span>}
+                      </div>
+                    </button>
                   </div>
                 </div>
 
@@ -191,13 +198,15 @@ const HeroSection: React.FC = () => {
                   <p className="text-center text-slate-400 text-sm mt-3">{t('hero.perYear')}</p>
                 </div>
 
-                {/* CTA Button */}
-                <button
-                  onClick={() => navigate('/register?plan=nova')}
-                  className="w-full py-4 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-semibold rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/30"
-                >
-                  {t('hero.getStartedNow')}
-                </button>
+                {/* CTA Buttons */}
+                <div className="flex justify-center">
+                  <button
+                    onClick={() => navigate('/register?plan=nova')}
+                    className="px-6 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-semibold rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/30"
+                  >
+                    {t('hero.getStartedNow')}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
