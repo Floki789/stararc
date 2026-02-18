@@ -165,9 +165,12 @@ const HeroSection: React.FC = () => {
                   </div>
 
                   <div className="flex flex-wrap items-center justify-center gap-4 mb-4">
-                    <div className="inline-flex items-center justify-center w-36 px-3 py-2.5 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-xl">
+                    <button
+                      onClick={() => navigate('/register')}
+                      className="inline-flex items-center justify-center w-36 px-3 py-2.5 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-xl hover:brightness-110 transition duration-300"
+                    >
                       <div className="text-white font-bold text-2xl text-center">{t('hero.discount53')}</div>
-                    </div>
+                    </button>
                     <span className="text-slate-400 text-sm uppercase tracking-wider">or</span>
                     <button
                       onClick={() => navigate('/register')}

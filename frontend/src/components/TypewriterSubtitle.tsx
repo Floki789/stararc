@@ -1,16 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface TypewriterSubtitleProps {
   className?: string;
 }
 
 export const TypewriterSubtitle: React.FC<TypewriterSubtitleProps> = ({ 
-  className = 'text-3xl text-slate-400 max-w-2xl leading-relaxed min-h-[10.5rem] mb-6'
+  className = 'text-3xl text-slate-400 max-w-2xl leading-relaxed min-h-[13.5rem] mb-6'
 }) => {
-  const subtitles = [
-    "Your personal Wealth Management Hub, with a strong focus on privacy and self-custody.",
-    "Take control of your wealth and budget. Design future scenarios. Store decentrally, manage centrally."
-  ];
+  const { t } = useLanguage();
+  const subtitles = useMemo(
+    () => [
+      t('animations.wealthManager.subtitles.0'),
+      t('animations.wealthManager.subtitles.1'),
+      t('animations.wealthManager.subtitles.2')
+    ],
+    [t]
+  );
 
   const [displayedText, setDisplayedText] = useState('');
   const [currentSubtitleIndex, setCurrentSubtitleIndex] = useState(0);
@@ -19,7 +25,7 @@ export const TypewriterSubtitle: React.FC<TypewriterSubtitleProps> = ({
   useEffect(() => {
     const currentSubtitle = subtitles[currentSubtitleIndex];
     const typeSpeed = 50; // ms pro Zeichen
-    const pauseBetweenTexts = 10000; // 10 Sekunden Pause zwischen Untertiteln
+    const pauseBetweenTexts = 3000; // 3 Sekunden Pause zwischen Untertiteln
 
     let timer: NodeJS.Timeout;
 
