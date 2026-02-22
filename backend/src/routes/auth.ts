@@ -843,20 +843,23 @@ router.post('/mark-spaceship-integrated', authMiddleware, async (req: Request, r
 
 // POST /api/auth/setup-zk-encryption
 // Sets up Zero-Knowledge encryption: updates StarArc DB only
-// ZK data is stored in sessionStorage and transferred via JWT on first Spaceship login
+// ZK data is stored in StarArc DB and transferred via JWT on first Spaceship login
 router.post('/setup-zk-encryption', authMiddleware, async (req: Request, res: Response): Promise<any> => {
   try {
     const user = (req as any).user;
-    const { login_method } = req.body;
+    const { login_method, wrapped_dek, wrapped_dek_recovery, dek_salt, recovery_salt, recovery_key_hash } = req.body;
 
     // Validate required fields
     if (login_method !== 'password_zk') {
       return res.status(400).json({ error: 'Invalid login_method' });
     }
+    if (!wrapped_dek || !wrapped_dek_recovery || !dek_salt || !recovery_salt || !recovery_key_hash) {
+      return res.status(400).json({ error: 'Missing required ZK encryption fields' });
+    }
 
     console.log(`🔐 Setting up ZK encryption for user ${user.id}`);
 
-    // Get user data to check/create Spaceship access
+    // Get user data
     const result = await pool.query(
       'SELECT spaceship_auth_key, language_code, subscription_plan FROM users WHERE id = $1',
       [user.id]
@@ -867,46 +870,41 @@ router.post('/setup-zk-encryption', authMiddleware, async (req: Request, res: Re
       throw new Error('SPACESHIP_AUTH_ENCRYPTION_KEY environment variable is required');
     }
     
-    // Auto-create Spaceship access if it doesn't exist
+    // Generate and store auth key if not exists (but DON'T create Spaceship user yet!)
+    // The Spaceship user will be created on first cross-app login, just like standard flow
     if (!result.rows[0]?.spaceship_auth_key) {
-      console.log(`🔑 No spaceship access found for user ${user.id}, creating automatically...`);
+      console.log(`🔑 Generating spaceship auth key for user ${user.id} (user will be created on first login)`);
       
       // Generate secure auth key (256-bit entropy)
       const authKey = generateSecureAuthKey();
       
-      // Create Spaceship user via StarArc token authentication
-      const spaceshipCreateResponse = await createSpaceshipUser({
-        authKey: authKey,
-        subscriptionPlan: result.rows[0]?.subscription_plan || 'Free',
-        parentUserId: user.id,
-        languageCode: result.rows[0]?.language_code || 'de'
-      });
-      
-      if (!spaceshipCreateResponse.success) {
-        return res.status(500).json({ 
-          error: 'Failed to create spaceship access',
-          details: spaceshipCreateResponse.error
-        });
-      }
-      
       // Encrypt auth key with AES-GCM
       const encryptedAuthKey = encryptAuthKey(authKey, masterKey);
       
-      // Store encrypted auth key in StarArc database
+      // Store encrypted auth key in StarArc database (NO Spaceship user creation!)
       await pool.query(
         'UPDATE users SET spaceship_auth_key = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2',
         [JSON.stringify(encryptedAuthKey), user.id]
       );
       
-      console.log(`✅ Spaceship access auto-created for user ${user.id}`);
+      console.log(`✅ Spaceship auth key stored for user ${user.id} (Spaceship user will be created on first login)`);
     }
 
-    // Update StarArc DB with login method
+    // Store ZK data AND update login method in StarArc DB
     await pool.query(
-      'UPDATE users SET login_method_selected = $1, onboarding_step = $2, updated_at = CURRENT_TIMESTAMP WHERE id = $3',
-      [login_method, 'completed', user.id]
+      `UPDATE users SET 
+        login_method_selected = $1, 
+        onboarding_step = $2,
+        wrapped_dek = $3,
+        wrapped_dek_recovery = $4,
+        dek_salt = $5,
+        recovery_salt = $6,
+        recovery_key_hash = $7,
+        updated_at = CURRENT_TIMESTAMP 
+      WHERE id = $8`,
+      [login_method, 'completed', wrapped_dek, wrapped_dek_recovery, dek_salt, recovery_salt, recovery_key_hash, user.id]
     );
-    console.log(`✅ StarArc: login_method_selected = '${login_method}', onboarding_step = 'completed' for user ${user.id}`);
+    console.log(`✅ StarArc: ZK data + login_method_selected = '${login_method}', onboarding_step = 'completed' for user ${user.id}`);
 
     // ZK data (wrapped_dek, etc.) is NOT sent to Spaceship here
     // Instead, it's stored in sessionStorage and sent via JWT on first Spaceship login
@@ -931,12 +929,11 @@ router.post('/generate-spaceship-token', authMiddleware, async (req: Request, re
   try {
     const user = (req as any).user;
     
-    // ZK data from frontend (optional - only present on first login after ZK setup)
-    const { zkData } = req.body || {};
-    
-    // Get encrypted auth key and login method from database
+    // Get encrypted auth key, login method, and ZK data from database
     const result = await pool.query(
-      'SELECT spaceship_auth_key, language_code, login_method_selected FROM users WHERE id = $1',
+      `SELECT spaceship_auth_key, language_code, login_method_selected,
+              wrapped_dek, wrapped_dek_recovery, dek_salt, recovery_salt, recovery_key_hash
+       FROM users WHERE id = $1`,
       [user.id]
     );
     
@@ -994,15 +991,16 @@ router.post('/generate-spaceship-token', authMiddleware, async (req: Request, re
       languageCode: result.rows[0].language_code || 'de'
     };
     
-    // Include ZK data if provided (for first-time ZK users)
-    if (zkData && authMethod === 'password_zk') {
-      console.log(`🔐 Including ZK data in JWT for user ${user.id} (first Spaceship login after ZK setup)`);
+    // Include ZK data from StarArc DB (for ZK users)
+    const dbRow = result.rows[0];
+    if (authMethod === 'password_zk' && dbRow.wrapped_dek) {
+      console.log(`🔐 Including ZK data from DB in JWT for user ${user.id}`);
       tokenPayload.zkData = {
-        wrapped_dek: zkData.wrapped_dek,
-        wrapped_dek_recovery: zkData.wrapped_dek_recovery,
-        dek_salt: zkData.dek_salt,
-        recovery_salt: zkData.recovery_salt,
-        recovery_key_hash: zkData.recovery_key_hash
+        wrapped_dek: dbRow.wrapped_dek,
+        wrapped_dek_recovery: dbRow.wrapped_dek_recovery,
+        dek_salt: dbRow.dek_salt,
+        recovery_salt: dbRow.recovery_salt,
+        recovery_key_hash: dbRow.recovery_key_hash
       };
     }
     

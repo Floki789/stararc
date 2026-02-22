@@ -452,7 +452,7 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
         recovery_key_hash: recoveryKeyHash
       };
 
-      // Update StarArc DB with login method (ZK data is NOT sent to Spaceship yet)
+      // Send ZK data to StarArc backend for storage in DB
       const apiUrl = (import.meta as any).env.VITE_API_URL || 'http://localhost:3004';
       const response = await fetch(`${apiUrl}/api/auth/setup-zk-encryption`, {
         method: 'POST',
@@ -461,7 +461,8 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
         body: JSON.stringify({
-          login_method: 'password_zk'
+          login_method: 'password_zk',
+          ...zkData  // Send ZK data to be stored in StarArc DB
         })
       });
 
@@ -470,10 +471,7 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
         throw new Error(errorData.error || 'Failed to setup ZK encryption');
       }
 
-      // Store ZK data in sessionStorage for transfer on first Spaceship login
-      // This data will be included in the JWT via generate-spaceship-token
-      sessionStorage.setItem('zk_pending_transfer', JSON.stringify(zkData));
-      console.log('🔐 ZK data stored in sessionStorage for first Spaceship login');
+      console.log('🔐 ZK data stored in StarArc DB');
 
       onComplete();
     } catch (err: any) {
