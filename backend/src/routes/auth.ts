@@ -841,14 +841,102 @@ router.post('/mark-spaceship-integrated', authMiddleware, async (req: Request, r
   }
 });
 
+// POST /api/auth/setup-zk-encryption
+// Sets up Zero-Knowledge encryption: updates StarArc DB only
+// ZK data is stored in sessionStorage and transferred via JWT on first Spaceship login
+router.post('/setup-zk-encryption', authMiddleware, async (req: Request, res: Response): Promise<any> => {
+  try {
+    const user = (req as any).user;
+    const { login_method } = req.body;
+
+    // Validate required fields
+    if (login_method !== 'password_zk') {
+      return res.status(400).json({ error: 'Invalid login_method' });
+    }
+
+    console.log(`🔐 Setting up ZK encryption for user ${user.id}`);
+
+    // Get user data to check/create Spaceship access
+    const result = await pool.query(
+      'SELECT spaceship_auth_key, language_code, subscription_plan FROM users WHERE id = $1',
+      [user.id]
+    );
+    
+    const masterKey = process.env.SPACESHIP_AUTH_ENCRYPTION_KEY;
+    if (!masterKey) {
+      throw new Error('SPACESHIP_AUTH_ENCRYPTION_KEY environment variable is required');
+    }
+    
+    // Auto-create Spaceship access if it doesn't exist
+    if (!result.rows[0]?.spaceship_auth_key) {
+      console.log(`🔑 No spaceship access found for user ${user.id}, creating automatically...`);
+      
+      // Generate secure auth key (256-bit entropy)
+      const authKey = generateSecureAuthKey();
+      
+      // Create Spaceship user via StarArc token authentication
+      const spaceshipCreateResponse = await createSpaceshipUser({
+        authKey: authKey,
+        subscriptionPlan: result.rows[0]?.subscription_plan || 'Free',
+        parentUserId: user.id,
+        languageCode: result.rows[0]?.language_code || 'de'
+      });
+      
+      if (!spaceshipCreateResponse.success) {
+        return res.status(500).json({ 
+          error: 'Failed to create spaceship access',
+          details: spaceshipCreateResponse.error
+        });
+      }
+      
+      // Encrypt auth key with AES-GCM
+      const encryptedAuthKey = encryptAuthKey(authKey, masterKey);
+      
+      // Store encrypted auth key in StarArc database
+      await pool.query(
+        'UPDATE users SET spaceship_auth_key = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2',
+        [JSON.stringify(encryptedAuthKey), user.id]
+      );
+      
+      console.log(`✅ Spaceship access auto-created for user ${user.id}`);
+    }
+
+    // Update StarArc DB with login method
+    await pool.query(
+      'UPDATE users SET login_method_selected = $1, onboarding_step = $2, updated_at = CURRENT_TIMESTAMP WHERE id = $3',
+      [login_method, 'completed', user.id]
+    );
+    console.log(`✅ StarArc: login_method_selected = '${login_method}', onboarding_step = 'completed' for user ${user.id}`);
+
+    // ZK data (wrapped_dek, etc.) is NOT sent to Spaceship here
+    // Instead, it's stored in sessionStorage and sent via JWT on first Spaceship login
+
+    res.json({
+      success: true,
+      message: 'Zero-Knowledge encryption configured. ZK data will be transferred on first Spaceship login.',
+      stararcUpdated: true
+    });
+
+  } catch (error: any) {
+    console.error('❌ ZK setup error:', error);
+    res.status(500).json({
+      error: 'Failed to setup ZK encryption',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+});
+
 // POST /api/auth/generate-spaceship-token
 router.post('/generate-spaceship-token', authMiddleware, async (req: Request, res: Response): Promise<any> => {
   try {
     const user = (req as any).user;
     
-    // Get encrypted auth key from database
+    // ZK data from frontend (optional - only present on first login after ZK setup)
+    const { zkData } = req.body || {};
+    
+    // Get encrypted auth key and login method from database
     const result = await pool.query(
-      'SELECT spaceship_auth_key, language_code FROM users WHERE id = $1',
+      'SELECT spaceship_auth_key, language_code, login_method_selected FROM users WHERE id = $1',
       [user.id]
     );
     
@@ -891,16 +979,35 @@ router.post('/generate-spaceship-token', authMiddleware, async (req: Request, re
       throw new Error('CROSS_APP_JWT_SECRET environment variable is required');
     }
     
+    // Determine auth method based on user's login_method_selected
+    const loginMethodSelected = result.rows[0].login_method_selected;
+    const authMethod = loginMethodSelected === 'password_zk' ? 'password_zk' : 'stararc_key';
+    
+    // Build JWT payload
+    const tokenPayload: Record<string, any> = {
+      authKey,
+      authMethod, 
+      subscriptionPlan: user.subscription_plan || 'Free',
+      crossApp: true,
+      source: 'stararc',
+      userId: user.id,
+      languageCode: result.rows[0].language_code || 'de'
+    };
+    
+    // Include ZK data if provided (for first-time ZK users)
+    if (zkData && authMethod === 'password_zk') {
+      console.log(`🔐 Including ZK data in JWT for user ${user.id} (first Spaceship login after ZK setup)`);
+      tokenPayload.zkData = {
+        wrapped_dek: zkData.wrapped_dek,
+        wrapped_dek_recovery: zkData.wrapped_dek_recovery,
+        dek_salt: zkData.dek_salt,
+        recovery_salt: zkData.recovery_salt,
+        recovery_key_hash: zkData.recovery_key_hash
+      };
+    }
+    
     const spaceshipToken = jwt.sign(
-      {
-        authKey,
-        authMethod: 'stararc_key', 
-        subscriptionPlan: user.subscription_plan || 'Free',
-        crossApp: true,
-        source: 'stararc',
-        userId: user.id,
-        languageCode: result.rows[0].language_code || 'de'
-      },
+      tokenPayload,
       crossAppSecret,
       { expiresIn: '5m' } // Short-lived for security
     );

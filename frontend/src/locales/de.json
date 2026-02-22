@@ -555,6 +555,7 @@
   "spaceshipAccess": {
     "unlockApp": "App freischalten",
     "goToPortfolio": "Zum Stararc Portfolio",
+    "goToPortfolioZK": "Zum Portfolio (ZK-geschützt)",
     "loading": "Wird geladen...",
     "error": "Fehler beim Zugriff auf die Spaceship App"
   },

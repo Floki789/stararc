@@ -61,6 +61,7 @@ router.post('/select-plan', authMiddleware, async (req, res): Promise<any> => {
         `UPDATE users SET 
          subscription_plan = 'Free', 
          subscription_status = 'active',
+         onboarding_step = 'subscription_selection',
          updated_at = CURRENT_TIMESTAMP
          WHERE id = $1`,
         [userId]

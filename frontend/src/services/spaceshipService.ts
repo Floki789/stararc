@@ -71,11 +71,27 @@ class SpaceshipService {
 
   /**
    * Generate Spaceship login token and redirect
+   * If ZK data is pending (first login after ZK setup), includes it for transfer to Spaceship
    */
   async loginToSpaceship(): Promise<void> {
     try {
+      // Check if there's pending ZK data to transfer (first login after ZK setup)
+      const zkPendingRaw = sessionStorage.getItem('zk_pending_transfer');
+      let requestBody: Record<string, any> = {};
+      
+      if (zkPendingRaw) {
+        try {
+          const zkData = JSON.parse(zkPendingRaw);
+          requestBody.zkData = zkData;
+          console.log('🔐 Including pending ZK data in Spaceship token request');
+        } catch (e) {
+          console.warn('Failed to parse ZK pending data, continuing without it');
+        }
+      }
+      
       const response = await this.fetchWithAuth('/auth/generate-spaceship-token', {
-        method: 'POST'
+        method: 'POST',
+        body: JSON.stringify(requestBody)
       });
       
       if (!response.ok) {
@@ -86,6 +102,12 @@ class SpaceshipService {
       const data: SpaceshipToken = await response.json();
 
       if (data.redirectUrl) {
+        // Clear pending ZK data after successful token generation
+        if (zkPendingRaw) {
+          sessionStorage.removeItem('zk_pending_transfer');
+          console.log('🔐 ZK pending data cleared after token generation');
+        }
+        
         // Redirect to Spaceship with token
         window.location.href = data.redirectUrl;
       } else {

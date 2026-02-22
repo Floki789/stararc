@@ -56,11 +56,24 @@ const SubscriptionSelection: React.FC = () => {
             if (!isUpgrade) {
               // Check onboarding status with fresh data
               if (freshUserData.onboardingStep === 'completed') {
+                // If completed but no login method, go to auth method selection
+                if (!freshUserData.loginMethodSelected) {
+                  navigate('/auth-method-selection');
+                  return;
+                }
                 navigate('/dashboard');
                 return;
               }
 
               if (freshUserData.onboardingStep === 'auth_method_selection') {
+                navigate('/auth-method-selection');
+                return;
+              }
+              
+              // If user has a subscription but onboarding step is still 'registration',
+              // they need to select their auth method
+              if (freshUserData.subscriptionPlan && freshUserData.onboardingStep === 'registration') {
+                console.log('User has subscription but onboarding not updated, redirecting to auth-method-selection');
                 navigate('/auth-method-selection');
                 return;
               }
@@ -80,6 +93,11 @@ const SubscriptionSelection: React.FC = () => {
       if (!isUpgrade) {
         // If user has completed onboarding, redirect to dashboard
         if (user && user.onboardingStep === 'completed') {
+          // Unless they haven't selected a login method yet
+          if (!(user as any).loginMethodSelected) {
+            navigate('/auth-method-selection');
+            return;
+          }
           navigate('/dashboard');
           return;
         }
@@ -87,6 +105,13 @@ const SubscriptionSelection: React.FC = () => {
         // If user has already selected a subscription but not completed onboarding
         // redirect to the next step in the workflow
         if (user && user.onboardingStep === 'auth_method_selection') {
+          navigate('/auth-method-selection');
+          return;
+        }
+        
+        // If user has a subscription but onboarding step is still 'registration'
+        if (user && (user as any).subscriptionPlan && user.onboardingStep === 'registration') {
+          console.log('User has subscription but onboarding not updated, redirecting to auth-method-selection');
           navigate('/auth-method-selection');
           return;
         }

@@ -420,6 +420,7 @@
   "spaceshipAccess": {
     "unlockApp": "Unlock App",
     "goToPortfolio": "Go to Stararc Portfolio",
+    "goToPortfolioZK": "Go to Portfolio (ZK-Protected)",
     "loading": "Loading...",
     "error": "Error accessing Spaceship App"
   },

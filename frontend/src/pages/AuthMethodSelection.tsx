@@ -250,10 +250,10 @@ const AuthMethodSelection: React.FC = () => {
                 },
                 body: JSON.stringify({
                   onboardingStep: 'completed',
-                  loginMethod: 'sovereignty'
+                  loginMethod: 'password_zk'
                 })
               });
-              updateUser({ onboardingStep: 'completed', loginMethodSelected: 'sovereignty' });
+              updateUser({ onboardingStep: 'completed', loginMethodSelected: 'password_zk' });
               navigate('/dashboard');
             }}
           />
@@ -443,21 +443,25 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
       // Hash recovery phrase for verification
       const recoveryKeyHash = await hashRecoveryPhrase(recoveryWords);
 
-      // Send to Spaceship backend
-      const spaceshipUrl = (import.meta as any).env.VITE_SPACESHIP_API_URL || 'http://localhost:3001';
-      const response = await fetch(`${spaceshipUrl}/api/auth/setup-zk-user`, {
+      // Prepare ZK data
+      const zkData = {
+        wrapped_dek: arrayBufferToBase64(wrappedDEK),
+        wrapped_dek_recovery: arrayBufferToBase64(wrappedDEKRecovery),
+        dek_salt: arrayBufferToBase64(dekSalt.buffer),
+        recovery_salt: arrayBufferToBase64(recoverySalt.buffer),
+        recovery_key_hash: recoveryKeyHash
+      };
+
+      // Update StarArc DB with login method (ZK data is NOT sent to Spaceship yet)
+      const apiUrl = (import.meta as any).env.VITE_API_URL || 'http://localhost:3004';
+      const response = await fetch(`${apiUrl}/api/auth/setup-zk-encryption`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
         body: JSON.stringify({
-          wrapped_dek: arrayBufferToBase64(wrappedDEK),
-          wrapped_dek_recovery: arrayBufferToBase64(wrappedDEKRecovery),
-          dek_salt: arrayBufferToBase64(dekSalt.buffer),
-          recovery_salt: arrayBufferToBase64(recoverySalt.buffer),
-          recovery_key_hash: recoveryKeyHash,
-          auth_method: 'password_zk'
+          login_method: 'password_zk'
         })
       });
 
@@ -465,6 +469,11 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Failed to setup ZK encryption');
       }
+
+      // Store ZK data in sessionStorage for transfer on first Spaceship login
+      // This data will be included in the JWT via generate-spaceship-token
+      sessionStorage.setItem('zk_pending_transfer', JSON.stringify(zkData));
+      console.log('🔐 ZK data stored in sessionStorage for first Spaceship login');
 
       onComplete();
     } catch (err: any) {

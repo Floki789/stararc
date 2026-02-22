@@ -57,18 +57,29 @@ const Dashboard: React.FC = () => {
           localStorage.setItem('user', JSON.stringify(freshUserData));
           
           // Check onboarding status with fresh data (skip redirect if coming from Stripe)
-          if (!skipOnboardingRedirect && freshUserData.onboardingStep !== 'completed') {
-            switch (freshUserData.onboardingStep) {
-              case 'registration':
-                navigate('/subscription-selection');
-                return false;
-              case 'subscription_selection':
-              case 'auth_method_selection':
-                navigate('/auth-method-selection');
-                return false;
-              default:
-                navigate('/subscription-selection');
-                return false;
+          if (!skipOnboardingRedirect) {
+            // First, check if user has completed onboarding but hasn't selected login method
+            // (for users created before auth method selection was implemented)
+            if (freshUserData.onboardingStep === 'completed' && !freshUserData.loginMethodSelected) {
+              console.log('User has completed onboarding but no login method selected, redirecting to auth-method-selection');
+              navigate('/auth-method-selection');
+              return false;
+            }
+            
+            // Check incomplete onboarding steps
+            if (freshUserData.onboardingStep !== 'completed') {
+              switch (freshUserData.onboardingStep) {
+                case 'registration':
+                  navigate('/subscription-selection');
+                  return false;
+                case 'subscription_selection':
+                case 'auth_method_selection':
+                  navigate('/auth-method-selection');
+                  return false;
+                default:
+                  navigate('/subscription-selection');
+                  return false;
+              }
             }
           }
           return true; // Onboarding completed or skipped redirect

@@ -1,11 +1,12 @@
 /**
  * Spaceship Access Button
  * Provides seamless access to the Spaceship app with automatic user creation
+ * Supports both standard (stararc_key) and Zero-Knowledge (password_zk) auth methods
  */
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { RocketLaunchIcon, CogIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
+import { RocketLaunchIcon, CogIcon, CheckCircleIcon, LockClosedIcon, ShieldCheckIcon } from '@heroicons/react/24/outline';
 import { spaceshipService } from '../services/spaceshipService';
 import { useAuth } from '../hooks/useAuth';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -26,8 +27,11 @@ const SpaceshipAccessButton: React.FC<SpaceshipAccessButtonProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [hasAccess, setHasAccess] = useState<boolean | null>(null);
   const [error, setError] = useState<string>('');
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const { t } = useLanguage();
+  
+  // Check if user is using Zero-Knowledge encryption
+  const isZKUser = user?.loginMethodSelected === 'password_zk';
 
   // Check access status on component mount
   React.useEffect(() => {
@@ -115,6 +119,15 @@ const SpaceshipAccessButton: React.FC<SpaceshipAccessButtonProps> = ({
     }
 
     if (hasAccess) {
+      // Show different UI for ZK users vs standard users
+      if (isZKUser) {
+        return (
+          <>
+            {showIcon && <ShieldCheckIcon className={`${iconSizes[size]} mr-2 text-emerald-300`} />}
+            {t('spaceshipAccess.goToPortfolioZK')}
+          </>
+        );
+      }
       return (
         <>
           {showIcon && <CheckCircleIcon className={`${iconSizes[size]} mr-2 text-green-300`} />}
