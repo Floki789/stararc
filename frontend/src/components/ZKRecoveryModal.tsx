@@ -368,8 +368,11 @@ const ZKRecoveryModal: React.FC<ZKRecoveryModalProps> = ({ isOpen, onClose, onSu
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                     className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-amber-500"
-                    placeholder="Mindestens 8 Zeichen"
+                    placeholder="Mindestens 12 Zeichen"
                   />
+                  <p className="text-slate-400 text-xs mt-1">
+                    Mind. 12 Zeichen, Groß-/Kleinbuchstaben, Zahl und Sonderzeichen (!@#$%...)
+                  </p>
                 </div>
                 
                 <div>
