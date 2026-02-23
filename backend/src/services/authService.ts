@@ -57,8 +57,38 @@ export class AuthService {
     return crypto.randomBytes(32).toString('hex');
   }
 
+  // Create server-side wrapped DEK for admin password reset capability
+  private createWrappedDEKServer(dekBase64: string, uniqueIdentifier: string): string {
+    const serverSecret = process.env.DEK_SERVER_SECRET || process.env.SPACESHIP_AUTH_ENCRYPTION_KEY || 'default-server-secret';
+    
+    // Derive server KEK from secret + unique identifier
+    const salt = crypto.createHash('sha256').update(uniqueIdentifier).digest();
+    const serverKEK = crypto.pbkdf2Sync(serverSecret, salt, 100000, 32, 'sha256');
+    
+    // Decode DEK from base64
+    const dekBuffer = Buffer.from(dekBase64, 'base64');
+    
+    // Encrypt DEK with server KEK using AES-256-GCM
+    const iv = crypto.randomBytes(12);
+    const cipher = crypto.createCipheriv('aes-256-gcm', serverKEK, iv);
+    const encrypted = Buffer.concat([cipher.update(dekBuffer), cipher.final()]);
+    const authTag = cipher.getAuthTag();
+    
+    // Combine: IV (12) + authTag (16) + encrypted
+    const combined = Buffer.concat([iv, authTag, encrypted]);
+    return combined.toString('base64');
+  }
+
   // Register user
-  async registerUser(email: string, password: string, alias: string = '', termsAccepted: boolean = false, clientIp?: string, languageCode?: string): Promise<User> {
+  async registerUser(
+    email: string, 
+    password: string, 
+    alias: string = '', 
+    termsAccepted: boolean = false, 
+    clientIp?: string, 
+    languageCode?: string,
+    dekData?: { dek: string; wrapped_dek: string; dek_salt: string }
+  ): Promise<User> {
     const client = await this.pool.connect();
     
     try {
@@ -129,6 +159,30 @@ export class AuthService {
       );
 
       const user = result.rows[0];
+
+      // If DEK data provided, create server-wrapped DEK and store all DEK fields
+      if (dekData && dekData.dek && dekData.wrapped_dek && dekData.dek_salt) {
+        console.log(`🔐 Creating wrapped_dek_server for user ${user.id} (standard login)`);
+        
+        // Create server-wrapped DEK for admin password reset capability
+        const wrappedDekServer = this.createWrappedDEKServer(dekData.dek, `user-${user.id}`);
+        
+        // Update user with DEK fields
+        await client.query(
+          `UPDATE users SET 
+            wrapped_dek = $1,
+            wrapped_dek_server = $2,
+            dek_salt = $3,
+            login_method_selected = 'standard'
+           WHERE id = $4`,
+          [dekData.wrapped_dek, wrappedDekServer, dekData.dek_salt, user.id]
+        );
+        
+        console.log(`✅ DEK data stored for user ${user.id}`);
+        
+        // Note: The raw DEK (dekData.dek) is NOT stored - it's only used to create wrapped_dek_server
+        // and then should be discarded from memory
+      }
       
       // Add decrypted data to user object for response
       user.email = email;
@@ -151,10 +205,11 @@ export class AuthService {
       // Generate email hash for lookup
       const emailHash = UserEncryptionService.generateEmailHash(email);
       
-      // Find user by email hash
+      // Find user by email hash (include DEK fields for client-side encryption)
       const result = await client.query(
         `SELECT id, password_hash, email_verified, role, created_at, onboarding_step, 
-         login_method_selected, spaceship_integration_completed, encrypted_email, encrypted_alias
+         login_method_selected, spaceship_integration_completed, encrypted_email, encrypted_alias,
+         wrapped_dek, dek_salt
          FROM users WHERE email_hash = $1`,
         [emailHash]
       );

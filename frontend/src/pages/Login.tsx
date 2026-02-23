@@ -4,6 +4,7 @@ import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { useLanguage } from '../contexts/LanguageContext';
+import { unwrapDEKForLogin, storeDEKInSession } from '../utils/clientCrypto';
 
 interface LoginFormData {
   email: string;
@@ -118,6 +119,26 @@ const Login: React.FC = () => {
         // Store token and user data in localStorage
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
+        
+        // If encryption data is present (standard login), unwrap and store DEK
+        if (data.encryption?.wrapped_dek && data.encryption?.dek_salt) {
+          console.log('🔐 Unwrapping DEK for standard login...');
+          try {
+            const dek = await unwrapDEKForLogin(
+              formData.password,
+              data.encryption.wrapped_dek,
+              data.encryption.dek_salt
+            );
+            if (dek) {
+              await storeDEKInSession(dek);
+              console.log('✅ DEK unwrapped and stored in session');
+            } else {
+              console.error('❌ Failed to unwrap DEK');
+            }
+          } catch (dekError) {
+            console.error('❌ DEK unwrapping error:', dekError);
+          }
+        }
         
         // Update AuthContext immediately
         login(data.user, data.token);

@@ -4,6 +4,7 @@ import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { useLanguage } from '../contexts/LanguageContext';
+import { setupDEKForRegistration } from '../utils/clientCrypto';
 
 interface RegisterFormData {
   email: string;
@@ -107,6 +108,11 @@ const Register: React.FC = () => {
       // Get current language from localStorage for cross-app sync
       const currentLanguage = localStorage.getItem('stararc-language') || 'de';
       
+      // Generate DEK for client-side encryption (Standard Login with server backup)
+      console.log('🔐 Generating DEK for standard login registration...');
+      const dekSetup = await setupDEKForRegistration(formData.password);
+      console.log('✅ DEK generated and wrapped');
+      
       const response = await fetch(`${apiUrl}/api/auth/register`, {
         method: 'POST',
         headers: {
@@ -117,7 +123,11 @@ const Register: React.FC = () => {
           password: formData.password,
           termsAccepted: formData.termsAccepted,
           inviteCode: formData.inviteCode,
-          languageCode: currentLanguage // Send language for DB storage
+          languageCode: currentLanguage,
+          // DEK data for client-side encryption
+          dek: dekSetup.dekBase64,           // Raw DEK (sent once, for server to create wrapped_dek_server)
+          wrapped_dek: dekSetup.wrappedDek,  // DEK wrapped with user's password-derived KEK
+          dek_salt: dekSetup.dekSalt         // Salt for password key derivation
         }),
       });
 

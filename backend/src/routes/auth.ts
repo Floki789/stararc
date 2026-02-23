@@ -115,10 +115,14 @@ router.post('/register', registerLimiter, registerValidation, async (req: Reques
       });
     }
 
-    const { email, password, alias = '', termsAccepted, inviteCode, languageCode } = req.body;
+    const { email, password, alias = '', termsAccepted, inviteCode, languageCode, dek, wrapped_dek, dek_salt } = req.body;
 
-    // Register user
-    const user = await authService.registerUser(email, password, alias, termsAccepted, req.ip, languageCode);
+    // Register user with DEK data for client-side encryption
+    const user = await authService.registerUser(email, password, alias, termsAccepted, req.ip, languageCode, {
+      dek,           // Raw DEK (used once to create wrapped_dek_server, then discarded)
+      wrapped_dek,   // DEK wrapped with user's password-derived KEK
+      dek_salt       // Salt for password key derivation
+    });
 
     // Send email verification
     try {
@@ -396,6 +400,14 @@ router.post('/login', authLimiter, loginValidation, async (req: Request, res: Re
         twoFactorEnabled: userWith2FA?.two_factor_enabled || false
       }
     };
+
+    // Include DEK data for client-side encryption (standard login)
+    if ((user as any).wrapped_dek && (user as any).dek_salt) {
+      response.encryption = {
+        wrapped_dek: (user as any).wrapped_dek,
+        dek_salt: (user as any).dek_salt
+      };
+    }
 
     // Add backup code info if a backup code was used
     if ((loginResult as any).backupCodeUsed) {
@@ -1067,10 +1079,10 @@ router.post('/generate-spaceship-token', authMiddleware, async (req: Request, re
   try {
     const user = (req as any).user;
     
-    // Get encrypted auth key, login method, and ZK data from database
+    // Get encrypted auth key, login method, and DEK/ZK data from database
     const result = await pool.query(
       `SELECT spaceship_auth_key, language_code, login_method_selected,
-              wrapped_dek, wrapped_dek_recovery, dek_salt, recovery_salt, recovery_key_hash
+              wrapped_dek, wrapped_dek_recovery, wrapped_dek_server, dek_salt, recovery_salt, recovery_key_hash
        FROM users WHERE id = $1`,
       [user.id]
     );
@@ -1139,6 +1151,16 @@ router.post('/generate-spaceship-token', authMiddleware, async (req: Request, re
         dek_salt: dbRow.dek_salt,
         recovery_salt: dbRow.recovery_salt,
         recovery_key_hash: dbRow.recovery_key_hash
+      };
+    }
+    
+    // Include DEK data for standard login users (for client-side encryption)
+    if (authMethod !== 'password_zk' && dbRow.wrapped_dek && dbRow.dek_salt) {
+      console.log(`🔐 Including standard DEK data from DB in JWT for user ${user.id}`);
+      tokenPayload.dekData = {
+        wrapped_dek: dbRow.wrapped_dek,
+        wrapped_dek_server: dbRow.wrapped_dek_server,
+        dek_salt: dbRow.dek_salt
       };
     }
     
