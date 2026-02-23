@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Shield, Star, Crown } from 'lucide-react';
+import { Shield, Star, Crown, Key } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import StripeAPIService from '../services/stripeService';
 import SpaceshipAccessButton from '../components/SpaceshipAccessButton';
 import ApexManagement from '../components/ApexManagement';
 import TwoFactorManagement from '../components/TwoFactorManagement';
+import ZKRecoveryModal from '../components/ZKRecoveryModal';
 import { useLanguage } from '../contexts/LanguageContext';
 
 interface Subscription {
@@ -23,7 +24,10 @@ const Dashboard: React.FC = () => {
   const [subscription, setSubscription] = useState<Subscription | null>(null);
   const [loading, setLoading] = useState(true);
   const [pollingError, setPollingError] = useState(false);
+  const [showZKRecoveryModal, setShowZKRecoveryModal] = useState(false);
   
+  // Check if user is a ZK user
+  const isZKUser = user?.loginMethodSelected === 'password_zk';
 
 
   useEffect(() => {
@@ -459,6 +463,52 @@ const Dashboard: React.FC = () => {
 
         {/* Two-Factor Authentication Management */}
         <TwoFactorManagement />
+
+        {/* Zero-Knowledge Recovery - Only show for ZK users */}
+        {isZKUser && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="bg-slate-800/40 backdrop-blur-sm border border-amber-500/30 rounded-2xl p-6 mb-6"
+          >
+            <div className="flex items-center gap-4 mb-4">
+              <div className="p-3 rounded-full bg-amber-500/20">
+                <Key className="w-6 h-6 text-amber-400" />
+              </div>
+              <div className="flex-1">
+                <h2 className="text-xl font-bold text-white">
+                  Zero-Knowledge Verschlüsselung
+                </h2>
+                <p className="text-amber-300 text-sm">
+                  Deine Spaceship-Daten sind client-seitig verschlüsselt
+                </p>
+              </div>
+            </div>
+            
+            <p className="text-slate-300 text-sm mb-4">
+              Falls du dein Spaceship-Passwort vergessen hast, kannst du es mit deiner 
+              6-Wort Wiederherstellungsphrase zurücksetzen.
+            </p>
+            
+            <button
+              onClick={() => setShowZKRecoveryModal(true)}
+              className="px-4 py-2 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 text-amber-300 rounded-lg font-medium transition-colors"
+            >
+              Spaceship-Passwort wiederherstellen
+            </button>
+          </motion.div>
+        )}
+
+        {/* ZK Recovery Modal */}
+        <ZKRecoveryModal
+          isOpen={showZKRecoveryModal}
+          onClose={() => setShowZKRecoveryModal(false)}
+          onSuccess={() => {
+            setShowZKRecoveryModal(false);
+            // Optionally show success message
+          }}
+        />
 
         {/* Apex Client Management - Only show for Apex subscription users */}
         {subscription?.plan === 'Apex' && (

@@ -856,7 +856,7 @@
         "recovery": "Passwort-Wiederherstellung möglich",
         "changePassword": "Passwort jederzeit änderbar",
         "encrypted": "Verschlüsselte Schlüssel-Speicherung",
-        "recoveryPhrase": "12-Wort-Wiederherstellungsphrase als Backup"
+        "recoveryPhrase": "6-Wort-Wiederherstellungsphrase als Backup"
       },
       "cons": {
         "serverData": "Verschlüsselter Schlüssel auf Server gespeichert",

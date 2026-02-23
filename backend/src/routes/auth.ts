@@ -924,6 +924,144 @@ router.post('/setup-zk-encryption', authMiddleware, async (req: Request, res: Re
   }
 });
 
+// GET /api/auth/get-zk-recovery-data
+// Returns the ZK recovery data needed to recover the DEK with recovery phrase
+router.get('/get-zk-recovery-data', authMiddleware, async (req: Request, res: Response): Promise<any> => {
+  try {
+    const user = (req as any).user;
+    
+    // Get ZK recovery data from database
+    const result = await pool.query(
+      `SELECT wrapped_dek_recovery, recovery_salt, dek_salt, login_method_selected
+       FROM users WHERE id = $1`,
+      [user.id]
+    );
+    
+    const userData = result.rows[0];
+    
+    if (!userData) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    if (userData.login_method_selected !== 'password_zk') {
+      return res.status(400).json({ error: 'User is not a ZK user' });
+    }
+    
+    if (!userData.wrapped_dek_recovery || !userData.recovery_salt || !userData.dek_salt) {
+      return res.status(400).json({ error: 'ZK recovery data not found' });
+    }
+    
+    console.log(`🔐 ZK recovery data requested for user ${user.id}`);
+    
+    res.json({
+      wrapped_dek_recovery: userData.wrapped_dek_recovery,
+      recovery_salt: userData.recovery_salt,
+      dek_salt: userData.dek_salt
+    });
+    
+  } catch (error: any) {
+    console.error('❌ Get ZK recovery data error:', error);
+    res.status(500).json({
+      error: 'Failed to get ZK recovery data',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+});
+
+// POST /api/auth/recover-zk
+// Updates the wrapped_dek after password recovery (dek_salt stays the same)
+router.post('/recover-zk', authMiddleware, async (req: Request, res: Response): Promise<any> => {
+  try {
+    const user = (req as any).user;
+    const { new_wrapped_dek } = req.body;
+    
+    if (!new_wrapped_dek) {
+      return res.status(400).json({ error: 'new_wrapped_dek is required' });
+    }
+    
+    // Verify user is a ZK user
+    const checkResult = await pool.query(
+      `SELECT login_method_selected FROM users WHERE id = $1`,
+      [user.id]
+    );
+    
+    if (checkResult.rows[0]?.login_method_selected !== 'password_zk') {
+      return res.status(400).json({ error: 'User is not a ZK user' });
+    }
+    
+    // Update wrapped_dek in StarArc DB (dek_salt stays the same!)
+    await pool.query(
+      `UPDATE users SET 
+        wrapped_dek = $1,
+        updated_at = CURRENT_TIMESTAMP 
+       WHERE id = $2`,
+      [new_wrapped_dek, user.id]
+    );
+    
+    console.log(`✅ StarArc: wrapped_dek updated for user ${user.id} (password recovery)`);
+    
+    // Sync to Spaceship DB
+    let spaceshipSynced = false;
+    try {
+      const spaceshipUrl = process.env.SPACESHIP_API_URL || 'http://localhost:3001';
+      
+      // Get the user's auth_key_hash to identify them in Spaceship
+      const authKeyResult = await pool.query(
+        `SELECT spaceship_auth_key FROM users WHERE id = $1`,
+        [user.id]
+      );
+      
+      if (authKeyResult.rows[0]?.spaceship_auth_key) {
+        // Decrypt the auth key
+        const masterKey = process.env.SPACESHIP_AUTH_ENCRYPTION_KEY;
+        if (masterKey) {
+          const encryptedData = JSON.parse(authKeyResult.rows[0].spaceship_auth_key);
+          const authKey = decryptAuthKey(encryptedData, masterKey);
+          
+          // Call Spaceship API to update wrapped_dek
+          const syncResponse = await fetch(`${spaceshipUrl}/api/auth/sync-wrapped-dek`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-StarArc-Internal': process.env.STARARC_INTERNAL_SECRET || 'dev-secret'
+            },
+            body: JSON.stringify({
+              auth_key: authKey,
+              new_wrapped_dek: new_wrapped_dek
+            })
+          });
+          
+          if (syncResponse.ok) {
+            const syncResult = await syncResponse.json() as { success?: boolean };
+            spaceshipSynced = syncResult.success === true;
+            console.log(`✅ Spaceship: wrapped_dek synced for user ${user.id}`);
+          } else {
+            const errorBody = await syncResponse.text();
+            console.error(`⚠️ Spaceship sync failed: ${syncResponse.status}`, errorBody);
+          }
+        }
+      }
+    } catch (syncError) {
+      console.error('⚠️ Spaceship sync error:', syncError);
+      // Don't fail the whole recovery if Spaceship sync fails
+    }
+    
+    res.json({
+      success: true,
+      message: 'Password recovery successful',
+      stararc_updated: true,
+      spaceship_synced: spaceshipSynced
+    });
+    
+  } catch (error: any) {
+    console.error('❌ ZK recovery error:', error);
+    res.status(500).json({
+      error: 'Failed to recover ZK password',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+});
+
 // POST /api/auth/generate-spaceship-token
 router.post('/generate-spaceship-token', authMiddleware, async (req: Request, res: Response): Promise<any> => {
   try {

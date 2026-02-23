@@ -154,7 +154,7 @@ export interface AuthMethodPreference {
 export interface StandardAuthData {
   email: string;
   password: string;
-  recoveryPhrase: string; // BIP39 12-word phrase
+  recoveryPhrase: string; // BIP39 6-word phrase
 }
 
 export interface SovereigntyAuthData {

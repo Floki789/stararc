@@ -304,9 +304,9 @@ const BIP39_WORDS = [
 
 function generateRecoveryPhrase(): string[] {
   const words: string[] = [];
-  const array = new Uint32Array(12);
+  const array = new Uint32Array(6);
   crypto.getRandomValues(array);
-  for (let i = 0; i < 12; i++) {
+  for (let i = 0; i < 6; i++) {
     words.push(BIP39_WORDS[array[i] % BIP39_WORDS.length]);
   }
   return words;
@@ -589,13 +589,13 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
               <div className="flex gap-2">
                 <AlertTriangle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
                 <div className="text-sm text-red-200">
-                  <strong>KRITISCH:</strong> Schreiben Sie diese 12 Wörter auf Papier ab und bewahren Sie sie sicher auf. 
+                  <strong>KRITISCH:</strong> Schreiben Sie diese 6 Wörter auf Papier ab und bewahren Sie sie sicher auf. 
                   Dies ist Ihre einzige Möglichkeit, Ihr Passwort zurückzusetzen.
                 </div>
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-2 p-4 bg-gray-900 rounded-lg border border-gray-700">
+            <div className="grid grid-cols-2 gap-2 p-4 bg-gray-900 rounded-lg border border-gray-700">
               {recoveryWords.map((word, index) => (
                 <div key={index} className="flex items-center gap-2 p-2 bg-gray-800 rounded">
                   <span className="text-gray-500 text-xs w-4">{index + 1}.</span>

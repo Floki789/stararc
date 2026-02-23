@@ -697,7 +697,7 @@
         "recovery": "Password recovery available",
         "changePassword": "Change password anytime",
         "encrypted": "Encrypted data key storage",
-        "recoveryPhrase": "12-word recovery phrase backup"
+        "recoveryPhrase": "6-word recovery phrase backup"
       },
       "cons": {
         "serverData": "Encrypted key stored on server",
