@@ -1154,9 +1154,36 @@ router.post('/generate-spaceship-token', authMiddleware, async (req: Request, re
       };
     }
     
-    // Include DEK data for standard login users (for client-side encryption)
-    if (authMethod !== 'password_zk' && dbRow.wrapped_dek && dbRow.dek_salt) {
-      console.log(`🔐 Including standard DEK data from DB in JWT for user ${user.id}`);
+    // For standard login users: unwrap DEK and encrypt for transport (no 2nd password needed)
+    if (authMethod !== 'password_zk' && dbRow.wrapped_dek_server) {
+      console.log(`🔐 Unwrapping DEK for seamless cross-app login for user ${user.id}`);
+      
+      // Always include dekData for Spaceship to store in its DB
+      tokenPayload.dekData = {
+        wrapped_dek: dbRow.wrapped_dek,
+        wrapped_dek_server: dbRow.wrapped_dek_server,
+        dek_salt: dbRow.dek_salt
+      };
+      
+      try {
+        // Unwrap DEK using server KEK
+        const dek = authService.unwrapDEKServer(dbRow.wrapped_dek_server, `user-${user.id}`);
+        
+        // Encrypt DEK with temp key for secure transport
+        const { encrypted_dek, temp_key } = authService.encryptDEKForTransport(dek);
+        
+        tokenPayload.dekTransport = {
+          encrypted_dek,
+          temp_key
+        };
+        console.log(`✅ DEK encrypted for transport to Spaceship`);
+      } catch (dekError) {
+        console.error(`❌ Failed to unwrap DEK for user ${user.id}:`, dekError);
+        // Fallback: dekData is already set, will use password-based unwrap
+      }
+    } else if (authMethod !== 'password_zk' && dbRow.wrapped_dek && dbRow.dek_salt) {
+      // Fallback for users without wrapped_dek_server (legacy)
+      console.log(`🔐 Including standard DEK data from DB in JWT for user ${user.id} (fallback)`);
       tokenPayload.dekData = {
         wrapped_dek: dbRow.wrapped_dek,
         wrapped_dek_server: dbRow.wrapped_dek_server,

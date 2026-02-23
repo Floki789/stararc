@@ -79,6 +79,53 @@ export class AuthService {
     return combined.toString('base64');
   }
 
+  // Unwrap server-side DEK for cross-app login (standard users only)
+  public unwrapDEKServer(wrappedDekServer: string, uniqueIdentifier: string): string {
+    const serverSecret = process.env.DEK_SERVER_SECRET || process.env.SPACESHIP_AUTH_ENCRYPTION_KEY || 'default-server-secret';
+    
+    // Derive server KEK from secret + unique identifier (same as createWrappedDEKServer)
+    const salt = crypto.createHash('sha256').update(uniqueIdentifier).digest();
+    const serverKEK = crypto.pbkdf2Sync(serverSecret, salt, 100000, 32, 'sha256');
+    
+    // Decode combined data
+    const combined = Buffer.from(wrappedDekServer, 'base64');
+    
+    // Extract: IV (12) + authTag (16) + encrypted
+    const iv = combined.subarray(0, 12);
+    const authTag = combined.subarray(12, 28);
+    const encrypted = combined.subarray(28);
+    
+    // Decrypt with server KEK
+    const decipher = crypto.createDecipheriv('aes-256-gcm', serverKEK, iv);
+    decipher.setAuthTag(authTag);
+    const dekBuffer = Buffer.concat([decipher.update(encrypted), decipher.final()]);
+    
+    return dekBuffer.toString('base64');
+  }
+
+  // Encrypt DEK with temporary key for cross-app transport
+  public encryptDEKForTransport(dekBase64: string): { encrypted_dek: string; temp_key: string } {
+    // Generate random temp key
+    const tempKey = crypto.randomBytes(32);
+    
+    // Decode DEK
+    const dekBuffer = Buffer.from(dekBase64, 'base64');
+    
+    // Encrypt with AES-256-GCM
+    const iv = crypto.randomBytes(12);
+    const cipher = crypto.createCipheriv('aes-256-gcm', tempKey, iv);
+    const encrypted = Buffer.concat([cipher.update(dekBuffer), cipher.final()]);
+    const authTag = cipher.getAuthTag();
+    
+    // Combine: IV (12) + authTag (16) + encrypted
+    const combined = Buffer.concat([iv, authTag, encrypted]);
+    
+    return {
+      encrypted_dek: combined.toString('base64'),
+      temp_key: tempKey.toString('base64')
+    };
+  }
+
   // Register user
   async registerUser(
     email: string, 
