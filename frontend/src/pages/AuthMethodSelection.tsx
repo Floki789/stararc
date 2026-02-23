@@ -327,7 +327,7 @@ async function deriveKeyFromPassword(password: string, salt: Uint8Array): Promis
     {
       name: 'PBKDF2',
       salt: salt.buffer as ArrayBuffer,
-      iterations: 100000,
+      iterations: 600000,
       hash: 'SHA-256'
     },
     keyMaterial,

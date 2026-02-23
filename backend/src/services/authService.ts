@@ -62,6 +62,8 @@ export class AuthService {
     const serverSecret = process.env.DEK_SERVER_SECRET || process.env.SPACESHIP_AUTH_ENCRYPTION_KEY || 'default-server-secret';
     
     // Derive server KEK from secret + unique identifier
+    // Note: 100000 iterations is sufficient for server KEK since SECRET is already strong
+    // Unlike user passwords, server KEK is not subject to brute-force attacks
     const salt = crypto.createHash('sha256').update(uniqueIdentifier).digest();
     const serverKEK = crypto.pbkdf2Sync(serverSecret, salt, 100000, 32, 'sha256');
     

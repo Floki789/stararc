@@ -49,7 +49,7 @@ export async function deriveKeyFromPassword(password: string, salt: Uint8Array):
     {
       name: 'PBKDF2',
       salt: salt,
-      iterations: 100000,
+      iterations: 600000,
       hash: 'SHA-256'
     },
     keyMaterial,

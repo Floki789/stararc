@@ -59,11 +59,11 @@ StarArc/Spaceship unterstützt zwei Login-Methoden mit Client-seitiger Verschlü
 2. Client generiert:
    - DEK: crypto.getRandomValues(32 bytes)
    - dek_salt: crypto.getRandomValues(32 bytes)
-   - KEK: PBKDF2(password, dek_salt, 100000, SHA-256)
+   - KEK: PBKDF2(password, dek_salt, 600000, SHA-256)
    - wrapped_dek: AES-256-GCM(DEK, KEK)
 3. Client sendet an Server: { wrapped_dek, dek_salt, dek (temporär) }
 4. Server erstellt:
-   - server_kek: PBKDF2(SERVER_SECRET, "user-{id}", 100000, SHA-256)
+   - server_kek: PBKDF2(SERVER_SECRET, "user-{id}", 100000, SHA-256) [starkes Secret]
    - wrapped_dek_server: AES-256-GCM(dek, server_kek)
 5. Server speichert: wrapped_dek, wrapped_dek_server, dek_salt
 6. Server löscht raw DEK aus Memory
@@ -257,12 +257,13 @@ StarArc/Spaceship unterstützt zwei Login-Methoden mit Client-seitiger Verschlü
 
 | Komponente | Algorithmus | Parameter |
 |------------|-------------|-----------|
-| Key Derivation | PBKDF2 | SHA-256, 100.000 Iterationen |
+| Key Derivation | PBKDF2 | SHA-256, 600.000 Iterationen (OWASP 2024) |
 | DEK Wrapping | AES-256-GCM | 96-bit IV, 128-bit Auth Tag |
 | Data Encryption | AES-256-GCM | 96-bit IV, 128-bit Auth Tag |
 | Hashing | SHA-256 | 256-bit Output |
 | Salt/IV Generation | crypto.getRandomValues | 32 bytes (Salt), 12 bytes (IV) |
 | Passphrase Generation | BIP39-ähnlich | 12 Wörter aus 2048-Wort-Liste |
+| Server KEK | PBKDF2 | SHA-256, 100.000 Iterationen (starkes Secret) |
 
 ---
 
