@@ -1693,7 +1693,35 @@
   "security": {
     "badge": "Client-Side Encryption",
     "title": "Ihre Daten bleiben privat",
-    "subtitle": "End-to-End Verschlüsselung mit Argon2id Key-Ableitung und AES-256-GCM. Ihre Daten werden direkt in Ihrem Browser verschlüsselt. Niemand außer Ihnen kann sie lesen – nicht einmal wir.",
+    "subtitle": "Wählen Sie zwischen zwei Authentifizierungsmethoden – beide schützen Ihre Daten mit modernster Verschlüsselung. Sie entscheiden, wie viel Kontrolle Sie übernehmen.",
+    "authMethods": {
+      "recommended": "Empfohlen",
+      "zeroKnowledge": "Zero-Knowledge",
+      "bestFor": "Ideal für",
+      "standard": {
+        "name": "Standard-Modus",
+        "tagline": "Sicher mit Wiederherstellungsoptionen",
+        "features": {
+          "standardLogin": "Standard Login-Verfahren",
+          "recovery": "Passwort-Wiederherstellung möglich",
+          "changePassword": "Passwort jederzeit änderbar",
+          "encrypted": "Verschlüsselte Schlüssel-Speicherung"
+        },
+        "bestFor": "Nutzer, die Sicherheit mit Komfort verbinden möchten"
+      },
+      "sovereignty": {
+        "name": "Souveränitäts-Modus",
+        "tagline": "Maximale Privatsphäre, Maximale Verantwortung",
+        "features": {
+          "zeroKnowledge": "Echtes Zero-Knowledge – Server weiss nichts",
+          "noServer": "Keine Schlüssel auf dem Server",
+          "maxPrivacy": "Maximale Privatsphäre-Garantie",
+          "recoveryPhrase": "6-Wort-Wiederherstellungsphrase als Backup"
+        },
+        "bestFor": "Privatsphäre-Puristen, Bitcoin-Maximalisten, fortgeschrittene Nutzer"
+      }
+    },
+    "demoTitle": "So funktioniert unsere Verschlüsselung",
     "userView": "Was Sie sehen",
     "serverView": "Was wir sehen",
     "assetData": "Ihre Assets",
@@ -1717,15 +1745,22 @@
     },
     "serverInfo": {
       "title": "Vollständig verschlüsselt und unleserlich",
-      "description": "Ihre Verschlüsselungs-Keys werden mit Argon2id abgeleitet (moderner memory-hard Algorithmus). Alle Daten werden dann mit AES-256-GCM verschlüsselt. Selbst mit direktem Datenbankzugriff kann niemand Ihre Informationen lesen. Nur Sie besitzen den Schlüssel – Zero-Knowledge Architecture."
+      "description": "Ihre Verschlüsselungs-Keys werden mit PBKDF2 abgeleitet (600'000 Iterationen, OWASP 2024). Alle Daten werden dann mit AES-256-GCM verschlüsselt. Selbst mit direktem Datenbankzugriff kann niemand Ihre Informationen lesen. Nur Sie besitzen den Schlüssel."
     },
-    "highlights": {
-      "aes256gcm": "Argon2id + AES-256-GCM",
-      "aes256gcmDesc": "Modernste Key-Ableitung (Argon2id) kombiniert mit militärischer Verschlüsselung (AES-256-GCM) direkt in Ihrem Browser",
-      "yourKeys": "Ihre Schlüssel",
-      "yourKeysDesc": "Nur Sie besitzen die Verschlüsselungs-Keys. Nicht einmal wir können Ihre Daten entschlüsseln",
-      "privacyFirst": "Privacy First",
-      "privacyFirstDesc": "Zero-Knowledge Architektur bedeutet maximale Privatsphäre für Ihre sensiblen Finanzdaten"
+    "encryptionStandards": {
+      "title": "Unsere Verschlüsselungsstandards",
+      "aes": {
+        "name": "AES-256-GCM",
+        "desc": "Militärische Verschlüsselung für alle Ihre Daten – der gleiche Standard wie bei Banken und Geheimdiensten. 256-Bit-Schlüssel mit authentifizierter Verschlüsselung."
+      },
+      "pbkdf2": {
+        "name": "PBKDF2 · 600'000 Iterationen",
+        "desc": "Schlüsselableitung nach OWASP-2024-Standard. Schützt Ihr Passwort zuverlässig vor Brute-Force-Angriffen durch rechenintensive Ableitung."
+      },
+      "zk": {
+        "name": "Zero-Knowledge-Architektur",
+        "desc": "Im Souveränitäts-Modus verlassen Ihre unverschlüsselten Daten niemals Ihr Gerät. Der Server speichert nichts – echte Zero-Knowledge."
+      }
     }
   },
   "dataArchitecture": {

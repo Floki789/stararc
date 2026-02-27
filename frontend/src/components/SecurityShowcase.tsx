@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Lock, Shield, Eye, EyeOff, Key, Server, Sparkles, CheckCircle } from 'lucide-react';
+import { Lock, Shield, Eye, EyeOff, Key, Server, Sparkles, CheckCircle, KeyRound, ServerOff, ShieldCheck, FileKey2 } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 
 const SecurityShowcase: React.FC = () => {
@@ -63,189 +63,286 @@ const SecurityShowcase: React.FC = () => {
           </p>
         </div>
 
-        {/* View Toggle */}
-        <div className="flex justify-center mb-8 space-x-4">
-          <button
-            onClick={() => setActiveView('user')}
-            className={`px-8 py-3 rounded-xl font-semibold transition-all duration-300 ${
-              activeView === 'user'
-                ? 'bg-gradient-to-r from-green-600 to-emerald-500 text-white shadow-lg shadow-green-500/50 scale-105'
-                : 'bg-slate-800/50 text-slate-400 hover:bg-slate-800 hover:text-slate-300'
-            }`}
-          >
-            <div className="flex items-center space-x-2">
-              <Eye className="w-5 h-5" />
-              <span>{t('security.userView')}</span>
+        {/* === TWO AUTH METHOD CARDS === */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
+          {/* Standard Mode Card */}
+          <div className="relative group">
+            <div className="absolute -inset-[1px] bg-gradient-to-r from-blue-500/50 to-purple-500/50 rounded-2xl opacity-60 group-hover:opacity-80 transition-opacity" />
+            <div className="relative bg-slate-900/90 backdrop-blur-xl rounded-2xl p-8">
+              {/* Recommended Badge */}
+              <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
+                <span className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-gradient-to-r from-blue-500 to-purple-500 text-white text-xs font-bold rounded-full shadow-lg shadow-blue-500/25">
+                  <CheckCircle className="w-3.5 h-3.5" />
+                  {t('security.authMethods.recommended')}
+                </span>
+              </div>
+              
+              {/* Card Header */}
+              <div className="flex items-center gap-4 mt-2 mb-5">
+                <div className="w-12 h-12 rounded-xl bg-blue-500/15 border border-blue-500/25 flex items-center justify-center">
+                  <Shield className="w-6 h-6 text-blue-400" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-white">{t('security.authMethods.standard.name')}</h3>
+                  <p className="text-sm text-slate-400">{t('security.authMethods.standard.tagline')}</p>
+                </div>
+              </div>
+
+              {/* Features */}
+              <div className="space-y-3 mb-5">
+                {['standardLogin', 'recovery', 'changePassword', 'encrypted'].map((key) => (
+                  <div key={key} className="flex items-start gap-2.5">
+                    <CheckCircle className="w-4 h-4 text-blue-400 mt-0.5 flex-shrink-0" />
+                    <span className="text-sm text-slate-300">{t(`security.authMethods.standard.features.${key}`)}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Best For */}
+              <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl px-4 py-3">
+                <p className="text-sm text-blue-300/90">
+                  <span className="font-semibold">{t('security.authMethods.bestFor')}:</span>{' '}
+                  {t('security.authMethods.standard.bestFor')}
+                </p>
+              </div>
             </div>
-          </button>
-          <button
-            onClick={() => setActiveView('server')}
-            className={`px-8 py-3 rounded-xl font-semibold transition-all duration-300 ${
-              activeView === 'server'
-                ? 'bg-gradient-to-r from-red-600 to-red-500 text-white shadow-lg shadow-red-500/50 scale-105'
-                : 'bg-slate-800/50 text-slate-400 hover:bg-slate-800 hover:text-slate-300'
-            }`}
-          >
-            <div className="flex items-center space-x-2">
-              <EyeOff className="w-5 h-5" />
-              <span>{t('security.serverView')}</span>
+          </div>
+
+          {/* Sovereignty Mode Card */}
+          <div className="relative group">
+            <div className="absolute -inset-[1px] bg-gradient-to-r from-orange-500/40 to-red-500/40 rounded-2xl opacity-50 group-hover:opacity-70 transition-opacity" />
+            <div className="relative bg-slate-900/90 backdrop-blur-xl rounded-2xl p-8">
+              {/* Zero-Knowledge Badge */}
+              <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
+                <span className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs font-bold rounded-full shadow-lg shadow-orange-500/25">
+                  <KeyRound className="w-3.5 h-3.5" />
+                  {t('security.authMethods.zeroKnowledge')}
+                </span>
+              </div>
+              
+              {/* Card Header */}
+              <div className="flex items-center gap-4 mt-2 mb-5">
+                <div className="w-12 h-12 rounded-xl bg-orange-500/15 border border-orange-500/25 flex items-center justify-center">
+                  <Key className="w-6 h-6 text-orange-400" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-white">{t('security.authMethods.sovereignty.name')}</h3>
+                  <p className="text-sm text-slate-400">{t('security.authMethods.sovereignty.tagline')}</p>
+                </div>
+              </div>
+
+              {/* Features */}
+              <div className="space-y-3 mb-5">
+                {['zeroKnowledge', 'noServer', 'maxPrivacy', 'recoveryPhrase'].map((key) => (
+                  <div key={key} className="flex items-start gap-2.5">
+                    <CheckCircle className="w-4 h-4 text-orange-400 mt-0.5 flex-shrink-0" />
+                    <span className="text-sm text-slate-300">{t(`security.authMethods.sovereignty.features.${key}`)}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Best For */}
+              <div className="bg-orange-500/10 border border-orange-500/20 rounded-xl px-4 py-3">
+                <p className="text-sm text-orange-300/90">
+                  <span className="font-semibold">{t('security.authMethods.bestFor')}:</span>{' '}
+                  {t('security.authMethods.sovereignty.bestFor')}
+                </p>
+              </div>
             </div>
-          </button>
+          </div>
         </div>
 
-        {/* User View - Decrypted Data */}
-        {activeView === 'user' && (
-          <div className="space-y-6">
-            {/* Asset Data Card */}
-            <div className="bg-slate-900/80 backdrop-blur-xl rounded-2xl p-8 border border-green-500/30 shadow-lg shadow-green-500/10">
-              <div className="flex items-center space-x-3 mb-6">
-                <div className="p-2 bg-green-500/20 rounded-lg">
-                  <CheckCircle className="w-6 h-6 text-green-400" />
-                </div>
-                <h3 className="text-2xl font-bold text-white">{t('security.assetData')}</h3>
+        {/* === ENCRYPTION DEMO (User vs Server View) === */}
+        <div className="mb-16">
+          <h3 className="text-2xl font-bold text-white text-center mb-8">{t('security.demoTitle')}</h3>
+          
+          {/* View Toggle */}
+          <div className="flex justify-center mb-8 space-x-4">
+            <button
+              onClick={() => setActiveView('user')}
+              className={`px-8 py-3 rounded-xl font-semibold transition-all duration-300 ${
+                activeView === 'user'
+                  ? 'bg-gradient-to-r from-green-600 to-emerald-500 text-white shadow-lg shadow-green-500/50 scale-105'
+                  : 'bg-slate-800/50 text-slate-400 hover:bg-slate-800 hover:text-slate-300'
+              }`}
+            >
+              <div className="flex items-center space-x-2">
+                <Eye className="w-5 h-5" />
+                <span>{t('security.userView')}</span>
               </div>
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead>
-                    <tr className="border-b border-slate-700">
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-slate-400">{t('security.tableHeaders.name')}</th>
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-slate-400">{t('security.tableHeaders.symbol')}</th>
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-slate-400">{t('security.tableHeaders.isin')}</th>
-                      <th className="text-right py-3 px-4 text-sm font-semibold text-slate-400">{t('security.tableHeaders.menge')}</th>
-                      <th className="text-right py-3 px-4 text-sm font-semibold text-slate-400">{t('security.tableHeaders.wert')}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr className="border-b border-slate-800/50">
-                      <td className="py-3 px-4 text-white">iShares Swiss Dividend ETF</td>
-                      <td className="py-3 px-4 text-slate-300">ISUIDE</td>
-                      <td className="py-3 px-4 text-slate-300 font-mono text-sm">CH0237935652</td>
-                      <td className="py-3 px-4 text-right text-white">150</td>
-                      <td className="py-3 px-4 text-right text-green-400 font-semibold">24,750.00 CHF</td>
-                    </tr>
-                    <tr>
-                      <td className="py-3 px-4 text-white">VanEck Sustainable World Eq ETF</td>
-                      <td className="py-3 px-4 text-slate-300">TSESG</td>
-                      <td className="py-3 px-4 text-slate-300 font-mono text-sm">IE00BM9TSQ87</td>
-                      <td className="py-3 px-4 text-right text-white">89</td>
-                      <td className="py-3 px-4 text-right text-green-400 font-semibold">5,340.00 CHF</td>
-                    </tr>
-                  </tbody>
-                </table>
+            </button>
+            <button
+              onClick={() => setActiveView('server')}
+              className={`px-8 py-3 rounded-xl font-semibold transition-all duration-300 ${
+                activeView === 'server'
+                  ? 'bg-gradient-to-r from-red-600 to-red-500 text-white shadow-lg shadow-red-500/50 scale-105'
+                  : 'bg-slate-800/50 text-slate-400 hover:bg-slate-800 hover:text-slate-300'
+              }`}
+            >
+              <div className="flex items-center space-x-2">
+                <EyeOff className="w-5 h-5" />
+                <span>{t('security.serverView')}</span>
               </div>
-            </div>
-
-            <div className="bg-green-500/10 border border-green-500/30 rounded-xl p-6">
-              <div className="flex items-start space-x-3">
-                <Lock className="w-6 h-6 text-green-400 flex-shrink-0 mt-1" />
-                <div>
-                  <p className="text-green-400 font-semibold mb-2">{t('security.userInfo.title')}</p>
-                  <p className="text-slate-300 leading-relaxed">
-                    {t('security.userInfo.description')}
-                  </p>
-                </div>
-              </div>
-            </div>
+            </button>
           </div>
-        )}
 
-        {/* Server View - Encrypted Data */}
-        {activeView === 'server' && (
-          <div className="space-y-6">
-            {/* Encrypted Asset Data Card */}
-            <div className="bg-slate-900/80 backdrop-blur-xl rounded-2xl p-8 border border-red-500/30 shadow-lg shadow-red-500/10">
-              <div className="flex items-center space-x-3 mb-6">
-                <div className="p-2 bg-red-500/20 rounded-lg">
-                  <Server className="w-6 h-6 text-red-400" />
+          {/* User View - Decrypted Data */}
+          {activeView === 'user' && (
+            <div className="space-y-6">
+              <div className="bg-slate-900/80 backdrop-blur-xl rounded-2xl p-8 border border-green-500/30 shadow-lg shadow-green-500/10">
+                <div className="flex items-center space-x-3 mb-6">
+                  <div className="p-2 bg-green-500/20 rounded-lg">
+                    <CheckCircle className="w-6 h-6 text-green-400" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-white">{t('security.assetData')}</h3>
                 </div>
-                <h3 className="text-2xl font-bold text-white">{t('security.encryptedData.title')}</h3>
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="border-b border-slate-700">
+                        <th className="text-left py-3 px-4 text-sm font-semibold text-slate-400">{t('security.tableHeaders.name')}</th>
+                        <th className="text-left py-3 px-4 text-sm font-semibold text-slate-400">{t('security.tableHeaders.symbol')}</th>
+                        <th className="text-left py-3 px-4 text-sm font-semibold text-slate-400">{t('security.tableHeaders.isin')}</th>
+                        <th className="text-right py-3 px-4 text-sm font-semibold text-slate-400">{t('security.tableHeaders.menge')}</th>
+                        <th className="text-right py-3 px-4 text-sm font-semibold text-slate-400">{t('security.tableHeaders.wert')}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr className="border-b border-slate-800/50">
+                        <td className="py-3 px-4 text-white">iShares Swiss Dividend ETF</td>
+                        <td className="py-3 px-4 text-slate-300">ISUIDE</td>
+                        <td className="py-3 px-4 text-slate-300 font-mono text-sm">CH0237935652</td>
+                        <td className="py-3 px-4 text-right text-white">150</td>
+                        <td className="py-3 px-4 text-right text-green-400 font-semibold">24,750.00 CHF</td>
+                      </tr>
+                      <tr>
+                        <td className="py-3 px-4 text-white">VanEck Sustainable World Eq ETF</td>
+                        <td className="py-3 px-4 text-slate-300">TSESG</td>
+                        <td className="py-3 px-4 text-slate-300 font-mono text-sm">IE00BM9TSQ87</td>
+                        <td className="py-3 px-4 text-right text-white">89</td>
+                        <td className="py-3 px-4 text-right text-green-400 font-semibold">5,340.00 CHF</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <p className="text-sm text-slate-400">{t('security.encryptedData.assetName')}</p>
-                  <div className="bg-slate-950/50 rounded-lg p-3 border border-slate-800">
-                    <code className="text-xs text-red-400 font-mono break-all">
-                      B6d2xJG7USujRiFJOwwKDfMImuMP48B0cHMEkvKrot6fmX5KnTTjc6aNZul4OLQcsbDbUltf100uH8gd2GNdzSPNinTVBDw=
-                    </code>
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <p className="text-sm text-slate-400">{t('security.encryptedData.symbol')}</p>
-                  <div className="bg-slate-950/50 rounded-lg p-3 border border-slate-800">
-                    <code className="text-xs text-red-400 font-mono break-all">
-                      DL1IKKQY2MbRamB5ejd134rVLHY6ygQJ7QSZtvg1IUNKf8egn9uYjM1Z5Zd318QkNcvPSkcZbcnv03MB
-                    </code>
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <p className="text-sm text-slate-400">{t('security.encryptedData.isin')}</p>
-                  <div className="bg-slate-950/50 rounded-lg p-3 border border-slate-800">
-                    <code className="text-xs text-red-400 font-mono break-all">
-                      tAf9EQmvgI/O/G+xGoAv8zIDwqA/g1m04kq3zHcYCjre5q7eUL/q420AwlGaY7pLGiEF4o9qy9o8fuwt
-                    </code>
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <p className="text-sm text-slate-400">{t('security.encryptedData.quantity')}</p>
-                  <div className="bg-slate-950/50 rounded-lg p-3 border border-slate-800">
-                    <code className="text-xs text-red-400 font-mono break-all">
-                      Jz/BS9iOOzOxn3l2WhoWM+P3HlAa9YAaH4pnFol+TVrXoQBciPqlsr31PhGI2/WIZuwfjAH35cWYVxEb
-                    </code>
+
+              <div className="bg-green-500/10 border border-green-500/30 rounded-xl p-6">
+                <div className="flex items-start space-x-3">
+                  <Lock className="w-6 h-6 text-green-400 flex-shrink-0 mt-1" />
+                  <div>
+                    <p className="text-green-400 font-semibold mb-2">{t('security.userInfo.title')}</p>
+                    <p className="text-slate-300 leading-relaxed">
+                      {t('security.userInfo.description')}
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
+          )}
 
-            <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-6">
-              <div className="flex items-start space-x-3">
-                <Shield className="w-6 h-6 text-red-400 flex-shrink-0 mt-1" />
-                <div>
-                  <p className="text-red-400 font-semibold mb-2">{t('security.serverInfo.title')}</p>
-                  <p className="text-slate-300 leading-relaxed">
-                    {t('security.serverInfo.description')}
-                  </p>
+          {/* Server View - Encrypted Data */}
+          {activeView === 'server' && (
+            <div className="space-y-6">
+              <div className="bg-slate-900/80 backdrop-blur-xl rounded-2xl p-8 border border-red-500/30 shadow-lg shadow-red-500/10">
+                <div className="flex items-center space-x-3 mb-6">
+                  <div className="p-2 bg-red-500/20 rounded-lg">
+                    <Server className="w-6 h-6 text-red-400" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-white">{t('security.encryptedData.title')}</h3>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <p className="text-sm text-slate-400">{t('security.encryptedData.assetName')}</p>
+                    <div className="bg-slate-950/50 rounded-lg p-3 border border-slate-800">
+                      <code className="text-xs text-red-400 font-mono break-all">
+                        B6d2xJG7USujRiFJOwwKDfMImuMP48B0cHMEkvKrot6fmX5KnTTjc6aNZul4OLQcsbDbUltf100uH8gd2GNdzSPNinTVBDw=
+                      </code>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-sm text-slate-400">{t('security.encryptedData.symbol')}</p>
+                    <div className="bg-slate-950/50 rounded-lg p-3 border border-slate-800">
+                      <code className="text-xs text-red-400 font-mono break-all">
+                        DL1IKKQY2MbRamB5ejd134rVLHY6ygQJ7QSZtvg1IUNKf8egn9uYjM1Z5Zd318QkNcvPSkcZbcnv03MB
+                      </code>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-sm text-slate-400">{t('security.encryptedData.isin')}</p>
+                    <div className="bg-slate-950/50 rounded-lg p-3 border border-slate-800">
+                      <code className="text-xs text-red-400 font-mono break-all">
+                        tAf9EQmvgI/O/G+xGoAv8zIDwqA/g1m04kq3zHcYCjre5q7eUL/q420AwlGaY7pLGiEF4o9qy9o8fuwt
+                      </code>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-sm text-slate-400">{t('security.encryptedData.quantity')}</p>
+                    <div className="bg-slate-950/50 rounded-lg p-3 border border-slate-800">
+                      <code className="text-xs text-red-400 font-mono break-all">
+                        Jz/BS9iOOzOxn3l2WhoWM+P3HlAa9YAaH4pnFol+TVrXoQBciPqlsr31PhGI2/WIZuwfjAH35cWYVxEb
+                      </code>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-6">
+                <div className="flex items-start space-x-3">
+                  <Shield className="w-6 h-6 text-red-400 flex-shrink-0 mt-1" />
+                  <div>
+                    <p className="text-red-400 font-semibold mb-2">{t('security.serverInfo.title')}</p>
+                    <p className="text-slate-300 leading-relaxed">
+                      {t('security.serverInfo.description')}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
 
-        {/* Feature Highlights */}
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-slate-900/50 backdrop-blur-xl rounded-xl p-6 border border-slate-800/50">
-            <div className="flex items-center space-x-3 mb-4">
-              <div className="p-3 bg-blue-500/20 rounded-lg">
-                <Lock className="w-6 h-6 text-blue-400" />
+        {/* === ENCRYPTION STANDARDS === */}
+        <div className="mb-8">
+          <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider text-center mb-8">
+            {t('security.encryptionStandards.title')}
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-slate-900/50 backdrop-blur-xl rounded-xl p-6 border border-slate-800/50 hover:border-purple-500/30 transition-colors">
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="p-3 bg-purple-500/20 rounded-lg">
+                  <FileKey2 className="w-6 h-6 text-purple-400" />
+                </div>
+                <h4 className="text-lg font-bold text-white">{t('security.encryptionStandards.aes.name')}</h4>
               </div>
-              <h4 className="text-lg font-bold text-white">{t('security.highlights.aes256gcm')}</h4>
+              <p className="text-slate-400 leading-relaxed">
+                {t('security.encryptionStandards.aes.desc')}
+              </p>
             </div>
-            <p className="text-slate-400 leading-relaxed">
-              {t('security.highlights.aes256gcmDesc')}
-            </p>
-          </div>
 
-          <div className="bg-slate-900/50 backdrop-blur-xl rounded-xl p-6 border border-slate-800/50">
-            <div className="flex items-center space-x-3 mb-4">
-              <div className="p-3 bg-purple-500/20 rounded-lg">
-                <Key className="w-6 h-6 text-purple-400" />
+            <div className="bg-slate-900/50 backdrop-blur-xl rounded-xl p-6 border border-slate-800/50 hover:border-cyan-500/30 transition-colors">
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="p-3 bg-cyan-500/20 rounded-lg">
+                  <ShieldCheck className="w-6 h-6 text-cyan-400" />
+                </div>
+                <h4 className="text-lg font-bold text-white">{t('security.encryptionStandards.pbkdf2.name')}</h4>
               </div>
-              <h4 className="text-lg font-bold text-white">{t('security.highlights.yourKeys')}</h4>
+              <p className="text-slate-400 leading-relaxed">
+                {t('security.encryptionStandards.pbkdf2.desc')}
+              </p>
             </div>
-            <p className="text-slate-400 leading-relaxed">
-              {t('security.highlights.yourKeysDesc')}
-            </p>
-          </div>
 
-          <div className="bg-slate-900/50 backdrop-blur-xl rounded-xl p-6 border border-slate-800/50">
-            <div className="flex items-center space-x-3 mb-4">
-              <div className="p-3 bg-green-500/20 rounded-lg">
-                <Shield className="w-6 h-6 text-green-400" />
+            <div className="bg-slate-900/50 backdrop-blur-xl rounded-xl p-6 border border-slate-800/50 hover:border-emerald-500/30 transition-colors">
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="p-3 bg-emerald-500/20 rounded-lg">
+                  <ServerOff className="w-6 h-6 text-emerald-400" />
+                </div>
+                <h4 className="text-lg font-bold text-white">{t('security.encryptionStandards.zk.name')}</h4>
               </div>
-              <h4 className="text-lg font-bold text-white">{t('security.highlights.privacyFirst')}</h4>
+              <p className="text-slate-400 leading-relaxed">
+                {t('security.encryptionStandards.zk.desc')}
+              </p>
             </div>
-            <p className="text-slate-400 leading-relaxed">
-              {t('security.highlights.privacyFirstDesc')}
-            </p>
           </div>
         </div>
       </div>
