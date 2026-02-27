@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Shield, Lock, Key, CheckCircle, Info, AlertTriangle, Copy, Eye, EyeOff, X } from 'lucide-react';
+import { BIP39_WORDLIST, RECOVERY_WORD_COUNT } from '../utils/bip39Wordlist';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../hooks/useAuth';
 
@@ -272,42 +273,16 @@ interface ZKSetupModalProps {
   onComplete: () => void;
 }
 
-type SetupStep = 'password' | 'recovery' | 'confirm';
+type SetupStep = 'password' | 'recovery' | 'verify' | 'confirm';
 
-// BIP39 word list (minimal subset for demo - real impl would use full 2048 words)
-const BIP39_WORDS = [
-  'abandon', 'ability', 'able', 'about', 'above', 'absent', 'absorb', 'abstract', 'absurd', 'abuse',
-  'access', 'accident', 'account', 'accuse', 'achieve', 'acid', 'acoustic', 'acquire', 'across', 'act',
-  'action', 'actor', 'actress', 'actual', 'adapt', 'add', 'addict', 'address', 'adjust', 'admit',
-  'adult', 'advance', 'advice', 'aerobic', 'affair', 'afford', 'afraid', 'again', 'age', 'agent',
-  'agree', 'ahead', 'aim', 'air', 'airport', 'aisle', 'alarm', 'album', 'alcohol', 'alert',
-  'alien', 'all', 'alley', 'allow', 'almost', 'alone', 'alpha', 'already', 'also', 'alter',
-  'always', 'amateur', 'amazing', 'among', 'amount', 'amused', 'analyst', 'anchor', 'ancient', 'anger',
-  'animal', 'ankle', 'announce', 'annual', 'another', 'answer', 'antenna', 'antique', 'anxiety', 'any',
-  'apart', 'apology', 'appear', 'apple', 'approve', 'april', 'arch', 'arctic', 'area', 'arena',
-  'argue', 'arm', 'armed', 'armor', 'army', 'around', 'arrange', 'arrest', 'arrive', 'arrow',
-  'art', 'artefact', 'artist', 'artwork', 'ask', 'aspect', 'assault', 'asset', 'assist', 'assume',
-  'asthma', 'athlete', 'atom', 'attack', 'attend', 'attitude', 'attract', 'auction', 'audit', 'august',
-  'aunt', 'author', 'auto', 'autumn', 'average', 'avocado', 'avoid', 'awake', 'aware', 'away',
-  'awesome', 'awful', 'awkward', 'axis', 'baby', 'bachelor', 'bacon', 'badge', 'bag', 'balance',
-  'balcony', 'ball', 'bamboo', 'banana', 'banner', 'bar', 'barely', 'bargain', 'barrel', 'base',
-  'basic', 'basket', 'battle', 'beach', 'bean', 'beauty', 'because', 'become', 'beef', 'before',
-  'begin', 'behave', 'behind', 'believe', 'below', 'belt', 'bench', 'benefit', 'best', 'betray',
-  'better', 'between', 'beyond', 'bicycle', 'bid', 'bike', 'bind', 'biology', 'bird', 'birth',
-  'bitter', 'black', 'blade', 'blame', 'blanket', 'blast', 'bleak', 'bless', 'blind', 'blood',
-  'blossom', 'blouse', 'blue', 'blur', 'blush', 'board', 'boat', 'body', 'boil', 'bomb',
-  'bonus', 'book', 'boost', 'border', 'boring', 'borrow', 'boss', 'bottom', 'bounce', 'box',
-  'boy', 'bracket', 'brain', 'brand', 'brass', 'brave', 'bread', 'breeze', 'brick', 'bridge',
-  'brief', 'bright', 'bring', 'brisk', 'broccoli', 'broken', 'bronze', 'broom', 'brother', 'brown',
-  'brush', 'bubble', 'buddy', 'budget', 'buffalo', 'build', 'bulb', 'bulk', 'bullet', 'bundle'
-];
+// Use imported BIP39 wordlist (2048 words) for recovery phrase generation
 
 function generateRecoveryPhrase(): string[] {
   const words: string[] = [];
-  const array = new Uint32Array(6);
+  const array = new Uint32Array(RECOVERY_WORD_COUNT);
   crypto.getRandomValues(array);
-  for (let i = 0; i < 6; i++) {
-    words.push(BIP39_WORDS[array[i] % BIP39_WORDS.length]);
+  for (let i = 0; i < RECOVERY_WORD_COUNT; i++) {
+    words.push(BIP39_WORDLIST[array[i] % BIP39_WORDLIST.length]);
   }
   return words;
 }
@@ -390,13 +365,116 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [recoveryWords, setRecoveryWords] = useState<string[]>([]);
+  const [verificationWords, setVerificationWords] = useState<string[]>(['', '', '', '', '', '']);
+  const [verificationError, setVerificationError] = useState('');
   const [copiedRecovery, setCopiedRecovery] = useState(false);
   const [confirmChecked, setConfirmChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
+  // Autocomplete state
+  const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const blurTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Cleanup blur timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (blurTimeoutRef.current) {
+        clearTimeout(blurTimeoutRef.current);
+      }
+    };
+  }, []);
+
   const passwordValid = password.length >= 12;
   const passwordsMatch = password === confirmPassword;
+
+  // Check if all verification words are filled
+  const allVerificationWordsFilled = verificationWords.every(w => w.trim().length > 0);
+
+  // Check if verification words match recovery words
+  const verificationMatches = verificationWords.every((word, index) =>
+    word.trim().toLowerCase() === recoveryWords[index]?.toLowerCase()
+  );
+
+  // Filter BIP39 words based on input - returns all matches
+  const getFilteredSuggestions = useCallback((input: string): string[] => {
+    if (!input || input.length < 1) return [];
+    const lowerInput = input.toLowerCase().trim();
+    return BIP39_WORDLIST.filter(word => word.startsWith(lowerInput)).slice(0, 6);
+  }, []);
+
+  // Get first autocomplete suggestion (for ghost text and Tab completion)
+  const getFirstSuggestion = useCallback((input: string): string | null => {
+    if (!input || input.length < 1) return null;
+    const lowerInput = input.toLowerCase().trim();
+    if (BIP39_WORDLIST.includes(lowerInput)) return null;
+    const matches = BIP39_WORDLIST.filter(word => word.startsWith(lowerInput));
+    return matches.length > 0 ? matches[0] : null;
+  }, []);
+
+  const handleVerificationWordChange = (index: number, value: string) => {
+    const newWords = [...verificationWords];
+    newWords[index] = value.toLowerCase();
+    setVerificationWords(newWords);
+    setVerificationError('');
+    const filtered = getFilteredSuggestions(value);
+    setSuggestions(filtered);
+  };
+
+  const handleWordKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+    const currentValue = verificationWords[index];
+    const filtered = getFilteredSuggestions(currentValue);
+    const firstSuggestion = filtered.length > 0 ? filtered[0] : null;
+
+    if ((e.key === 'Tab' || e.key === 'Enter') && firstSuggestion && firstSuggestion !== currentValue.toLowerCase()) {
+      e.preventDefault();
+      const newWords = [...verificationWords];
+      newWords[index] = firstSuggestion;
+      setVerificationWords(newWords);
+      setSuggestions([]);
+      if (index < 5) {
+        inputRefs.current[index + 1]?.focus();
+      }
+    } else if (e.key === 'Tab' && !e.shiftKey && !firstSuggestion) {
+      // Let default Tab behavior happen
+    } else if (e.key === 'Enter' && currentValue.trim()) {
+      e.preventDefault();
+      if (index < 5) {
+        inputRefs.current[index + 1]?.focus();
+      }
+    } else if (e.key === 'ArrowDown' && suggestions.length > 0) {
+      e.preventDefault();
+      const newWords = [...verificationWords];
+      newWords[index] = suggestions[0];
+      setVerificationWords(newWords);
+      setSuggestions([]);
+    }
+  };
+
+  const handleSuggestionClick = (index: number, suggestion: string) => {
+    const newWords = [...verificationWords];
+    newWords[index] = suggestion;
+    setVerificationWords(newWords);
+    setSuggestions([]);
+    if (index < 5) {
+      inputRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleVerifySubmit = () => {
+    if (!allVerificationWordsFilled) {
+      setVerificationError('Bitte alle 6 Wörter eingeben');
+      return;
+    }
+    if (!verificationMatches) {
+      setVerificationError('Die Wörter stimmen nicht überein. Bitte überprüfen Sie Ihre Recovery Phrase.');
+      return;
+    }
+    setVerificationError('');
+    setStep('confirm');
+  };
 
   const handlePasswordSubmit = () => {
     if (!passwordValid) {
@@ -505,9 +583,10 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
               <h2 className="text-xl font-bold text-white">
                 {step === 'password' && 'Zero-Knowledge Passwort'}
                 {step === 'recovery' && 'Recovery Phrase'}
+                {step === 'verify' && 'Verifikation'}
                 {step === 'confirm' && 'Bestätigung'}
               </h2>
-              <p className="text-sm text-gray-400">Schritt {step === 'password' ? 1 : step === 'recovery' ? 2 : 3} von 3</p>
+              <p className="text-sm text-gray-400">Schritt {step === 'password' ? 1 : step === 'recovery' ? 2 : step === 'verify' ? 3 : 4} von 4</p>
             </div>
           </div>
           <button onClick={onClose} className="text-gray-400 hover:text-white">
@@ -613,7 +692,7 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
             </button>
 
             <button
-              onClick={() => setStep('confirm')}
+              onClick={() => setStep('verify')}
               className="w-full py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold rounded-lg hover:from-orange-600 hover:to-red-600 transition-all"
             >
               Ich habe die Phrase notiert →
@@ -621,7 +700,139 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
           </div>
         )}
 
-        {/* Step 3: Confirm */}
+        {/* Step 3: Verify Recovery Phrase */}
+        {step === 'verify' && (
+          <div className="space-y-4">
+            <div className="p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+              <div className="flex gap-2">
+                <Info className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                <div className="text-sm text-blue-200">
+                  Geben Sie die 6 Wörter Ihrer Recovery Phrase in der richtigen Reihenfolge ein, 
+                  um zu bestätigen, dass Sie sie korrekt notiert haben.
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              {verificationWords.map((word, index) => {
+                const firstSuggestion = getFirstSuggestion(word);
+                const currentSuggestions = focusedIndex === index ? suggestions : [];
+                const isCorrect = word && recoveryWords[index] && word.trim().toLowerCase() === recoveryWords[index].toLowerCase();
+                const isIncorrect = word && word.length > 0 && !BIP39_WORDLIST.some(w => w.startsWith(word.toLowerCase().trim()));
+                const showGhostText = firstSuggestion && word && focusedIndex === index;
+
+                return (
+                  <div key={index} className="relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xs z-10">{index + 1}.</span>
+
+                    {/* Autocomplete ghost text */}
+                    {showGhostText && (
+                      <div className="absolute left-8 top-1/2 -translate-y-1/2 font-mono text-sm pointer-events-none">
+                        <span className="text-transparent">{word}</span>
+                        <span className="text-gray-500">{firstSuggestion.slice(word.length)}</span>
+                      </div>
+                    )}
+
+                    <input
+                      ref={(el) => { inputRefs.current[index] = el; }}
+                      type="text"
+                      value={word}
+                      onChange={(e) => handleVerificationWordChange(index, e.target.value)}
+                      onKeyDown={(e) => handleWordKeyDown(index, e)}
+                      onFocus={() => {
+                        if (blurTimeoutRef.current) {
+                          clearTimeout(blurTimeoutRef.current);
+                          blurTimeoutRef.current = null;
+                        }
+                        setFocusedIndex(index);
+                        const filtered = getFilteredSuggestions(word);
+                        setSuggestions(filtered);
+                      }}
+                      onBlur={() => {
+                        blurTimeoutRef.current = setTimeout(() => {
+                          setFocusedIndex(null);
+                          setSuggestions([]);
+                          blurTimeoutRef.current = null;
+                        }, 200);
+                      }}
+                      className={`w-full pl-8 pr-12 py-2.5 bg-gray-900 border rounded-lg text-white font-mono text-sm focus:ring-1 outline-none ${
+                        isCorrect
+                          ? 'border-green-500/50 focus:border-green-500 focus:ring-green-500'
+                          : isIncorrect
+                          ? 'border-red-500/50 focus:border-red-500 focus:ring-red-500'
+                          : 'border-gray-600 focus:border-orange-500 focus:ring-orange-500'
+                      }`}
+                      placeholder={`Wort ${index + 1}`}
+                      autoComplete="off"
+                      spellCheck="false"
+                    />
+
+                    {/* Suggestions dropdown */}
+                    {currentSuggestions.length > 1 && focusedIndex === index && (
+                      <div className="absolute z-20 top-full left-0 right-0 mt-1 bg-gray-800 border border-gray-600 rounded-lg shadow-lg overflow-hidden max-h-40 overflow-y-auto">
+                        {currentSuggestions.map((s, i) => (
+                          <button
+                            key={s}
+                            onMouseDown={(e) => {
+                              e.preventDefault();
+                              handleSuggestionClick(index, s);
+                            }}
+                            className={`w-full px-3 py-2 text-left font-mono text-sm hover:bg-gray-700 ${
+                              i === 0 ? 'bg-orange-500/20 text-orange-300' : 'text-white'
+                            } ${s === recoveryWords[index] ? 'text-green-400' : ''}`}
+                          >
+                            <span className="text-orange-400">{word}</span>
+                            <span>{s.slice(word.length)}</span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Tab hint */}
+                    {showGhostText && (
+                      <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-gray-500 bg-gray-800 px-1.5 py-0.5 rounded border border-gray-600">
+                        Tab
+                      </span>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            <p className="text-xs text-gray-500 text-center">
+              Tipp: Tippen Sie die ersten Buchstaben ein, dann Tab oder Enter zum Vervollständigen
+            </p>
+
+            {verificationError && (
+              <p className="text-red-400 text-sm flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4" />
+                {verificationError}
+              </p>
+            )}
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => {
+                  setVerificationWords(['', '', '', '', '', '']);
+                  setVerificationError('');
+                  setStep('recovery');
+                }}
+                className="flex-1 py-3 border border-gray-600 text-gray-300 rounded-lg hover:bg-gray-700 transition-colors"
+              >
+                ← Zurück
+              </button>
+              <button
+                onClick={handleVerifySubmit}
+                disabled={!allVerificationWordsFilled}
+                className="flex-1 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold rounded-lg hover:from-orange-600 hover:to-red-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+              >
+                Verifizieren →
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Step 4: Confirm */}
         {step === 'confirm' && (
           <div className="space-y-4">
             <div className="p-4 bg-gray-900 rounded-lg border border-gray-700 space-y-3">
