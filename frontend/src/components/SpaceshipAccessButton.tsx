@@ -6,7 +6,7 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { RocketLaunchIcon, CogIcon, CheckCircleIcon, LockClosedIcon, ShieldCheckIcon } from '@heroicons/react/24/outline';
+import { RocketLaunchIcon, CogIcon, CheckCircleIcon, ShieldCheckIcon } from '@heroicons/react/24/outline';
 import { spaceshipService } from '../services/spaceshipService';
 import { useAuth } from '../hooks/useAuth';
 import { useLanguage } from '../contexts/LanguageContext';

@@ -48,7 +48,7 @@ export async function deriveKeyFromPassword(password: string, salt: Uint8Array):
   return crypto.subtle.deriveKey(
     {
       name: 'PBKDF2',
-      salt: salt,
+      salt: salt as unknown as BufferSource,
       iterations: 600000,
       hash: 'SHA-256'
     },
@@ -205,7 +205,7 @@ export async function getDEKFromSession(): Promise<CryptoKey | null> {
  * @param salt - Salt as Uint8Array
  */
 export function storeSaltInSession(salt: Uint8Array): void {
-  sessionStorage.setItem(DEK_SALT_STORAGE_KEY, arrayBufferToBase64(salt.buffer));
+  sessionStorage.setItem(DEK_SALT_STORAGE_KEY, arrayBufferToBase64(salt.buffer as ArrayBuffer));
 }
 
 /**
@@ -260,7 +260,7 @@ export async function setupDEKForRegistration(password: string): Promise<DEKSetu
     dek,
     dekBase64,
     wrappedDek: arrayBufferToBase64(wrappedDekBuffer),
-    dekSalt: arrayBufferToBase64(dekSalt.buffer)
+    dekSalt: arrayBufferToBase64(dekSalt.buffer as ArrayBuffer)
   };
 }
 
