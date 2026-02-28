@@ -473,6 +473,34 @@ router.post('/update-onboarding-step', authMiddleware, async (req: Request, res:
       
       await client.query(updateQuery, params);
       
+      // Send notification when auth method is selected (onboarding completed)
+      if (onboardingStep === 'completed' && loginMethod) {
+        try {
+          const userResult = await pool.query(
+            'SELECT admin_encrypted_email, admin_encrypted_alias FROM users WHERE id = $1',
+            [userId]
+          );
+          const userRow = userResult.rows[0];
+          if (userRow?.admin_encrypted_email) {
+            const userEmail = UserEncryptionService.decryptWithMasterKey(userRow.admin_encrypted_email);
+            const userAlias = userRow.admin_encrypted_alias 
+              ? UserEncryptionService.decryptWithMasterKey(userRow.admin_encrypted_alias) 
+              : 'User';
+            // Email to user
+            emailService.sendAuthMethodConfirmation(userEmail, userAlias, loginMethod)
+              .catch((err: any) => console.error('Auth method user email failed:', err));
+            // Email to admin
+            emailService.sendAdminNotification('User hat Auth-Methode gewählt', {
+              'User-ID': userId,
+              'Auth-Methode': loginMethod,
+              'Zeitpunkt': new Date().toLocaleString('de-CH', { timeZone: 'Europe/Zurich' })
+            }).catch((err: any) => console.error('Auth method admin email failed:', err));
+          }
+        } catch (notifError: any) {
+          console.error('Failed to send auth method notification:', notifError);
+        }
+      }
+      
       res.json({ message: 'Onboarding step updated successfully' });
     } finally {
       client.release();
@@ -918,6 +946,33 @@ router.post('/setup-zk-encryption', authMiddleware, async (req: Request, res: Re
     );
     console.log(`✅ StarArc: ZK data + login_method_selected = '${login_method}', onboarding_step = 'completed' for user ${user.id}`);
 
+    // Send notification emails for ZK auth method selection
+    try {
+      const userEmailResult = await pool.query(
+        'SELECT admin_encrypted_email, admin_encrypted_alias FROM users WHERE id = $1',
+        [user.id]
+      );
+      const userRow = userEmailResult.rows[0];
+      if (userRow?.admin_encrypted_email) {
+        const userEmail = UserEncryptionService.decryptWithMasterKey(userRow.admin_encrypted_email);
+        const userAlias = userRow.admin_encrypted_alias 
+          ? UserEncryptionService.decryptWithMasterKey(userRow.admin_encrypted_alias) 
+          : 'User';
+        // Email to user
+        emailService.sendAuthMethodConfirmation(userEmail, userAlias, login_method)
+          .catch((err: any) => console.error('ZK auth method user email failed:', err));
+        // Email to admin
+        emailService.sendAdminNotification('User hat Auth-Methode gewählt (ZK)', {
+          'User-ID': user.id,
+          'Auth-Methode': login_method,
+          'Typ': 'Zero-Knowledge Encryption',
+          'Zeitpunkt': new Date().toLocaleString('de-CH', { timeZone: 'Europe/Zurich' })
+        }).catch((err: any) => console.error('ZK auth method admin email failed:', err));
+      }
+    } catch (notifError: any) {
+      console.error('Failed to send ZK auth method notification:', notifError);
+    }
+
     // ZK data (wrapped_dek, etc.) is NOT sent to Spaceship here
     // Instead, it's stored in sessionStorage and sent via JWT on first Spaceship login
 
@@ -1079,10 +1134,11 @@ router.post('/generate-spaceship-token', authMiddleware, async (req: Request, re
   try {
     const user = (req as any).user;
     
-    // Get encrypted auth key, login method, and DEK/ZK data from database
+    // Get encrypted auth key, login method, DEK/ZK data, and spaceship_integration for first-login detection
     const result = await pool.query(
       `SELECT spaceship_auth_key, language_code, login_method_selected,
-              wrapped_dek, wrapped_dek_recovery, wrapped_dek_server, dek_salt, recovery_salt, recovery_key_hash
+              wrapped_dek, wrapped_dek_recovery, wrapped_dek_server, dek_salt, recovery_salt, recovery_key_hash,
+              spaceship_integration_completed, admin_encrypted_email, admin_encrypted_alias
        FROM users WHERE id = $1`,
       [user.id]
     );
@@ -1201,6 +1257,30 @@ router.post('/generate-spaceship-token', authMiddleware, async (req: Request, re
       ? process.env.SPACESHIP_URL || 'https://spaceship.stararc.one'
       : process.env.SPACESHIP_URL || 'http://localhost:3000';
     
+    // Detect first Spaceship login and send notifications
+    const isFirstSpaceshipLogin = !result.rows[0]?.spaceship_integration_completed;
+    if (isFirstSpaceshipLogin) {
+      try {
+        const dbRow = result.rows[0];
+        if (dbRow.admin_encrypted_email) {
+          const userEmail = UserEncryptionService.decryptWithMasterKey(dbRow.admin_encrypted_email);
+          const userAlias = dbRow.admin_encrypted_alias 
+            ? UserEncryptionService.decryptWithMasterKey(dbRow.admin_encrypted_alias) 
+            : 'User';
+          // Email to user
+          emailService.sendFirstSpaceshipLogin(userEmail, userAlias)
+            .catch((err: any) => console.error('First Spaceship login user email failed:', err));
+          // Email to admin
+          emailService.sendAdminNotification('Erster Spaceship Login', {
+            'User-ID': user.id,
+            'Zeitpunkt': new Date().toLocaleString('de-CH', { timeZone: 'Europe/Zurich' })
+          }).catch((err: any) => console.error('First Spaceship login admin email failed:', err));
+        }
+      } catch (notifError: any) {
+        console.error('Failed to send first Spaceship login notification:', notifError);
+      }
+    }
+
     res.json({
       success: true,
       spaceshipToken,

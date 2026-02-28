@@ -405,9 +405,9 @@ router.post('/webhook', async (req, res): Promise<any> => {
 
           console.log(`🚨 WEBHOOK - Activating subscription for user ${userId}, plan ${planId}`);
           
-          // Fetch current plan BEFORE update (to detect upgrades)
+          // Fetch current plan + encrypted email BEFORE update (to detect upgrades + send user email)
           const currentUserResult = await pool.query(
-            `SELECT subscription_plan, onboarding_step FROM users WHERE id = $1`,
+            `SELECT subscription_plan, onboarding_step, admin_encrypted_email, admin_encrypted_alias FROM users WHERE id = $1`,
             [userId]
           );
           const previousPlan = currentUserResult.rows[0]?.subscription_plan || null;
@@ -462,6 +462,22 @@ router.post('/webhook', async (req, res): Promise<any> => {
             };
             emailSvc.sendAdminNotification(emailSubject, emailDetails)
               .catch((err: any) => console.error('Admin notification failed:', err));
+            
+            // Send subscription confirmation email to user
+            try {
+              const { UserEncryptionService } = require('../services/userEncryptionService');
+              const userRow = currentUserResult.rows[0];
+              if (userRow.admin_encrypted_email) {
+                const userEmail = UserEncryptionService.decryptWithMasterKey(userRow.admin_encrypted_email);
+                const userAlias = userRow.admin_encrypted_alias 
+                  ? UserEncryptionService.decryptWithMasterKey(userRow.admin_encrypted_alias) 
+                  : 'User';
+                emailSvc.sendSubscriptionConfirmation(userEmail, userAlias, planId, isUpgrade, previousPlan)
+                  .catch((err: any) => console.error('User subscription email failed:', err));
+              }
+            } catch (decryptErr: any) {
+              console.error('Failed to decrypt user email for notification:', decryptErr);
+            }
           } else {
             throw new Error(`User ${userId} not found`);
           }
