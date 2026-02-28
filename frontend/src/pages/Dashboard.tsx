@@ -131,7 +131,7 @@ const Dashboard: React.FC = () => {
           const subData = await StripeAPIService.getSubscriptionStatus();
           
           // Check if subscription is activated
-          if (subData.hasSubscription && ['Free', 'Spark', 'Core', 'Apex'].includes(subData.plan)) {
+          if (subData.hasSubscription && ['Free', 'Spark', 'Nova', 'Galaxy', 'Apex'].includes(subData.plan)) {
             console.log('🔧 TEST MODE: Subscription activated!', subData.plan);
             setSubscription({
               plan: subData.plan,
@@ -272,7 +272,8 @@ const Dashboard: React.FC = () => {
     switch (plan) {
       case 'Free': return Shield;
       case 'Spark': return Star;
-      case 'Core': return Crown;
+      case 'Nova': return Crown;
+      case 'Galaxy': return Crown;
       case 'Apex': return Crown;
       default: return Shield;
     }
@@ -281,8 +282,9 @@ const Dashboard: React.FC = () => {
   const getNextUpgrade = (currentPlan: string) => {
     switch (currentPlan) {
       case 'Free': return { plan: 'Spark', color: 'blue' };
-      case 'Spark': return { plan: 'Core', color: 'purple' };
-      case 'Core': return { plan: 'Apex', color: 'yellow' };
+      case 'Spark': return { plan: 'Nova', color: 'purple' };
+      case 'Nova': return { plan: 'Galaxy', color: 'indigo' };
+      case 'Galaxy': return { plan: 'Apex', color: 'yellow' };
       case 'Apex': return null; // No upgrade available
       default: return null;
     }
@@ -373,13 +375,15 @@ const Dashboard: React.FC = () => {
             <div className={`p-3 rounded-full ${
               subscription.plan === 'Free' ? 'bg-green-500/20' :
               subscription.plan === 'Spark' ? 'bg-blue-500/20' :
-              subscription.plan === 'Core' ? 'bg-purple-500/20' :
+              subscription.plan === 'Nova' ? 'bg-purple-500/20' :
+              subscription.plan === 'Galaxy' ? 'bg-indigo-500/20' :
               subscription.plan === 'Apex' ? 'bg-yellow-500/20' : 'bg-gray-500/20'
             }`}>
               <Icon className={`w-6 h-6 ${
                 subscription.plan === 'Free' ? 'text-green-400' :
                 subscription.plan === 'Spark' ? 'text-blue-400' :
-                subscription.plan === 'Core' ? 'text-purple-400' :
+                subscription.plan === 'Nova' ? 'text-purple-400' :
+                subscription.plan === 'Galaxy' ? 'text-indigo-400' :
                 subscription.plan === 'Apex' ? 'text-yellow-400' : 'text-gray-400'
               }`} />
             </div>
