@@ -128,7 +128,7 @@ router.post('/select-plan', authMiddleware, async (req, res): Promise<any> => {
              subscription_plan = $1, 
              subscription_status = 'active',
              stripe_subscription_id = $2,
-             onboarding_step = 'auth_method_selection',
+             onboarding_step = CASE WHEN onboarding_step = 'completed' THEN 'completed' ELSE 'auth_method_selection' END,
              updated_at = CURRENT_TIMESTAMP
              WHERE id = $3`,
             [planId, session.id, userId]
@@ -418,14 +418,14 @@ router.post('/webhook', async (req, res): Promise<any> => {
             }
           }
           
-          // Activate subscription
+          // Activate subscription (preserve 'completed' for upgrades)
           const updateResult = await pool.query(
             `UPDATE users SET 
              subscription_plan = $1, 
              subscription_status = 'active',
              stripe_subscription_id = $2,
              subscription_expires_at = $3,
-             onboarding_step = 'auth_method_selection',
+             onboarding_step = CASE WHEN onboarding_step = 'completed' THEN 'completed' ELSE 'auth_method_selection' END,
              updated_at = CURRENT_TIMESTAMP
              WHERE id = $4
              RETURNING id`,
@@ -625,13 +625,13 @@ router.post('/activate-subscription', authMiddleware, async (req, res): Promise<
         return res.status(400).json({ error: 'Plan ID not found in session metadata' });
       }
 
-      // Update user subscription
+      // Update user subscription (preserve 'completed' for upgrades)
       const updateResult = await pool.query(
         `UPDATE users SET 
          subscription_plan = $1, 
          subscription_status = 'active',
          stripe_subscription_id = $2,
-         onboarding_step = 'auth_method_selection',
+         onboarding_step = CASE WHEN onboarding_step = 'completed' THEN 'completed' ELSE 'auth_method_selection' END,
          updated_at = CURRENT_TIMESTAMP
          WHERE id = $3
          RETURNING id, email, onboarding_step, subscription_plan`,

@@ -139,9 +139,9 @@ const Dashboard: React.FC = () => {
           if (subData.hasSubscription && ['Free', 'Spark', 'Nova', 'Galaxy', 'Apex'].includes(subData.plan)) {
             console.log('🔧 Subscription activated!', subData.plan);
             
-            // Subscription confirmed - now check onboarding status
-            // The webhook sets onboarding_step to 'auth_method_selection'
-            // so we need to redirect there before showing the dashboard
+            // Subscription confirmed - check onboarding status
+            // For new users: webhook sets onboarding_step to 'auth_method_selection' → redirect
+            // For upgrades: webhook preserves 'completed' → stay on dashboard
             const token = localStorage.getItem('token');
             const apiUrl = (import.meta as any).env.VITE_API_URL || 'http://localhost:3004';
             const meResponse = await fetch(`${apiUrl}/api/auth/me`, {
@@ -152,11 +152,13 @@ const Dashboard: React.FC = () => {
               const step = meData.user.onboardingStep;
               console.log('🔍 Onboarding step after subscription:', step);
               
-              if (step === 'auth_method_selection' || step === 'subscription_selection') {
+              // Only redirect if onboarding is NOT completed (new user flow)
+              if (step === 'completed') {
+                console.log('✅ Upgrade detected - onboarding already completed, staying on dashboard');
+              } else if (step === 'auth_method_selection' || step === 'subscription_selection') {
                 navigate('/auth-method-selection');
                 return;
-              }
-              if (step !== 'completed' && !meData.user.loginMethodSelected) {
+              } else if (!meData.user.loginMethodSelected) {
                 navigate('/auth-method-selection');
                 return;
               }
