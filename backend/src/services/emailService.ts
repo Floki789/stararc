@@ -51,35 +51,24 @@ export class EmailService {
   async sendAdminNotification(subject: string, details: Record<string, any>): Promise<void> {
     const adminEmail = 'info@stararc.one';
     
-    // Format details as HTML table
+    // Format details as simple text lines
     const detailsHtml = Object.entries(details)
-      .map(([key, value]) => `
-        <tr>
-          <td style="padding: 8px; border-bottom: 1px solid #e5e7eb; font-weight: 600; color: #374151;">${key}</td>
-          <td style="padding: 8px; border-bottom: 1px solid #e5e7eb; color: #6b7280;">${value}</td>
-        </tr>
-      `)
+      .map(([key, value]) => `<p style="color: #4b5563; margin: 4px 0;"><strong>${key}:</strong> ${value}</p>`)
       .join('');
 
     const mailOptions = {
       from: this.fromEmail,
       to: adminEmail,
-      subject: `🔔 Stararc Admin: ${subject}`,
+      subject: `Stararc Admin - ${subject}`,
       html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-          <div style="background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); padding: 20px; border-radius: 8px 8px 0 0;">
-            <h2 style="color: white; margin: 0;">🔔 ${subject}</h2>
-          </div>
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px;">
+          <h2 style="color: #1f2937; margin-bottom: 20px;">${subject}</h2>
           
-          <div style="background: #f9fafb; padding: 20px; border-radius: 0 0 8px 8px;">
-            <table style="width: 100%; border-collapse: collapse;">
-              ${detailsHtml}
-            </table>
-            
-            <p style="color: #9ca3af; font-size: 12px; margin-top: 20px; text-align: center;">
-              Automatische Benachrichtigung • ${new Date().toLocaleString('de-CH', { timeZone: 'Europe/Zurich' })} CET
-            </p>
-          </div>
+          ${detailsHtml}
+          
+          <p style="color: #9ca3af; font-size: 12px; margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+            © ${new Date().getFullYear()} Stararc.one
+          </p>
         </div>
       `
     };
@@ -453,51 +442,40 @@ export class EmailService {
     const dashboardUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/dashboard`;
     
     const subject = isUpgrade 
-      ? `Subscription Upgrade: ${previousPlan} → ${plan}`
-      : `Deine ${plan}-Subscription ist aktiv`;
+      ? `Stararc - Subscription Upgrade: ${previousPlan} → ${plan}`
+      : `Stararc - ${plan}-Subscription aktiv`;
     
-    const headerText = isUpgrade
-      ? `Upgrade auf ${plan} erfolgreich`
-      : `${plan}-Subscription aktiviert`;
+    const heading = isUpgrade
+      ? `Subscription Upgrade`
+      : `Subscription aktiviert`;
     
     const bodyText = isUpgrade
-      ? `Dein Upgrade von <strong>${previousPlan}</strong> auf <strong>${plan}</strong> wurde erfolgreich durchgeführt. Du hast jetzt Zugriff auf alle Funktionen deines neuen Plans.`
-      : `Deine <strong>${plan}</strong>-Subscription ist jetzt aktiv. Du hast jetzt Zugriff auf alle Funktionen deines Plans.`;
-
-    const gradientColors = isUpgrade 
-      ? '#f59e0b 0%, #ef4444 100%' 
-      : '#3b82f6 0%, #8b5cf6 100%';
+      ? `Dein Upgrade von ${previousPlan} auf ${plan} wurde erfolgreich durchgeführt.`
+      : `Deine ${plan}-Subscription ist jetzt aktiv.`;
 
     const mailOptions = {
       from: this.fromEmail,
       to: email,
-      subject: `🚀 ${subject}`,
+      subject,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px;">
-          <div style="background: linear-gradient(135deg, ${gradientColors}); padding: 20px; border-radius: 8px 8px 0 0;">
-            <h2 style="color: white; margin: 0;">${isUpgrade ? '⬆️' : '🚀'} ${headerText}</h2>
+          <h2 style="color: #1f2937; margin-bottom: 20px;">${heading}</h2>
+          
+          <p style="color: #4b5563; line-height: 1.6; margin-bottom: 30px;">
+            ${bodyText}
+          </p>
+          
+          <div style="margin: 30px 0;">
+            <a href="${dashboardUrl}" 
+               style="display: inline-block; background: #3b82f6; color: white; padding: 12px 30px; 
+                      text-decoration: none; border-radius: 6px; font-weight: 500;">
+              Zum Dashboard
+            </a>
           </div>
           
-          <div style="background: #f9fafb; padding: 20px; border-radius: 0 0 8px 8px;">
-            <p style="color: #4b5563; line-height: 1.6;">${bodyText}</p>
-            
-            <div style="background: white; padding: 15px; border-radius: 6px; margin: 20px 0; border-left: 3px solid #3b82f6;">
-              <p style="color: #374151; margin: 0;"><strong>Plan:</strong> ${plan}</p>
-              ${isUpgrade ? `<p style="color: #6b7280; margin: 5px 0 0;"><strong>Vorher:</strong> ${previousPlan}</p>` : ''}
-            </div>
-            
-            <div style="margin: 30px 0;">
-              <a href="${dashboardUrl}" 
-                 style="display: inline-block; background: #3b82f6; color: white; padding: 12px 30px; 
-                        text-decoration: none; border-radius: 6px; font-weight: 500;">
-                Zum Dashboard
-              </a>
-            </div>
-            
-            <p style="color: #9ca3af; font-size: 12px; margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
-              © ${new Date().getFullYear()} Stararc.one
-            </p>
-          </div>
+          <p style="color: #9ca3af; font-size: 12px; margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+            © ${new Date().getFullYear()} Stararc.one
+          </p>
         </div>
       `
     };
@@ -510,7 +488,6 @@ export class EmailService {
       }
     } catch (error) {
       console.error('❌ Failed to send subscription email:', error);
-      // Don't throw - subscription emails shouldn't break user flows
     }
   }
 
@@ -519,42 +496,34 @@ export class EmailService {
     const dashboardUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/dashboard`;
     
     const methodLabel = authMethod === 'password_zk' 
-      ? 'Passwort (Zero-Knowledge Encryption)' 
+      ? 'Zero-Knowledge Encryption' 
       : authMethod === 'privacy' 
-        ? 'Passwort (Privacy-Modus)' 
-        : 'Standard Login';
+        ? 'Privacy-Modus' 
+        : 'Standard';
 
     const mailOptions = {
       from: this.fromEmail,
       to: email,
-      subject: '🔐 Authentifizierungsmethode gewählt',
+      subject: 'Stararc - Authentifizierungsmethode konfiguriert',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px;">
-          <div style="background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%); padding: 20px; border-radius: 8px 8px 0 0;">
-            <h2 style="color: white; margin: 0;">🔐 Authentifizierungsmethode konfiguriert</h2>
+          <h2 style="color: #1f2937; margin-bottom: 20px;">Authentifizierungsmethode konfiguriert</h2>
+          
+          <p style="color: #4b5563; line-height: 1.6; margin-bottom: 30px;">
+            Deine Authentifizierungsmethode wurde erfolgreich eingerichtet: ${methodLabel}.
+          </p>
+          
+          <div style="margin: 30px 0;">
+            <a href="${dashboardUrl}" 
+               style="display: inline-block; background: #3b82f6; color: white; padding: 12px 30px; 
+                      text-decoration: none; border-radius: 6px; font-weight: 500;">
+              Zum Dashboard
+            </a>
           </div>
           
-          <div style="background: #f9fafb; padding: 20px; border-radius: 0 0 8px 8px;">
-            <p style="color: #4b5563; line-height: 1.6;">
-              Du hast deine Authentifizierungsmethode erfolgreich gewählt. Dein Konto ist jetzt vollständig eingerichtet.
-            </p>
-            
-            <div style="background: white; padding: 15px; border-radius: 6px; margin: 20px 0; border-left: 3px solid #10b981;">
-              <p style="color: #374151; margin: 0;"><strong>Gewählte Methode:</strong> ${methodLabel}</p>
-            </div>
-            
-            <div style="margin: 30px 0;">
-              <a href="${dashboardUrl}" 
-                 style="display: inline-block; background: #3b82f6; color: white; padding: 12px 30px; 
-                        text-decoration: none; border-radius: 6px; font-weight: 500;">
-                Zum Dashboard
-              </a>
-            </div>
-            
-            <p style="color: #9ca3af; font-size: 12px; margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
-              © ${new Date().getFullYear()} Stararc.one
-            </p>
-          </div>
+          <p style="color: #9ca3af; font-size: 12px; margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+            © ${new Date().getFullYear()} Stararc.one
+          </p>
         </div>
       `
     };
@@ -572,34 +541,26 @@ export class EmailService {
 
   // Send first Spaceship login notification to user
   async sendFirstSpaceshipLogin(email: string, alias: string): Promise<void> {
-    const spaceshipUrl = process.env.SPACESHIP_URL || 'https://spaceship.stararc.one';
-
     const mailOptions = {
       from: this.fromEmail,
       to: email,
-      subject: '🚀 Erster Login in Stararc Spaceship',
+      subject: 'Stararc - Erster Login in Spaceship',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px;">
-          <div style="background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%); padding: 20px; border-radius: 8px 8px 0 0;">
-            <h2 style="color: white; margin: 0;">🚀 Willkommen in Spaceship</h2>
-          </div>
+          <h2 style="color: #1f2937; margin-bottom: 20px;">Willkommen in Spaceship</h2>
           
-          <div style="background: #f9fafb; padding: 20px; border-radius: 0 0 8px 8px;">
-            <p style="color: #4b5563; line-height: 1.6;">
-              Du hast dich zum ersten Mal in <strong>Stararc Spaceship</strong> eingeloggt. 
-              Spaceship ist die sichere Asset-Management-Plattform von Stararc.
-            </p>
-            
-            <div style="background: white; padding: 15px; border-radius: 6px; margin: 20px 0; border-left: 3px solid #8b5cf6;">
-              <p style="color: #374151; margin: 0;">
-                <strong>Tipp:</strong> Du kannst Spaceship jederzeit über dein Stararc Dashboard starten.
-              </p>
-            </div>
-            
-            <p style="color: #9ca3af; font-size: 12px; margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
-              © ${new Date().getFullYear()} Stararc.one
-            </p>
-          </div>
+          <p style="color: #4b5563; line-height: 1.6; margin-bottom: 30px;">
+            Du hast dich zum ersten Mal in Stararc Spaceship eingeloggt. 
+            Spaceship ist die sichere Asset-Management-Plattform von Stararc.
+          </p>
+          
+          <p style="color: #6b7280; font-size: 14px;">
+            Du kannst Spaceship jederzeit über dein Stararc Dashboard starten.
+          </p>
+          
+          <p style="color: #9ca3af; font-size: 12px; margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+            © ${new Date().getFullYear()} Stararc.one
+          </p>
         </div>
       `
     };
