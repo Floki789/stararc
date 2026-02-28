@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Key, Shield, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+import { BIP39_WORDLIST } from '../utils/bip39Wordlist';
 
 interface ZKRecoveryModalProps {
   isOpen: boolean;
@@ -17,6 +18,10 @@ const ZKRecoveryModal: React.FC<ZKRecoveryModalProps> = ({ isOpen, onClose, onSu
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const blurTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   
   // Temporary storage for DEK during recovery
   const [recoveredDEK, setRecoveredDEK] = useState<CryptoKey | null>(null);
@@ -27,6 +32,70 @@ const ZKRecoveryModal: React.FC<ZKRecoveryModalProps> = ({ isOpen, onClose, onSu
   } | null>(null);
 
   const apiUrl = (import.meta as any).env.VITE_API_URL || 'http://localhost:3004';
+
+  // BIP39 autocomplete helpers
+  const getFilteredSuggestions = useCallback((input: string): string[] => {
+    if (!input || input.length < 1) return [];
+    const lowerInput = input.toLowerCase().trim();
+    return BIP39_WORDLIST.filter(word => word.startsWith(lowerInput)).slice(0, 6);
+  }, []);
+
+  const getFirstSuggestion = useCallback((input: string): string | null => {
+    if (!input || input.length < 1) return null;
+    const lowerInput = input.toLowerCase().trim();
+    if (BIP39_WORDLIST.includes(lowerInput)) return null;
+    const matches = BIP39_WORDLIST.filter(word => word.startsWith(lowerInput));
+    return matches.length > 0 ? matches[0] : null;
+  }, []);
+
+  const handleRecoveryWordChange = (index: number, value: string) => {
+    const newWords = [...recoveryWords];
+    newWords[index] = value.toLowerCase();
+    setRecoveryWords(newWords);
+    setError('');
+    const filtered = getFilteredSuggestions(value);
+    setSuggestions(filtered);
+  };
+
+  const handleWordKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+    const currentValue = recoveryWords[index];
+    const filtered = getFilteredSuggestions(currentValue);
+    const firstSuggestion = filtered.length > 0 ? filtered[0] : null;
+
+    if ((e.key === 'Tab' || e.key === 'Enter') && firstSuggestion && firstSuggestion !== currentValue.toLowerCase()) {
+      e.preventDefault();
+      const newWords = [...recoveryWords];
+      newWords[index] = firstSuggestion;
+      setRecoveryWords(newWords);
+      setSuggestions([]);
+      if (index < 5) {
+        inputRefs.current[index + 1]?.focus();
+      }
+    } else if (e.key === 'Tab' && !e.shiftKey && !firstSuggestion) {
+      // Let default Tab behavior happen
+    } else if (e.key === 'Enter' && currentValue.trim()) {
+      e.preventDefault();
+      if (index < 5) {
+        inputRefs.current[index + 1]?.focus();
+      }
+    } else if (e.key === 'ArrowDown' && suggestions.length > 0) {
+      e.preventDefault();
+      const newWords = [...recoveryWords];
+      newWords[index] = suggestions[0];
+      setRecoveryWords(newWords);
+      setSuggestions([]);
+    }
+  };
+
+  const handleSuggestionClick = (index: number, suggestion: string) => {
+    const newWords = [...recoveryWords];
+    newWords[index] = suggestion;
+    setRecoveryWords(newWords);
+    setSuggestions([]);
+    if (index < 5) {
+      inputRefs.current[index + 1]?.focus();
+    }
+  };
 
   // ==========================================
   // Crypto Helper Functions
@@ -308,24 +377,81 @@ const ZKRecoveryModal: React.FC<ZKRecoveryModalProps> = ({ isOpen, onClose, onSu
               </p>
               
               <div className="grid grid-cols-3 gap-2 mb-6">
-                {recoveryWords.map((word, index) => (
-                  <div key={index} className="relative">
-                    <span className="absolute left-2 top-1/2 -translate-y-1/2 text-slate-500 text-xs">
-                      {index + 1}.
-                    </span>
-                    <input
-                      type="text"
-                      value={word}
-                      onChange={(e) => {
-                        const newWords = [...recoveryWords];
-                        newWords[index] = e.target.value.toLowerCase();
-                        setRecoveryWords(newWords);
-                      }}
-                      className="w-full pl-7 pr-2 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
-                      placeholder="wort"
-                    />
-                  </div>
-                ))}
+                {recoveryWords.map((word, index) => {
+                  const firstSuggestion = getFirstSuggestion(word);
+                  const currentSuggestions = focusedIndex === index ? suggestions : [];
+                  const showGhostText = firstSuggestion && word && focusedIndex === index;
+
+                  return (
+                    <div key={index} className="relative">
+                      <span className="absolute left-2 top-1/2 -translate-y-1/2 text-slate-500 text-xs z-10">
+                        {index + 1}.
+                      </span>
+
+                      {/* Autocomplete ghost text */}
+                      {showGhostText && (
+                        <div className="absolute left-7 top-1/2 -translate-y-1/2 font-mono text-sm pointer-events-none">
+                          <span className="text-transparent">{word}</span>
+                          <span className="text-slate-500">{firstSuggestion.slice(word.length)}</span>
+                        </div>
+                      )}
+
+                      <input
+                        ref={(el) => { inputRefs.current[index] = el; }}
+                        type="text"
+                        value={word}
+                        onChange={(e) => handleRecoveryWordChange(index, e.target.value)}
+                        onKeyDown={(e) => handleWordKeyDown(index, e)}
+                        onFocus={() => {
+                          if (blurTimeoutRef.current) {
+                            clearTimeout(blurTimeoutRef.current);
+                            blurTimeoutRef.current = null;
+                          }
+                          setFocusedIndex(index);
+                          const filtered = getFilteredSuggestions(word);
+                          setSuggestions(filtered);
+                        }}
+                        onBlur={() => {
+                          blurTimeoutRef.current = setTimeout(() => {
+                            setFocusedIndex(null);
+                            setSuggestions([]);
+                            blurTimeoutRef.current = null;
+                          }, 200);
+                        }}
+                        className="w-full pl-7 pr-2 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white font-mono text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+                        placeholder="wort"
+                        autoComplete="off"
+                        spellCheck={false}
+                      />
+
+                      {/* Suggestions dropdown */}
+                      {currentSuggestions.length > 1 && focusedIndex === index && (
+                        <div className="absolute z-20 top-full left-0 right-0 mt-1 bg-slate-800 border border-slate-600 rounded-lg shadow-lg overflow-hidden max-h-40 overflow-y-auto">
+                          {currentSuggestions.map((s, i) => (
+                            <button
+                              key={s}
+                              onMouseDown={(e) => {
+                                e.preventDefault();
+                                handleSuggestionClick(index, s);
+                              }}
+                              className={`w-full px-3 py-2 text-left font-mono text-sm hover:bg-slate-700 ${
+                                i === 0 ? 'bg-amber-500/20 text-amber-300' : 'text-white'
+                              }`}
+                            >
+                              <span className="text-amber-400">{word}</span>
+                              <span>{s.slice(word.length)}</span>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Tab hint */}
+                      {firstSuggestion && focusedIndex === index && (
+                        <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-slate-500">Tab ↹</span>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
               
               <button
