@@ -104,7 +104,8 @@ const Dashboard: React.FC = () => {
 
       if (user) {
         // Always refresh user data for latest onboarding status
-        // Skip onboarding redirect if this is a new subscription from Stripe
+        // For new subscriptions from Stripe: skip redirect initially to allow polling,
+        // but after polling completes, we'll check onboarding status
         const canProceed = await refreshUserData(isNew);
         if (canProceed) {
           // For new subscriptions, always load dashboard even if onboarding not completed
@@ -112,6 +113,10 @@ const Dashboard: React.FC = () => {
           if (isNew || user.onboardingStep === 'completed') {
             loadDashboardDataWithDelay(isNew);
           }
+        } else if (isNew) {
+          // refreshUserData returned false because it redirected (e.g. to auth-method-selection)
+          // This is correct — after Stripe subscription, user needs to complete onboarding
+          return;
         }
       }
     };
@@ -132,7 +137,31 @@ const Dashboard: React.FC = () => {
           
           // Check if subscription is activated
           if (subData.hasSubscription && ['Free', 'Spark', 'Nova', 'Galaxy', 'Apex'].includes(subData.plan)) {
-            console.log('🔧 TEST MODE: Subscription activated!', subData.plan);
+            console.log('🔧 Subscription activated!', subData.plan);
+            
+            // Subscription confirmed - now check onboarding status
+            // The webhook sets onboarding_step to 'auth_method_selection'
+            // so we need to redirect there before showing the dashboard
+            const token = localStorage.getItem('token');
+            const apiUrl = (import.meta as any).env.VITE_API_URL || 'http://localhost:3004';
+            const meResponse = await fetch(`${apiUrl}/api/auth/me`, {
+              headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (meResponse.ok) {
+              const meData = await meResponse.json();
+              const step = meData.user.onboardingStep;
+              console.log('🔍 Onboarding step after subscription:', step);
+              
+              if (step === 'auth_method_selection' || step === 'subscription_selection') {
+                navigate('/auth-method-selection');
+                return;
+              }
+              if (step !== 'completed' && !meData.user.loginMethodSelected) {
+                navigate('/auth-method-selection');
+                return;
+              }
+            }
+            
             setSubscription({
               plan: subData.plan,
               status: subData.status,
