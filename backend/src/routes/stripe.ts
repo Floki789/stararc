@@ -405,6 +405,14 @@ router.post('/webhook', async (req, res): Promise<any> => {
 
           console.log(`🚨 WEBHOOK - Activating subscription for user ${userId}, plan ${planId}`);
           
+          // Fetch current plan BEFORE update (to detect upgrades)
+          const currentUserResult = await pool.query(
+            `SELECT subscription_plan, onboarding_step FROM users WHERE id = $1`,
+            [userId]
+          );
+          const previousPlan = currentUserResult.rows[0]?.subscription_plan || null;
+          const isUpgrade = previousPlan && previousPlan !== 'Free' && previousPlan !== planId;
+          
           // Get subscription details for period end date
           let periodEnd = null;
           if (session.subscription) {
@@ -439,14 +447,21 @@ router.post('/webhook', async (req, res): Promise<any> => {
             // Send admin notification
             const { EmailService } = require('../services/emailService');
             const emailSvc = new EmailService();
-            emailSvc.sendAdminNotification(`User hat Subscription abgeschlossen`, {
+            const emailSubject = isUpgrade 
+              ? `Subscription UPGRADE: ${previousPlan} → ${planId}`
+              : `User hat Subscription abgeschlossen`;
+            const emailDetails: Record<string, any> = {
               'User-ID': userId,
+              ...(isUpgrade ? { 'Typ': '⬆️ UPGRADE' } : { 'Typ': 'Neue Subscription' }),
+              ...(isUpgrade ? { 'Alte Subscription': previousPlan } : {}),
               'Plan': planId,
               'Subscription-ID': session.subscription,
               'Session-ID': session.id,
               'Status': 'active',
               'Zeitpunkt': new Date().toLocaleString('de-CH', { timeZone: 'Europe/Zurich' })
-            }).catch((err: any) => console.error('Admin notification failed:', err));
+            };
+            emailSvc.sendAdminNotification(emailSubject, emailDetails)
+              .catch((err: any) => console.error('Admin notification failed:', err));
           } else {
             throw new Error(`User ${userId} not found`);
           }
