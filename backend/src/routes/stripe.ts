@@ -437,8 +437,9 @@ router.post('/webhook', async (req, res): Promise<any> => {
             processed = true;
             
             // Send admin notification
-            const emailService = require('../services/emailService').default;
-            emailService.sendAdminNotification(`User hat Subscription abgeschlossen`, {
+            const { EmailService } = require('../services/emailService');
+            const emailSvc = new EmailService();
+            emailSvc.sendAdminNotification(`User hat Subscription abgeschlossen`, {
               'User-ID': userId,
               'Plan': planId,
               'Subscription-ID': session.subscription,
