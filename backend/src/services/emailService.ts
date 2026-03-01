@@ -623,25 +623,55 @@ export class EmailService {
     await this.ensureReady();
     const dashboardUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/dashboard`;
     
-    const methodLabel = authMethod === 'password_zk' 
-      ? 'Zero-Knowledge Encryption' 
-      : authMethod === 'privacy' 
-        ? 'Privacy-Modus' 
-        : 'Standard';
+    const isSovereignty = authMethod === 'password_zk';
+    const methodLabel = isSovereignty ? 'Sovereignty' : 'Standard';
+    const subject = isSovereignty 
+      ? 'StarArc – Sovereignty Login eingerichtet' 
+      : 'StarArc – Login-Methode eingerichtet';
+
+    const standardBody = `
+      <p style="color: #4b5563; line-height: 1.6; margin-bottom: 24px;">
+        Deine Login-Methode <strong>Standard</strong> wurde erfolgreich eingerichtet.
+        Du kannst dich ab sofort mit deiner E-Mail und deinem Passwort anmelden.
+      </p>
+    `;
+
+    const sovereigntyBody = `
+      <p style="color: #4b5563; line-height: 1.6; margin-bottom: 16px;">
+        Deine Login-Methode <strong>Sovereignty</strong> wurde erfolgreich eingerichtet.
+        Du benötigst <strong>zwei Passwörter</strong> zum Einloggen:
+      </p>
+
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 16px;">
+        <tr>
+          <td style="padding: 12px 16px; border: 1px solid #e5e7eb; background: #f9fafb; width: 140px; font-weight: 600; color: #1f2937;">StarArc</td>
+          <td style="padding: 12px 16px; border: 1px solid #e5e7eb; color: #4b5563;">E-Mail + Passwort aus der Registrierung</td>
+        </tr>
+        <tr>
+          <td style="padding: 12px 16px; border: 1px solid #e5e7eb; background: #f9fafb; font-weight: 600; color: #1f2937;">Finanzdaten</td>
+          <td style="padding: 12px 16px; border: 1px solid #e5e7eb; color: #4b5563;">Sovereignty-Passwort (12 Zeichen), das du nach der Methodenwahl gesetzt hast</td>
+        </tr>
+      </table>
+
+      <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 12px 16px; margin-bottom: 24px; border-radius: 4px;">
+        <p style="color: #92400e; margin: 0; font-size: 14px; line-height: 1.5;">
+          <strong>⚠️ Wichtig:</strong> Das Sovereignty-Passwort kann nur mit deiner <strong>6-Worte-Passphrase</strong> wiederhergestellt werden.
+          Verwahre diese sicher – wir empfehlen mindestens <strong>zwei geografisch getrennte Backups</strong>.
+        </p>
+      </div>
+    `;
 
     const mailOptions = {
       from: this.fromEmail,
       to: email,
-      subject: 'Stararc - Authentifizierungsmethode konfiguriert',
+      subject,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px;">
-          <h2 style="color: #1f2937; margin-bottom: 20px;">Authentifizierungsmethode konfiguriert</h2>
+          <h2 style="color: #1f2937; margin-bottom: 20px;">Login-Methode: ${methodLabel}</h2>
           
-          <p style="color: #4b5563; line-height: 1.6; margin-bottom: 30px;">
-            Deine Authentifizierungsmethode wurde erfolgreich eingerichtet: ${methodLabel}.
-          </p>
+          ${isSovereignty ? sovereigntyBody : standardBody}
           
-          <div style="margin: 30px 0;">
+          <div style="margin: 24px 0;">
             <a href="${dashboardUrl}" 
                style="display: inline-block; background: #3b82f6; color: white; padding: 12px 30px; 
                       text-decoration: none; border-radius: 6px; font-weight: 500;">
