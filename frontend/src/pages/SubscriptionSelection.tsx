@@ -26,7 +26,7 @@ const SubscriptionSelection: React.FC = () => {
   const [loading, setLoading] = useState<Record<string, boolean>>({});
   const [currentPlan, setCurrentPlan] = useState<string | null>(null);
   const [upgradePreview, setUpgradePreview] = useState<UpgradePreview | null>(null);
-  const [previewLoading, setPreviewLoading] = useState(false);
+  const [, setPreviewLoading] = useState(false);
   const [upgrading, setUpgrading] = useState(false);
 
   useEffect(() => {
