@@ -10,7 +10,7 @@
     "privacy": "Datenschutz"
   },
   "hero": {
-    "title": "Ihr ganzes Anlageuniversum unter einem Dach",
+    "title": "Dein ganzes Anlageuniversum unter einem Dach",
     "subtitle": "Privacy-First Portfolio Management mit Zero-Knowledge Architektur",
     "cta": "Kostenlos starten",
     "launchSpecial": "Launch Special",
@@ -40,7 +40,7 @@
     "pricing": {
       "monthly": "Monatlich",
       "yearly": "Jährlich",
-      "savePercent": "Sparen Sie 17%",
+      "savePercent": "Spare 17%",
       "getStarted": "Loslegen",
       "startWithPro": "🚀 Mit Pro starten",
       "cancelAnytime": "Jederzeit kündbar • Keine versteckten Gebühren • Schweizer Datenschutz garantiert",
@@ -56,7 +56,7 @@
   "documentScanner": {
     "badge": "OCR Document Scanner",
     "title": "Automatisierter Wertschriften-Import",
-    "subtitle": "Scannen Sie Ihre Depotauszüge und importieren Sie Wertschriften automatisch mit unserer OCR-Technologie. Privacy-First Ansatz mit lokaler Bildverarbeitung.",
+    "subtitle": "Scanne deine Depotauszüge und importiere Wertschriften automatisch mit unserer OCR-Technologie. Privacy-First Ansatz mit lokaler Bildverarbeitung.",
     "cropDocument": "Dokument Zuschneiden",
     "reviewConfirm": "Review & Confirm",
     "tableHeaders": {
@@ -90,7 +90,7 @@
     },
     "privacyInfo": {
       "title": "Privacy-First OCR",
-      "description": "Alle Dokumenten werden lokal in Ihrem Browser verarbeitet. Nur die erkannten Metadaten werden verschlüsselt übertragen."
+      "description": "Alle Dokumente werden lokal in deinem Browser verarbeitet. Nur die erkannten Metadaten werden verschlüsselt übertragen."
     },
     "highlights": {
       "ocrRecognition": "OCR Recognition",
@@ -113,15 +113,15 @@
     }
   },
   "portfolio": {
-    "title": "Visualisieren Sie Ihr komplettes Vermögen",
-    "subtitle": "Behalten Sie alle Anlageklassen mit detaillierten Aufschlüsselungen und interaktiven Visualisierungen im Überblick",
+    "title": "Visualisiere dein komplettes Vermögen",
+    "subtitle": "Behalte alle Anlageklassen mit detaillierten Aufschlüsselungen und interaktiven Visualisierungen im Überblick",
     "assetClassesOverview": "Portfolio Anlageklassen Übersicht",
     "assetClassesOrigin": "Portfolio Anlageklassen Herkunft",
     "totalPortfolioValue": "Gesamtportfolio-Wert",
     "totalValue": "Gesamtwert",
     "securities": {
-      "title": "Ihre Wertschriften im Detail",
-      "subtitle": "Verwalten Sie Aktien, ETFs und Fonds mit Live-Kursen und professionellen Übersichten",
+      "title": "Deine Wertschriften im Detail",
+      "subtitle": "Verwalte Aktien, ETFs und Fonds mit Live-Kursen und professionellen Übersichten",
       "stocks": "Aktien",
       "etfs": "ETFs",
       "funds": "Fonds",
@@ -138,7 +138,7 @@
       "features": {
         "livePricing": {
           "title": "Live Pricing",
-          "description": "Echtzeit-Kurse für alle Ihre Wertschriften mit automatischen Updates"
+          "description": "Echtzeit-Kurse für alle deine Wertschriften mit automatischen Updates"
         },
         "multiCurrency": {
           "title": "Multi-Currency",
@@ -172,7 +172,7 @@
     "risk": "Risiko",
     "volatility": "Volatilität",
     "currencyFor": "Währung für Portfolios, Investments und Vermögenswerte",
-    "managePhysicalDigital": "Verwalten Sie physische und digitale Speicherorte für wichtige Informationen oder Vermögenswerte"
+    "managePhysicalDigital": "Verwalte physische und digitale Speicherorte für wichtige Informationen oder Vermögenswerte"
   },
   "bitcoin": {
     "dashboard": "Bitcoin Dashboard",
@@ -210,7 +210,7 @@
     "features": {
       "multiWallet": {
         "title": "Multi-Wallet Management",
-        "description": "Verwalten Sie mehrere Bitcoin-Wallets mit verschiedenen Script-Types (P2PKH, P2WPKH, P2TR)"
+        "description": "Verwalte mehrere Bitcoin-Wallets mit verschiedenen Script-Types (P2PKH, P2WPKH, P2TR)"
       },
       "backupStrategy": {
         "title": "Comprehensive Backup Strategy",
@@ -225,7 +225,7 @@
   "currency": {
     "badge": "Multi-Währungs-Support",
     "title": "Globaler Währungs-Support",
-    "subtitle": "Verwalten Sie Ihr Portfolio in mehreren Währungen mit getrennten Budget- und Portfolio-Einstellungen. Live-Wechselkurse und automatische Umrechnungen.",
+    "subtitle": "Verwalte dein Portfolio in mehreren Währungen mit getrennten Budget- und Portfolio-Einstellungen. Live-Wechselkurse und automatische Umrechnungen.",
     "currencySettings": "Währungseinstellungen",
     "budgetCurrency": "Budget-Währung",
     "portfolioCurrency": "Portfolio-Währung",
@@ -251,11 +251,11 @@
   },
   "realEstate": {
     "title": "Immobilien-Portfolio-Management",
-    "subtitle": "Verwalten Sie Ihre Immobilieninvestments zentral. Direktbesitz, REITs und Hypotheken-Tracking in einer integrierten Lösung.",
+    "subtitle": "Verwalte deine Immobilieninvestments zentral. Direktbesitz, REITs und Hypotheken-Tracking in einer integrierten Lösung.",
     "features": {
       "portfolio": {
         "title": "Immobilien-Portfolio",
-        "description": "Verwalten Sie mehrere Immobilien mit detaillierten Finanzierungsstrukturen und Eigenkapital-Tracking"
+        "description": "Verwalte mehrere Immobilien mit detaillierten Finanzierungsstrukturen und Eigenkapital-Tracking"
       },
       "mortgageManagement": {
         "title": "Hypotheken-Management",
@@ -334,7 +334,7 @@
       "title": "§ 5 Privacy und Datenminimierung",
       "p1": "Grundprinzip: Privacy-fokussierte Metadatenverwaltung mit strikter Trennung zwischen Organisationsdaten und sicherheitsrelevanten Zugangsinformationen.",
       "p2": "Datenfokus: Die Plattform beschränkt sich auf die Speicherung von Metadaten und Organisationsstrukturen ohne Verarbeitung von Dokumenteninhalten oder sicherheitsrelevanten Informationen.",
-      "p3": "Verschlüsselung: Alle privacy-relevanten Daten werden auf dem Client des Nutzers verschlüsselt und sicher an den Stararc Server übertragen. Die verschlüsselten Daten sind auch für Stararc oder Dritte nicht lesbar, solange Sie ihre Logindaten nicht preisgeben.",
+      "p3": "Verschlüsselung: Alle privacy-relevanten Daten werden auf dem Client des Nutzers verschlüsselt und sicher an den Stararc Server übertragen. Die verschlüsselten Daten sind auch für Stararc oder Dritte nicht lesbar, solange du deine Logindaten nicht preisgibst.",
       "p4": "Datenschutzstandards: Einhaltung höchster Schweizer und europäischer Datenschutzgesetze (DSG, EU-DSGVO) sowie vergleichbarer internationaler Standards."
     },
     "section6": {
@@ -488,7 +488,7 @@
   "dashboard": {
     "loading": "Lädt...",
     "activationFailed": "Aktivierung fehlgeschlagen",
-    "activationFailedMessage": "Die Subscription konnte nicht aktiviert werden. Bitte versuchen Sie es erneut oder kontaktieren Sie den Support.",
+    "activationFailedMessage": "Die Subscription konnte nicht aktiviert werden. Bitte versuche es erneut oder kontaktiere den Support.",
     "reload": "Seite neu laden",
     "noSubscription": "Keine Subscription gefunden...",
     "plan": "Plan",
@@ -520,17 +520,17 @@
     "passwordPlaceholder": "Passwort (min. 8 Zeichen, A-z, 0-9)",
     "registering": "Registrierung läuft...",
     "or": "Oder",
-    "agreementText": "Durch die Registrierung stimmen Sie unseren",
+    "agreementText": "Durch die Registrierung stimmst du unseren",
     "privacyPolicy": "Datenschutzbestimmungen",
     "and": "und",
     "termsConditions": "Nutzungsbedingungen",
     "agreementEnd": "zu",
     "acceptTerms": "Ich akzeptiere die",
-    "termsRequired": "Sie müssen den AGB und der Datenschutzerklärung zustimmen",
-    "createAccount": "erstellen Sie ein neues Konto",
-    "loginToExisting": "melden Sie sich in Ihr bestehendes Konto an",
+    "termsRequired": "Du musst den AGB und der Datenschutzerklärung zustimmen",
+    "createAccount": "erstelle ein neues Konto",
+    "loginToExisting": "melde dich in dein bestehendes Konto an",
     "earlyBetaTitle": "Early Beta Version",
-    "earlyBetaDescription": "Dies ist eine frühe Beta-Version von StarArc. Alle Daten können regelmäßig und ohne Ankündigung gelöscht werden. Nutzen Sie diese Version nur zu Test- und Evaluationszwecken.",
+    "earlyBetaDescription": "Dies ist eine frühe Beta-Version von StarArc. Alle Daten können regelmäßig und ohne Ankündigung gelöscht werden. Nutze diese Version nur zu Test- und Evaluationszwecken.",
     "loginTitle": "Anmelden",
     "registerTitle": "Konto erstellen",
     "twoFactorToken": "2FA-Token",
@@ -538,22 +538,22 @@
     "demo": "Demo",
     "demoButton": "🚀 Mit Demo-Account anmelden",
     "demoLoading": "Demo-Login läuft...",
-    "networkError": "Netzwerkfehler. Bitte versuchen Sie es später erneut.",
+    "networkError": "Netzwerkfehler. Bitte versuche es später erneut.",
     "loginFailed": "Anmeldung fehlgeschlagen",
     "demoLoginFailed": "Demo-Login fehlgeschlagen",
-    "registerSuccess": "Registrierung erfolgreich! Sie können sich jetzt anmelden.",
+    "registerSuccess": "Registrierung erfolgreich! Du kannst dich jetzt anmelden.",
     "registerFailed": "Registrierung fehlgeschlagen",
     "emailSent": "E-Mail versendet!",
     "confirmationEmailSent": "Wir haben eine Bestätigungs-E-Mail an",
-    "pleaseCheckInbox": "gesendet. Bitte überprüfen Sie Ihr Postfach und klicken Sie auf den Bestätigungslink.",
-    "noEmailReceived": "Keine E-Mail erhalten? Prüfen Sie Ihren Spam-Ordner.",
+    "pleaseCheckInbox": "gesendet. Bitte überprüfe dein Postfach und klicke auf den Bestätigungslink.",
+    "noEmailReceived": "Keine E-Mail erhalten? Prüfe deinen Spam-Ordner.",
     "backToLogin": "Zurück zum Login"
   },
   "subscriptionSelection": {
     "welcome": "Willkommen bei Stararc",
-    "choosePlan": "Wählen Sie Ihren Plan",
-    "choosePlanSubtitle": "Starten Sie kostenlos oder wählen Sie gleich einen Premium-Plan",
-    "planSelectionError": "Fehler bei der Plan-Auswahl. Bitte versuchen Sie es erneut."
+    "choosePlan": "Wähle deinen Plan",
+    "choosePlanSubtitle": "Starte kostenlos oder wähle gleich einen Premium-Plan",
+    "planSelectionError": "Fehler bei der Plan-Auswahl. Bitte versuche es erneut."
   },
   "upgradePreview": {
     "title": "Upgrade-Übersicht",
@@ -563,12 +563,12 @@
     "credit": "Gutschrift",
     "proratedCharge": "Anteilige Kosten",
     "dueNow": "Sofort fällig",
-    "infoText": "Die Gutschrift basiert auf der verbleibenden Laufzeit Ihres aktuellen Plans. Der Betrag wird Ihrer hinterlegten Kreditkarte belastet.",
+    "infoText": "Die Gutschrift basiert auf der verbleibenden Laufzeit deines aktuellen Plans. Der Betrag wird deiner hinterlegten Kreditkarte belastet.",
     "cancel": "Abbrechen",
     "confirm": "Jetzt bezahlen",
     "processing": "Wird verarbeitet...",
-    "scaFailed": "3D Secure Bestätigung fehlgeschlagen. Bitte versuchen Sie es erneut.",
-    "paymentFailed": "Zahlung fehlgeschlagen. Bitte überprüfen Sie Ihre Zahlungsmethode."
+    "scaFailed": "3D Secure Bestätigung fehlgeschlagen. Bitte versuche es erneut.",
+    "paymentFailed": "Zahlung fehlgeschlagen. Bitte überprüfe deine Zahlungsmethode."
   },
   "spaceshipAccess": {
     "unlockApp": "App freischalten",
@@ -583,14 +583,14 @@
     "setup": "2FA einrichten",
     "disable": "2FA deaktivieren",
     "requiresAuthenticator": "Benötigt eine Authenticator-App",
-    "activeMessage": "Ihre 2FA ist aktiv und schützt Ihr Konto zusätzlich.",
+    "activeMessage": "Deine 2FA ist aktiv und schützt dein Konto zusätzlich.",
     "enabledOn": "Aktiviert am:",
     "securityIncreased": "Sicherheit erhöht",
-    "securityIncreasedMessage": "Ihr Konto und alle App-Zugriffe sind durch 2FA geschützt.",
+    "securityIncreasedMessage": "Dein Konto und alle App-Zugriffe sind durch 2FA geschützt.",
     "disableTitle": "2FA deaktivieren",
-    "disableWarning": "Das Deaktivieren von 2FA reduziert die Sicherheit Ihres Kontos erheblich. Nur Sie sollten Zugriff auf Ihre Authenticator-App haben.",
+    "disableWarning": "Das Deaktivieren von 2FA reduziert die Sicherheit deines Kontos erheblich. Nur du solltest Zugriff auf deine Authenticator-App haben.",
     "currentPassword": "Aktuelles Passwort:",
-    "fillAllFields": "Bitte füllen Sie alle Felder aus"
+    "fillAllFields": "Bitte fülle alle Felder aus"
   },
   "assetOrganization": {
     "wealthAssetsTitle": "Vermögenswerte",
@@ -620,12 +620,12 @@
     "animations": {
       "wealthManager": {
         "title": "Become your own wealth manager",
-        "subtitle": "Übernehmen Sie die Kontrolle über Ihr Vermögen und Budget"
+        "subtitle": "Übernimm die Kontrolle über dein Vermögen und Budget"
       },
       "assetOrganization": {
         "title": "Organize your wealth and security",
-        "titlePart1": "Organisieren Sie Ihr",
-        "titlePart2": "Vermögen und Ihre Sicherheit",
+        "titlePart1": "Organisiere dein",
+        "titlePart2": "Vermögen und deine Sicherheit",
         "subtitle": ""
       },
       "animation1": {
@@ -649,15 +649,15 @@
         "subtitle": ""
       },
       "vaultManagement": {
-        "title": "Verwalten Sie Ihre Tresore",
+        "title": "Verwalte deine Tresore",
         "subtitle": "Sowohl physisch als auch digital"
       },
       "generationalWealth": {
-        "title": "Hinterlassen Sie Ihren Erben ein gut organisiertes Portfolio",
-        "subtitle": "Schützen Sie das Vermögen von Generationen"
+        "title": "Hinterlasse deinen Erben ein gut organisiertes Portfolio",
+        "subtitle": "Schütze das Vermögen von Generationen"
       },
       "marketAccess": {
-        "title": "Erhalten Sie direkten Marktzugang über unsere Partner",
+        "title": "Erhalte direkten Marktzugang über unsere Partner",
         "subtitle": "Bitcoin kaufen - Haus verkaufen - Hypotheken erneuern"
       },
       "bootstrapping": {
@@ -670,7 +670,7 @@
       },
       "assetsOverview": {
         "title": "Komplette Vermögensübersicht",
-        "subtitle": "Umfassende Ansicht aller Ihrer Vermögenswerte und Sicherheitselemente in einer organisierten Oberfläche."
+        "subtitle": "Umfassende Ansicht aller deiner Vermögenswerte und Sicherheitselemente in einer organisierten Oberfläche."
       },
       "bitcoinCustody": {
         "title": "Der neue Standard: Self Custody",
@@ -678,19 +678,19 @@
       },
       "portfolioManagement": {
         "title": "Professionelles Portfolio-Management",
-        "subtitle": "Verfolgen und verwalten Sie Ihre Aktien, ETFs, Anleihen und Krypto-Assets mit institutionellen Tools."
+        "subtitle": "Verfolge und verwalte deine Aktien, ETFs, Anleihen und Krypto-Assets mit institutionellen Tools."
       },
       "privacy": {
         "title": "Das neue Gold: Privacy",
-        "subtitle": "Alle Ihre Daten sind verschlüsselt und werden anonym gehalten. Komplette Privatsphäre by Design.",
+        "subtitle": "Alle deine Daten sind verschlüsselt und werden anonym gehalten. Komplette Privatsphäre by Design.",
         "step9": {
           "title": "Komplette Privacy-Trennung",
-          "description": "Es besteht keine Verbindung zwischen Ihren persönlichen Login-Daten und Ihren verschlüsselten Daten in der StarArc Spaceship App"
+          "description": "Es besteht keine Verbindung zwischen deinen persönlichen Login-Daten und deinen verschlüsselten Daten in der StarArc Spaceship App"
         },
         "step10": {
           "title": "Ultimativer Datenschutz",
-          "description": "Niemand kann Ihre Daten lesen, nicht einmal wir",
-          "subtitle": "Bewahren Sie Ihren privaten Schlüssel sicher für den Login auf. Wir können Ihr Passwort nicht wiederherstellen."
+          "description": "Niemand kann deine Daten lesen, nicht einmal wir",
+          "subtitle": "Bewahre deinen privaten Schlüssel sicher für den Login auf. Wir können dein Passwort nicht wiederherstellen."
         }
       },
       "wholeEnchilada": {
@@ -702,7 +702,7 @@
   "selfCustody": {
     "badge": "Bitcoin Self Custody Standard",
     "title": "Bitcoin Self Custody - Der neue Standard",
-    "subtitle": "Übernehmen Sie die vollständige Kontrolle über Ihre Bitcoin. Erfahren Sie, wie richtig umgesetzte Bitcoin Self-Custody-Lösungen Ihre finanzielle Souveränität und Privatsphäre revolutionieren.",
+    "subtitle": "Übernimm die vollständige Kontrolle über deine Bitcoin. Erfahre, wie richtig umgesetzte Bitcoin Self-Custody-Lösungen deine finanzielle Souveränität und Privatsphäre revolutionieren.",
     "tabs": {
       "overview": "Übersicht",
       "comparison": "Vergleich",
@@ -728,8 +728,8 @@
       },
       "control": {
         "aspect": "Private Key Kontrolle",
-        "self": "Sie besitzen Ihre Private Keys - Not your keys, not your Bitcoin",
-        "thirdParty": "Exchange/Custodian kontrolliert Ihre Private Keys"
+        "self": "Du besitzt deine Private Keys - Not your keys, not your Bitcoin",
+        "thirdParty": "Exchange/Custodian kontrolliert deine Private Keys"
       },
       "privacy": {
         "aspect": "Transaktionsprivatsphäre",
@@ -753,7 +753,7 @@
       },
       "censorship": {
         "aspect": "Zensurresistenz",
-        "self": "Vollständige Zensurresistenz, niemand kann Sie stoppen",
+        "self": "Vollständige Zensurresistenz, niemand kann dich stoppen",
         "thirdParty": "Account kann gesperrt/eingefroren werden"
       }
     },
@@ -761,7 +761,7 @@
       "title": "Warum Bitcoin Self Custody?",
       "fullControl": {
         "title": "Not Your Keys, Not Your Bitcoin",
-        "description": "Nur wer die Private Keys kontrolliert, besitzt wirklich Bitcoin. Bei Exchanges sind Sie nur ein Gläubiger mit einem IOU."
+        "description": "Nur wer die Private Keys kontrolliert, besitzt wirklich Bitcoin. Bei Exchanges bist du nur ein Gläubiger mit einem IOU."
       },
       "privacy": {
         "title": "Erweiterte Privacy-Möglichkeiten",
@@ -781,11 +781,11 @@
       },
       "responsibility": {
         "title": "Persönliche Verantwortung",
-        "description": "Self Custody erfordert sorgfältiges Seed-Phrase-Backup und Sicherheitspraktiken. Sie sind Ihre eigene Bank - mit all der Verantwortung, die damit einhergeht."
+        "description": "Self Custody erfordert sorgfältiges Seed-Phrase-Backup und Sicherheitspraktiken. Du bist deine eigene Bank - mit all der Verantwortung, die damit einhergeht."
       },
       "inheritance": {
         "title": "Vererbung & Generationenwealth",
-        "description": "Mit MultiSig-Setups und Seed-Phrase-Vererbung können Sie Bitcoin sicher an die nächste Generation weitergeben."
+        "description": "Mit MultiSig-Setups und Seed-Phrase-Vererbung kannst du Bitcoin sicher an die nächste Generation weitergeben."
       },
       "technology": {
         "title": "Hardware Wallet Innovation",
@@ -831,7 +831,7 @@
   },
   "plans": {
     "title": "Pläne & Preise",
-    "subtitle": "Wählen Sie den perfekten Plan für Ihre Bedürfnisse",
+    "subtitle": "Wähle den perfekten Plan für deine Bedürfnisse",
     "free": {
       "name": "Free",
       "description": "Zum Kennenlernen"
@@ -842,7 +842,7 @@
     },
     "nakamoto": {
       "name": "Nakamoto",
-      "description": "So viele Bitcoin Setups wie Sie wollen"
+      "description": "So viele Bitcoin Setups wie du willst"
     },
     "core": {
       "name": "Core",
@@ -858,8 +858,8 @@
     }
   },
   "authMethod": {
-    "title": "Wählen Sie Ihre Authentifizierungsmethode",
-    "subtitle": "Entscheiden Sie, wie Sie Ihren Starship-Account schützen möchten. Beide Methoden sind sicher, bieten aber unterschiedliche Vor- und Nachteile zwischen Komfort und Privatsphäre.",
+    "title": "Wähle deine Authentifizierungsmethode",
+    "subtitle": "Entscheide, wie du deinen Starship-Account schützen möchtest. Beide Methoden sind sicher, bieten aber unterschiedliche Vor- und Nachteile zwischen Komfort und Privatsphäre.",
     "recommended": "Empfohlen",
     "bestFor": "Ideal für",
     "advantages": "Vorteile",
@@ -900,11 +900,11 @@
       "bestFor": "Privatsphäre-Puristen, Bitcoin-Maximalisten, fortgeschrittene Nutzer",
       "warning": {
         "title": "⚠️ Kritische Warnung - Bitte sorgfältig lesen",
-        "point1": "Wenn Sie Ihren Login-Code verlieren, ist Ihr Account PERMANENT UNZUGÄNGLICH. Wir können Ihnen nicht bei der Wiederherstellung helfen.",
+        "point1": "Wenn du deinen Login-Code verlierst, ist dein Account PERMANENT UNZUGÄNGLICH. Wir können dir nicht bei der Wiederherstellung helfen.",
         "point2": "Es gibt KEIN Passwort-Reset, KEINE Kundenservice-Wiederherstellung, KEINEN Backup-Zugang.",
-        "point3": "Sie sind zu 100% verantwortlich für die sichere Aufbewahrung Ihres Login-Codes. Schreiben Sie ihn auf, nutzen Sie einen Passwort-Manager oder bewahren Sie ihn in einem sicheren Tresor auf.",
+        "point3": "Du bist zu 100% verantwortlich für die sichere Aufbewahrung deines Login-Codes. Schreibe ihn auf, nutze einen Passwort-Manager oder bewahre ihn in einem sicheren Tresor auf.",
         "acknowledge": "Ich verstehe und akzeptiere die volle Verantwortung. Mir ist bewusst, dass der Verlust meines Login-Codes den permanenten Verlust des Zugriffs auf meinen Account und alle Daten bedeutet.",
-        "mustAcknowledge": "Sie müssen die Warnung bestätigen, bevor Sie fortfahren können."
+        "mustAcknowledge": "Du musst die Warnung bestätigen, bevor du fortfahren kannst."
       }
     },
     "comparison": {
@@ -926,7 +926,7 @@
       "extreme": "Extrem"
     },
     "footer": {
-      "info": "Sie können unabhängig von Ihrer Authentifizierungsmethode jederzeit sowohl auf die Starship-App als auch auf das StarArc-Abonnement-Portal zugreifen."
+      "info": "Du kannst unabhängig von deiner Authentifizierungsmethode jederzeit sowohl auf die Starship-App als auch auf das StarArc-Abonnement-Portal zugreifen."
     }
   },
   "animations": {
@@ -950,10 +950,10 @@
     },
     "animation1": {
       "headline": {
-        "part1": "Halten und verwalten Sie ihr Vermögen",
+        "part1": "Halte und verwalte dein Vermögen",
         "part2": "für Generationen"
       },
-      "subtext": "Übernehmen Sie die Kontrolle über Ihr Vermögen und Budget mit unserer umfassenden Asset-Management-Plattform. Von Bitcoin-Verwahrung bis hin zu traditionellen Investitionen - alles in einem sicheren, privaten Dashboard.",
+      "subtext": "Übernimm die Kontrolle über dein Vermögen und Budget mit unserer umfassenden Asset-Management-Plattform. Von Bitcoin-Verwahrung bis hin zu traditionellen Investitionen - alles in einem sicheren, privaten Dashboard.",
       "features": {
         "security": "Bank-Level-Sicherheit",
         "privacy": "Vollständige Privatsphäre",
@@ -963,7 +963,7 @@
     },
     "vaultManagement": {
       "headline": {
-        "part1": "Verwalten Sie Ihre",
+        "part1": "Verwalte deine",
         "part2": "Tresore"
       },
       "subtext": "Sowohl physisch als auch digital",
@@ -976,7 +976,7 @@
     },
     "generationalWealth": {
       "headline": {
-        "part1": "Hinterlassen Sie Ihren Erben ein",
+        "part1": "Hinterlasse deinen Erben ein",
         "part2": "gut organisiertes Portfolio"
       },
       "subtext": "Generationenvermögen. Unabhängigkeit",
@@ -985,11 +985,11 @@
         "growth": "Wachstum",
         "legacy": "Erbe"
       },
-      "cta": "Ihr Erbe planen"
+      "cta": "Dein Erbe planen"
     },
     "marketAccess": {
       "headline": {
-        "part1": "Erhalten Sie direkten",
+        "part1": "Erhalte direkten",
         "part2": "Marktzugang",
         "part3": "über unsere Partner"
       },
@@ -1004,7 +1004,7 @@
     "oneDashboard": {
       "headline": {
         "part1": "EIN",
-        "part2": "Dashboard für alle Ihre Vermögenswerte"
+        "part2": "Dashboard für alle deine Vermögenswerte"
       },
       "subtext": "selbstverwaltet · sicher · datenschutzsensibel",
       "features": {
@@ -1016,7 +1016,7 @@
     },
     "bigPicture": {
       "headline": {
-        "part1": "Sehen Sie das",
+        "part1": "Sieh das",
         "part2": "große Ganze",
         "part3": "— dann handeln Sie"
       },
@@ -1047,9 +1047,9 @@
         "part2": "Bootstrapping"
       },
       "subtext": {
-        "part1": "Werden Sie ein",
+        "part1": "Wirst du ein",
         "part2": "StarArc Früh-Unterstützer",
-        "part3": "und erhalten Sie ein",
+        "part3": "und erhalte ein",
         "part4": "lebenslange Core-Mitgliedschaft für 999 Dollar"
       },
       "features": {
@@ -1061,7 +1061,7 @@
     },
     "securitySetup": {
       "headline": {
-        "part1": "Dokumentieren und überprüfen Sie Ihr",
+        "part1": "Dokumentiere und überprüfe dein",
         "part2": "Sicherheitssetup"
       },
       "subtext": "Digitale und physische Tresore — Backup-Strategie",
@@ -1081,15 +1081,15 @@
       }
     },
     "planningShowcase": {
-      "title": "Visualisieren Sie Ihre finanzielle Zukunft",
-      "subtitle": "Planen Sie Ihre Vermögensentwicklung mit leistungsstarken Szenarien und Monte-Carlo-Simulationen. Verstehen Sie Ihre finanziellen Möglichkeiten und treffen Sie fundierte Entscheidungen.",
+      "title": "Visualisiere deine finanzielle Zukunft",
+      "subtitle": "Plane deine Vermögensentwicklung mit leistungsstarken Szenarien und Monte-Carlo-Simulationen. Verstehe deine finanziellen Möglichkeiten und triff fundierte Entscheidungen.",
       "views": {
         "capitalWithdrawals": "Kapitalbezüge",
         "monteCarloSimulation": "Monte Carlo Simulation"
       },
       "capitalWithdrawals": {
         "title": "Vermögensentwicklung mit Kapitalbezügen",
-        "subtitle": "Visualisieren Sie, wie sich Ihr Vermögen über die Zeit entwickelt, unter Berücksichtigung von geplanten Kapitalbezügen und unterschiedlichen Wachstumsszenarien.",
+        "subtitle": "Visualisiere, wie sich dein Vermögen über die Zeit entwickelt, unter Berücksichtigung von geplanten Kapitalbezügen und unterschiedlichen Wachstumsszenarien.",
         "controls": {
           "growthScenario": "Wachstumsszenario",
           "inflationScenario": "Inflationsszenario",
@@ -1121,15 +1121,15 @@
       "features": {
         "scenarioPlanning": {
           "title": "Szenario-Planung",
-          "description": "Erstellen Sie unterschiedliche Szenarien mit verschiedenen Wachstumsraten, Inflationsannahmen und Kapitalbezügen."
+          "description": "Erstelle unterschiedliche Szenarien mit verschiedenen Wachstumsraten, Inflationsannahmen und Kapitalbezügen."
         },
         "monteCarloAnalysis": {
           "title": "Monte Carlo Analyse",
-          "description": "1000 Simulationen zeigen die Wahrscheinlichkeitsverteilung Ihrer zukünftigen Vermögensentwicklung."
+          "description": "1000 Simulationen zeigen die Wahrscheinlichkeitsverteilung deiner zukünftigen Vermögensentwicklung."
         },
         "capitalWithdrawals": {
           "title": "Kapitalbezugs-Planung",
-          "description": "Planen Sie Bezüge aus Säule 2, Säule 3 und anderen Vermögenswerten und visualisieren Sie deren Auswirkungen."
+          "description": "Plane Bezüge aus Säule 2, Säule 3 und anderen Vermögenswerten und visualisiere deren Auswirkungen."
         },
         "inflationAdjustment": {
           "title": "Inflationsanpassung",
@@ -1137,24 +1137,24 @@
         },
         "eventTimeline": {
           "title": "Ereignis-Zeitstrahl",
-          "description": "Visualisieren Sie wichtige finanzielle Ereignisse wie Pensionierung, Immobilienkauf oder Kapitalbezüge."
+          "description": "Visualisiere wichtige finanzielle Ereignisse wie Pensionierung, Immobilienkauf oder Kapitalbezüge."
         },
         "volatilityAnalysis": {
           "title": "Volatilitäts-Analyse",
-          "description": "Verstehen Sie die Auswirkungen von Marktvolatilität auf Ihre langfristige Vermögensentwicklung."
+          "description": "Verstehe die Auswirkungen von Marktvolatilität auf deine langfristige Vermögensentwicklung."
         }
       },
       "cta": {
-        "message": "Beginnen Sie Ihre Finanzplanung und visualisieren Sie Ihre Zukunft",
+        "message": "Beginne deine Finanzplanung und visualisiere deine Zukunft",
         "startButton": "Jetzt Starten",
         "plansButton": "Preise Ansehen"
       }
     },
     "retirementShowcase": {
-      "title": "Planen Sie Ihre Pensionierung",
-      "subtitle": "Professionelle Pensionierungsplanung mit Kapitalbezügen, Allokationssimulation und Lebensabschnitt-basierter Planung. Visualisieren Sie Ihre finanzielle Zukunft im Ruhestand.",
+      "title": "Plane deine Pensionierung",
+      "subtitle": "Professionelle Pensionierungsplanung mit Kapitalbezügen, Allokationssimulation und Lebensabschnitt-basierter Planung. Visualisiere deine finanzielle Zukunft im Ruhestand.",
       "timeline": {
-        "title": "Ihre Lebensabschnitte",
+        "title": "Deine Lebensabschnitte",
         "phases": {
           "accumulation": "Ansparphase",
           "transition": "Übergangsphase",
@@ -1168,7 +1168,7 @@
       },
       "withdrawals": {
         "title": "Kapitalbezüge",
-        "subtitle": "Planen Sie alle Bezüge strategisch",
+        "subtitle": "Plane alle Bezüge strategisch",
         "atAge": "Mit {{age}}",
         "events": {
           "pillar3": "3. Säule Bezug",
@@ -1195,41 +1195,41 @@
       "features": {
         "phaseBasedPlanning": {
           "title": "Lebensabschnitt-Planung",
-          "description": "Planen Sie verschiedene Lebensabschnitte mit unterschiedlichen Kapitalbezügen und Allokationsstrategien."
+          "description": "Plane verschiedene Lebensabschnitte mit unterschiedlichen Kapitalbezügen und Allokationsstrategien."
         },
         "capitalWithdrawals": {
           "title": "Kapitalbezugs-Strategien",
-          "description": "Optimieren Sie den Zeitpunkt und die Höhe Ihrer Säule 2 und Säule 3 Bezüge steuerlich und finanziell."
+          "description": "Optimiere den Zeitpunkt und die Höhe deiner Säule 2 und Säule 3 Bezüge steuerlich und finanziell."
         },
         "allocationSimulation": {
           "title": "Allokations-Simulation",
-          "description": "Simulieren Sie Ihre Asset-Allokation nach Kapitalbezügen und optimieren Sie für Ihre Risikotoleranz."
+          "description": "Simuliere deine Asset-Allokation nach Kapitalbezügen und optimiere für deine Risikotoleranz."
         },
         "eventPlanning": {
           "title": "Event-Planung",
-          "description": "Planen Sie Hypothekenrückzahlungen, Immobilienkäufe und andere größere finanzielle Ereignisse."
+          "description": "Plane Hypothekenrückzahlungen, Immobilienkäufe und andere größere finanzielle Ereignisse."
         },
         "drawdownStrategy": {
           "title": "Entnahme-Strategie",
-          "description": "Entwickeln Sie eine nachhaltige Strategie für Vermögensentnahmen während der Pensionierung."
+          "description": "Entwickle eine nachhaltige Strategie für Vermögensentnahmen während der Pensionierung."
         },
         "sustainabilityAnalysis": {
           "title": "Nachhaltigkeits-Analyse",
-          "description": "Stellen Sie sicher, dass Ihr Vermögen über Ihre gesamte Ruhestandsphase ausreicht."
+          "description": "Stelle sicher, dass dein Vermögen über deine gesamte Ruhestandsphase ausreicht."
         }
       },
       "cta": {
-        "message": "Starten Sie Ihre Pensionierungsplanung mit StarArc",
+        "message": "Starte deine Pensionierungsplanung mit StarArc",
         "startButton": "Jetzt Starten",
         "plansButton": "Preise Ansehen"
       }
     },
     "assetShowcase": {
       "title": {
-        "part1": "Ihre Assets",
+        "part1": "Deine Assets",
         "part2": "Zentral verwaltet"
       },
-      "subtitle": "Verwalten Sie alle Ihre Vermögenswerte an einem Ort.",
+      "subtitle": "Verwalte alle deine Vermögenswerte an einem Ort.",
       "assets": {
         "securities": {
           "title": "Wertschriften",
@@ -1305,7 +1305,7 @@
         }
       },
       "cta": {
-        "subtitle": "Entdecken Sie die Vielfalt Ihrer Anlagemöglichkeiten",
+        "subtitle": "Entdecke die Vielfalt deiner Anlagemöglichkeiten",
         "start": "Jetzt Starten",
         "demo": "Demo Account"
       }
@@ -1359,7 +1359,7 @@
         }
       },
       "cta": {
-        "subtitle": "Starten Sie noch heute mit Ihrer intelligenten Budget-Verwaltung",
+        "subtitle": "Starte noch heute mit deiner intelligenten Budget-Verwaltung",
         "start": "Kostenlos starten",
         "demo": "Demo ansehen"
       }
@@ -1369,7 +1369,7 @@
         "part1": "Maximale Sicherheit",
         "part2": "& Datenschutz"
       },
-      "subtitle": "Wir setzen die höchsten Standards für den Schutz Ihrer Privatsphäre um.",
+      "subtitle": "Wir setzen die höchsten Standards für den Schutz deiner Privatsphäre um.",
       "features": {
         "institutions": {
           "title": "Finanzinstitute",
@@ -1407,15 +1407,15 @@
         "principles": {
           "noSales": {
             "title": "Keine Datenweitergabe",
-            "description": "Kein Verkauf oder Weitergabe Ihrer Daten an Dritte"
+            "description": "Kein Verkauf oder Weitergabe deiner Daten an Dritte"
           },
           "encryption": {
             "title": "AES-256-GCM Verschlüsselung",
-            "description": "Client-seitig verschlüsselt - nur für Sie lesbar"
+            "description": "Client-seitig verschlüsselt - nur für dich lesbar"
           },
           "local": {
             "title": "Zero-Knowledge Architektur",
-            "description": "Wir können Ihre Daten nicht lesen"
+            "description": "Wir können deine Daten nicht lesen"
           },
           "compliance": {
             "title": "DSGVO-Compliant",
@@ -1424,24 +1424,24 @@
         }
       },
       "cta": {
-        "subtitle": "Vertrauen Sie auf Swiss-Made Sicherheit",
+        "subtitle": "Vertraue auf Swiss-Made Sicherheit",
         "start": "Jetzt Starten",
         "demo": "Demo Account"
       }
     },
     "gettingStartedShowcase": {
       "title": "Einfacher Einstieg leicht gemacht",
-      "subtitle": "Ihre personalisierte Onboarding-Reise hilft Ihnen, Ihr Finanzprofil in wenigen Minuten einzurichten. Folgen Sie unserem geführten Drei-Schritte-Prozess, um das volle Potenzial Ihrer Vermögensverwaltung zu entfalten.",
+      "subtitle": "Deine personalisierte Onboarding-Reise hilft dir, dein Finanzprofil in wenigen Minuten einzurichten. Folge unserem geführten Drei-Schritte-Prozess, um das volle Potenzial deiner Vermögensverwaltung zu entfalten.",
       "tabs": {
         "gettingStarted": "Getting Started",
         "gettingBetter": "Getting Better"
       },
       "header": {
-        "title": "Folgen Sie diesen drei Schritten für Ihre Ersteinrichtung",
-        "subtitle": "Sie können jederzeit über den Menüpunkt \"Getting Started\" zu dieser Ansicht zurückkehren."
+        "title": "Folge diesen drei Schritten für deine Ersteinrichtung",
+        "subtitle": "Du kannst jederzeit über den Menüpunkt \"Getting Started\" zu dieser Ansicht zurückkehren."
       },
       "progress": {
-        "title": "Ihr Fortschritt",
+        "title": "Dein Fortschritt",
         "completed": "5 / 7 abgeschlossen",
         "percentComplete": "71% abgeschlossen"
       },
@@ -1481,8 +1481,8 @@
       },
       "gettingBetter": {
         "header": {
-          "title": "Optimieren Sie Ihr Profil und Portfolio kontinuierlich",
-          "subtitle": "Klicken Sie auf die blauen Info-Symbole für Informationen, Tipps und Sicherheitsrichtlinien zu jedem Element."
+          "title": "Optimiere dein Profil und Portfolio kontinuierlich",
+          "subtitle": "Klicke auf die blauen Info-Symbole für Informationen, Tipps und Sicherheitsrichtlinien zu jedem Element."
         },
         "progress": {
           "title": "Fortschritt",
@@ -1534,15 +1534,15 @@
       "benefits": {
         "quickSetup": {
           "title": "Schnelle & Geführte Einrichtung",
-          "description": "Unser intelligentes Onboarding-System führt Sie Schritt für Schritt durch die Einrichtung Ihres Profils, die Erstellung Ihres ersten Budgets und die Planung Ihrer Finanzen. Visuelle Fortschrittsverfolgung hält Sie motiviert, während intelligente Standards und automatisch ausgefüllte Budget-Positionen basierend auf Ihrer Familienstruktur Ihnen Stunden manueller Dateneingabe ersparen."
+          "description": "Unser intelligentes Onboarding-System führt dich Schritt für Schritt durch die Einrichtung deines Profils, die Erstellung deines ersten Budgets und die Planung deiner Finanzen. Visuelle Fortschrittsverfolgung hält dich motiviert, während intelligente Standards und automatisch ausgefüllte Budget-Positionen basierend auf deiner Familienstruktur dir Stunden manueller Dateneingabe ersparen."
         },
         "continuousImprovement": {
           "title": "Kontinuierliche Verbesserung",
-          "description": "Während Sie die App nutzen, erweitern und verfeinern Sie auf natürliche Weise Ihr Finanzprofil. Fügen Sie mehr Assets hinzu, verfolgen Sie detaillierte Ausgaben und bauen Sie im Laufe der Zeit ein umfassendes Bild Ihres Vermögens auf. Das System wächst mit Ihnen – die Rückkehr zur Getting Started-Ansicht zeigt Ihnen jederzeit Ihren Fortschritt und hebt Bereiche hervor, in denen Sie Ihre Finanzverwaltung weiter optimieren können."
+          "description": "Während du die App nutzt, erweiterst und verfeinerst du auf natürliche Weise dein Finanzprofil. Füge mehr Assets hinzu, verfolge detaillierte Ausgaben und baue im Laufe der Zeit ein umfassendes Bild deines Vermögens auf. Das System wächst mit dir – die Rückkehr zur Getting Started-Ansicht zeigt dir jederzeit deinen Fortschritt und hebt Bereiche hervor, in denen du deine Finanzverwaltung weiter optimieren kannst."
         }
       },
       "cta": {
-        "message": "Beginnen Sie heute Ihre Reise zu besserer finanzieller Klarheit",
+        "message": "Beginne heute deine Reise zu besserer finanzieller Klarheit",
         "startButton": "Kostenlos starten",
         "plansButton": "Pläne ansehen"
       }
@@ -1564,7 +1564,7 @@
       "title": "2. Grundsätze der Datenverarbeitung",
       "p1": "Privacy-by-Design: Stararc.one ist als privacy-fokussierte Metadaten-Verwaltungsplattform konzipiert, die explizit darauf aufmerksam macht, die Plattform nicht für die Speicherung sicherheitsrelevanter Informationen zu verwenden.",
       "p2": "Datenminimierung: Wir verarbeiten nur die Daten, die für den Betrieb der Plattform technisch erforderlich sind.",
-      "p3": "Client-seitige Verschlüsselung: Alle Nutzerdaten werden bereits auf Ihrem Gerät verschlüsselt, bevor sie an unsere Server übertragen werden."
+      "p3": "Client-seitige Verschlüsselung: Alle Nutzerdaten werden bereits auf deinem Gerät verschlüsselt, bevor sie an unsere Server übertragen werden."
     },
     "section3": {
       "title": "3. Art und Zweck der Datenverarbeitung",
@@ -1618,36 +1618,36 @@
     },
     "section5": {
       "title": "5. Verschlüsselung und technische Sicherheit",
-      "p1": "Client-seitige Verschlüsselung: Alle sensiblen Daten werden bereits auf Ihrem Gerät verschlüsselt, bevor sie übertragen werden.",
+      "p1": "Client-seitige Verschlüsselung: Alle sensiblen Daten werden bereits auf deinem Gerät verschlüsselt, bevor sie übertragen werden.",
       "p2": "Keine Klartext-Speicherung: Wir speichern grundsätzlich keine privacy-relevanten Daten im Klartext auf unseren Servern.",
-      "p3": "Kein Zugriff: Selbst wir als Betreiber können Ihre verschlüsselten Daten nicht entschlüsseln, solange Sie Ihre Login-Daten nicht preisgeben."
+      "p3": "Kein Zugriff: Selbst wir als Betreiber können deine verschlüsselten Daten nicht entschlüsseln, solange du deine Login-Daten nicht preisgibst."
     },
     "section6": {
       "title": "6. Empfänger und Drittanbieter",
       "p1": "Zahlungsdienstleister: Für die Zahlungsabwicklung nutzen wir externe, zertifizierte Zahlungsdienstleister.",
       "p2": "Hosting-Provider: Die Daten werden auf Servern in der Schweiz, EU oder den Vereinigten Staaten gehostet.",
-      "p3": "Keine Datenvermarktung: Wir verkaufen, vermieten oder teilen Ihre Daten niemals mit Dritten zu kommerziellen Zwecken."
+      "p3": "Keine Datenvermarktung: Wir verkaufen, vermieten oder teilen deine Daten niemals mit Dritten zu kommerziellen Zwecken."
     },
     "section7": {
       "title": "7. Speicherdauer",
-      "p1": "Aktive Accounts: Daten werden nur solange gespeichert, wie Ihr Account aktiv ist.",
-      "p2": "Nach Kündigung: Bei Kündigung werden alle Ihre Daten sofort unwiderruflich gelöscht, soweit keine gesetzlichen Aufbewahrungspflichten bestehen.",
+      "p1": "Aktive Accounts: Daten werden nur solange gespeichert, wie dein Account aktiv ist.",
+      "p2": "Nach Kündigung: Bei Kündigung werden alle deine Daten sofort unwiderruflich gelöscht, soweit keine gesetzlichen Aufbewahrungspflichten bestehen.",
       "p3": "Rechtliche Aufbewahrung: Nur gesetzlich vorgeschriebene Aufbewahrungsfristen (z.B. für Rechnungsdaten) bleiben bestehen."
     },
     "section8": {
-      "title": "8. Ihre Rechte (DSGVO)",
+      "title": "8. Deine Rechte (DSGVO)",
       "p1": "Auskunftsrecht (Art. 15 DSGVO): Information über verarbeitete Daten",
       "p2": "Berichtigungsrecht (Art. 16 DSGVO): Korrektur falscher Daten",
-      "p3": "Löschungsrecht (Art. 17 DSGVO): Löschung Ihrer Daten",
+      "p3": "Löschungsrecht (Art. 17 DSGVO): Löschung deiner Daten",
       "p4": "Einschränkung (Art. 18 DSGVO): Einschränkung der Verarbeitung",
-      "p5": "Datenübertragbarkeit (Art. 20 DSGVO): Export Ihrer Daten",
+      "p5": "Datenübertragbarkeit (Art. 20 DSGVO): Export deiner Daten",
       "p6": "Widerspruchsrecht (Art. 21 DSGVO): Widerspruch gegen Verarbeitung"
     },
     "section9": {
       "title": "9. Cookies und Tracking",
       "p1": "Minimaler Einsatz: Wir verwenden nur technisch notwendige Cookies für die Funktionalität der Plattform.",
-      "p2": "Kein Tracking: Wir setzen keine Tracking-Cookies oder Analytics-Tools ein, die Ihr Nutzungsverhalten verfolgen.",
-      "p3": "Session-Management: Cookies dienen ausschließlich der Aufrechterhaltung Ihrer Sitzung."
+      "p2": "Kein Tracking: Wir setzen keine Tracking-Cookies oder Analytics-Tools ein, die dein Nutzungsverhalten verfolgen.",
+      "p3": "Session-Management: Cookies dienen ausschließlich der Aufrechterhaltung deiner Sitzung."
     },
     "section10": {
       "title": "10. Internationale Datenübertragung",
@@ -1656,24 +1656,24 @@
     },
     "section11": {
       "title": "11. Datenschutz-Folgenabschätzung",
-      "p1": "Aufgrund unserer Privacy-by-Design-Architektur und der ausschließlichen Verarbeitung von Metadaten ist das Risiko für Ihre Privatsphäre minimiert.",
+      "p1": "Aufgrund unserer Privacy-by-Design-Architektur und der ausschließlichen Verarbeitung von Metadaten ist das Risiko für deine Privatsphäre minimiert.",
       "p2": "Die client-seitige Verschlüsselung stellt sicher, dass selbst bei einem Sicherheitsvorfall keine sensiblen Daten kompromittiert werden können."
     },
     "section12": {
       "title": "12. Änderungen dieser Datenschutzerklärung",
-      "p1": "Änderungen dieser Datenschutzerklärung werden Ihnen mindestens 30 Tage im Voraus per E-Mail mitgeteilt.",
-      "p2": "Bei wesentlichen Änderungen holen wir Ihre erneute Einwilligung ein."
+      "p1": "Änderungen dieser Datenschutzerklärung werden dir mindestens 30 Tage im Voraus per E-Mail mitgeteilt.",
+      "p2": "Bei wesentlichen Änderungen holen wir deine erneute Einwilligung ein."
     },
     "section13": {
       "title": "13. Kontakt und Beschwerden",
       "p1": "Datenschutzanfragen: info@stararc.one",
-      "p2": "Beschwerdestelle: Sie haben das Recht, sich bei der zuständigen Datenschutzbehörde zu beschweren."
+      "p2": "Beschwerdestelle: du hast das Recht, dich bei der zuständigen Datenschutzbehörde zu beschweren."
     }
   },
   "pension": {
     "badge": "Vorsorge & Versicherungen",
     "title": "Berufliche und Private Vorsorge",
-    "subtitle": "Verwalten Sie Ihre Altersvorsorge und Versicherungen zentral. Berufliche und private Vorsorge mit mehreren Konten pro Familie.",
+    "subtitle": "Verwalte deine Altersvorsorge und Versicherungen zentral. Berufliche und private Vorsorge mit mehreren Konten pro Familie.",
     "pensionSection": "Pension Section",
     "privateVorsorge": "Private Vorsorge",
     "beruflicheVorsorge": "Berufliche Vorsorge",
@@ -1710,8 +1710,8 @@
   },
   "security": {
     "badge": "Client-Side Encryption",
-    "title": "Ihre Daten bleiben privat",
-    "subtitle": "Wählen Sie zwischen zwei Authentifizierungsmethoden – beide schützen Ihre Daten mit modernster Verschlüsselung. Sie entscheiden, wie viel Kontrolle Sie übernehmen.",
+    "title": "Deine Daten bleiben privat",
+    "subtitle": "Wähle zwischen zwei Authentifizierungsmethoden – beide schützen deine Daten mit modernster Verschlüsselung. Du entscheidest, wie viel Kontrolle du übernimmst.",
     "authMethods": {
       "recommended": "Empfohlen",
       "zeroKnowledge": "Zero-Knowledge",
@@ -1740,9 +1740,9 @@
       }
     },
     "demoTitle": "So funktioniert unsere Verschlüsselung",
-    "userView": "Was Sie sehen",
+    "userView": "Was du siehst",
     "serverView": "Was wir sehen",
-    "assetData": "Ihre Assets",
+    "assetData": "Deine Assets",
     "tableHeaders": {
       "name": "Name",
       "symbol": "Symbol",
@@ -1759,39 +1759,39 @@
     },
     "userInfo": {
       "title": "Lesbar und zugänglich",
-      "description": "In Ihrem Browser werden Ihre Daten entschlüsselt und lesbar dargestellt. Nur Sie haben Zugriff auf Ihre Verschlüsselungs-Keys."
+      "description": "In deinem Browser werden deine Daten entschlüsselt und lesbar dargestellt. Nur du hast Zugriff auf deine Verschlüsselungs-Keys."
     },
     "serverInfo": {
       "title": "Vollständig verschlüsselt und unleserlich",
-      "description": "Ihre Verschlüsselungs-Keys werden mit PBKDF2 abgeleitet (600'000 Iterationen, OWASP 2024). Alle Daten werden dann mit AES-256-GCM verschlüsselt. Selbst mit direktem Datenbankzugriff kann niemand Ihre Informationen lesen. Nur Sie besitzen den Schlüssel."
+      "description": "Deine Verschlüsselungs-Keys werden mit PBKDF2 abgeleitet (600'000 Iterationen, OWASP 2024). Alle Daten werden dann mit AES-256-GCM verschlüsselt. Selbst mit direktem Datenbankzugriff kann niemand deine Informationen lesen. Nur du besitzt den Schlüssel."
     },
     "encryptionStandards": {
       "title": "Unsere Verschlüsselungsstandards",
       "aes": {
         "name": "AES-256-GCM",
-        "desc": "Militärische Verschlüsselung für alle Ihre Daten – der gleiche Standard wie bei Banken und Geheimdiensten. 256-Bit-Schlüssel mit authentifizierter Verschlüsselung."
+        "desc": "Militärische Verschlüsselung für alle deine Daten – der gleiche Standard wie bei Banken und Geheimdiensten. 256-Bit-Schlüssel mit authentifizierter Verschlüsselung."
       },
       "pbkdf2": {
         "name": "PBKDF2 · 600'000 Iterationen",
-        "desc": "Schlüsselableitung nach OWASP-2024-Standard. Schützt Ihr Passwort zuverlässig vor Brute-Force-Angriffen durch rechenintensive Ableitung."
+        "desc": "Schlüsselableitung nach OWASP-2024-Standard. Schützt dein Passwort zuverlässig vor Brute-Force-Angriffen durch rechenintensive Ableitung."
       },
       "zk": {
         "name": "Zero-Knowledge-Architektur",
-        "desc": "Im Souveränitäts-Modus verlassen Ihre unverschlüsselten Daten niemals Ihr Gerät. Der Server speichert nichts – echte Zero-Knowledge."
+        "desc": "Im Souveränitäts-Modus verlassen deine unverschlüsselten Daten niemals dein Gerät. Der Server speichert nichts – echte Zero-Knowledge."
       }
     }
   },
   "dataArchitecture": {
     "badge": "Multi-Layer Security Architecture",
     "title": "Zwei Verschlüsselungsebenen",
-    "subtitle": "StarArc \"Public\" schützt Ihre Identität mit Admin-Verschlüsselung. StarArc \"Spaceship\" verschlüsselt Ihre Finanzdaten client-seitig. Sichere Autorisierung verbindet beide Systeme.",
+    "subtitle": "StarArc \"Public\" schützt deine Identität mit Admin-Verschlüsselung. StarArc \"Spaceship\" verschlüsselt deine Finanzdaten client-seitig. Sichere Autorisierung verbindet beide Systeme.",
     "stararcIdentity": "StarArc: Identität",
     "authorization": "Autorisierung",
     "spaceshipAppData": "Spaceship: App-Daten",
     "stararcUserData": {
       "title": "StarArc: Benutzerdaten",
       "adminEncryption": "Admin-Key Verschlüsselung",
-      "description": "Ihre Identitätsdaten (Email, Alias, etc.) werden in StarArc mit einem Master-Admin-Key verschlüsselt. Dies ermöglicht Support und Account-Recovery, während Ihre Finanzdaten komplett privat bleiben.",
+      "description": "Deine Identitätsdaten (Email, Alias, etc.) werden in StarArc mit einem Master-Admin-Key verschlüsselt. Dies ermöglicht Support und Account-Recovery, während deine Finanzdaten komplett privat bleiben.",
       "whatStored": "Was wird gespeichert?",
       "whyAdminEncryption": "Warum Admin-Verschlüsselung?",
       "storedItems": [
@@ -1824,9 +1824,9 @@
     "spaceshipData": {
       "title": "Spaceship: Finanzdaten",
       "clientSideEncryption": "Client-Side Verschlüsselung",
-      "description": "Ihre Verschlüsselungs-Keys werden mit Argon2id abgeleitet. Alle Finanzdaten werden dann mit AES-256-GCM direkt in Ihrem Browser verschlüsselt, bevor sie an den Server gesendet werden. Zero-Knowledge Architecture - niemand außer Ihnen kann die Daten entschlüsseln.",
+      "description": "Deine Verschlüsselungs-Keys werden mit Argon2id abgeleitet. Alle Finanzdaten werden dann mit AES-256-GCM direkt in deinem Browser verschlüsselt, bevor sie an den Server gesendet werden. Zero-Knowledge Architecture - niemand außer dir kann die Daten entschlüsseln.",
       "whatEncrypted": "Was wird verschlüsselt?",
-      "yourPrivateKey": "Ihr privater Schlüssel",
+      "yourPrivateKey": "Dein privater Schlüssel",
       "encryptedItems": [
         "Asset Namen & Symbole",
         "ISIN, Mengen, Preise",
@@ -1835,8 +1835,8 @@
         "Alle sensiblen Finanzdaten"
       ],
       "privateKeyFeatures": [
-        "Wird aus Ihrem Login-Code generiert",
-        "Verlässt nie Ihren Browser",
+        "Wird aus deinem Login-Code generiert",
+        "Verlässt nie deinen Browser",
         "Wird nie an Server gesendet",
         "Maximale Privatsphäre garantiert",
         "Zero-Knowledge Architektur"
@@ -1871,8 +1871,8 @@
     }
   },
   "overview": {
-    "title": "Entdecken Sie alle Features",
-    "subtitle": "Klicken Sie auf ein Feature, um direkt zur detaillierten Ansicht zu springen",
+    "title": "Entdecke alle Features",
+    "subtitle": "Klicke auf ein Feature, um direkt zur detaillierten Ansicht zu springen",
     "features": {
       "portfolioManagement": "Portfolio Management",
       "planning": "Finanzplanung",
@@ -1899,8 +1899,8 @@
     "close": "Schließen"
   },
   "securities": {
-    "title": "Ihre Wertschriften im Detail",
-    "subtitle": "Verwalten Sie Aktien, ETFs und Fonds mit Live-Kursen und professionellen Übersichten",
+    "title": "Deine Wertschriften im Detail",
+    "subtitle": "Verwalte Aktien, ETFs und Fonds mit Live-Kursen und professionellen Übersichten",
     "tabStocks": "Stocks",
     "tabETFs": "ETFs",
     "tabFunds": "Funds",
@@ -1919,7 +1919,7 @@
     "features": {
       "livePricing": {
         "title": "Live Pricing",
-        "description": "Echtzeit-Kurse für alle Ihre Wertschriften mit automatischer Aktualisierung"
+        "description": "Echtzeit-Kurse für alle deine Wertschriften mit automatischer Aktualisierung"
       },
       "multiCurrency": {
         "title": "Multi-Currency",
@@ -1933,7 +1933,7 @@
   },
   "bitcoinWizard": {
     "title": "Bitcoin Self-Custody Management",
-    "subtitle": "Dokumentieren und verwalten Sie Ihre Bitcoin-Setups sicher mit unserem Schritt-für-Schritt Assistenten. Von SingleSig bis MultiSig – alles unter Kontrolle.",
+    "subtitle": "Dokumentieren und verwalte deine Bitcoin-Setups sicher mit unserem Schritt-für-Schritt Assistenten. Von SingleSig bis MultiSig – alles unter Kontrolle.",
     "badge": "Bitcoin Self-Custody",
     "features": {
       "singleSig": {
@@ -1946,13 +1946,13 @@
       },
       "backupStrategy": {
         "title": "Backup-Strategie",
-        "description": "Sichere Aufbewahrung und Dokumentation Ihrer Recovery-Phrasen"
+        "description": "Sichere Aufbewahrung und Dokumentation deiner Recovery-Phrasen"
       }
     }
   },
   "profile": {
     "title": "Profil & Verwaltung",
-    "subtitle": "Verwalten Sie Ihr StarArc-Profil, Subscription-Einstellungen und Ihre persönlichen Daten zentral. Sichere Einstellungen für maximale Kontrolle.",
+    "subtitle": "Verwalte dein StarArc-Profil, Subscription-Einstellungen und deine persönlichen Daten zentral. Sichere Einstellungen für maximale Kontrolle.",
     "badge": "Profile Management",
     "features": {
       "accountSettings": {
@@ -1969,7 +1969,7 @@
       },
       "vaultManagement": {
         "title": "Vault Management",
-        "description": "Verwalten Sie physische und digitale Speicherorte für wichtige Dokumente und Assets"
+        "description": "Verwalte physische und digitale Speicherorte für wichtige Dokumente und Assets"
       },
       "familyManagement": {
         "title": "Family Management",
