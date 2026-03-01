@@ -236,11 +236,6 @@ export class StripeService {
       creditAmount = newPlanAmount - totalDue;
     }
 
-    console.log('[Upgrade Preview] Lines:', JSON.stringify(preview.lines?.data?.map(l => ({
-      amount: l.amount, proration: l.proration, type: l.type, description: l.description
-    }))));
-    console.log('[Upgrade Preview] amount_due:', preview.amount_due, 'total:', preview.total, 'creditAmount:', creditAmount, 'newPlanAmount:', newPlanAmount, 'totalDue:', totalDue);
-
     return {
       creditAmount,
       newPlanAmount,
