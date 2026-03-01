@@ -124,7 +124,7 @@ const VerifyEmail: React.FC = () => {
                 <h3 className="text-xl font-semibold text-white">
                   {t('verifyEmailPage.successTitle')}
                 </h3>
-                <p className="text-gray-300">{message}</p>
+                <p className="text-gray-300">{t('verifyEmailPage.successMessage')}</p>
                 <p className="text-sm text-gray-400">
                   {t('verifyEmailPage.redirecting')}
                 </p>
