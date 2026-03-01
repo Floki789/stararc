@@ -501,7 +501,11 @@
     "daysRemaining": "Noch {{days}} Tage",
     "nextUpgrade": "Nächstes Upgrade:",
     "upgrade": "Upgrade",
-    "manageSubscription": "Zahlung & Kündigung verwalten"
+    "manageSubscription": "Zahlung & Kündigung verwalten",
+    "zkEncryption": "Zero-Knowledge Verschlüsselung",
+    "zkSubtitle": "Deine Spaceship-Daten sind client-seitig verschlüsselt",
+    "zkRecoveryHint": "Falls du dein Spaceship-Passwort vergessen hast, kannst du es mit deiner 6-Wort Wiederherstellungsphrase zurücksetzen.",
+    "zkRecoverButton": "Spaceship-Passwort wiederherstellen"
   },
   "auth": {
     "login": "Anmelden",

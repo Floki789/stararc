@@ -548,24 +548,23 @@ const Dashboard: React.FC = () => {
               </div>
               <div className="flex-1">
                 <h2 className="text-xl font-bold text-white">
-                  Zero-Knowledge Verschlüsselung
+                  {t('dashboard.zkEncryption')}
                 </h2>
                 <p className="text-amber-300 text-sm">
-                  Deine Spaceship-Daten sind client-seitig verschlüsselt
+                  {t('dashboard.zkSubtitle')}
                 </p>
               </div>
             </div>
             
             <p className="text-slate-300 text-sm mb-4">
-              Falls du dein Spaceship-Passwort vergessen hast, kannst du es mit deiner 
-              6-Wort Wiederherstellungsphrase zurücksetzen.
+              {t('dashboard.zkRecoveryHint')}
             </p>
             
             <button
               onClick={() => setShowZKRecoveryModal(true)}
               className="px-4 py-2 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 text-amber-300 rounded-lg font-medium transition-colors"
             >
-              Spaceship-Passwort wiederherstellen
+              {t('dashboard.zkRecoverButton')}
             </button>
           </motion.div>
         )}

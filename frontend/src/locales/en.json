@@ -342,7 +342,11 @@
     "daysRemaining": "{{days}} days remaining",
     "nextUpgrade": "Next upgrade:",
     "upgrade": "Upgrade",
-    "manageSubscription": "Manage Payment & Cancellation"
+    "manageSubscription": "Manage Payment & Cancellation",
+    "zkEncryption": "Zero-Knowledge Encryption",
+    "zkSubtitle": "Your Spaceship data is encrypted client-side",
+    "zkRecoveryHint": "If you forgot your Spaceship password, you can reset it using your 6-word recovery phrase.",
+    "zkRecoverButton": "Recover Spaceship Password"
   },
   "assetOrganization": {
     "wealthAssetsTitle": "Wealth Assets",
