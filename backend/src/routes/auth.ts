@@ -127,7 +127,7 @@ router.post('/register', registerLimiter, registerValidation, async (req: Reques
     // Send email verification
     try {
       const verificationToken = (user as any).emailVerificationToken;
-      await emailService.sendEmailVerification(
+      const previewUrl = await emailService.sendEmailVerification(
         email, 
         alias || 'User', 
         verificationToken
@@ -146,11 +146,18 @@ router.post('/register', registerLimiter, registerValidation, async (req: Reques
       }).catch(err => console.error('Admin notification failed:', err));
       
       // Return success WITHOUT token (user must verify email first)
-      res.status(201).json({
+      const responseData: any = {
         message: 'Registrierung erfolgreich! Bitte bestätigen Sie Ihre E-Mail-Adresse. Wir haben Ihnen einen Bestätigungslink gesendet.',
         requiresVerification: true,
         email: email // Show email so user knows where to check
-      });
+      };
+      
+      // In development, include Ethereal preview URL so frontend can show it
+      if (process.env.NODE_ENV !== 'production' && previewUrl) {
+        responseData.devPreviewUrl = previewUrl;
+      }
+      
+      res.status(201).json(responseData);
     } catch (emailError) {
       console.error('❌ Email sending failed:', emailError);
       

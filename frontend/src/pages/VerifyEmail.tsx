@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
@@ -8,8 +8,13 @@ const VerifyEmail: React.FC = () => {
   const navigate = useNavigate();
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
   const [message, setMessage] = useState('');
+  const verificationAttempted = useRef(false);
 
   useEffect(() => {
+    // Prevent double-call in React StrictMode
+    if (verificationAttempted.current) return;
+    verificationAttempted.current = true;
+
     const token = searchParams.get('token');
     
     if (!token) {

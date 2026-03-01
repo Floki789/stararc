@@ -1,8 +1,9 @@
 import nodemailer from 'nodemailer';
 
 export class EmailService {
-  private transporter: nodemailer.Transporter;
+  private transporter!: nodemailer.Transporter;
   private fromEmail: string;
+  private ready: Promise<void>;
 
   constructor() {
     this.fromEmail = process.env.FROM_EMAIL || 'noreply@stararc.one';
@@ -24,31 +25,58 @@ export class EmailService {
       });
       
       // Verify SMTP connection on startup
-      this.transporter.verify((error, success) => {
-        if (error) {
-          console.error('❌ SMTP connection failed:', error);
-          console.error('Check your Hostpoint SMTP credentials in environment variables');
-        } else {
-          console.log('✅ SMTP server ready to send emails via Hostpoint');
-          console.log(`📧 Sender: ${this.fromEmail}`);
-        }
+      this.ready = new Promise((resolve) => {
+        this.transporter.verify((error, success) => {
+          if (error) {
+            console.error('❌ SMTP connection failed:', error);
+            console.error('Check your Hostpoint SMTP credentials in environment variables');
+          } else {
+            console.log('✅ SMTP server ready to send emails via Hostpoint');
+            console.log(`📧 Sender: ${this.fromEmail}`);
+          }
+          resolve();
+        });
       });
     } else {
-      // Development: Use Ethereal Email for testing
-      console.log('🧪 Development mode: Using Ethereal Email (test only)');
+      // Development: Use Ethereal Email for testing (auto-generated account)
+      this.ready = this.initEthereal();
+    }
+  }
+
+  private async initEthereal(): Promise<void> {
+    try {
+      const testAccount = await nodemailer.createTestAccount();
       this.transporter = nodemailer.createTransport({
         host: 'smtp.ethereal.email',
         port: 587,
+        secure: false,
         auth: {
-          user: 'ethereal.user@ethereal.email',
-          pass: 'ethereal.pass'
-        }
+          user: testAccount.user,
+          pass: testAccount.pass,
+        },
+      });
+      console.log('🧪 Development mode: Ethereal Email ready');
+      console.log(`📧 Ethereal User: ${testAccount.user}`);
+      console.log(`🌐 Ethereal Inbox: https://ethereal.email/login`);
+      console.log(`   (Login: ${testAccount.user} / ${testAccount.pass})`);
+    } catch (error) {
+      console.error('❌ Failed to create Ethereal account, falling back to console logging:', error);
+      // Fallback: create a stream transport that just logs
+      this.transporter = nodemailer.createTransport({
+        streamTransport: true,
+        newline: 'unix',
       });
     }
   }
 
+  // Ensure transporter is ready before sending (needed for async Ethereal init)
+  private async ensureReady(): Promise<void> {
+    await this.ready;
+  }
+
   // Send admin notification for important user events
   async sendAdminNotification(subject: string, details: Record<string, any>): Promise<void> {
+    await this.ensureReady();
     const adminEmail = 'info@stararc.one';
     
     // Format details as simple text lines
@@ -82,8 +110,9 @@ export class EmailService {
     }
   }
 
-  // Send email verification
-  async sendEmailVerification(email: string, alias: string, verificationToken: string): Promise<void> {
+  // Send email verification (returns preview URL in dev mode)
+  async sendEmailVerification(email: string, alias: string, verificationToken: string): Promise<string | null> {
+    await this.ensureReady();
     const verificationUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/verify-email?token=${verificationToken}`;
     
     const mailOptions = {
@@ -123,10 +152,13 @@ export class EmailService {
       console.log(`✅ Verification email sent to ${email}`);
       console.log(`📧 Message ID: ${info.messageId}`);
       
-      // In development, log preview URL
+      // In development, log and return preview URL
       if (process.env.NODE_ENV !== 'production') {
-        console.log(`🔗 Preview URL: ${nodemailer.getTestMessageUrl(info)}`);
+        const previewUrl = nodemailer.getTestMessageUrl(info);
+        console.log(`🔗 Preview URL: ${previewUrl}`);
+        return previewUrl || null;
       }
+      return null;
     } catch (error) {
       console.error('❌ Failed to send verification email:', error);
       throw new Error('Failed to send verification email');
@@ -135,6 +167,7 @@ export class EmailService {
 
   // Send password reset email
   async sendPasswordReset(email: string, alias: string, resetToken: string): Promise<void> {
+    await this.ensureReady();
     const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/reset-password?token=${resetToken}`;
     
     const mailOptions = {
@@ -186,6 +219,7 @@ export class EmailService {
 
   // Send welcome email after email verification
   async sendWelcomeEmail(email: string, alias: string): Promise<void> {
+    await this.ensureReady();
     const loginUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/login`;
     
     const mailOptions = {
@@ -240,6 +274,7 @@ export class EmailService {
 
   // Send 2FA enabled notification
   async send2FAEnabled(email: string, alias: string): Promise<void> {
+    await this.ensureReady();
     const dashboardUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/dashboard`;
     
     const mailOptions = {
@@ -303,6 +338,7 @@ export class EmailService {
 
   // Send 2FA disabled notification (security alert)
   async send2FADisabled(email: string, alias: string): Promise<void> {
+    await this.ensureReady();
     const changePasswordUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/dashboard`;
     
     const mailOptions = {
@@ -368,6 +404,7 @@ export class EmailService {
 
   // Send backup codes low warning
   async sendBackupCodesLowWarning(email: string, alias: string, remainingCodes: number): Promise<void> {
+    await this.ensureReady();
     const dashboardUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/dashboard`;
     
     const mailOptions = {
@@ -439,6 +476,7 @@ export class EmailService {
 
   // Send subscription confirmation to user
   async sendSubscriptionConfirmation(email: string, alias: string, plan: string, isUpgrade: boolean = false, previousPlan?: string): Promise<void> {
+    await this.ensureReady();
     const dashboardUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/dashboard`;
     
     const subject = isUpgrade 
@@ -493,6 +531,7 @@ export class EmailService {
 
   // Send auth method selection confirmation to user
   async sendAuthMethodConfirmation(email: string, alias: string, authMethod: string): Promise<void> {
+    await this.ensureReady();
     const dashboardUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/dashboard`;
     
     const methodLabel = authMethod === 'password_zk' 
@@ -541,6 +580,7 @@ export class EmailService {
 
   // Send first Spaceship login notification to user
   async sendFirstSpaceshipLogin(email: string, alias: string): Promise<void> {
+    await this.ensureReady();
     const mailOptions = {
       from: this.fromEmail,
       to: email,

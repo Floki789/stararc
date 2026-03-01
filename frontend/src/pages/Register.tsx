@@ -42,6 +42,7 @@ const Register: React.FC = () => {
   const [successMessage, setSuccessMessage] = useState('');
   const [registeredEmail, setRegisteredEmail] = useState('');
   const [showSuccessScreen, setShowSuccessScreen] = useState(false);
+  const [devPreviewUrl, setDevPreviewUrl] = useState<string | null>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -138,6 +139,7 @@ const Register: React.FC = () => {
         if (data.requiresVerification) {
           // Email verification required - show success screen
           setRegisteredEmail(data.email || formData.email);
+          if (data.devPreviewUrl) setDevPreviewUrl(data.devPreviewUrl);
           setShowSuccessScreen(true);
         } else if (data.user && data.token) {
           // No email verification - log in immediately (fallback for testing)
@@ -243,6 +245,21 @@ const Register: React.FC = () => {
                 <p className="text-gray-300 text-sm leading-relaxed">
                   {t('auth.pleaseCheckInbox')}
                 </p>
+
+                {/* Dev mode: Show Ethereal preview link */}
+                {devPreviewUrl && (
+                  <div className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-3 mt-3">
+                    <p className="text-purple-300 text-xs font-mono mb-1">🧪 Dev Mode</p>
+                    <a
+                      href={devPreviewUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-purple-400 hover:text-purple-300 text-sm font-medium underline break-all"
+                    >
+                      📧 Email in Ethereal ansehen
+                    </a>
+                  </div>
+                )}
               </motion.div>
 
               {/* Info Box */}
