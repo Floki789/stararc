@@ -142,7 +142,8 @@ export class StripeService {
     userId: number,
     planId: string,
     successUrl: string,
-    cancelUrl: string
+    cancelUrl: string,
+    locale: string = 'de'
   ): Promise<Stripe.Checkout.Session> {
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
@@ -156,6 +157,7 @@ export class StripeService {
       mode: 'subscription',
       success_url: successUrl,
       cancel_url: cancelUrl,
+      locale: locale === 'en' ? 'en' : 'de',
       metadata: {
         userId: userId.toString(),
         planId: planId

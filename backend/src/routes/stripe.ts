@@ -274,7 +274,8 @@ router.post('/select-plan', authMiddleware, async (req, res): Promise<any> => {
         userId,
         planId,
         successUrl,
-        cancelUrl
+        cancelUrl,
+        userResult.rows[0]?.language_code || 'de'
       );
 
       // TEST MODE ONLY: Automatically activate subscription after session creation
@@ -537,7 +538,8 @@ router.post('/create-checkout-session', authMiddleware, async (req, res): Promis
       userId,
       planId,
       successUrl,
-      cancelUrl
+      cancelUrl,
+      userResult.rows[0]?.language_code || 'de'
     );
 
     res.json({ 
