@@ -369,7 +369,6 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
   const [verificationError, setVerificationError] = useState('');
   const [copiedRecovery, setCopiedRecovery] = useState(false);
   const [confirmChecked, setConfirmChecked] = useState(false);
-  const [backupConfirmed, setBackupConfirmed] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -498,7 +497,7 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
   };
 
   const handleFinalConfirm = async () => {
-    if (!confirmChecked || !backupConfirmed) return;
+    if (!confirmChecked) return;
     
     setIsLoading(true);
     setError('');
@@ -871,23 +870,18 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
               </span>
             </label>
 
-            <label className="flex items-start gap-3 cursor-pointer p-3 bg-gray-900 rounded-lg border border-gray-700 hover:border-orange-500/50 transition-colors">
-              <input
-                type="checkbox"
-                checked={backupConfirmed}
-                onChange={(e) => setBackupConfirmed(e.target.checked)}
-                className="mt-1 w-4 h-4 accent-orange-500"
-              />
-              <span className="text-sm text-gray-300">
-                Ich habe meine 6-Worte-Passphrase an mindestens zwei geografisch getrennten Orten sicher aufbewahrt.
+            <div className="flex items-start gap-3 p-3 bg-orange-950/40 rounded-lg border border-orange-500/30">
+              <AlertTriangle className="w-5 h-5 text-orange-400 flex-shrink-0 mt-0.5" />
+              <span className="text-sm text-orange-200">
+                Empfehlung: Bewahre deine 6-Worte-Passphrase an mindestens zwei geografisch getrennten Orten sicher auf.
               </span>
-            </label>
+            </div>
 
             {error && <p className="text-red-400 text-sm">{error}</p>}
 
             <button
               onClick={handleFinalConfirm}
-              disabled={!confirmChecked || !backupConfirmed || isLoading}
+              disabled={!confirmChecked || isLoading}
               className="w-full py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold rounded-lg hover:from-orange-600 hover:to-red-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
             >
               {isLoading ? (
