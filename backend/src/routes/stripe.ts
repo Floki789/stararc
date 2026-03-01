@@ -117,9 +117,11 @@ router.post('/select-plan', authMiddleware, async (req, res): Promise<any> => {
 
       // TEST MODE ONLY: Automatically activate subscription after session creation
       // In production mode, activation happens ONLY via webhook
+      // STRIPE_FORCE_WEBHOOK_FLOW=true skips auto-activation (for local Stripe CLI testing)
       const isTestMode = !isProductionMode();
+      const forceWebhookFlow = process.env.STRIPE_FORCE_WEBHOOK_FLOW === 'true';
       
-      if (isTestMode) {
+      if (isTestMode && !forceWebhookFlow) {
         console.log('🔧 TEST MODE: Auto-activating subscription for user:', userId, 'plan:', planId);
         
         try {
@@ -139,6 +141,8 @@ router.post('/select-plan', authMiddleware, async (req, res): Promise<any> => {
           console.error('🔧 TEST MODE: Auto-activation failed:', activationError);
           // Continue anyway - user can still use manual activation fallback
         }
+      } else if (forceWebhookFlow) {
+        console.log('🔧 TEST MODE + STRIPE_FORCE_WEBHOOK_FLOW: Skipping auto-activation, waiting for webhook');
       } else {
         console.log('🚀 PRODUCTION MODE: Subscription will be activated via webhook only');
       }
