@@ -220,16 +220,31 @@ export class StripeService {
       for (const line of preview.lines.data) {
         if (line.amount < 0) {
           creditAmount += Math.abs(line.amount);
-        } else if (line.proration) {
+        } else if (line.proration || line.type === 'invoiceitem') {
+          // Count proration lines and invoice items (Stripe may use either)
           newPlanAmount += line.amount;
         }
+        // Ignore type === 'subscription' lines (next cycle charge)
       }
     }
+
+    // Use Stripe's authoritative amount_due as totalDue — handles all edge cases
+    const totalDue = Math.max(0, preview.amount_due ?? (newPlanAmount - creditAmount));
+
+    // If Stripe didn't return explicit credit lines, derive credit from the math
+    if (creditAmount === 0 && newPlanAmount > 0 && totalDue < newPlanAmount) {
+      creditAmount = newPlanAmount - totalDue;
+    }
+
+    console.log('[Upgrade Preview] Lines:', JSON.stringify(preview.lines?.data?.map(l => ({
+      amount: l.amount, proration: l.proration, type: l.type, description: l.description
+    }))));
+    console.log('[Upgrade Preview] amount_due:', preview.amount_due, 'total:', preview.total, 'creditAmount:', creditAmount, 'newPlanAmount:', newPlanAmount, 'totalDue:', totalDue);
 
     return {
       creditAmount,
       newPlanAmount,
-      totalDue: Math.max(0, newPlanAmount - creditAmount),
+      totalDue,
       currency: preview.currency || 'usd',
       currentPeriodEnd: subscription.current_period_end,
     };
