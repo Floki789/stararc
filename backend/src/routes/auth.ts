@@ -130,7 +130,8 @@ router.post('/register', registerLimiter, registerValidation, async (req: Reques
       const previewUrl = await emailService.sendEmailVerification(
         email, 
         alias || 'User', 
-        verificationToken
+        verificationToken,
+        languageCode || 'de'
       );
       
       console.log(`✅ Verification email sent to ${email}`);
@@ -213,7 +214,7 @@ router.get('/verify-email', async (req: Request, res: Response): Promise<any> =>
            updated_at = NOW()
        WHERE email_verification_token = $1 
        AND email_verification_expires > NOW()
-       RETURNING id, admin_encrypted_email`,
+       RETURNING id, admin_encrypted_email, language_code`,
       [token]
     );
     
@@ -241,7 +242,7 @@ router.get('/verify-email', async (req: Request, res: Response): Promise<any> =>
         let email = decipher.update(user.admin_encrypted_email.encryptedData, 'hex', 'utf8');
         email += decipher.final('utf8');
         
-        await emailService.sendWelcomeEmail(email, 'User');
+        await emailService.sendWelcomeEmail(email, 'User', user.language_code || 'de');
         console.log(`📧 Welcome email sent to user ${user.id}`);
         
         // Send admin notification
@@ -285,7 +286,7 @@ router.post('/login', authLimiter, loginValidation, async (req: Request, res: Re
     
     // Check if user has 2FA enabled
     const userQuery = await pool.query(
-      'SELECT two_factor_enabled, encrypted_two_factor_secret, encrypted_backup_codes FROM users WHERE id = $1',
+      'SELECT two_factor_enabled, encrypted_two_factor_secret, encrypted_backup_codes, language_code FROM users WHERE id = $1',
       [loginResult.user.id]
     );
     
@@ -346,7 +347,8 @@ router.post('/login', authLimiter, loginValidation, async (req: Request, res: Re
                 await emailService.sendBackupCodesLowWarning(
                   userWith2FA.email,
                   userWith2FA.alias || userWith2FA.email,
-                  remainingCodes
+                  remainingCodes,
+                  userWith2FA.language_code || 'de'
                 );
                 console.log(`📧 Sent backup codes low warning email (${remainingCodes} codes remaining)`);
               } catch (emailError) {
@@ -484,7 +486,7 @@ router.post('/update-onboarding-step', authMiddleware, async (req: Request, res:
       if (onboardingStep === 'completed' && loginMethod) {
         try {
           const userResult = await pool.query(
-            'SELECT admin_encrypted_email, admin_encrypted_alias FROM users WHERE id = $1',
+            'SELECT admin_encrypted_email, admin_encrypted_alias, language_code FROM users WHERE id = $1',
             [userId]
           );
           const userRow = userResult.rows[0];
@@ -493,8 +495,9 @@ router.post('/update-onboarding-step', authMiddleware, async (req: Request, res:
             const userAlias = userRow.admin_encrypted_alias 
               ? UserEncryptionService.decryptWithMasterKey(userRow.admin_encrypted_alias) 
               : 'User';
+            const userLang = userRow.language_code || 'de';
             // Email to user
-            emailService.sendAuthMethodConfirmation(userEmail, userAlias, loginMethod)
+            emailService.sendAuthMethodConfirmation(userEmail, userAlias, loginMethod, userLang)
               .catch((err: any) => console.error('Auth method user email failed:', err));
             // Email to admin
             emailService.sendAdminNotification('User hat Auth-Methode gewählt', {
@@ -562,7 +565,7 @@ router.post('/verify-email', async (req: Request, res: Response): Promise<any> =
     const user = await authService.verifyEmail(token);
 
     // Send welcome email
-    await emailService.sendWelcomeEmail(user.email, (user as any).alias);
+    await emailService.sendWelcomeEmail(user.email, (user as any).alias, (user as any).language_code || 'de');
     
     // Send admin notification
     const userIdentifier = (user as any).alias || user.email;
@@ -602,8 +605,8 @@ router.post('/resend-verification', authLimiter, async (req: Request, res: Respo
     }
 
     // Resend verification email
-    const verificationToken = await authService.resendEmailVerification(email);
-    await emailService.sendEmailVerification(email, '', verificationToken);
+    const { token: verificationToken, language: userLang } = await authService.resendEmailVerification(email);
+    await emailService.sendEmailVerification(email, '', verificationToken, userLang);
 
     res.json({ message: 'Verification email sent successfully' });
   } catch (error: any) {
@@ -636,14 +639,14 @@ router.post('/forgot-password', authLimiter, forgotPasswordValidation, async (re
     const { email } = req.body;
 
     // Request password reset
-    const resetToken = await authService.requestPasswordReset(email);
+    const { token: resetToken, language: userLang } = await authService.requestPasswordReset(email);
     
     console.log(`🔍 DEBUG: Email: ${email}, ResetToken: ${resetToken}`);
     
     if (resetToken !== 'Password reset email sent if account exists') {
       // Send reset email (only if user exists, but don't reveal this)
       try {
-        await emailService.sendPasswordReset(email, '', resetToken);
+        await emailService.sendPasswordReset(email, '', resetToken, userLang);
         console.log(`📧 Email sent successfully to ${email}`);
       } catch (emailError) {
         console.log(`📧 Email failed (DEV MODE - ignored):`, (emailError as Error).message);
@@ -956,7 +959,7 @@ router.post('/setup-zk-encryption', authMiddleware, async (req: Request, res: Re
     // Send notification emails for ZK auth method selection
     try {
       const userEmailResult = await pool.query(
-        'SELECT admin_encrypted_email, admin_encrypted_alias FROM users WHERE id = $1',
+        'SELECT admin_encrypted_email, admin_encrypted_alias, language_code FROM users WHERE id = $1',
         [user.id]
       );
       const userRow = userEmailResult.rows[0];
@@ -965,8 +968,9 @@ router.post('/setup-zk-encryption', authMiddleware, async (req: Request, res: Re
         const userAlias = userRow.admin_encrypted_alias 
           ? UserEncryptionService.decryptWithMasterKey(userRow.admin_encrypted_alias) 
           : 'User';
+        const userLang = userRow.language_code || 'de';
         // Email to user
-        emailService.sendAuthMethodConfirmation(userEmail, userAlias, login_method)
+        emailService.sendAuthMethodConfirmation(userEmail, userAlias, login_method, userLang)
           .catch((err: any) => console.error('ZK auth method user email failed:', err));
         // Email to admin
         emailService.sendAdminNotification('User hat Auth-Methode gewählt (ZK)', {
@@ -1275,7 +1279,7 @@ router.post('/generate-spaceship-token', authMiddleware, async (req: Request, re
             ? UserEncryptionService.decryptWithMasterKey(dbRow.admin_encrypted_alias) 
             : 'User';
           // Email to user
-          emailService.sendFirstSpaceshipLogin(userEmail, userAlias)
+          emailService.sendFirstSpaceshipLogin(userEmail, userAlias, dbRow.language_code || 'de')
             .catch((err: any) => console.error('First Spaceship login user email failed:', err));
           // Email to admin
           emailService.sendAdminNotification('Erster Spaceship Login', {

@@ -134,7 +134,7 @@ router.post('/select-plan', authMiddleware, async (req, res): Promise<any> => {
       let existingSubscriptionId: string | null = null;
       
       const userResult = await pool.query(
-        'SELECT stripe_customer_id, stripe_subscription_id, subscription_status, subscription_plan FROM users WHERE id = $1',
+        'SELECT stripe_customer_id, stripe_subscription_id, subscription_status, subscription_plan, language_code FROM users WHERE id = $1',
         [userId]
       );
 
@@ -162,6 +162,7 @@ router.post('/select-plan', authMiddleware, async (req, res): Promise<any> => {
       // If user already has an active subscription, upgrade it directly (no new checkout)
       if (existingSubscriptionId) {
         const currentPlan = userResult.rows[0].subscription_plan;
+        const userLang = userResult.rows[0].language_code || 'de';
         console.log(`🔄 Upgrading existing subscription ${existingSubscriptionId}: ${currentPlan} → ${planId} for user ${userId}`);
         
         const updatedSub = await StripeService.upgradeSubscription(
@@ -230,7 +231,8 @@ router.post('/select-plan', authMiddleware, async (req, res): Promise<any> => {
               newPlanData?.price || 0,
               invoiceDetails.creditAmount,
               invoiceDetails.totalCharged,
-              invoiceDetails.currency
+              invoiceDetails.currency,
+              userLang
             );
 
             // Email to admin
@@ -400,7 +402,7 @@ router.post('/create-checkout-session', authMiddleware, async (req, res): Promis
     let existingSubscriptionId: string | null = null;
     
     const userResult = await pool.query(
-      'SELECT stripe_customer_id, stripe_subscription_id, subscription_status, subscription_plan FROM users WHERE id = $1',
+      'SELECT stripe_customer_id, stripe_subscription_id, subscription_status, subscription_plan, language_code FROM users WHERE id = $1',
       [userId]
     );
 
@@ -428,6 +430,7 @@ router.post('/create-checkout-session', authMiddleware, async (req, res): Promis
     // If user already has an active subscription, upgrade it directly (no new checkout)
     if (existingSubscriptionId) {
       const currentPlan = userResult.rows[0].subscription_plan;
+      const userLang = userResult.rows[0].language_code || 'de';
       console.log(`🔄 Upgrading existing subscription ${existingSubscriptionId}: ${currentPlan} → ${planId} for user ${userId}`);
       
       const updatedSub = await StripeService.upgradeSubscription(
@@ -493,7 +496,8 @@ router.post('/create-checkout-session', authMiddleware, async (req, res): Promis
             newPlanData?.price || 0,
             invoiceDetails.creditAmount,
             invoiceDetails.totalCharged,
-            invoiceDetails.currency
+            invoiceDetails.currency,
+            userLang
           );
 
           // Email to admin
@@ -680,7 +684,7 @@ router.post('/webhook', async (req, res): Promise<any> => {
           
           // Fetch current plan + encrypted email BEFORE update (to detect upgrades + send user email)
           const currentUserResult = await pool.query(
-            `SELECT subscription_plan, onboarding_step, admin_encrypted_email, admin_encrypted_alias FROM users WHERE id = $1`,
+            `SELECT subscription_plan, onboarding_step, admin_encrypted_email, admin_encrypted_alias, language_code FROM users WHERE id = $1`,
             [userId]
           );
           const previousPlan = currentUserResult.rows[0]?.subscription_plan || null;
@@ -743,7 +747,7 @@ router.post('/webhook', async (req, res): Promise<any> => {
                 const userAlias = userRow.admin_encrypted_alias 
                   ? UserEncryptionService.decryptWithMasterKey(userRow.admin_encrypted_alias) 
                   : 'User';
-                emailService.sendSubscriptionConfirmation(userEmail, userAlias, planId, isUpgrade, previousPlan)
+                emailService.sendSubscriptionConfirmation(userEmail, userAlias, planId, isUpgrade, previousPlan, userRow.language_code || 'de')
                   .catch((err: any) => console.error('User subscription email failed:', err));
               }
             } catch (decryptErr: any) {

@@ -317,7 +317,7 @@ export class AuthService {
     try {
       // Find user with verification token
       const result = await client.query(
-        'SELECT id, encrypted_email, encrypted_alias FROM users WHERE email_verification_token = $1 AND email_verification_expires > NOW()',
+        'SELECT id, encrypted_email, encrypted_alias, language_code FROM users WHERE email_verification_token = $1 AND email_verification_expires > NOW()',
         [token]
       );
 
@@ -340,19 +340,20 @@ export class AuthService {
   }
 
   // Request password reset
-  async requestPasswordReset(email: string): Promise<string> {
+  async requestPasswordReset(email: string): Promise<{ token: string; language: string }> {
     const client = await this.pool.connect();
     
     try {
       // Check if user exists
       const emailHash = UserEncryptionService.generateEmailHash(email);
-      const result = await client.query('SELECT id FROM users WHERE email_hash = $1', [emailHash]);
+      const result = await client.query('SELECT id, language_code FROM users WHERE email_hash = $1', [emailHash]);
       if (result.rows.length === 0) {
         // Don't reveal if email exists or not
-        return 'Password reset email sent if account exists';
+        return { token: 'Password reset email sent if account exists', language: 'de' };
       }
 
       const userId = result.rows[0].id;
+      const userLanguage = result.rows[0].language_code || 'de';
       
       // Generate reset token
       const resetToken = this.generatePasswordResetToken();
@@ -364,7 +365,7 @@ export class AuthService {
         [resetToken, resetExpires, userId]
       );
 
-      return resetToken;
+      return { token: resetToken, language: userLanguage };
     } finally {
       client.release();
     }
@@ -505,13 +506,13 @@ export class AuthService {
   }
 
   // Resend email verification
-  async resendEmailVerification(email: string): Promise<string> {
+  async resendEmailVerification(email: string): Promise<{ token: string; language: string }> {
     const client = await this.pool.connect();
     
     try {
       // Check if user exists and is not verified
       const result = await client.query(
-        'SELECT id, email_verified FROM users WHERE email_hash = $1',
+        'SELECT id, email_verified, language_code FROM users WHERE email_hash = $1',
         [UserEncryptionService.generateEmailHash(email)]
       );
 
@@ -535,7 +536,7 @@ export class AuthService {
         [emailVerificationToken, emailVerificationExpires, userId]
       );
 
-      return emailVerificationToken;
+      return { token: emailVerificationToken, language: result.rows[0].language_code || 'de' };
     } finally {
       client.release();
     }

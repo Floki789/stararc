@@ -148,14 +148,14 @@ router.post('/verify', authMiddleware, async (req: AuthRequest, res): Promise<an
     try {
       const { UserEncryptionService } = require('../services/userEncryptionService');
       const userData = await pool.query(
-        'SELECT admin_encrypted_email, admin_encrypted_alias FROM users WHERE id = $1',
+        'SELECT admin_encrypted_email, admin_encrypted_alias, language_code FROM users WHERE id = $1',
         [userId]
       );
       
       if (userData.rows[0]) {
         const userEmail = UserEncryptionService.decryptWithMasterKey(userData.rows[0].admin_encrypted_email);
         const userAlias = UserEncryptionService.decryptWithMasterKey(userData.rows[0].admin_encrypted_alias);
-        await emailService.send2FAEnabled(userEmail, userAlias);
+        await emailService.send2FAEnabled(userEmail, userAlias, userData.rows[0].language_code || 'de');
         console.log(`✅ 2FA enabled notification sent to ${userEmail}`);
       }
     } catch (emailError) {
@@ -252,14 +252,14 @@ router.post('/disable', authMiddleware, async (req: AuthRequest, res): Promise<a
     // Send 2FA disabled security alert email
     try {
       const userData = await pool.query(
-        'SELECT admin_encrypted_email, admin_encrypted_alias FROM users WHERE id = $1',
+        'SELECT admin_encrypted_email, admin_encrypted_alias, language_code FROM users WHERE id = $1',
         [userId]
       );
       
       if (userData.rows[0]) {
         const userEmail = UserEncryptionService.decryptWithMasterKey(userData.rows[0].admin_encrypted_email);
         const userAlias = UserEncryptionService.decryptWithMasterKey(userData.rows[0].admin_encrypted_alias);
-        await emailService.send2FADisabled(userEmail, userAlias);
+        await emailService.send2FADisabled(userEmail, userAlias, userData.rows[0].language_code || 'de');
         console.log(`⚠️ 2FA disabled security alert sent to ${userEmail}`);
       }
     } catch (emailError) {
