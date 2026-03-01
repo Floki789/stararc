@@ -77,6 +77,8 @@ export class StripeAPIService {
       plan: data.plan,
       status: data.status,
       expiresAt: data.expiresAt,
+      cancelAtPeriodEnd: data.cancelAtPeriodEnd || false,
+      canceledAt: data.canceledAt,
       spaceshipIntegrationCompleted: data.spaceshipIntegrationCompleted
     };
   }
@@ -105,6 +107,25 @@ export class StripeAPIService {
       throw new Error(error.error || 'Failed to activate free plan');
     }
 
+    return response.json();
+  }
+
+  static async getUpgradePreview(targetPlan: string): Promise<{
+    currentPlan: string;
+    currentPlanPrice: number;
+    targetPlan: string;
+    targetPlanPrice: number;
+    creditAmount: number;
+    newPlanAmount: number;
+    totalDue: number;
+    currency: string;
+    currentPeriodEnd: string;
+  }> {
+    const response = await this.fetchWithAuth(`/upgrade-preview?targetPlan=${targetPlan}`);
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to get upgrade preview');
+    }
     return response.json();
   }
 

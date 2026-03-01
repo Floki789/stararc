@@ -186,6 +186,133 @@ export class StripeService {
     });
   }
 
+  // Preview upgrade proration (does NOT execute the upgrade)
+  static async previewUpgrade(
+    subscriptionId: string,
+    newPriceId: string
+  ): Promise<{
+    creditAmount: number;   // cents, amount credited from old plan (positive)
+    newPlanAmount: number;  // cents, prorated charge for new plan
+    totalDue: number;       // cents, net amount to charge now
+    currency: string;
+    currentPeriodEnd: number; // unix timestamp
+  }> {
+    const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+    const currentItemId = subscription.items.data[0]?.id;
+    if (!currentItemId) {
+      throw new Error('No subscription item found');
+    }
+
+    const preview = await stripe.invoices.retrieveUpcoming({
+      customer: subscription.customer as string,
+      subscription: subscriptionId,
+      subscription_items: [{
+        id: currentItemId,
+        price: newPriceId,
+      }],
+      subscription_proration_behavior: 'always_invoice',
+    });
+
+    let creditAmount = 0;
+    let newPlanAmount = 0;
+
+    if (preview.lines?.data) {
+      for (const line of preview.lines.data) {
+        if (line.amount < 0) {
+          creditAmount += Math.abs(line.amount);
+        } else if (line.proration) {
+          newPlanAmount += line.amount;
+        }
+      }
+    }
+
+    return {
+      creditAmount,
+      newPlanAmount,
+      totalDue: Math.max(0, newPlanAmount - creditAmount),
+      currency: preview.currency || 'usd',
+      currentPeriodEnd: subscription.current_period_end,
+    };
+  }
+
+  // Upgrade/downgrade existing subscription (swap plan with proration)
+  static async upgradeSubscription(
+    subscriptionId: string,
+    newPriceId: string,
+    userId: number,
+    planId: string
+  ): Promise<Stripe.Subscription> {
+    // Get existing subscription to find the current item
+    const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+    const currentItemId = subscription.items.data[0]?.id;
+
+    if (!currentItemId) {
+      throw new Error('No subscription item found to upgrade');
+    }
+
+    // Update the subscription: swap the price, prorate, and reactivate if cancelled
+    // payment_behavior: 'allow_incomplete' auto-charges when possible, allows SCA handling when needed
+    return await stripe.subscriptions.update(subscriptionId, {
+      items: [{
+        id: currentItemId,
+        price: newPriceId,
+      }],
+      proration_behavior: 'always_invoice', // Immediately charge/credit the difference
+      cancel_at_period_end: false, // Reactivate if it was set to cancel
+      payment_behavior: 'allow_incomplete', // Auto-charge, but allow SCA if bank requires it
+      expand: ['latest_invoice.payment_intent'], // Get payment intent for SCA check
+      metadata: {
+        userId: userId.toString(),
+        planId: planId,
+        source: 'stararc',
+        mode: isProductionMode() ? 'live' : 'test'
+      }
+    });
+  }
+
+  // Retrieve the latest invoice for a subscription (useful after upgrade to get proration details)
+  static async getUpgradeInvoiceDetails(subscriptionId: string): Promise<{
+    creditAmount: number; // Amount credited from old plan (in cents, positive)
+    chargeAmount: number; // Amount charged for new plan (in cents, positive)
+    totalCharged: number; // Net amount charged (in cents)
+    currency: string;
+  }> {
+    try {
+      const subscription = await stripe.subscriptions.retrieve(subscriptionId, {
+        expand: ['latest_invoice']
+      });
+      
+      const invoice = subscription.latest_invoice as Stripe.Invoice;
+      if (!invoice || typeof invoice === 'string') {
+        return { creditAmount: 0, chargeAmount: 0, totalCharged: 0, currency: 'usd' };
+      }
+
+      let creditAmount = 0;
+      let chargeAmount = 0;
+
+      // Parse invoice line items for proration credits and charges
+      if (invoice.lines?.data) {
+        for (const line of invoice.lines.data) {
+          if (line.amount < 0) {
+            creditAmount += Math.abs(line.amount);
+          } else {
+            chargeAmount += line.amount;
+          }
+        }
+      }
+
+      return {
+        creditAmount,
+        chargeAmount,
+        totalCharged: invoice.amount_paid || (chargeAmount - creditAmount),
+        currency: invoice.currency || 'usd'
+      };
+    } catch (error) {
+      console.error('Failed to retrieve upgrade invoice details:', error);
+      return { creditAmount: 0, chargeAmount: 0, totalCharged: 0, currency: 'usd' };
+    }
+  }
+
   // Construct webhook event
   static constructWebhookEvent(body: Buffer | string, signature: string): Stripe.Event {
     return stripe.webhooks.constructEvent(

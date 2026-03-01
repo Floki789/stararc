@@ -529,6 +529,95 @@ export class EmailService {
     }
   }
 
+  // Send detailed upgrade notification to user with proration/credit breakdown
+  async sendUpgradeNotification(
+    email: string,
+    alias: string,
+    previousPlan: string,
+    newPlan: string,
+    previousPriceYearly: number, // in cents
+    newPriceYearly: number,      // in cents
+    creditAmount: number,        // in cents (positive = credited from old plan)
+    chargedAmount: number,       // in cents (net amount charged now)
+    currency: string
+  ): Promise<void> {
+    await this.ensureReady();
+    const dashboardUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/dashboard`;
+    
+    const formatAmount = (cents: number) => {
+      const symbol = currency === 'usd' ? '$' : currency.toUpperCase() + ' ';
+      return `${symbol}${(cents / 100).toFixed(2)}`;
+    };
+
+    const mailOptions = {
+      from: this.fromEmail,
+      to: email,
+      subject: `Stararc - Upgrade: ${previousPlan} → ${newPlan}`,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px;">
+          <h2 style="color: #1f2937; margin-bottom: 20px;">Subscription Upgrade</h2>
+          
+          <p style="color: #4b5563; line-height: 1.6; margin-bottom: 20px;">
+            Dein Upgrade von <strong>${previousPlan}</strong> auf <strong>${newPlan}</strong> wurde erfolgreich durchgeführt.
+          </p>
+          
+          <div style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 24px; margin: 24px 0;">
+            <h3 style="color: #374151; margin: 0 0 16px 0; font-size: 16px;">Abrechnungsdetails</h3>
+            
+            <table style="width: 100%; border-collapse: collapse;">
+              <tr>
+                <td style="color: #6b7280; padding: 6px 0;">Bisheriger Plan (${previousPlan})</td>
+                <td style="color: #6b7280; padding: 6px 0; text-align: right;">${formatAmount(previousPriceYearly)}/Jahr</td>
+              </tr>
+              <tr>
+                <td style="color: #1f2937; padding: 6px 0; font-weight: 500;">Neuer Plan (${newPlan})</td>
+                <td style="color: #1f2937; padding: 6px 0; text-align: right; font-weight: 500;">${formatAmount(newPriceYearly)}/Jahr</td>
+              </tr>
+              ${creditAmount > 0 ? `
+              <tr>
+                <td colspan="2" style="padding: 12px 0 4px 0; border-top: 1px solid #e5e7eb;"></td>
+              </tr>
+              <tr>
+                <td style="color: #059669; padding: 6px 0;">Gutschrift ${previousPlan} (anteilig)</td>
+                <td style="color: #059669; padding: 6px 0; text-align: right;">-${formatAmount(creditAmount)}</td>
+              </tr>` : ''}
+              <tr>
+                <td style="color: #1f2937; padding: 12px 0 6px 0; font-weight: 600; border-top: 1px solid #e5e7eb;">Sofort belastet</td>
+                <td style="color: #1f2937; padding: 12px 0 6px 0; text-align: right; font-weight: 600; border-top: 1px solid #e5e7eb;">${formatAmount(chargedAmount)}</td>
+              </tr>
+            </table>
+          </div>
+          
+          <p style="color: #6b7280; font-size: 14px; line-height: 1.6; margin-bottom: 24px;">
+            Die anteilige Gutschrift basiert auf der verbleibenden Laufzeit deiner ${previousPlan}-Subscription.
+          </p>
+          
+          <div style="margin: 30px 0;">
+            <a href="${dashboardUrl}" 
+               style="display: inline-block; background: #3b82f6; color: white; padding: 12px 30px; 
+                      text-decoration: none; border-radius: 6px; font-weight: 500;">
+              Zum Dashboard
+            </a>
+          </div>
+          
+          <p style="color: #9ca3af; font-size: 12px; margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+            © ${new Date().getFullYear()} Stararc.one
+          </p>
+        </div>
+      `
+    };
+
+    try {
+      const info = await this.transporter.sendMail(mailOptions);
+      console.log(`✅ Upgrade notification email sent to ${email}`);
+      if (process.env.NODE_ENV !== 'production') {
+        console.log(`🔗 Preview URL: ${nodemailer.getTestMessageUrl(info)}`);
+      }
+    } catch (error) {
+      console.error('❌ Failed to send upgrade notification email:', error);
+    }
+  }
+
   // Send auth method selection confirmation to user
   async sendAuthMethodConfirmation(email: string, alias: string, authMethod: string): Promise<void> {
     await this.ensureReady();

@@ -1,10 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import StripeAPIService from '../services/stripeService';
+import { loadStripe } from '@stripe/stripe-js';
 import PlanCards from '../components/PlanCards';
 import { useLanguage } from '../contexts/LanguageContext';
+
+interface UpgradePreview {
+  currentPlan: string;
+  currentPlanPrice: number;
+  targetPlan: string;
+  targetPlanPrice: number;
+  creditAmount: number;
+  newPlanAmount: number;
+  totalDue: number;
+  currency: string;
+  currentPeriodEnd: string;
+}
 
 const SubscriptionSelection: React.FC = () => {
   const { user } = useAuth();
@@ -12,6 +25,9 @@ const SubscriptionSelection: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState<Record<string, boolean>>({});
   const [currentPlan, setCurrentPlan] = useState<string | null>(null);
+  const [upgradePreview, setUpgradePreview] = useState<UpgradePreview | null>(null);
+  const [previewLoading, setPreviewLoading] = useState(false);
+  const [upgrading, setUpgrading] = useState(false);
 
   useEffect(() => {
     const initializeSubscriptionSelection = async () => {
@@ -121,7 +137,12 @@ const SubscriptionSelection: React.FC = () => {
     initializeSubscriptionSelection();
   }, [user, navigate]);
 
-  
+  const isUpgradeFlow = currentPlan && currentPlan !== 'Free';
+
+  const formatAmount = (cents: number, currency: string) => {
+    const symbol = currency === 'usd' ? '$' : currency.toUpperCase() + ' ';
+    return `${symbol}${(cents / 100).toFixed(2)}`;
+  };
 
   const handlePlanSelection = async (planId: string, _priceValue: number, interval: 'month' | 'year' = 'month') => {
     console.log('handlePlanSelection called with planId:', planId, 'interval:', interval);
@@ -131,32 +152,70 @@ const SubscriptionSelection: React.FC = () => {
       return;
     }
 
+    // If user has an active paid subscription, show upgrade preview first
+    if (isUpgradeFlow && planId !== currentPlan) {
+      setPreviewLoading(true);
+      setLoading(prev => ({ ...prev, [planId]: true }));
+      try {
+        const preview = await StripeAPIService.getUpgradePreview(planId);
+        setUpgradePreview(preview);
+      } catch (error) {
+        console.error('Failed to get upgrade preview:', error);
+        // Fallback: proceed without preview
+        await executeUpgrade(planId, interval);
+      } finally {
+        setPreviewLoading(false);
+        setLoading(prev => ({ ...prev, [planId]: false }));
+      }
+      return;
+    }
+
+    await executeUpgrade(planId, interval);
+  };
+
+  const executeUpgrade = async (planId: string, interval: 'month' | 'year' = 'year') => {
+    if (!user) return;
+
     setLoading(prev => ({ ...prev, [planId]: true }));
+    setUpgrading(true);
 
     try {
-      // Use the new unified plan selection endpoint with interval
       const result = await StripeAPIService.selectPlan(planId, interval);
       
       if (result.success) {
         if (result.workflow === 'direct') {
-          // Free plan - navigate directly to next step
-          console.log('Free plan activated:', result.message);
-          
-          // Update user data in localStorage
-          const storedUser = localStorage.getItem('user');
-          if (storedUser) {
-            const userData = JSON.parse(storedUser);
-            userData.onboardingStep = 'auth_method_selection';
-            userData.subscriptionPlan = 'Free';
-            localStorage.setItem('user', JSON.stringify(userData));
+          if ((result as any).upgraded) {
+            // Check if 3D Secure / SCA confirmation is needed
+            if ((result as any).requiresAction && (result as any).clientSecret) {
+              console.log('3D Secure confirmation required for upgrade');
+              const stripeKey = (import.meta as any).env.VITE_STRIPE_PUBLISHABLE_KEY;
+              const stripeInstance = await loadStripe(stripeKey);
+              if (!stripeInstance) throw new Error('Stripe not loaded');
+
+              const { error } = await stripeInstance.confirmCardPayment((result as any).clientSecret);
+              if (error) {
+                throw new Error(error.message || t('upgradePreview.scaFailed'));
+              }
+              console.log('3D Secure confirmed, upgrade complete');
+            }
+            console.log('Subscription upgraded:', result.plan, result.message);
+            navigate('/dashboard');
+          } else {
+            console.log('Free plan activated:', result.message);
+            
+            const storedUser = localStorage.getItem('user');
+            if (storedUser) {
+              const userData = JSON.parse(storedUser);
+              userData.onboardingStep = 'auth_method_selection';
+              userData.subscriptionPlan = 'Free';
+              localStorage.setItem('user', JSON.stringify(userData));
+            }
+            
+            sessionStorage.setItem('selectedPlan', 'Free');
+            navigate('/auth-method-selection');
           }
           
-          // Store selected plan for later use
-          sessionStorage.setItem('selectedPlan', 'Free');
-          navigate('/auth-method-selection');
-          
         } else if (result.workflow === 'stripe') {
-          // Paid plan - redirect to Stripe Checkout
           console.log('Creating Stripe checkout for plan:', planId, 'interval:', interval);
           if (result.sessionId) {
             await StripeAPIService.redirectToCheckout(result.sessionId);
@@ -175,7 +234,19 @@ const SubscriptionSelection: React.FC = () => {
       alert(errorMessage);
     } finally {
       setLoading(prev => ({ ...prev, [planId]: false }));
+      setUpgrading(false);
+      setUpgradePreview(null);
     }
+  };
+
+  const handleConfirmUpgrade = () => {
+    if (upgradePreview) {
+      executeUpgrade(upgradePreview.targetPlan, 'year');
+    }
+  };
+
+  const handleCancelPreview = () => {
+    setUpgradePreview(null);
   };
 
 
@@ -219,9 +290,146 @@ const SubscriptionSelection: React.FC = () => {
             className="max-w-5xl"
           />
         </div>
-        
 
       </div>
+
+      {/* Upgrade Preview Modal */}
+      <AnimatePresence>
+        {upgradePreview && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            onClick={handleCancelPreview}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ duration: 0.3 }}
+              className="bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl max-w-md w-full p-8"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Header */}
+              <div className="text-center mb-6">
+                <div className="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-6 h-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                  </svg>
+                </div>
+                <h3 className="text-2xl font-bold text-white">
+                  {t('upgradePreview.title')}
+                </h3>
+                <p className="text-slate-400 mt-2">
+                  {upgradePreview.currentPlan} → {upgradePreview.targetPlan}
+                </p>
+              </div>
+
+              {/* Pricing Breakdown */}
+              <div className="bg-slate-900/60 border border-slate-700 rounded-xl p-5 mb-6">
+                {/* Current Plan */}
+                <div className="flex justify-between items-center py-2">
+                  <span className="text-slate-400">
+                    {t('upgradePreview.currentPlan')} ({upgradePreview.currentPlan})
+                  </span>
+                  <span className="text-slate-400">
+                    {formatAmount(upgradePreview.currentPlanPrice, upgradePreview.currency)}/{t('upgradePreview.year')}
+                  </span>
+                </div>
+
+                {/* New Plan */}
+                <div className="flex justify-between items-center py-2">
+                  <span className="text-white font-medium">
+                    {t('upgradePreview.newPlan')} ({upgradePreview.targetPlan})
+                  </span>
+                  <span className="text-white font-medium">
+                    {formatAmount(upgradePreview.targetPlanPrice, upgradePreview.currency)}/{t('upgradePreview.year')}
+                  </span>
+                </div>
+
+                {/* Divider */}
+                <div className="border-t border-slate-700 my-3"></div>
+
+                {/* Credit */}
+                {upgradePreview.creditAmount > 0 && (
+                  <div className="flex justify-between items-center py-2">
+                    <span className="text-emerald-400">
+                      {t('upgradePreview.credit')} ({upgradePreview.currentPlan})
+                    </span>
+                    <span className="text-emerald-400 font-medium">
+                      −{formatAmount(upgradePreview.creditAmount, upgradePreview.currency)}
+                    </span>
+                  </div>
+                )}
+
+                {/* Prorated new plan charge */}
+                {upgradePreview.newPlanAmount > 0 && (
+                  <div className="flex justify-between items-center py-2">
+                    <span className="text-slate-300">
+                      {t('upgradePreview.proratedCharge')} ({upgradePreview.targetPlan})
+                    </span>
+                    <span className="text-slate-300">
+                      {formatAmount(upgradePreview.newPlanAmount, upgradePreview.currency)}
+                    </span>
+                  </div>
+                )}
+
+                {/* Divider */}
+                <div className="border-t border-slate-600 my-3"></div>
+
+                {/* Total */}
+                <div className="flex justify-between items-center py-2">
+                  <span className="text-white font-bold text-lg">
+                    {t('upgradePreview.dueNow')}
+                  </span>
+                  <span className="text-white font-bold text-lg">
+                    {formatAmount(upgradePreview.totalDue, upgradePreview.currency)}
+                  </span>
+                </div>
+              </div>
+
+              {/* Info Text */}
+              <p className="text-slate-500 text-sm text-center mb-6">
+                {t('upgradePreview.infoText')}
+              </p>
+
+              {/* Buttons */}
+              <div className="flex gap-3">
+                <button
+                  onClick={handleCancelPreview}
+                  disabled={upgrading}
+                  className="flex-1 px-4 py-3 rounded-xl border border-slate-600 text-slate-300 hover:bg-slate-700 transition-colors disabled:opacity-50"
+                >
+                  {t('upgradePreview.cancel')}
+                </button>
+                <button
+                  onClick={handleConfirmUpgrade}
+                  disabled={upgrading}
+                  className="flex-1 px-4 py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-500 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                >
+                  {upgrading ? (
+                    <>
+                      <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                      </svg>
+                      {t('upgradePreview.processing')}
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                      </svg>
+                      {t('upgradePreview.confirm')} {upgradePreview ? formatAmount(upgradePreview.totalDue, upgradePreview.currency) : ''}
+                    </>
+                  )}
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

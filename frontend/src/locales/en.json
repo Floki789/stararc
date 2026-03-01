@@ -334,6 +334,9 @@
     "noSubscription": "No subscription found...",
     "plan": "Plan",
     "active": "Active",
+    "cancelled": "Cancelled",
+    "cancelledExpiresOn": "Active until:",
+    "expired": "Expired",
     "expiresOn": "Expires on:",
     "renewsTomorrow": "Renews tomorrow",
     "daysRemaining": "{{days}} days remaining",
@@ -416,6 +419,21 @@
     "choosePlan": "Choose Your Plan",
     "choosePlanSubtitle": "Start for free or choose a premium plan right away",
     "planSelectionError": "Error selecting plan. Please try again."
+  },
+  "upgradePreview": {
+    "title": "Upgrade Summary",
+    "currentPlan": "Current Plan",
+    "newPlan": "New Plan",
+    "year": "year",
+    "credit": "Credit",
+    "proratedCharge": "Prorated charge",
+    "dueNow": "Due now",
+    "infoText": "The credit is based on the remaining time of your current plan. The amount will be charged to your card on file.",
+    "cancel": "Cancel",
+    "confirm": "Pay now",
+    "processing": "Processing...",
+    "scaFailed": "3D Secure confirmation failed. Please try again.",
+    "paymentFailed": "Payment failed. Please check your payment method."
   },
   "spaceshipAccess": {
     "unlockApp": "Unlock App",

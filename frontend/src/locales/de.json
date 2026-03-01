@@ -493,6 +493,9 @@
     "noSubscription": "Keine Subscription gefunden...",
     "plan": "Plan",
     "active": "Aktiv",
+    "cancelled": "Gekündigt",
+    "cancelledExpiresOn": "Aktiv bis:",
+    "expired": "Abgelaufen",
     "expiresOn": "Läuft bis:",
     "renewsTomorrow": "Morgen wird verlängert",
     "daysRemaining": "Noch {{days}} Tage",
@@ -551,6 +554,21 @@
     "choosePlan": "Wählen Sie Ihren Plan",
     "choosePlanSubtitle": "Starten Sie kostenlos oder wählen Sie gleich einen Premium-Plan",
     "planSelectionError": "Fehler bei der Plan-Auswahl. Bitte versuchen Sie es erneut."
+  },
+  "upgradePreview": {
+    "title": "Upgrade-Übersicht",
+    "currentPlan": "Bisheriger Plan",
+    "newPlan": "Neuer Plan",
+    "year": "Jahr",
+    "credit": "Gutschrift",
+    "proratedCharge": "Anteilige Kosten",
+    "dueNow": "Sofort fällig",
+    "infoText": "Die Gutschrift basiert auf der verbleibenden Laufzeit Ihres aktuellen Plans. Der Betrag wird Ihrer hinterlegten Kreditkarte belastet.",
+    "cancel": "Abbrechen",
+    "confirm": "Jetzt bezahlen",
+    "processing": "Wird verarbeitet...",
+    "scaFailed": "3D Secure Bestätigung fehlgeschlagen. Bitte versuchen Sie es erneut.",
+    "paymentFailed": "Zahlung fehlgeschlagen. Bitte überprüfen Sie Ihre Zahlungsmethode."
   },
   "spaceshipAccess": {
     "unlockApp": "App freischalten",

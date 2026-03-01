@@ -1,7 +1,10 @@
 import express from 'express';
 import { authMiddleware } from '../middleware/auth';
 import { StripeService, SUBSCRIPTION_PLANS, isProductionMode } from '../services/stripeService';
+import { EmailService } from '../services/emailService';
 import { pool } from '../database/connection';
+
+const emailService = new EmailService();
 
 const router = express.Router();
 
@@ -14,6 +17,54 @@ router.get('/plans', authMiddleware, async (req, res) => {
   } catch (error) {
     console.error('Get plans error:', error);
     res.status(500).json({ error: 'Failed to get plans' });
+  }
+});
+
+// Preview upgrade proration (does NOT execute the upgrade)
+router.get('/upgrade-preview', authMiddleware, async (req, res): Promise<any> => {
+  try {
+    const userId = (req as any).user.id;
+    const targetPlanId = req.query.targetPlan as string;
+
+    if (!targetPlanId || !['Spark', 'Nova', 'Galaxy', 'Apex'].includes(targetPlanId)) {
+      return res.status(400).json({ error: 'Invalid target plan' });
+    }
+
+    const userResult = await pool.query(
+      'SELECT stripe_subscription_id, subscription_status, subscription_plan FROM users WHERE id = $1',
+      [userId]
+    );
+
+    const user = userResult.rows[0];
+    if (!user?.stripe_subscription_id || !['active', 'past_due'].includes(user.subscription_status)) {
+      return res.status(400).json({ error: 'No active subscription to upgrade' });
+    }
+
+    const currentPlanId = user.subscription_plan;
+    const currentPlanData = SUBSCRIPTION_PLANS[currentPlanId];
+    const targetPlanData = SUBSCRIPTION_PLANS[targetPlanId];
+
+    if (!targetPlanData) {
+      return res.status(400).json({ error: 'Target plan not found' });
+    }
+
+    const priceId = StripeService.getPriceId(targetPlanData, 'year');
+    const preview = await StripeService.previewUpgrade(user.stripe_subscription_id, priceId);
+
+    res.json({
+      currentPlan: currentPlanId,
+      currentPlanPrice: currentPlanData?.price || 0,
+      targetPlan: targetPlanId,
+      targetPlanPrice: targetPlanData.price,
+      creditAmount: preview.creditAmount,
+      newPlanAmount: preview.newPlanAmount,
+      totalDue: preview.totalDue,
+      currency: preview.currency,
+      currentPeriodEnd: new Date(preview.currentPeriodEnd * 1000).toISOString(),
+    });
+  } catch (error) {
+    console.error('Upgrade preview error:', error);
+    res.status(500).json({ error: 'Failed to generate upgrade preview' });
   }
 });
 
@@ -80,14 +131,20 @@ router.post('/select-plan', authMiddleware, async (req, res): Promise<any> => {
     if (['Spark', 'Nova', 'Galaxy', 'Apex'].includes(planId)) {
       // Get or create Stripe customer
       let stripeCustomerId: string;
+      let existingSubscriptionId: string | null = null;
       
       const userResult = await pool.query(
-        'SELECT stripe_customer_id FROM users WHERE id = $1',
+        'SELECT stripe_customer_id, stripe_subscription_id, subscription_status, subscription_plan FROM users WHERE id = $1',
         [userId]
       );
 
       if (userResult.rows[0]?.stripe_customer_id) {
         stripeCustomerId = userResult.rows[0].stripe_customer_id;
+        // Check for existing active subscription that can be upgraded
+        const subStatus = userResult.rows[0].subscription_status;
+        if (userResult.rows[0].stripe_subscription_id && ['active', 'past_due'].includes(subStatus)) {
+          existingSubscriptionId = userResult.rows[0].stripe_subscription_id;
+        }
       } else {
         const customer = await StripeService.createCustomer(userEmail, userId);
         stripeCustomerId = customer.id;
@@ -99,12 +156,115 @@ router.post('/select-plan', authMiddleware, async (req, res): Promise<any> => {
         );
       }
 
-      // Create checkout session
-      const successUrl = `${process.env.FRONTEND_URL || 'http://localhost:3003'}/dashboard?new=true&session_id={CHECKOUT_SESSION_ID}`;
-      const cancelUrl = `${process.env.FRONTEND_URL || 'http://localhost:3003'}/subscription-selection?canceled=true`;
-
       // Get correct price ID based on mode (test/live) and interval
       const priceId = StripeService.getPriceId(plan, interval);
+
+      // If user already has an active subscription, upgrade it directly (no new checkout)
+      if (existingSubscriptionId) {
+        const currentPlan = userResult.rows[0].subscription_plan;
+        console.log(`🔄 Upgrading existing subscription ${existingSubscriptionId}: ${currentPlan} → ${planId} for user ${userId}`);
+        
+        const updatedSub = await StripeService.upgradeSubscription(
+          existingSubscriptionId,
+          priceId,
+          userId,
+          planId
+        );
+
+        // Check if 3D Secure / SCA is required
+        const latestInvoice = updatedSub.latest_invoice as any;
+        const paymentIntent = latestInvoice?.payment_intent;
+
+        if (paymentIntent?.status === 'requires_action') {
+          console.log(`🔐 SCA/3D Secure required for upgrade ${currentPlan} → ${planId}, user ${userId}`);
+          return res.json({
+            success: true,
+            workflow: 'direct',
+            upgraded: true,
+            requiresAction: true,
+            clientSecret: paymentIntent.client_secret,
+            plan: planId,
+            status: 'incomplete',
+            message: `Upgrade erfordert 3D Secure Bestätigung`
+          });
+        }
+
+        if (paymentIntent?.status === 'requires_payment_method') {
+          console.error(`❌ Payment failed for upgrade ${currentPlan} → ${planId}, user ${userId}`);
+          return res.status(402).json({
+            error: 'Payment method declined',
+            message: 'Zahlung fehlgeschlagen. Bitte überprüfen Sie Ihre Zahlungsmethode.'
+          });
+        }
+
+        // Update user in DB
+        const periodEnd = new Date(updatedSub.current_period_end * 1000);
+        await pool.query(
+          `UPDATE users SET 
+           subscription_plan = $1,
+           subscription_status = $2,
+           subscription_cancel_at_period_end = false,
+           subscription_canceled_at = NULL,
+           subscription_expires_at = $3,
+           updated_at = CURRENT_TIMESTAMP
+           WHERE id = $4`,
+          [planId, updatedSub.status, periodEnd, userId]
+        );
+
+        console.log(`✅ Subscription upgraded to ${planId}, status: ${updatedSub.status}`);
+
+        // Send upgrade emails (non-blocking)
+        (async () => {
+          try {
+            const invoiceDetails = await StripeService.getUpgradeInvoiceDetails(existingSubscriptionId!);
+            const previousPlanData = SUBSCRIPTION_PLANS[currentPlan];
+            const newPlanData = SUBSCRIPTION_PLANS[planId];
+
+            // Email to user
+            await emailService.sendUpgradeNotification(
+              userEmail,
+              'User',
+              currentPlan,
+              planId,
+              previousPlanData?.price || 0,
+              newPlanData?.price || 0,
+              invoiceDetails.creditAmount,
+              invoiceDetails.totalCharged,
+              invoiceDetails.currency
+            );
+
+            // Email to admin
+            await emailService.sendAdminNotification(
+              `Subscription UPGRADE: ${currentPlan} → ${planId}`, {
+                'User-ID': userId,
+                'E-Mail': userEmail,
+                'Typ': '⬆️ UPGRADE',
+                'Alter Plan': `${currentPlan} (${(previousPlanData?.price || 0) / 100} ${invoiceDetails.currency}/Jahr)`,
+                'Neuer Plan': `${planId} (${(newPlanData?.price || 0) / 100} ${invoiceDetails.currency}/Jahr)`,
+                'Gutschrift (anteilig)': `${(invoiceDetails.creditAmount / 100).toFixed(2)} ${invoiceDetails.currency}`,
+                'Sofort belastet': `${(invoiceDetails.totalCharged / 100).toFixed(2)} ${invoiceDetails.currency}`,
+                'Subscription-ID': existingSubscriptionId,
+                'Zeitpunkt': new Date().toLocaleString('de-CH', { timeZone: 'Europe/Zurich' })
+              }
+            );
+          } catch (emailErr) {
+            console.error('Upgrade email sending failed:', emailErr);
+          }
+        })();
+
+        return res.json({ 
+          success: true,
+          workflow: 'direct',
+          upgraded: true,
+          plan: planId,
+          status: updatedSub.status,
+          message: `Upgrade von ${currentPlan} auf ${planId} erfolgreich!`
+        });
+      }
+
+      // No existing subscription — create new checkout session
+      const successUrl = `${process.env.FRONTEND_URL || 'http://localhost:3003'}/dashboard?new=true&session_id={CHECKOUT_SESSION_ID}`;
+      const cancelUrl = `${process.env.FRONTEND_URL || 'http://localhost:3003'}/subscription-selection?canceled=true`;
 
       const session = await StripeService.createCheckoutSession(
         stripeCustomerId,
@@ -237,14 +397,20 @@ router.post('/create-checkout-session', authMiddleware, async (req, res): Promis
 
     // Get or create Stripe customer
     let stripeCustomerId: string;
+    let existingSubscriptionId: string | null = null;
     
     const userResult = await pool.query(
-      'SELECT stripe_customer_id FROM users WHERE id = $1',
+      'SELECT stripe_customer_id, stripe_subscription_id, subscription_status, subscription_plan FROM users WHERE id = $1',
       [userId]
     );
 
     if (userResult.rows[0]?.stripe_customer_id) {
       stripeCustomerId = userResult.rows[0].stripe_customer_id;
+      // Check for existing active subscription
+      const subStatus = userResult.rows[0].subscription_status;
+      if (userResult.rows[0].stripe_subscription_id && ['active', 'past_due'].includes(subStatus)) {
+        existingSubscriptionId = userResult.rows[0].stripe_subscription_id;
+      }
     } else {
       const customer = await StripeService.createCustomer(userEmail, userId);
       stripeCustomerId = customer.id;
@@ -256,7 +422,108 @@ router.post('/create-checkout-session', authMiddleware, async (req, res): Promis
       );
     }
 
-    // Create checkout session
+    // Get correct price ID
+    const priceId = StripeService.getPriceId(plan, 'year');
+
+    // If user already has an active subscription, upgrade it directly (no new checkout)
+    if (existingSubscriptionId) {
+      const currentPlan = userResult.rows[0].subscription_plan;
+      console.log(`🔄 Upgrading existing subscription ${existingSubscriptionId}: ${currentPlan} → ${planId} for user ${userId}`);
+      
+      const updatedSub = await StripeService.upgradeSubscription(
+        existingSubscriptionId,
+        priceId,
+        userId,
+        planId
+      );
+
+      // Check if 3D Secure / SCA is required
+      const latestInvoice = updatedSub.latest_invoice as any;
+      const paymentIntent = latestInvoice?.payment_intent;
+
+      if (paymentIntent?.status === 'requires_action') {
+        console.log(`🔐 SCA/3D Secure required for upgrade to ${planId}, user ${userId}`);
+        return res.json({
+          upgraded: true,
+          requiresAction: true,
+          clientSecret: paymentIntent.client_secret,
+          plan: planId,
+          status: 'incomplete'
+        });
+      }
+
+      if (paymentIntent?.status === 'requires_payment_method') {
+        console.error(`❌ Payment failed for upgrade to ${planId}, user ${userId}`);
+        return res.status(402).json({
+          error: 'Payment method declined',
+          message: 'Zahlung fehlgeschlagen. Bitte überprüfen Sie Ihre Zahlungsmethode.'
+        });
+      }
+
+      // Update user in DB
+      const periodEnd = new Date(updatedSub.current_period_end * 1000);
+      await pool.query(
+        `UPDATE users SET 
+         subscription_plan = $1,
+         subscription_status = $2,
+         subscription_cancel_at_period_end = false,
+         subscription_canceled_at = NULL,
+         subscription_expires_at = $3,
+         updated_at = CURRENT_TIMESTAMP
+         WHERE id = $4`,
+        [planId, updatedSub.status, periodEnd, userId]
+      );
+
+      console.log(`✅ Subscription upgraded to ${planId}, status: ${updatedSub.status}`);
+
+      // Send upgrade emails (non-blocking)
+      (async () => {
+        try {
+          const invoiceDetails = await StripeService.getUpgradeInvoiceDetails(existingSubscriptionId!);
+          const previousPlanData = SUBSCRIPTION_PLANS[currentPlan];
+          const newPlanData = SUBSCRIPTION_PLANS[planId];
+
+          // Email to user
+          await emailService.sendUpgradeNotification(
+            userEmail,
+            'User',
+            currentPlan,
+            planId,
+            previousPlanData?.price || 0,
+            newPlanData?.price || 0,
+            invoiceDetails.creditAmount,
+            invoiceDetails.totalCharged,
+            invoiceDetails.currency
+          );
+
+          // Email to admin
+          await emailService.sendAdminNotification(
+            `Subscription UPGRADE: ${currentPlan} → ${planId}`, {
+              'User-ID': userId,
+              'E-Mail': userEmail,
+              'Typ': '⬆️ UPGRADE',
+              'Alter Plan': `${currentPlan} (${(previousPlanData?.price || 0) / 100} ${invoiceDetails.currency}/Jahr)`,
+              'Neuer Plan': `${planId} (${(newPlanData?.price || 0) / 100} ${invoiceDetails.currency}/Jahr)`,
+              'Gutschrift (anteilig)': `${(invoiceDetails.creditAmount / 100).toFixed(2)} ${invoiceDetails.currency}`,
+              'Sofort belastet': `${(invoiceDetails.totalCharged / 100).toFixed(2)} ${invoiceDetails.currency}`,
+              'Subscription-ID': existingSubscriptionId,
+              'Zeitpunkt': new Date().toLocaleString('de-CH', { timeZone: 'Europe/Zurich' })
+            }
+          );
+        } catch (emailErr) {
+          console.error('Upgrade email sending failed:', emailErr);
+        }
+      })();
+
+      return res.json({
+        upgraded: true,
+        plan: planId,
+        status: updatedSub.status,
+        expiresAt: periodEnd.toISOString()
+      });
+    }
+
+    // No existing subscription — create new checkout session
     const successUrl = `${process.env.FRONTEND_URL || 'http://localhost:3003'}/dashboard?new=true`;
     const cancelUrl = `${process.env.FRONTEND_URL || 'http://localhost:3003'}/subscription-selection?canceled=true`;
 
@@ -286,7 +553,7 @@ router.get('/subscription', authMiddleware, async (req, res): Promise<any> => {
     const userId = (req as any).user.id;
     
     const result = await pool.query(
-      'SELECT subscription_plan, subscription_status, subscription_expires_at, spaceship_integration_completed FROM users WHERE id = $1',
+      'SELECT subscription_plan, subscription_status, subscription_expires_at, subscription_cancel_at_period_end, subscription_canceled_at, spaceship_integration_completed FROM users WHERE id = $1',
       [userId]
     );
 
@@ -308,6 +575,8 @@ router.get('/subscription', authMiddleware, async (req, res): Promise<any> => {
       plan: user.subscription_plan,
       status: user.subscription_status,
       expiresAt: user.subscription_expires_at,
+      cancelAtPeriodEnd: user.subscription_cancel_at_period_end || false,
+      canceledAt: user.subscription_canceled_at,
       hasSubscription: !!(user.subscription_plan && user.subscription_status),
       spaceshipIntegrationCompleted: user.spaceship_integration_completed
     });
@@ -449,8 +718,6 @@ router.post('/webhook', async (req, res): Promise<any> => {
             processed = true;
             
             // Send admin notification
-            const { EmailService } = require('../services/emailService');
-            const emailSvc = new EmailService();
             const emailSubject = isUpgrade 
               ? `Subscription UPGRADE: ${previousPlan} → ${planId}`
               : `User hat Subscription abgeschlossen`;
@@ -464,7 +731,7 @@ router.post('/webhook', async (req, res): Promise<any> => {
               'Status': 'active',
               'Zeitpunkt': new Date().toLocaleString('de-CH', { timeZone: 'Europe/Zurich' })
             };
-            emailSvc.sendAdminNotification(emailSubject, emailDetails)
+            emailService.sendAdminNotification(emailSubject, emailDetails)
               .catch((err: any) => console.error('Admin notification failed:', err));
             
             // Send subscription confirmation email to user
@@ -476,7 +743,7 @@ router.post('/webhook', async (req, res): Promise<any> => {
                 const userAlias = userRow.admin_encrypted_alias 
                   ? UserEncryptionService.decryptWithMasterKey(userRow.admin_encrypted_alias) 
                   : 'User';
-                emailSvc.sendSubscriptionConfirmation(userEmail, userAlias, planId, isUpgrade, previousPlan)
+                emailService.sendSubscriptionConfirmation(userEmail, userAlias, planId, isUpgrade, previousPlan)
                   .catch((err: any) => console.error('User subscription email failed:', err));
               }
             } catch (decryptErr: any) {
@@ -492,16 +759,25 @@ router.post('/webhook', async (req, res): Promise<any> => {
           console.log('🔄 WEBHOOK - Processing customer.subscription.updated');
           const subscription = eventData;
           
-          // Update subscription status if it changes (e.g., past_due, canceled)
+          // Update subscription status, cancellation tracking, and period end
+          const cancelAtPeriodEnd = subscription.cancel_at_period_end || false;
+          const canceledAt = cancelAtPeriodEnd ? new Date() : null;
+          const periodEnd = subscription.current_period_end 
+            ? new Date(subscription.current_period_end * 1000) 
+            : null;
+          
           await pool.query(
             `UPDATE users SET 
              subscription_status = $1,
+             subscription_cancel_at_period_end = $2,
+             subscription_canceled_at = CASE WHEN $2 = true AND subscription_canceled_at IS NULL THEN $3 ELSE CASE WHEN $2 = false THEN NULL ELSE subscription_canceled_at END END,
+             subscription_expires_at = COALESCE($4, subscription_expires_at),
              updated_at = CURRENT_TIMESTAMP
-             WHERE stripe_subscription_id = $2`,
-            [subscription.status, subscription.id]
+             WHERE stripe_subscription_id = $5`,
+            [subscription.status, cancelAtPeriodEnd, canceledAt, periodEnd, subscription.id]
           );
           
-          console.log(`✅ WEBHOOK - Subscription ${subscription.id} status updated to ${subscription.status}`);
+          console.log(`✅ WEBHOOK - Subscription ${subscription.id} status: ${subscription.status}, cancel_at_period_end: ${cancelAtPeriodEnd}`);
           processed = true;
           break;
         }
@@ -510,16 +786,17 @@ router.post('/webhook', async (req, res): Promise<any> => {
           console.log('❌ WEBHOOK - Processing customer.subscription.deleted');
           const subscription = eventData;
           
-          // Mark subscription as canceled
+          // Mark subscription as fully canceled (period has ended)
           await pool.query(
             `UPDATE users SET 
              subscription_status = 'canceled',
+             subscription_cancel_at_period_end = false,
              updated_at = CURRENT_TIMESTAMP
              WHERE stripe_subscription_id = $1`,
             [subscription.id]
           );
           
-          console.log(`✅ WEBHOOK - Subscription ${subscription.id} marked as canceled`);
+          console.log(`✅ WEBHOOK - Subscription ${subscription.id} marked as canceled (period ended)`);
           processed = true;
           break;
         }
