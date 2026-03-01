@@ -507,6 +507,19 @@
     "zkRecoveryHint": "Falls du dein Spaceship-Passwort vergessen hast, kannst du es mit deiner 6-Wort Wiederherstellungsphrase zurücksetzen.",
     "zkRecoverButton": "Spaceship-Passwort wiederherstellen"
   },
+  "verifyEmailPage": {
+    "title": "E-Mail-Bestätigung",
+    "verifying": "Bestätige deine E-Mail-Adresse...",
+    "noToken": "Kein Bestätigungstoken gefunden.",
+    "successTitle": "E-Mail bestätigt!",
+    "successMessage": "Deine E-Mail-Adresse wurde erfolgreich bestätigt. Du kannst dich jetzt anmelden.",
+    "redirecting": "Du wirst in Kürze zur Anmeldung weitergeleitet...",
+    "errorTitle": "Bestätigung fehlgeschlagen",
+    "errorFallback": "E-Mail-Bestätigung fehlgeschlagen.",
+    "networkError": "Netzwerkfehler. Bitte versuche es später erneut.",
+    "newRegistration": "Neue Registrierung",
+    "toLogin": "Zur Anmeldung"
+  },
   "auth": {
     "login": "Anmelden",
     "register": "Registrieren",

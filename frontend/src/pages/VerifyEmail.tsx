@@ -2,10 +2,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const VerifyEmail: React.FC = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
   const [message, setMessage] = useState('');
   const verificationAttempted = useRef(false);
@@ -19,7 +21,7 @@ const VerifyEmail: React.FC = () => {
     
     if (!token) {
       setStatus('error');
-      setMessage('Kein Bestätigungstoken gefunden.');
+      setMessage(t('verifyEmailPage.noToken'));
       return;
     }
 
@@ -33,7 +35,7 @@ const VerifyEmail: React.FC = () => {
 
         if (response.ok) {
           setStatus('success');
-          setMessage('Ihre E-Mail-Adresse wurde erfolgreich bestätigt. Sie können sich jetzt anmelden.');
+          setMessage(t('verifyEmailPage.successMessage'));
           
           // Redirect to login after 3 seconds
           setTimeout(() => {
@@ -41,11 +43,11 @@ const VerifyEmail: React.FC = () => {
           }, 3000);
         } else {
           setStatus('error');
-          setMessage(data.error || 'E-Mail-Bestätigung fehlgeschlagen.');
+          setMessage(data.error || t('verifyEmailPage.errorFallback'));
         }
       } catch (error) {
         setStatus('error');
-        setMessage('Netzwerkfehler. Bitte versuchen Sie es später erneut.');
+        setMessage(t('verifyEmailPage.networkError'));
       }
     };
 
@@ -87,7 +89,7 @@ const VerifyEmail: React.FC = () => {
             <span className="text-white font-bold text-xl">S</span>
           </div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-white">
-            E-Mail-Bestätigung
+            {t('verifyEmailPage.title')}
           </h2>
         </div>
 
@@ -103,7 +105,7 @@ const VerifyEmail: React.FC = () => {
                 <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
               </div>
               <p className="text-gray-300">
-                Bestätige Ihre E-Mail-Adresse...
+                {t('verifyEmailPage.verifying')}
               </p>
             </div>
           )}
@@ -120,11 +122,11 @@ const VerifyEmail: React.FC = () => {
               </div>
               <div className="space-y-2">
                 <h3 className="text-xl font-semibold text-white">
-                  E-Mail bestätigt!
+                  {t('verifyEmailPage.successTitle')}
                 </h3>
                 <p className="text-gray-300">{message}</p>
                 <p className="text-sm text-gray-400">
-                  Sie werden in Kürze zur Anmeldung weitergeleitet...
+                  {t('verifyEmailPage.redirecting')}
                 </p>
               </div>
             </motion.div>
@@ -142,7 +144,7 @@ const VerifyEmail: React.FC = () => {
               </div>
               <div className="space-y-2">
                 <h3 className="text-xl font-semibold text-white">
-                  Bestätigung fehlgeschlagen
+                  {t('verifyEmailPage.errorTitle')}
                 </h3>
                 <p className="text-gray-300">{message}</p>
               </div>
@@ -151,13 +153,13 @@ const VerifyEmail: React.FC = () => {
                   to="/register"
                   className="inline-flex items-center justify-center w-full py-2 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200"
                 >
-                  Neue Registrierung
+                  {t('verifyEmailPage.newRegistration')}
                 </Link>
                 <Link
                   to="/login"
                   className="inline-flex items-center justify-center w-full py-2 px-4 border border-gray-600 text-sm font-medium rounded-lg text-gray-300 bg-transparent hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all duration-200"
                 >
-                  Zur Anmeldung
+                  {t('verifyEmailPage.toLogin')}
                 </Link>
               </div>
             </motion.div>

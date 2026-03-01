@@ -348,6 +348,19 @@
     "zkRecoveryHint": "If you forgot your Spaceship password, you can reset it using your 6-word recovery phrase.",
     "zkRecoverButton": "Recover Spaceship Password"
   },
+  "verifyEmailPage": {
+    "title": "Email Verification",
+    "verifying": "Verifying your email address...",
+    "noToken": "No verification token found.",
+    "successTitle": "Email Verified!",
+    "successMessage": "Your email address has been successfully verified. You can now log in.",
+    "redirecting": "You will be redirected to login shortly...",
+    "errorTitle": "Verification Failed",
+    "errorFallback": "Email verification failed.",
+    "networkError": "Network error. Please try again later.",
+    "newRegistration": "New Registration",
+    "toLogin": "Go to Login"
+  },
   "assetOrganization": {
     "wealthAssetsTitle": "Wealth Assets",
     "securityElementsTitle": "Security Elements",
