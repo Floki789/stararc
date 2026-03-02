@@ -787,6 +787,41 @@
       "info": "You can always access both the Starship app and StarArc subscription portal regardless of your authentication method."
     }
   },
+  "zkSetup": {
+    "step1Title": "Zero-Knowledge Password",
+    "step2Title": "Recovery Phrase",
+    "step3Title": "Verification",
+    "step4Title": "Confirmation",
+    "stepOf": "Step {{step}} of 4",
+    "step1Warning": "Important:",
+    "step1WarningText": "This password encrypts your data locally. It is not stored anywhere. If lost, your data is irretrievably gone (unless you have the Recovery Phrase).",
+    "passwordLabel": "ZK Password (min. 12 characters)",
+    "passwordPlaceholder": "Choose a strong password...",
+    "passwordMinLength": "At least 12 characters required",
+    "confirmPasswordLabel": "Confirm Password",
+    "confirmPasswordPlaceholder": "Repeat password...",
+    "passwordsMismatch": "Passwords do not match",
+    "nextToRecovery": "Continue to Recovery Phrase →",
+    "step2Warning": "CRITICAL:",
+    "step2WarningText": "Write down these 6 words on paper and store them safely. This is your only way to reset your password.",
+    "copyToClipboard": "Copy to clipboard",
+    "copied": "Copied!",
+    "phraseNoted": "I have noted the phrase →",
+    "step3Info": "Enter the 6 words of your Recovery Phrase in the correct order to confirm you have written them down correctly.",
+    "wordPlaceholder": "Word {{num}}",
+    "step3Tip": "Tip: Type the first letters, then Tab or Enter to autocomplete",
+    "errorAllWords": "Please enter all 6 words",
+    "errorWordsMismatch": "The words do not match. Please check your Recovery Phrase.",
+    "back": "← Back",
+    "verify": "Verify →",
+    "confirmPoint1": "Your password encrypts your financial data locally in the browser",
+    "confirmPoint2": "We only store encrypted data – your password stays with you",
+    "confirmPoint3": "Without password or Recovery Phrase, no access is possible",
+    "confirmCheckbox": "I understand that I need my password and/or my Recovery Phrase to access my data. If both are lost, my data is irretrievably gone.",
+    "recommendation": "Recommendation: Store your 6-word passphrase securely in at least two geographically separated locations.",
+    "activating": "Setting up encryption...",
+    "activate": "Activate Zero-Knowledge"
+  },
   "animations": {
     "wealthManager": {
       "headline": {

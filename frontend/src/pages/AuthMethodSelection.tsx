@@ -465,11 +465,11 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
 
   const handleVerifySubmit = () => {
     if (!allVerificationWordsFilled) {
-      setVerificationError('Bitte alle 6 Wörter eingeben');
+      setVerificationError(t('zkSetup.errorAllWords'));
       return;
     }
     if (!verificationMatches) {
-      setVerificationError('Die Wörter stimmen nicht überein. Bitte überprüfen Sie Ihre Recovery Phrase.');
+      setVerificationError(t('zkSetup.errorWordsMismatch'));
       return;
     }
     setVerificationError('');
@@ -581,12 +581,12 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
             </div>
             <div>
               <h2 className="text-xl font-bold text-white">
-                {step === 'password' && 'Zero-Knowledge Passwort'}
-                {step === 'recovery' && 'Recovery Phrase'}
-                {step === 'verify' && 'Verifikation'}
-                {step === 'confirm' && 'Bestätigung'}
+                {step === 'password' && t('zkSetup.step1Title')}
+                {step === 'recovery' && t('zkSetup.step2Title')}
+                {step === 'verify' && t('zkSetup.step3Title')}
+                {step === 'confirm' && t('zkSetup.step4Title')}
               </h2>
-              <p className="text-sm text-gray-400">Schritt {step === 'password' ? 1 : step === 'recovery' ? 2 : step === 'verify' ? 3 : 4} von 4</p>
+              <p className="text-sm text-gray-400">{t('zkSetup.stepOf').replace('{{step}}', String(step === 'password' ? 1 : step === 'recovery' ? 2 : step === 'verify' ? 3 : 4))}</p>
             </div>
           </div>
           <button onClick={onClose} className="text-gray-400 hover:text-white">
@@ -601,16 +601,14 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
               <div className="flex gap-2">
                 <AlertTriangle className="w-5 h-5 text-orange-400 flex-shrink-0 mt-0.5" />
                 <div className="text-sm text-orange-200">
-                  <strong>Wichtig:</strong> Dieses Passwort verschlüsselt Ihre Daten lokal. 
-                  Es wird nirgendwo gespeichert. Bei Verlust sind Ihre Daten unwiederbringlich verloren 
-                  (außer Sie haben die Recovery Phrase).
+                  <strong>{t('zkSetup.step1Warning')}</strong> {t('zkSetup.step1WarningText')}
                 </div>
               </div>
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
-                ZK Passwort (mind. 12 Zeichen)
+                {t('zkSetup.passwordLabel')}
               </label>
               <div className="relative">
                 <input
@@ -618,7 +616,7 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full px-4 py-3 bg-gray-900 border border-gray-600 rounded-lg text-white focus:border-orange-500 focus:ring-1 focus:ring-orange-500 outline-none"
-                  placeholder="Starkes Passwort wählen..."
+                  placeholder={t('zkSetup.passwordPlaceholder')}
                 />
                 <button
                   type="button"
@@ -629,23 +627,23 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
                 </button>
               </div>
               {password && !passwordValid && (
-                <p className="text-red-400 text-sm mt-1">Mindestens 12 Zeichen erforderlich</p>
+                <p className="text-red-400 text-sm mt-1">{t('zkSetup.passwordMinLength')}</p>
               )}
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
-                Passwort bestätigen
+                {t('zkSetup.confirmPasswordLabel')}
               </label>
               <input
                 type={showPassword ? 'text' : 'password'}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 className="w-full px-4 py-3 bg-gray-900 border border-gray-600 rounded-lg text-white focus:border-orange-500 focus:ring-1 focus:ring-orange-500 outline-none"
-                placeholder="Passwort wiederholen..."
+                placeholder={t('zkSetup.confirmPasswordPlaceholder')}
               />
               {confirmPassword && !passwordsMatch && (
-                <p className="text-red-400 text-sm mt-1">Passwörter stimmen nicht überein</p>
+                <p className="text-red-400 text-sm mt-1">{t('zkSetup.passwordsMismatch')}</p>
               )}
             </div>
 
@@ -656,7 +654,7 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
               disabled={!passwordValid || !passwordsMatch}
               className="w-full py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold rounded-lg hover:from-orange-600 hover:to-red-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
-              Weiter zur Recovery Phrase →
+              {t('zkSetup.nextToRecovery')}
             </button>
           </div>
         )}
@@ -668,8 +666,7 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
               <div className="flex gap-2">
                 <AlertTriangle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
                 <div className="text-sm text-red-200">
-                  <strong>KRITISCH:</strong> Schreiben Sie diese 6 Wörter auf Papier ab und bewahren Sie sie sicher auf. 
-                  Dies ist Ihre einzige Möglichkeit, Ihr Passwort zurückzusetzen.
+                  <strong>{t('zkSetup.step2Warning')}</strong> {t('zkSetup.step2WarningText')}
                 </div>
               </div>
             </div>
@@ -688,14 +685,14 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
               className="w-full py-2 border border-gray-600 text-gray-300 rounded-lg hover:bg-gray-700 flex items-center justify-center gap-2 transition-colors"
             >
               <Copy className="w-4 h-4" />
-              {copiedRecovery ? 'Kopiert!' : 'In Zwischenablage kopieren'}
+              {copiedRecovery ? t('zkSetup.copied') : t('zkSetup.copyToClipboard')}
             </button>
 
             <button
               onClick={() => setStep('verify')}
               className="w-full py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold rounded-lg hover:from-orange-600 hover:to-red-600 transition-all"
             >
-              Ich habe die Phrase notiert →
+              {t('zkSetup.phraseNoted')}
             </button>
           </div>
         )}
@@ -707,8 +704,7 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
               <div className="flex gap-2">
                 <Info className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
                 <div className="text-sm text-blue-200">
-                  Geben Sie die 6 Wörter Ihrer Recovery Phrase in der richtigen Reihenfolge ein, 
-                  um zu bestätigen, dass Sie sie korrekt notiert haben.
+                  {t('zkSetup.step3Info')}
                 </div>
               </div>
             </div>
@@ -762,7 +758,7 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
                           ? 'border-red-500/50 focus:border-red-500 focus:ring-red-500'
                           : 'border-gray-600 focus:border-orange-500 focus:ring-orange-500'
                       }`}
-                      placeholder={`Wort ${index + 1}`}
+                      placeholder={t('zkSetup.wordPlaceholder').replace('{{num}}', String(index + 1))}
                       autoComplete="off"
                       spellCheck="false"
                     />
@@ -800,7 +796,7 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
             </div>
 
             <p className="text-xs text-gray-500 text-center">
-              Tipp: Tippen Sie die ersten Buchstaben ein, dann Tab oder Enter zum Vervollständigen
+              {t('zkSetup.step3Tip')}
             </p>
 
             {verificationError && (
@@ -819,14 +815,14 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
                 }}
                 className="flex-1 py-3 border border-gray-600 text-gray-300 rounded-lg hover:bg-gray-700 transition-colors"
               >
-                ← Zurück
+                {t('zkSetup.back')}
               </button>
               <button
                 onClick={handleVerifySubmit}
                 disabled={!allVerificationWordsFilled}
                 className="flex-1 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold rounded-lg hover:from-orange-600 hover:to-red-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
               >
-                Verifizieren →
+                {t('zkSetup.verify')}
               </button>
             </div>
           </div>
@@ -839,19 +835,19 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
               <div className="flex items-start gap-3">
                 <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" />
                 <p className="text-gray-300 text-sm">
-                  Dein Passwort verschlüsselt deine Finanzdaten lokal im Browser
+                  {t('zkSetup.confirmPoint1')}
                 </p>
               </div>
               <div className="flex items-start gap-3">
                 <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" />
                 <p className="text-gray-300 text-sm">
-                  Wir speichern nur verschlüsselte Daten – dein Passwort bleibt bei dir
+                  {t('zkSetup.confirmPoint2')}
                 </p>
               </div>
               <div className="flex items-start gap-3">
                 <AlertTriangle className="w-5 h-5 text-orange-400 flex-shrink-0 mt-0.5" />
                 <p className="text-gray-300 text-sm">
-                  Ohne Passwort oder Recovery Phrase ist kein Zugriff möglich
+                  {t('zkSetup.confirmPoint3')}
                 </p>
               </div>
             </div>
@@ -864,16 +860,14 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
                 className="mt-1 w-4 h-4 accent-orange-500"
               />
               <span className="text-sm text-gray-300">
-                Ich verstehe, dass ich mein Passwort und/oder meine Recovery Phrase 
-                benötige, um auf meine Daten zuzugreifen. Bei Verlust beider sind 
-                meine Daten unwiederbringlich verloren.
+                {t('zkSetup.confirmCheckbox')}
               </span>
             </label>
 
             <div className="flex items-start gap-3 p-3 bg-orange-950/40 rounded-lg border border-orange-500/30">
               <AlertTriangle className="w-5 h-5 text-orange-400 flex-shrink-0 mt-0.5" />
               <span className="text-sm text-orange-200">
-                Empfehlung: Bewahre deine 6-Worte-Passphrase an mindestens zwei geografisch getrennten Orten sicher auf.
+                {t('zkSetup.recommendation')}
               </span>
             </div>
 
@@ -887,12 +881,12 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
               {isLoading ? (
                 <>
                   <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  Verschlüsselung wird eingerichtet...
+                  {t('zkSetup.activating')}
                 </>
               ) : (
                 <>
                   <Lock className="w-5 h-5" />
-                  Zero-Knowledge aktivieren
+                  {t('zkSetup.activate')}
                 </>
               )}
             </button>

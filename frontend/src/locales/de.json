@@ -946,6 +946,41 @@
       "info": "Du kannst unabhängig von deiner Authentifizierungsmethode jederzeit sowohl auf die Starship-App als auch auf das StarArc-Abonnement-Portal zugreifen."
     }
   },
+  "zkSetup": {
+    "step1Title": "Zero-Knowledge Passwort",
+    "step2Title": "Recovery Phrase",
+    "step3Title": "Verifikation",
+    "step4Title": "Bestätigung",
+    "stepOf": "Schritt {{step}} von 4",
+    "step1Warning": "Wichtig:",
+    "step1WarningText": "Dieses Passwort verschlüsselt deine Daten lokal. Es wird nirgendwo gespeichert. Bei Verlust sind deine Daten unwiederbringlich verloren (außer du hast die Recovery Phrase).",
+    "passwordLabel": "ZK Passwort (mind. 12 Zeichen)",
+    "passwordPlaceholder": "Starkes Passwort wählen...",
+    "passwordMinLength": "Mindestens 12 Zeichen erforderlich",
+    "confirmPasswordLabel": "Passwort bestätigen",
+    "confirmPasswordPlaceholder": "Passwort wiederholen...",
+    "passwordsMismatch": "Passwörter stimmen nicht überein",
+    "nextToRecovery": "Weiter zur Recovery Phrase →",
+    "step2Warning": "KRITISCH:",
+    "step2WarningText": "Schreibe diese 6 Wörter auf Papier ab und bewahre sie sicher auf. Dies ist deine einzige Möglichkeit, dein Passwort zurückzusetzen.",
+    "copyToClipboard": "In Zwischenablage kopieren",
+    "copied": "Kopiert!",
+    "phraseNoted": "Ich habe die Phrase notiert →",
+    "step3Info": "Gib die 6 Wörter deiner Recovery Phrase in der richtigen Reihenfolge ein, um zu bestätigen, dass du sie korrekt notiert hast.",
+    "wordPlaceholder": "Wort {{num}}",
+    "step3Tip": "Tipp: Tippe die ersten Buchstaben ein, dann Tab oder Enter zum Vervollständigen",
+    "errorAllWords": "Bitte alle 6 Wörter eingeben",
+    "errorWordsMismatch": "Die Wörter stimmen nicht überein. Bitte überprüfe deine Recovery Phrase.",
+    "back": "← Zurück",
+    "verify": "Verifizieren →",
+    "confirmPoint1": "Dein Passwort verschlüsselt deine Finanzdaten lokal im Browser",
+    "confirmPoint2": "Wir speichern nur verschlüsselte Daten – dein Passwort bleibt bei dir",
+    "confirmPoint3": "Ohne Passwort oder Recovery Phrase ist kein Zugriff möglich",
+    "confirmCheckbox": "Ich verstehe, dass ich mein Passwort und/oder meine Recovery Phrase benötige, um auf meine Daten zuzugreifen. Bei Verlust beider sind meine Daten unwiederbringlich verloren.",
+    "recommendation": "Empfehlung: Bewahre deine 6-Worte-Passphrase an mindestens zwei geografisch getrennten Orten sicher auf.",
+    "activating": "Verschlüsselung wird eingerichtet...",
+    "activate": "Zero-Knowledge aktivieren"
+  },
   "animations": {
     "wealthManager": {
       "headline": {
