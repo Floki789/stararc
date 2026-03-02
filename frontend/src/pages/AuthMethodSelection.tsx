@@ -360,6 +360,7 @@ function arrayBufferToBase64(buffer: ArrayBuffer): string {
 }
 
 const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
+  const { t } = useLanguage();
   const [step, setStep] = useState<SetupStep>('password');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
