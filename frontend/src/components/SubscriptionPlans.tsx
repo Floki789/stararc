@@ -36,10 +36,13 @@ const SubscriptionPlans: React.FC = () => {
         'Future Planning Section',
         'Bitcoin Self Custody Security Matrix',
         '1 Family Member',
-        '12 Securities Maximum',
-        '2 Bitcoin assets & 1 Precious metals',
+        '10 Securities',
+        '1 Precious metal',
         '1 Real estate & 1 Mortgage',
-        '2 Pension accounts'
+        '2 Pension accounts',
+        '2 Bitcoin single sig setups (no passphrase)',
+        '2 Hardware & Software wallets each',
+        '4 Seed & Descriptor backups each'
       ]
     },
     {
@@ -59,10 +62,13 @@ const SubscriptionPlans: React.FC = () => {
         'Future Planning Section',
         'Bitcoin Self Custody Security Matrix',
         '4 Family Members',
-        '50 Securities Maximum',
-        '4 Bitcoin assets & 6 Precious metals',
-        '3 Real estate & 5 Mortgages',
-        '4 Pension accounts'
+        '25 Securities',
+        '4 Precious metals',
+        '2 Real estate & 3 Mortgages',
+        '4 Pension accounts',
+        '4 Bitcoin single sig setups with passphrase',
+        '4 Hardware & Software wallets each',
+        '8 Seed, Passphrase & Descriptor backups each'
       ]
     }
   ];
@@ -85,10 +91,13 @@ const SubscriptionPlans: React.FC = () => {
         'Future Planning Section',
         'Bitcoin Self Custody Security Matrix',
         '1 Family Member',
-        '12 Securities Maximum',
-        '2 Bitcoin assets & 1 Precious metals',
+        '10 Securities',
+        '1 Precious metal',
         '1 Real estate & 1 Mortgage',
         '2 Pension accounts',
+        '2 Bitcoin single sig setups (no passphrase)',
+        '2 Hardware & Software wallets each',
+        '4 Seed & Descriptor backups each',
         '2 Months Free'
       ]
     },
@@ -110,10 +119,13 @@ const SubscriptionPlans: React.FC = () => {
         'Future Planning Section',
         'Bitcoin Self Custody Security Matrix',
         '4 Family Members',
-        '50 Securities Maximum',
-        '4 Bitcoin assets & 6 Precious metals',
-        '3 Real estate & 5 Mortgages',
+        '25 Securities',
+        '4 Precious metals',
+        '2 Real estate & 3 Mortgages',
         '4 Pension accounts',
+        '4 Bitcoin single sig setups with passphrase',
+        '4 Hardware & Software wallets each',
+        '8 Seed, Passphrase & Descriptor backups each',
         '2 Months Free'
       ]
     }

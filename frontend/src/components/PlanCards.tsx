@@ -72,14 +72,17 @@ const PlanCards: React.FC<PlanCardsProps> = ({
       yearlyOnly: true,
       features: [
         '1 Family member',
-        '12 Securities Maximum',
-        '2 Bitcoin setups & 1 Precious metal',
+        '10 Securities',
+        '1 Precious metal',
         '1 Real estate & 1 Mortgage',
         '2 Pension accounts',
-        '4 Liquidity accounts',
-        '10 Budget categories & 70 Budget items',
-        '4 Financial institutions',
-        '4 Vaults'
+        '2 Liquidity accounts',
+        '10 Budget categories & 50 Budget items',
+        '3 Financial institutions',
+        '3 Vaults',
+        '2 Bitcoin single sig setups (no passphrase)',
+        '2 Hardware & Software wallets each',
+        '4 Seed & Descriptor backups each'
       ],
       buttonText: 'Choose Spark'
     },
@@ -98,14 +101,17 @@ const PlanCards: React.FC<PlanCardsProps> = ({
       yearlyOnly: true,
       features: [
         '4 Family members',
-        '50 Securities Maximum',
-        '4 Bitcoin setups & 6 Precious metals',
-        '3 Real estate & 5 Mortgages',
+        '25 Securities',
+        '4 Precious metals',
+        '2 Real estate & 3 Mortgages',
         '4 Pension accounts',
-        '8 Liquidity accounts',
-        '12 Budget categories & 100 Budget items',
-        '8 Financial institutions',
-        '8 Vaults'
+        '4 Liquidity accounts',
+        '12 Budget categories & 70 Budget items',
+        '5 Financial institutions',
+        '5 Vaults',
+        '4 Bitcoin single sig setups with passphrase',
+        '4 Hardware & Software wallets each',
+        '8 Seed, Passphrase & Descriptor backups each'
       ],
       isPopular: true,
       buttonText: 'Choose Nova'
@@ -126,13 +132,16 @@ const PlanCards: React.FC<PlanCardsProps> = ({
       features: [
         'Unlimited Family members',
         'Unlimited Securities',
-        'Unlimited Bitcoin setups & Precious metals',
+        'Unlimited Precious metals',
         'Unlimited Real estate & Mortgages',
         'Unlimited Pension accounts',
         'Unlimited Liquidity accounts',
         'Unlimited Budget categories & Items',
         'Unlimited Financial institutions',
-        'Unlimited Vaults'
+        'Unlimited Vaults',
+        'Unlimited Bitcoin setups',
+        'Unlimited Hardware & Software wallets',
+        'Unlimited Seed, Passphrase & Descriptor backups'
       ],
       buttonText: 'Choose Galaxy'
     }
@@ -265,16 +274,16 @@ const PlanCards: React.FC<PlanCardsProps> = ({
               {plan.id === 'Spark' ? (
                 <div className="border border-gray-600 rounded-lg p-3 mb-4 text-left text-sm">
                   <div className="space-y-1.5">
-                    {['Balance Section', 'Budget Section', 'Cockpit Section', 'Future Planning Section', 'Bitcoin Self Custody Security Matrix'].map((section, i) => (
+                    {['Balance Section', 'Budget Section', 'Cockpit Section', 'Future Planning Section', 'Standard or Zero-Knowledge Login', 'Bitcoin Self Custody Security Matrix'].map((section, i) => (
                       <div key={i} className="flex items-start gap-2">
                         <Check className={`w-4 h-4 ${plan.color} flex-shrink-0 mt-0.5`} />
-                        <span className="text-gray-300 leading-relaxed">{section}</span>
+                        <span className="text-gray-300 leading-relaxed font-bold">{section}</span>
                       </div>
                     ))}
                   </div>
                 </div>
               ) : (
-                <div className="border border-gray-600 rounded-lg p-3 mb-4 text-center text-sm flex items-center justify-center" style={{ minHeight: '160px' }}>
+                <div className="border border-gray-600 rounded-lg p-3 mb-4 text-center text-sm flex items-center justify-center" style={{ minHeight: '188px' }}>
                   <p className="text-gray-400 italic">Same as in Spark plan</p>
                 </div>
               )}
