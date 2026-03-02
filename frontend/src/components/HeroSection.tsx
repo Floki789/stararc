@@ -1,30 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
-import { Sparkles, Calendar } from 'lucide-react';
+import { Sparkles, Calendar, Zap, Globe, Crown, Star } from 'lucide-react';
 import { TypewriterSubtitle } from './TypewriterSubtitle';
 
 const HeroSection: React.FC = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
   
-  // Launch offer counter - Update this manually or connect to backend
-  const remainingSubscriptions = 87; // Out of 100
+  // Launch offer counters - Update manually or connect to backend
+  const remainingNova = 87; // Out of 100
+  const remainingGalaxy = 94; // Out of 100
 
-  // Countdown to March 1, 2026
+  // Countdown to March 21, 2026
   const [daysUntilLaunch, setDaysUntilLaunch] = useState(0);
-  const freeTrialText = t('hero.freeTrialButton');
-  // Split button text into two lines at 'days' (EN) or 'Tage' (DE)
-  const daysMarkerEN = 'days';
-  const daysMarkerDE = 'Tage';
-  const markerUsed = freeTrialText.includes(daysMarkerDE) ? daysMarkerDE : daysMarkerEN;
-  const markerIndex = freeTrialText.indexOf(markerUsed);
-  const freeTrialLine1 = markerIndex >= 0
-    ? freeTrialText.slice(0, markerIndex + markerUsed.length)
-    : freeTrialText;
-  const freeTrialLine2 = markerIndex >= 0
-    ? freeTrialText.slice(markerIndex + markerUsed.length).trim()
-    : '';
+  const [showGenesis, setShowGenesis] = useState(false);
+
+  // Alternate between Launch Special and Genesis Member every 7 seconds
+  useEffect(() => {
+    const toggle = setInterval(() => {
+      setShowGenesis(prev => !prev);
+    }, 7000);
+    return () => clearInterval(toggle);
+  }, []);
 
   useEffect(() => {
     const calculateDaysUntilLaunch = () => {
@@ -125,94 +123,178 @@ const HeroSection: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Column - Offer Card (2 columns) */}
+          {/* Right Column - Alternating Offer Cards (2 columns) */}
           <div className="lg:col-span-2">
-            <div className="relative">
+            <div className="relative" style={{ minHeight: '700px' }}>
+              
+              {/* === Launch Special Card === */}
+              <div
+                className={`absolute inset-x-0 top-0 bottom-10 transition-all duration-700 ease-in-out ${
+                  showGenesis ? 'opacity-0 pointer-events-none translate-x-4' : 'opacity-100 translate-x-0'
+                }`}
+              >
+              <div className="relative h-full">
               {/* Glow effect behind card */}
               <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-2xl blur-xl opacity-30"></div>
               
               {/* Main card */}
-              <div className="relative bg-slate-900/80 backdrop-blur-xl border border-slate-800 rounded-2xl p-8 shadow-2xl">
+              <div className="relative bg-slate-900/80 backdrop-blur-xl border border-slate-800 rounded-2xl p-6 shadow-2xl">
                 
-                {/* Title & Main Offer */}
-                <div className="mb-6 text-center">
-                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full mb-4">
+                {/* Header */}
+                <div className="text-center mb-5">
+                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full mb-3">
                     <Sparkles className="w-5 h-5 text-blue-400" />
                     <span className="text-base font-semibold text-blue-400">{t('hero.launchSpecial')}</span>
                   </div>
+                  <h3 className="text-2xl font-bold text-white mb-2">{t('hero.lifetimeDiscount')}</h3>
+                  <p className="text-slate-400 text-sm">{t('hero.useCode')} <span className="font-mono font-bold text-amber-400 text-base">STAR50</span></p>
+                </div>
 
-                  <h3 className="text-center text-4xl font-bold text-white mb-4">{t('hero.novaPlan')}</h3>
-
-                  {/* Startup Angebot Banner */}
-                  <div className="bg-amber-500/10 border-2 border-amber-500/30 rounded-xl p-4 mb-4">
-                    <div className="text-center">
-                      <div className="text-amber-400 font-bold text-lg mb-2">{t('hero.startupOffer')}</div>
-                      <div className="text-slate-300 text-lg font-semibold">
-                        {t('hero.limitedOffer')}
-                      </div>
-                    </div>
+                {/* Nova Plan Card */}
+                <div className="mb-4 p-4 bg-slate-800/60 border border-blue-500/20 rounded-xl">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Zap className="w-5 h-5 text-blue-400" />
+                    <span className="text-lg font-bold text-white">Nova</span>
+                    <span className="ml-auto px-2 py-0.5 bg-amber-500/15 border border-amber-500/30 rounded-full text-amber-400 text-xs font-semibold">50% OFF</span>
                   </div>
-
-                  {/* Availability Counter */}
-                  <div className="mb-6 p-4 bg-amber-500/10 border-2 border-amber-500/30 rounded-xl">
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="text-sm font-medium text-slate-300">{t('hero.stillAvailable')}</span>
-                      <span className="text-2xl font-bold text-amber-400">{remainingSubscriptions} / 100</span>
+                  <div className="flex items-baseline gap-3 mb-3">
+                    <span className="text-2xl text-slate-500 line-through font-bold">$190</span>
+                    <span className="text-3xl font-bold text-white">$95</span>
+                    <span className="text-slate-400 text-sm">/ {t('hero.perYear')}</span>
+                  </div>
+                  {/* Nova Counter */}
+                  <div className="mb-2">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="text-xs font-medium text-slate-400">{t('hero.stillAvailable')}</span>
+                      <span className="text-sm font-bold text-blue-400">{remainingNova} / 100</span>
                     </div>
-                    <div className="h-3 bg-slate-800 rounded-full overflow-hidden">
+                    <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
                       <div 
-                        className="h-full bg-gradient-to-r from-amber-500 to-yellow-500 transition-all duration-500 rounded-full"
-                        style={{ width: `${remainingSubscriptions}%` }}
+                        className="h-full bg-gradient-to-r from-blue-500 to-cyan-500 transition-all duration-500 rounded-full"
+                        style={{ width: `${remainingNova}%` }}
                       />
                     </div>
                   </div>
-
-                  <div className="flex flex-wrap items-center justify-center gap-4 mb-4">
-                    <button
-                      onClick={() => navigate('/register')}
-                      className="inline-flex items-center justify-center w-36 px-3 py-2.5 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-xl hover:brightness-110 transition duration-300"
-                    >
-                      <div className="text-white font-bold text-2xl text-center">{t('hero.discount53')}</div>
-                    </button>
-                    <span className="text-slate-400 text-sm uppercase tracking-wider">or</span>
-                    <button
-                      onClick={() => navigate('/register')}
-                      className="group relative inline-flex items-center justify-center w-36 px-3 py-2 bg-gradient-to-r from-blue-600 via-cyan-600 to-blue-600 hover:from-blue-500 hover:via-cyan-500 hover:to-blue-500 text-white font-semibold rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/30 border border-blue-400/30"
-                    >
-                      <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-xl blur opacity-20 group-hover:opacity-40 transition duration-300"></div>
-                      <div className="relative text-center w-full whitespace-normal leading-tight">
-                        <span className="block">{freeTrialLine1}</span>
-                        {freeTrialLine2 && <span className="block">{freeTrialLine2}</span>}
-                      </div>
-                    </button>
-                  </div>
-                </div>
-
-                {/* Pricing */}
-                <div className="mb-6 pb-6 border-b border-slate-800">
-                  <div className="flex items-center justify-center gap-4">
-                    <div className="text-center">
-                      <div className="text-slate-400 text-sm mb-1">{t('hero.regular')}</div>
-                      <div className="text-4xl text-slate-400 line-through font-bold">$190</div>
-                    </div>
-                    <div className="text-4xl text-blue-400 font-bold">→</div>
-                    <div className="text-center">
-                      <div className="text-blue-400 text-sm mb-1 font-semibold">{t('hero.launchPrice')}</div>
-                      <div className="text-5xl font-bold text-white">$90</div>
-                    </div>
-                  </div>
-                  <p className="text-center text-slate-400 text-sm mt-3">{t('hero.perYear')}</p>
-                </div>
-
-                {/* CTA Buttons */}
-                <div className="flex justify-center">
                   <button
                     onClick={() => navigate('/register?plan=nova')}
-                    className="px-6 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-semibold rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/30"
+                    className="w-full mt-3 px-4 py-2.5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/30 text-sm"
                   >
                     {t('hero.getStartedNow')}
                   </button>
                 </div>
+
+                {/* Galaxy Plan Card */}
+                <div className="mb-4 p-4 bg-slate-800/60 border border-purple-500/20 rounded-xl">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Globe className="w-5 h-5 text-purple-400" />
+                    <span className="text-lg font-bold text-white">Galaxy</span>
+                    <span className="ml-auto px-2 py-0.5 bg-amber-500/15 border border-amber-500/30 rounded-full text-amber-400 text-xs font-semibold">50% OFF</span>
+                  </div>
+                  <div className="flex items-baseline gap-3 mb-3">
+                    <span className="text-2xl text-slate-500 line-through font-bold">$390</span>
+                    <span className="text-3xl font-bold text-white">$195</span>
+                    <span className="text-slate-400 text-sm">/ {t('hero.perYear')}</span>
+                  </div>
+                  {/* Galaxy Counter */}
+                  <div className="mb-2">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="text-xs font-medium text-slate-400">{t('hero.stillAvailable')}</span>
+                      <span className="text-sm font-bold text-purple-400">{remainingGalaxy} / 100</span>
+                    </div>
+                    <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-gradient-to-r from-purple-500 to-indigo-500 transition-all duration-500 rounded-full"
+                        style={{ width: `${remainingGalaxy}%` }}
+                      />
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => navigate('/register?plan=galaxy')}
+                    className="w-full mt-3 px-4 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/30 text-sm"
+                  >
+                    {t('hero.getStartedNow')}
+                  </button>
+                </div>
+
+                {/* Footer info */}
+                <p className="text-center text-slate-500 text-xs mt-3">{t('hero.trialIncluded')}</p>
+              </div>
+              </div>
+              </div>
+
+              {/* === Genesis Member Card === */}
+              <div
+                className={`absolute inset-x-0 top-0 bottom-10 transition-all duration-700 ease-in-out ${
+                  showGenesis ? 'opacity-100 translate-x-0' : 'opacity-0 pointer-events-none -translate-x-4'
+                }`}
+              >
+              <div className="relative h-full">
+              {/* Glow effect - golden */}
+              <div className="absolute -inset-1 bg-gradient-to-r from-amber-500 to-yellow-600 rounded-2xl blur-xl opacity-30"></div>
+              
+              <div className="relative bg-slate-900/80 backdrop-blur-xl border border-amber-500/30 rounded-2xl p-6 shadow-2xl h-full flex flex-col">
+                
+                {/* Genesis Header */}
+                <div className="text-center mb-6">
+                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-500/10 border border-amber-500/30 rounded-full mb-4">
+                    <Crown className="w-5 h-5 text-amber-400" />
+                    <span className="text-base font-semibold text-amber-400">{t('hero.genesisExclusive')}</span>
+                  </div>
+                  <h3 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-300 mb-2">
+                    {t('hero.genesisTitle')}
+                  </h3>
+                  <p className="text-slate-400 text-sm">{t('hero.genesisSubtitle')}</p>
+                </div>
+
+                {/* Price */}
+                <div className="text-center mb-6 py-5 bg-gradient-to-b from-amber-500/10 to-transparent border border-amber-500/20 rounded-xl">
+                  <div className="text-5xl font-bold text-white mb-1">$1,999</div>
+                  <div className="text-amber-400 font-semibold text-sm">{t('hero.genesisOneTime')}</div>
+                </div>
+
+                {/* Benefits */}
+                <div className="space-y-4 mb-6 flex-grow">
+                  <div className="flex items-start gap-3 p-3 bg-slate-800/60 border border-purple-500/20 rounded-lg">
+                    <Globe className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <div className="text-white font-semibold text-sm">{t('hero.genesisGalaxy')}</div>
+                      <div className="text-slate-400 text-xs">{t('hero.genesisGalaxyDesc')}</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3 p-3 bg-slate-800/60 border border-amber-500/20 rounded-lg">
+                    <Star className="w-5 h-5 text-amber-400 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <div className="text-white font-semibold text-sm">{t('hero.genesisHallOfFame')}</div>
+                      <div className="text-slate-400 text-xs">{t('hero.genesisHallOfFameDesc')}</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* CTA */}
+                <button
+                  onClick={() => navigate('/register?plan=genesis')}
+                  className="w-full px-6 py-3.5 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-900 font-bold rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-amber-500/30 text-base"
+                >
+                  {t('hero.genesisButton')}
+                </button>
+              </div>
+              </div>
+              </div>
+
+              {/* Dot indicators */}
+              <div className="absolute bottom-0 left-0 right-0 flex justify-center gap-2">
+                <button
+                  onClick={() => setShowGenesis(false)}
+                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                    !showGenesis ? 'bg-blue-400 w-6' : 'bg-slate-600 hover:bg-slate-500'
+                  }`}
+                />
+                <button
+                  onClick={() => setShowGenesis(true)}
+                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                    showGenesis ? 'bg-amber-400 w-6' : 'bg-slate-600 hover:bg-slate-500'
+                  }`}
+                />
               </div>
             </div>
           </div>
