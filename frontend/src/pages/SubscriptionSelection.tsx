@@ -287,7 +287,7 @@ const SubscriptionSelection: React.FC = () => {
             onPlanSelect={(planId, priceValue, interval) => handlePlanSelection(planId, priceValue, interval)}
             loading={loading}
             currentPlan={currentPlan || undefined}
-            className="max-w-5xl"
+            className="max-w-7xl w-full"
           />
         </div>
 

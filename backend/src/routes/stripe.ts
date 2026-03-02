@@ -1,6 +1,6 @@
 import express from 'express';
 import { authMiddleware } from '../middleware/auth';
-import { StripeService, SUBSCRIPTION_PLANS, isProductionMode } from '../services/stripeService';
+import { StripeService, SUBSCRIPTION_PLANS, GENESIS_CONFIG, isProductionMode } from '../services/stripeService';
 import { EmailService } from '../services/emailService';
 import { pool } from '../database/connection';
 
@@ -599,6 +599,265 @@ router.post('/test-webhook', async (req, res) => {
   res.json({ test: 'success', timestamp: new Date().toISOString() });
 });
 
+// ============================================================
+// LAUNCH SPECIAL ENDPOINTS
+// ============================================================
+
+// Get launch availability (public — no auth needed for hero section)
+router.get('/launch-availability', async (_req, res) => {
+  try {
+    const result = await pool.query(
+      'SELECT plan_code, remaining_slots, total_slots, is_active FROM launch_counters'
+    );
+
+    const counters: Record<string, { remaining: number; total: number }> = {};
+    let anyActive = false;
+
+    for (const row of result.rows) {
+      counters[row.plan_code] = {
+        remaining: row.remaining_slots,
+        total: row.total_slots,
+      };
+      if (row.is_active && row.remaining_slots > 0) {
+        anyActive = true;
+      }
+    }
+
+    res.json({
+      launchActive: anyActive,
+      nova: counters.nova || { remaining: 0, total: 100 },
+      galaxy: counters.galaxy || { remaining: 0, total: 100 },
+    });
+  } catch (error) {
+    console.error('Launch availability error:', error);
+    res.status(500).json({ error: 'Failed to get launch availability' });
+  }
+});
+
+// Launch checkout — subscribe at 50% launch price (auth required)
+router.post('/launch-checkout', authMiddleware, async (req, res): Promise<any> => {
+  try {
+    const { planId } = req.body;
+    const userId = (req as any).user.id;
+    const userEmail = (req as any).user.email;
+
+    if (!planId || !['Nova', 'Galaxy'].includes(planId)) {
+      return res.status(400).json({ error: 'Launch pricing is only available for Nova and Galaxy' });
+    }
+
+    const planCode = planId.toLowerCase(); // 'nova' or 'galaxy'
+    const plan = SUBSCRIPTION_PLANS[planId];
+    if (!plan) {
+      return res.status(400).json({ error: 'Plan not found' });
+    }
+
+    // Check if user already got launch pricing
+    const existingLaunch = await pool.query(
+      'SELECT id FROM launch_purchases WHERE user_id = $1 AND plan_code = $2',
+      [userId, planCode]
+    );
+    if (existingLaunch.rows.length > 0) {
+      return res.status(400).json({ error: 'You already purchased this plan at launch pricing' });
+    }
+
+    // Atomically reserve a launch slot
+    const reserveResult = await pool.query(
+      `UPDATE launch_counters 
+       SET remaining_slots = remaining_slots - 1, updated_at = NOW()
+       WHERE plan_code = $1 AND remaining_slots > 0 AND is_active = true
+       RETURNING remaining_slots`,
+      [planCode]
+    );
+
+    if (reserveResult.rows.length === 0) {
+      return res.status(410).json({ error: 'Launch pricing is no longer available for this plan' });
+    }
+
+    const remainingSlots = reserveResult.rows[0].remaining_slots;
+    console.log(`🚀 Launch slot reserved for ${planId}: ${remainingSlots} remaining`);
+
+    // Get launch price ID
+    const launchPriceId = StripeService.getLaunchPriceId(plan);
+    if (!launchPriceId) {
+      // Rollback the reservation
+      await pool.query(
+        'UPDATE launch_counters SET remaining_slots = remaining_slots + 1 WHERE plan_code = $1',
+        [planCode]
+      );
+      return res.status(500).json({ error: 'Launch price not configured' });
+    }
+
+    // Get or create Stripe customer
+    let stripeCustomerId: string;
+    const userResult = await pool.query(
+      'SELECT stripe_customer_id, stripe_subscription_id, subscription_status, language_code FROM users WHERE id = $1',
+      [userId]
+    );
+
+    if (userResult.rows[0]?.stripe_customer_id) {
+      stripeCustomerId = userResult.rows[0].stripe_customer_id;
+    } else {
+      const customer = await StripeService.createCustomer(userEmail, userId);
+      stripeCustomerId = customer.id;
+      await pool.query('UPDATE users SET stripe_customer_id = $1 WHERE id = $2', [stripeCustomerId, userId]);
+    }
+
+    // Check for existing active subscription (upgrade flow)
+    const existingSub = userResult.rows[0]?.stripe_subscription_id;
+    const subStatus = userResult.rows[0]?.subscription_status;
+    if (existingSub && ['active', 'past_due'].includes(subStatus)) {
+      // Rollback — can't use launch checkout for upgrades
+      await pool.query(
+        'UPDATE launch_counters SET remaining_slots = remaining_slots + 1 WHERE plan_code = $1',
+        [planCode]
+      );
+      return res.status(400).json({ error: 'Launch pricing is for new subscriptions only. Please use the upgrade option.' });
+    }
+
+    // Create checkout session with launch price
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3003';
+    const successUrl = `${frontendUrl}/dashboard?new=true&launch=true&session_id={CHECKOUT_SESSION_ID}`;
+    const cancelUrl = `${frontendUrl}/subscription-selection?canceled=true`;
+    const locale = userResult.rows[0]?.language_code || 'de';
+
+    const session = await StripeService.createCheckoutSession(
+      stripeCustomerId,
+      launchPriceId,
+      userId,
+      planId,
+      successUrl,
+      cancelUrl,
+      locale
+    );
+
+    // Record the launch purchase (pending — will be confirmed via webhook)
+    await pool.query(
+      `INSERT INTO launch_purchases (user_id, plan_code, stripe_session_id, price_paid)
+       VALUES ($1, $2, $3, $4)`,
+      [userId, planCode, session.id, plan.launchPrice || 0]
+    );
+
+    // TEST MODE: Auto-activate like normal select-plan
+    const isTestMode = !isProductionMode();
+    const forceWebhookFlow = process.env.STRIPE_FORCE_WEBHOOK_FLOW === 'true';
+
+    if (isTestMode && !forceWebhookFlow) {
+      console.log('🔧 TEST MODE: Auto-activating launch subscription for user:', userId, 'plan:', planId);
+      await pool.query(
+        `UPDATE users SET 
+         subscription_plan = $1, 
+         subscription_status = 'active',
+         stripe_subscription_id = $2,
+         onboarding_step = CASE WHEN onboarding_step = 'completed' THEN 'completed' ELSE 'auth_method_selection' END,
+         updated_at = CURRENT_TIMESTAMP
+         WHERE id = $3`,
+        [planId, session.id, userId]
+      );
+    }
+
+    return res.json({
+      success: true,
+      sessionId: session.id,
+      url: session.url,
+      workflow: 'stripe',
+      plan: planId,
+      launchPricing: true,
+      remainingSlots,
+      testModeActivated: isTestMode && !forceWebhookFlow,
+      mode: isTestMode ? 'test' : 'live'
+    });
+
+  } catch (error) {
+    console.error('Launch checkout error:', error);
+    res.status(500).json({ error: 'Failed to create launch checkout' });
+  }
+});
+
+// Genesis checkout — one-time payment for lifetime Galaxy (auth required)
+router.post('/genesis-checkout', authMiddleware, async (req, res): Promise<any> => {
+  try {
+    const { hallOfFameName } = req.body;
+    const userId = (req as any).user.id;
+    const userEmail = (req as any).user.email;
+
+    if (!hallOfFameName || typeof hallOfFameName !== 'string' || hallOfFameName.trim().length === 0) {
+      return res.status(400).json({ error: 'Hall of Fame name is required' });
+    }
+
+    // Check if user is already a genesis member
+    const genesisCheck = await pool.query(
+      'SELECT genesis_member FROM users WHERE id = $1',
+      [userId]
+    );
+    if (genesisCheck.rows[0]?.genesis_member) {
+      return res.status(400).json({ error: 'You are already a Genesis Member' });
+    }
+
+    // Get or create Stripe customer
+    let stripeCustomerId: string;
+    const userResult = await pool.query(
+      'SELECT stripe_customer_id, language_code FROM users WHERE id = $1',
+      [userId]
+    );
+
+    if (userResult.rows[0]?.stripe_customer_id) {
+      stripeCustomerId = userResult.rows[0].stripe_customer_id;
+    } else {
+      const customer = await StripeService.createCustomer(userEmail, userId);
+      stripeCustomerId = customer.id;
+      await pool.query('UPDATE users SET stripe_customer_id = $1 WHERE id = $2', [stripeCustomerId, userId]);
+    }
+
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3003';
+    const successUrl = `${frontendUrl}/dashboard?genesis=true&session_id={CHECKOUT_SESSION_ID}`;
+    const cancelUrl = `${frontendUrl}/subscription-selection?canceled=true`;
+    const locale = userResult.rows[0]?.language_code || 'de';
+
+    const session = await StripeService.createGenesisCheckoutSession(
+      stripeCustomerId,
+      userId,
+      successUrl,
+      cancelUrl,
+      hallOfFameName.trim(),
+      locale
+    );
+
+    // TEST MODE: Auto-activate genesis
+    const isTestMode = !isProductionMode();
+    const forceWebhookFlow = process.env.STRIPE_FORCE_WEBHOOK_FLOW === 'true';
+
+    if (isTestMode && !forceWebhookFlow) {
+      console.log('🔧 TEST MODE: Auto-activating genesis for user:', userId);
+      await pool.query(
+        `UPDATE users SET 
+         subscription_plan = 'Galaxy',
+         subscription_status = 'lifetime',
+         genesis_member = true,
+         genesis_purchased_at = NOW(),
+         genesis_hall_of_fame_name = $1,
+         onboarding_step = CASE WHEN onboarding_step = 'completed' THEN 'completed' ELSE 'auth_method_selection' END,
+         updated_at = CURRENT_TIMESTAMP
+         WHERE id = $2`,
+        [hallOfFameName.trim(), userId]
+      );
+    }
+
+    return res.json({
+      success: true,
+      sessionId: session.id,
+      url: session.url,
+      workflow: 'stripe',
+      type: 'genesis',
+      testModeActivated: isTestMode && !forceWebhookFlow,
+      mode: isTestMode ? 'test' : 'live'
+    });
+
+  } catch (error) {
+    console.error('Genesis checkout error:', error);
+    res.status(500).json({ error: 'Failed to create genesis checkout' });
+  }
+});
+
 // Stripe webhook handler (express.raw middleware is already applied in app.ts)
 router.post('/webhook', async (req, res): Promise<any> => {
   console.log('🚨 WEBHOOK HANDLER CALLED');
@@ -677,11 +936,50 @@ router.post('/webhook', async (req, res): Promise<any> => {
           const session = eventData;
           const userId = parseInt(session.metadata?.userId);
           const planId = session.metadata?.planId;
+          const sessionType = session.metadata?.type; // 'genesis' or undefined
           
           if (!userId || !planId) {
             throw new Error(`Missing userId or planId in metadata`);
           }
 
+          // ── Genesis one-time payment ──
+          if (sessionType === 'genesis' && session.mode === 'payment') {
+            console.log(`👑 WEBHOOK - Processing Genesis purchase for user ${userId}`);
+            const hallOfFameName = session.metadata?.hallOfFameName || 'Anonymous';
+
+            await pool.query(
+              `UPDATE users SET 
+               subscription_plan = 'Galaxy',
+               subscription_status = 'lifetime',
+               genesis_member = true,
+               genesis_purchased_at = NOW(),
+               genesis_hall_of_fame_name = $1,
+               onboarding_step = CASE WHEN onboarding_step = 'completed' THEN 'completed' ELSE 'auth_method_selection' END,
+               updated_at = CURRENT_TIMESTAMP
+               WHERE id = $2`,
+              [hallOfFameName, userId]
+            );
+
+            console.log(`✅ WEBHOOK - Genesis member activated: user ${userId}, Hall of Fame: ${hallOfFameName}`);
+            processed = true;
+
+            // Admin notification
+            emailService.sendAdminNotification(
+              `👑 GENESIS MEMBER: User ${userId}`, {
+                'User-ID': userId,
+                'Typ': '👑 GENESIS MEMBER',
+                'Hall of Fame Name': hallOfFameName,
+                'Plan': 'Galaxy (Lifetime)',
+                'Betrag': `$${(GENESIS_CONFIG.price / 100).toFixed(2)}`,
+                'Session-ID': session.id,
+                'Zeitpunkt': new Date().toLocaleString('de-CH', { timeZone: 'Europe/Zurich' })
+              }
+            ).catch((err: any) => console.error('Genesis admin notification failed:', err));
+
+            break;
+          }
+
+          // ── Regular subscription checkout ──
           console.log(`🚨 WEBHOOK - Activating subscription for user ${userId}, plan ${planId}`);
           
           // Fetch current plan + encrypted email BEFORE update (to detect upgrades + send user email)
@@ -722,6 +1020,19 @@ router.post('/webhook', async (req, res): Promise<any> => {
           if (updateResult.rows.length > 0) {
             console.log(`✅ WEBHOOK - User ${userId} subscription activated successfully`);
             processed = true;
+
+            // Update launch_purchases record with subscription ID (if this was a launch checkout)
+            try {
+              await pool.query(
+                `UPDATE launch_purchases 
+                 SET stripe_subscription_id = $1 
+                 WHERE stripe_session_id = $2 AND user_id = $3`,
+                [session.subscription, session.id, userId]
+              );
+            } catch (lpErr) {
+              // Non-critical — just logging
+              console.warn('⚠️ WEBHOOK - launch_purchases update skipped (not a launch checkout or table missing)');
+            }
             
             // Send admin notification
             const emailSubject = isUpgrade 

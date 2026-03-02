@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Check, Flame, Sparkles, Globe } from 'lucide-react';
+import { Check, Flame, Sparkles, Globe, Crown, Star } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface PlanData {
   id: string;
@@ -24,6 +25,8 @@ interface PlanData {
 
 interface PlanCardsProps {
   onPlanSelect?: (planId: string, priceValue: number, interval: 'month' | 'year') => void;
+  onLaunchSelect?: (planId: string) => void;
+  onGenesisSelect?: () => void;
   loading?: Record<string, boolean>;
   showPricing?: boolean;
   className?: string;
@@ -32,13 +35,43 @@ interface PlanCardsProps {
 
 const PlanCards: React.FC<PlanCardsProps> = ({ 
   onPlanSelect,
+  onLaunchSelect,
+  onGenesisSelect,
   loading = {},
   showPricing = true,
   className = '',
   currentPlan
 }) => {
+  const { t } = useLanguage();
   // Only yearly plans available now
   const billingInterval = 'year';
+
+  // Launch availability counters — fetched from backend
+  const [remainingNova, setRemainingNova] = useState(100);
+  const [remainingGalaxy, setRemainingGalaxy] = useState(100);
+  const [launchActive, setLaunchActive] = useState(true);
+
+  // Fetch launch availability from backend
+  useEffect(() => {
+    const apiUrl = (import.meta as any).env.VITE_API_URL || 'http://localhost:3004';
+    const fetchLaunchAvailability = async () => {
+      try {
+        const res = await fetch(`${apiUrl}/api/stripe/launch-availability`);
+        if (res.ok) {
+          const data = await res.json();
+          setRemainingNova(data.nova?.remaining ?? 0);
+          setRemainingGalaxy(data.galaxy?.remaining ?? 0);
+          setLaunchActive(data.launchActive ?? false);
+        }
+      } catch (err) {
+        console.warn('Failed to fetch launch availability:', err);
+      }
+    };
+    fetchLaunchAvailability();
+    // Refresh every 30 seconds for live counter updates
+    const interval = setInterval(fetchLaunchAvailability, 30000);
+    return () => clearInterval(interval);
+  }, []);
 
   // Plan hierarchy for filtering (lower index = lower tier)
   const planHierarchy = ['Free', 'Spark', 'Nova', 'Galaxy', 'Apex'];
@@ -170,6 +203,70 @@ const PlanCards: React.FC<PlanCardsProps> = ({
 
   return (
     <div className={className}>
+      {/* Genesis Member Card - Full Width */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        viewport={{ once: true }}
+        className="mb-10"
+      >
+        <div className="relative">
+          <div className="absolute -inset-1 bg-gradient-to-r from-amber-500 to-yellow-600 rounded-2xl blur-xl opacity-20"></div>
+          <div className="relative bg-slate-900/80 backdrop-blur-xl border border-amber-500/30 rounded-2xl p-6 shadow-2xl">
+            <div className="grid md:grid-cols-[1fr_auto_1fr_auto] gap-6 items-center">
+              {/* Left: Title + Badge */}
+              <div className="text-center md:text-left">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-amber-500/10 border border-amber-500/30 rounded-full mb-3">
+                  <Crown className="w-4 h-4 text-amber-400" />
+                  <span className="text-sm font-semibold text-amber-400">{t('hero.genesisExclusive')}</span>
+                </div>
+                <h3 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-300 mb-1">
+                  {t('hero.genesisTitle')}
+                </h3>
+                <p className="text-slate-400 text-sm">{t('hero.genesisSubtitle')}</p>
+              </div>
+
+              {/* Price */}
+              <div className="text-center px-6">
+                <div className="text-4xl font-bold text-white">$1,999</div>
+                <div className="text-amber-400 font-semibold text-xs mt-1">{t('hero.genesisOneTime')}</div>
+              </div>
+
+              {/* Benefits */}
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <Globe className="w-4 h-4 text-purple-400 flex-shrink-0" />
+                  <div>
+                    <span className="text-white font-semibold text-sm">{t('hero.genesisGalaxy')}</span>
+                    <span className="text-slate-400 text-xs ml-2">{t('hero.genesisGalaxyDesc')}</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Star className="w-4 h-4 text-amber-400 flex-shrink-0" />
+                  <div>
+                    <span className="text-white font-semibold text-sm">{t('hero.genesisHallOfFame')}</span>
+                    <span className="text-slate-400 text-xs ml-2">{t('hero.genesisHallOfFameDesc')}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* CTA */}
+              <div>
+                <button
+                  onClick={() => onGenesisSelect?.()}
+                  disabled={loading['genesis']}
+                  className="px-6 py-3 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-900 font-bold rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-amber-500/30 text-sm whitespace-nowrap"
+                >
+                  {loading['genesis'] ? 'Loading...' : t('hero.genesisButton')}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+
       {/* Header Text - Yearly Plans Only */}
       <div className="text-center mb-8">
         <p className="text-gray-400 text-lg">
@@ -239,25 +336,71 @@ const PlanCards: React.FC<PlanCardsProps> = ({
               {/* Price */}
               {showPricing && (
                 <div className="mb-2">
-                  <p className={`text-3xl font-bold ${plan.color}`}>
-                    {price}
-                  </p>
-                  {priceValue > 0 && (
-                    <p className="text-sm text-gray-400 mt-1">
-                      per year
-                    </p>
-                  )}
-                  {priceValue > 0 && (
-                    <div className="flex flex-wrap justify-center gap-2 mt-2">
-                      <span className="bg-green-500/20 text-green-400 px-2 py-1 rounded text-xs font-semibold">
-                        14 days free trial
-                      </span>
-                      {plan.yearlyOnly && (
+                  {/* Show launch pricing for Nova/Galaxy when active */}
+                  {launchActive && (plan.id === 'Nova' || plan.id === 'Galaxy') ? (
+                    <>
+                      <div className="flex items-center justify-center gap-1 mb-2">
+                        <span className="text-amber-400 text-xs font-bold">🔥 Launch Special</span>
+                        <span className="bg-amber-500/20 text-amber-400 px-1.5 py-0.5 rounded text-xs font-bold ml-1">50% OFF</span>
+                      </div>
+                      <div className="flex items-baseline justify-center gap-2">
+                        <span className="text-gray-500 line-through text-xl">{price}</span>
+                        <span className={`text-3xl font-bold text-green-400`}>
+                          {plan.id === 'Nova' ? '$95' : '$195'}
+                        </span>
+                      </div>
+                      <p className="text-sm text-gray-400 mt-1">per year</p>
+                      {/* Counter */}
+                      <div className="mt-3 px-2">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-gray-500 text-xs">{t('hero.stillAvailable')}</span>
+                          <span className={`text-xs font-bold ${plan.id === 'Nova' ? 'text-blue-400' : 'text-purple-400'}`}>
+                            {plan.id === 'Nova' ? remainingNova : remainingGalaxy} / 100
+                          </span>
+                        </div>
+                        <div className="h-1.5 bg-slate-700 rounded-full overflow-hidden">
+                          <div
+                            className={`h-full rounded-full transition-all duration-500 ${
+                              plan.id === 'Nova' 
+                                ? 'bg-gradient-to-r from-blue-500 to-cyan-500' 
+                                : 'bg-gradient-to-r from-purple-500 to-indigo-500'
+                            }`}
+                            style={{ width: `${plan.id === 'Nova' ? remainingNova : remainingGalaxy}%` }}
+                          />
+                        </div>
+                      </div>
+                      <div className="flex flex-wrap justify-center gap-2 mt-3">
+                        <span className="bg-green-500/20 text-green-400 px-2 py-1 rounded text-xs font-semibold">
+                          14 days free trial
+                        </span>
                         <span className="bg-blue-500/20 text-blue-400 px-2 py-1 rounded text-xs font-semibold">
                           Annual billing
                         </span>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <p className={`text-3xl font-bold ${plan.color}`}>
+                        {price}
+                      </p>
+                      {priceValue > 0 && (
+                        <p className="text-sm text-gray-400 mt-1">
+                          per year
+                        </p>
                       )}
-                    </div>
+                      {priceValue > 0 && (
+                        <div className="flex flex-wrap justify-center gap-2 mt-2">
+                          <span className="bg-green-500/20 text-green-400 px-2 py-1 rounded text-xs font-semibold">
+                            14 days free trial
+                          </span>
+                          {plan.yearlyOnly && (
+                            <span className="bg-blue-500/20 text-blue-400 px-2 py-1 rounded text-xs font-semibold">
+                              Annual billing
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    </>
                   )}
                 </div>
               )}
@@ -283,7 +426,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
                   </div>
                 </div>
               ) : (
-                <div className="border border-gray-600 rounded-lg p-3 mb-4 text-center text-sm flex items-center justify-center" style={{ minHeight: '188px' }}>
+                <div className="border border-gray-600 rounded-lg p-3 mb-4 text-center text-sm flex items-center justify-center" style={{ minHeight: launchActive ? '123px' : '188px' }}>
                   <p className="text-gray-400 italic">Same as in Spark plan</p>
                 </div>
               )}
@@ -303,25 +446,36 @@ const PlanCards: React.FC<PlanCardsProps> = ({
             <div className="flex-none mt-auto">
               {onPlanSelect && (
                 <button 
-                  onClick={() => handlePlanClick(plan)}
-                  disabled={loading[plan.id] || currentPlan === plan.id || !isPlanSelectable(plan.id, currentPlan, plan)}
-                  className={`w-full py-3 text-white text-sm font-semibold rounded-lg transition-all duration-200 ${
+                  onClick={() => {
+                    // During launch, Nova/Galaxy buttons use launch pricing
+                    if (launchActive && (plan.id === 'Nova' || plan.id === 'Galaxy') && onLaunchSelect) {
+                      onLaunchSelect(plan.id);
+                    } else {
+                      handlePlanClick(plan);
+                    }
+                  }}
+                  disabled={loading[plan.id] || loading[`${plan.id}-launch`] || currentPlan === plan.id || !isPlanSelectable(plan.id, currentPlan, plan)}
+                  className={`w-full py-3 text-sm font-semibold rounded-lg transition-all duration-200 ${
                     currentPlan === plan.id 
-                      ? 'bg-gray-500 cursor-not-allowed' 
+                      ? 'bg-gray-500 cursor-not-allowed text-white' 
                       : !isPlanSelectable(plan.id, currentPlan, plan)
-                        ? 'bg-gray-600 cursor-not-allowed'
-                        : `${plan.bgGradient} hover:shadow-lg transform hover:scale-105`
+                        ? 'bg-gray-600 cursor-not-allowed text-white'
+                        : launchActive && (plan.id === 'Nova' || plan.id === 'Galaxy')
+                          ? 'bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-900 font-bold hover:shadow-lg hover:shadow-amber-500/30 transform hover:scale-105'
+                          : `${plan.bgGradient} hover:shadow-lg transform hover:scale-105 text-white`
                   } ${
-                    loading[plan.id] ? 'opacity-50 cursor-not-allowed' : ''
+                    (loading[plan.id] || loading[`${plan.id}-launch`]) ? 'opacity-50 cursor-not-allowed' : ''
                   }`}
                 >
                   {currentPlan === plan.id 
                     ? 'Active Plan' 
                     : !isPlanSelectable(plan.id, currentPlan, plan)
                       ? plan.comingSoon ? 'Coming Soon' : 'Not available'
-                      : loading[plan.id] 
+                      : (loading[plan.id] || loading[`${plan.id}-launch`])
                         ? 'Loading...' 
-                        : plan.buttonText
+                        : launchActive && (plan.id === 'Nova' || plan.id === 'Galaxy')
+                          ? `${plan.buttonText} — Launch Price →`
+                          : plan.buttonText
                   }
                 </button>
               )}

@@ -8,13 +8,36 @@ const HeroSection: React.FC = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
   
-  // Launch offer counters - Update manually or connect to backend
-  const remainingNova = 87; // Out of 100
-  const remainingGalaxy = 94; // Out of 100
+  // Launch offer counters — fetched from backend
+  const [remainingNova, setRemainingNova] = useState(100);
+  const [remainingGalaxy, setRemainingGalaxy] = useState(100);
+  const [launchActive, setLaunchActive] = useState(true);
 
   // Countdown to March 21, 2026
   const [daysUntilLaunch, setDaysUntilLaunch] = useState(0);
   const [showGenesis, setShowGenesis] = useState(false);
+
+  // Fetch launch availability from backend
+  useEffect(() => {
+    const apiUrl = (import.meta as any).env.VITE_API_URL || 'http://localhost:3004';
+    const fetchLaunchAvailability = async () => {
+      try {
+        const res = await fetch(`${apiUrl}/api/stripe/launch-availability`);
+        if (res.ok) {
+          const data = await res.json();
+          setRemainingNova(data.nova?.remaining ?? 0);
+          setRemainingGalaxy(data.galaxy?.remaining ?? 0);
+          setLaunchActive(data.launchActive ?? false);
+        }
+      } catch (err) {
+        console.warn('Failed to fetch launch availability:', err);
+      }
+    };
+    fetchLaunchAvailability();
+    // Refresh every 30 seconds for live counter updates
+    const interval = setInterval(fetchLaunchAvailability, 30000);
+    return () => clearInterval(interval);
+  }, []);
 
   // Alternate between Launch Special and Genesis Member every 7 seconds
   useEffect(() => {
@@ -125,6 +148,7 @@ const HeroSection: React.FC = () => {
 
           {/* Right Column - Alternating Offer Cards (2 columns) */}
           <div className="lg:col-span-2">
+            {launchActive ? (
             <div className="relative" style={{ minHeight: '700px' }}>
               
               {/* === Launch Special Card === */}
@@ -297,6 +321,7 @@ const HeroSection: React.FC = () => {
                 />
               </div>
             </div>
+            ) : null}
           </div>
 
         </div>

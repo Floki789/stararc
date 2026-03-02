@@ -15,12 +15,24 @@ export interface SubscriptionPlan {
   stripeIdLive?: string; // Production mode Stripe price ID (monthly)
   stripeIdYearly?: string; // Test mode Stripe price ID (yearly)
   stripeIdYearlyLive?: string; // Production mode Stripe price ID (yearly)
+  launchPriceId?: string; // Test mode launch (50% off) price ID
+  launchPriceIdLive?: string; // Production mode launch price ID
+  launchPrice?: number; // Launch price in cents
   name: string;
   price: number;
   currency: string;
   interval: 'month' | 'year';
   features: string[];
 }
+
+// Genesis one-time payment configuration
+export const GENESIS_CONFIG = {
+  priceId: process.env.STRIPE_GENESIS_PRICE_ID || 'price_genesis_test',
+  priceIdLive: process.env.STRIPE_GENESIS_PRICE_ID_LIVE || 'price_genesis_live',
+  price: 199900, // $1,999.00 in cents
+  currency: 'usd',
+  planCode: 'Galaxy', // Genesis members get Galaxy plan
+};
 
 export const SUBSCRIPTION_PLANS: Record<string, SubscriptionPlan> = {
   Free: {
@@ -57,6 +69,9 @@ export const SUBSCRIPTION_PLANS: Record<string, SubscriptionPlan> = {
     id: 'Nova',
     stripeId: process.env.STRIPE_PRICE_NOVA_YEARLY || 'price_1SjH6VD1Ykg9qG9I1rm5STKQ', // YEARLY ONLY: $190/yr
     stripeIdLive: process.env.STRIPE_PRICE_NOVA_YEARLY || 'price_1SjH6VD1Ykg9qG9I1rm5STKQ', // LIVE MODE: $190/yr
+    launchPriceId: process.env.STRIPE_NOVA_LAUNCH_PRICE_ID || 'price_nova_launch_test', // Launch: $95/yr
+    launchPriceIdLive: process.env.STRIPE_NOVA_LAUNCH_PRICE_ID_LIVE || 'price_nova_launch_live',
+    launchPrice: 9500, // $95.00 in cents (50% off)
     name: 'Nova',
     price: 19000, // $190.00 in cents (yearly)
     currency: 'usd',
@@ -73,6 +88,9 @@ export const SUBSCRIPTION_PLANS: Record<string, SubscriptionPlan> = {
     id: 'Galaxy',
     stripeId: process.env.STRIPE_PRICE_GALAXY_YEARLY || 'price_1SjHEeD1Ykg9qG9IPRUpYYfO', // YEARLY ONLY: $390/yr
     stripeIdLive: process.env.STRIPE_PRICE_GALAXY_YEARLY || 'price_1SjHEeD1Ykg9qG9IPRUpYYfO', // LIVE MODE: $390/yr
+    launchPriceId: process.env.STRIPE_GALAXY_LAUNCH_PRICE_ID || 'price_galaxy_launch_test', // Launch: $195/yr
+    launchPriceIdLive: process.env.STRIPE_GALAXY_LAUNCH_PRICE_ID_LIVE || 'price_galaxy_launch_live',
+    launchPrice: 19500, // $195.00 in cents (50% off)
     name: 'Galaxy',
     price: 39000, // $390.00 in cents (yearly)
     currency: 'usd',
@@ -121,6 +139,58 @@ export class StripeService {
     
     console.log(`💳 Using ${isLive ? 'LIVE' : 'TEST'} yearly price ID for ${plan.id}: ${priceId}`);
     return priceId;
+  }
+
+  // Get launch price ID (50% discount) for a plan
+  static getLaunchPriceId(plan: SubscriptionPlan): string | null {
+    const isLive = isProductionMode();
+    const priceId = isLive ? plan.launchPriceIdLive : plan.launchPriceId;
+    if (!priceId) return null;
+    console.log(`🚀 Using ${isLive ? 'LIVE' : 'TEST'} LAUNCH price ID for ${plan.id}: ${priceId}`);
+    return priceId;
+  }
+
+  // Get genesis price ID
+  static getGenesisPriceId(): string {
+    const isLive = isProductionMode();
+    const priceId = isLive ? GENESIS_CONFIG.priceIdLive : GENESIS_CONFIG.priceId;
+    console.log(`👑 Using ${isLive ? 'LIVE' : 'TEST'} GENESIS price ID: ${priceId}`);
+    return priceId;
+  }
+
+  // Create checkout session for Genesis one-time payment
+  static async createGenesisCheckoutSession(
+    customerId: string,
+    userId: number,
+    successUrl: string,
+    cancelUrl: string,
+    hallOfFameName: string,
+    locale: string = 'de'
+  ): Promise<Stripe.Checkout.Session> {
+    const priceId = StripeService.getGenesisPriceId();
+    
+    const session = await stripe.checkout.sessions.create({
+      customer: customerId,
+      payment_method_types: ['card'],
+      line_items: [
+        {
+          price: priceId,
+          quantity: 1,
+        },
+      ],
+      mode: 'payment', // One-time payment, not subscription
+      success_url: successUrl,
+      cancel_url: cancelUrl,
+      locale: locale === 'en' ? 'en' : 'de',
+      metadata: {
+        userId: userId.toString(),
+        planId: 'Genesis',
+        type: 'genesis',
+        hallOfFameName: hallOfFameName,
+      },
+    });
+
+    return session;
   }
 
   // Create customer
