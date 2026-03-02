@@ -14,13 +14,16 @@ const HeroSection: React.FC = () => {
   // Countdown to March 1, 2026
   const [daysUntilLaunch, setDaysUntilLaunch] = useState(0);
   const freeTrialText = t('hero.freeTrialButton');
-  const monthMarker = 'month';
-  const monthIndex = freeTrialText.indexOf(monthMarker);
-  const freeTrialLine1 = monthIndex >= 0
-    ? freeTrialText.slice(0, monthIndex + monthMarker.length)
+  // Split button text into two lines at 'days' (EN) or 'Tage' (DE)
+  const daysMarkerEN = 'days';
+  const daysMarkerDE = 'Tage';
+  const markerUsed = freeTrialText.includes(daysMarkerDE) ? daysMarkerDE : daysMarkerEN;
+  const markerIndex = freeTrialText.indexOf(markerUsed);
+  const freeTrialLine1 = markerIndex >= 0
+    ? freeTrialText.slice(0, markerIndex + markerUsed.length)
     : freeTrialText;
-  const freeTrialLine2 = monthIndex >= 0
-    ? freeTrialText.slice(monthIndex + monthMarker.length).trim()
+  const freeTrialLine2 = markerIndex >= 0
+    ? freeTrialText.slice(markerIndex + markerUsed.length).trim()
     : '';
 
   useEffect(() => {
