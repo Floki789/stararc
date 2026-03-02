@@ -21,49 +21,31 @@ const SubscriptionPlans: React.FC = () => {
   const { t } = useLanguage();
   const plans: SubscriptionPlan[] = [
     {
-      id: 1,
-      name: 'Free',
-      description: 'Get to know us with basic portfolio overview',
-      priceChf: 0,
-      priceUsd: 0,
-      priceEur: 0,
-      billingCycle: 'monthly',
-      maxPortfolios: 1,
-      features: [
-        '1 Family Member',
-        'CHF 500K Portfolio Limit', 
-        '7 Securities Maximum',
-        'CHF 80K Income Limit',
-        '1 Bitcoin setup & 2 Precious metals',
-        '1 Real estate & 0 Mortgages',
-        '1 Pension account',
-        'Basic Wealth Overview'
-      ]
-    },
-    {
       id: 2,
       name: 'Spark',
-      description: 'For individuals and growing families',
+      description: 'For individuals with startup portfolios',
       priceChf: 9,
       priceUsd: 9,
       priceEur: 9,
       billingCycle: 'monthly',
       maxPortfolios: 1,
       features: [
-        '2 Family Members',
-        'CHF 1M Portfolio Limit',
+        'Balance Section',
+        'Budget Section',
+        'Cockpit Section',
+        'Future Planning Section',
+        'Bitcoin Self Custody Security Matrix',
+        '1 Family Member',
         '12 Securities Maximum',
-        'CHF 100K Income Limit',
         '2 Bitcoin assets & 1 Precious metals',
         '1 Real estate & 1 Mortgage',
-        '2 Pension accounts',
-        'Complete Wealth Suite'
+        '2 Pension accounts'
       ]
     },
     {
       id: 3,
       name: 'Nova',
-      description: 'Complete suite for larger portfolios',
+      description: 'Complete suite for growing family wealth',
       priceChf: 19,
       priceUsd: 19,
       priceEur: 19,
@@ -71,44 +53,25 @@ const SubscriptionPlans: React.FC = () => {
       maxPortfolios: 1,
       isPopular: true,
       features: [
+        'Balance Section',
+        'Budget Section',
+        'Cockpit Section',
+        'Future Planning Section',
+        'Bitcoin Self Custody Security Matrix',
         '4 Family Members',
-        'CHF 3M Portfolio Limit',
         '50 Securities Maximum',
-        'CHF 300K Income Limit',
         '4 Bitcoin assets & 6 Precious metals',
         '3 Real estate & 5 Mortgages',
-        '4 Pension accounts',
-        'Complete Wealth Suite',
-        'Priority Support'
+        '4 Pension accounts'
       ]
     }
   ];
 
   const yearlyPlans: SubscriptionPlan[] = [
     {
-      id: 4,
-      name: 'Free',
-      description: 'Get to know us with basic portfolio overview - always free',
-      priceChf: 0,
-      priceUsd: 0,
-      priceEur: 0,
-      billingCycle: 'yearly',
-      maxPortfolios: 1,
-      features: [
-        '1 Family Member',
-        'CHF 500K Portfolio Limit', 
-        '7 Securities Maximum',
-        'CHF 80K Income Limit',
-        '1 Bitcoin setup & 2 Precious metals',
-        '1 Real estate & 0 Mortgages',
-        '1 Pension account',
-        'Basic Wealth Overview'
-      ]
-    },
-    {
       id: 5,
       name: 'Spark',
-      description: 'For individuals and growing families - 2 months free',
+      description: 'For individuals with startup portfolios - 2 months free',
       priceChf: 90,
       priceUsd: 90,
       priceEur: 90,
@@ -116,21 +79,23 @@ const SubscriptionPlans: React.FC = () => {
       maxPortfolios: 1,
       savings: '2 Monate gratis',
       features: [
-        '2 Family Members',
-        'CHF 1M Portfolio Limit',
+        'Balance Section',
+        'Budget Section',
+        'Cockpit Section',
+        'Future Planning Section',
+        'Bitcoin Self Custody Security Matrix',
+        '1 Family Member',
         '12 Securities Maximum',
-        'CHF 100K Income Limit',
         '2 Bitcoin assets & 1 Precious metals',
         '1 Real estate & 1 Mortgage',
         '2 Pension accounts',
-        'Complete Wealth Suite',
         '2 Months Free'
       ]
     },
     {
       id: 6,
       name: 'Nova',
-      description: 'Complete suite for larger portfolios - 2 months free',
+      description: 'Complete suite for growing family wealth - 2 months free',
       priceChf: 190,
       priceUsd: 190,
       priceEur: 190,
@@ -139,15 +104,16 @@ const SubscriptionPlans: React.FC = () => {
       isPopular: true,
       savings: '2 Monate gratis',
       features: [
+        'Balance Section',
+        'Budget Section',
+        'Cockpit Section',
+        'Future Planning Section',
+        'Bitcoin Self Custody Security Matrix',
         '4 Family Members',
-        'CHF 3M Portfolio Limit',
         '50 Securities Maximum',
-        'CHF 300K Income Limit',
         '4 Bitcoin assets & 6 Precious metals',
         '3 Real estate & 5 Mortgages',
         '4 Pension accounts',
-        'Complete Wealth Suite',
-        'Priority Support',
         '2 Months Free'
       ]
     }
@@ -155,6 +121,16 @@ const SubscriptionPlans: React.FC = () => {
 
   const [billingCycle, setBillingCycle] = React.useState<'monthly' | 'yearly'>('monthly');
   const [currency, setCurrency] = React.useState<'CHF' | 'USD' | 'EUR'>('CHF');
+
+  // Bold numbers and "Unlimited" in feature strings
+  const boldFeature = (text: string) => {
+    const parts = text.split(/(\d+|Unlimited)/g);
+    return parts.map((part: string, i: number) =>
+      /^\d+$/.test(part) || part === 'Unlimited'
+        ? <strong key={i} className="font-bold text-white">{part}</strong>
+        : part
+    );
+  };
 
   const currentPlans = billingCycle === 'monthly' ? plans : yearlyPlans;
 
@@ -244,7 +220,7 @@ const SubscriptionPlans: React.FC = () => {
         </div>
       </motion.div>
 
-      <div className="grid lg:grid-cols-3 gap-8">
+      <div className="grid lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
         {currentPlans.map((plan, index) => {
           const pricing = formatPrice(plan);
           
@@ -304,13 +280,20 @@ const SubscriptionPlans: React.FC = () => {
                     Total: {pricing.symbol}{pricing.total} per year
                   </p>
                 )}
+                {plan.priceChf > 0 && (
+                  <div className="mt-3 inline-block">
+                    <span className="bg-green-500/20 text-green-400 px-3 py-1 rounded-full text-xs font-semibold">
+                      14 days free trial
+                    </span>
+                  </div>
+                )}
               </div>
 
               <ul className="space-y-3 mb-8">
                 {plan.features.map((feature, featureIndex) => (
                   <li key={featureIndex} className="flex items-start gap-3">
                     <CheckIcon className="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-300">{feature}</span>
+                    <span className="text-gray-300">{boldFeature(feature)}</span>
                   </li>
                 ))}
               </ul>

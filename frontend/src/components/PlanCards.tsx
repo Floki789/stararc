@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Check, Crown, Star, Flame, Sparkles, Globe } from 'lucide-react';
+import { Check, Flame, Sparkles, Globe } from 'lucide-react';
 
 interface PlanData {
   id: string;
@@ -58,34 +58,6 @@ const PlanCards: React.FC<PlanCardsProps> = ({
   // Centralized plan data - single source of truth
   const allPlans: PlanData[] = [
     {
-      id: 'Free',
-      name: 'Free',
-      priceMonthly: 'Free',
-      priceYearly: 'Free',
-      priceValueMonthly: 0,
-      priceValueYearly: 0,
-      currency: 'usd',
-      description: 'Get to know us',
-      icon: Star,
-      color: 'text-gray-400',
-      bgGradient: 'bg-gradient-to-r from-green-500 to-green-600',
-      features: [
-        '1 Family member',
-        'CHF 500K Portfolio Limit',
-        '7 Securities Maximum',
-        'CHF 80K Income Limit',
-        '1 Bitcoin setup & 2 Precious metals',
-        '1 Real estate & 0 Mortgages',
-        '1 Pension account',
-        '2 Liquidity accounts',
-        '10 Budget categories & 50 Budget items',
-        '3 Financial institutions (2+1 custom)',
-        '3 Vaults (2 physical, 1 digital)',
-        'Basic Wealth Overview'
-      ],
-      buttonText: 'Start Free'
-    },
-    {
       id: 'Spark',
       name: 'Spark',
       priceMonthly: '$90',
@@ -93,24 +65,26 @@ const PlanCards: React.FC<PlanCardsProps> = ({
       priceValueMonthly: 9000, // $90 yearly in cents
       priceValueYearly: 9000, // $90 yearly in cents
       currency: 'usd',
-      description: 'For individuals and growing families',
+      description: 'For individuals with startup portfolios',
       icon: Flame,
       color: 'text-orange-400',
       bgGradient: 'bg-gradient-to-r from-orange-500 to-red-600',
       yearlyOnly: true,
       features: [
-        '2 Family members',
-        'CHF 1M Portfolio Limit',
+        'Balance Section',
+        'Budget Section',
+        'Cockpit Section',
+        'Future Planning Section',
+        'Bitcoin Self Custody Security Matrix',
+        '1 Family member',
         '12 Securities Maximum',
-        'CHF 100K Income Limit',
         '2 Bitcoin setups & 1 Precious metal',
         '1 Real estate & 1 Mortgage',
         '2 Pension accounts',
         '4 Liquidity accounts',
         '10 Budget categories & 70 Budget items',
         '4 Financial institutions',
-        '4 Vaults (2 physical, 2 digital)',
-        'Complete Wealth Suite'
+        '4 Vaults'
       ],
       buttonText: 'Choose Spark'
     },
@@ -122,25 +96,26 @@ const PlanCards: React.FC<PlanCardsProps> = ({
       priceValueMonthly: 19000, // $190 yearly in cents
       priceValueYearly: 19000, // $190 yearly in cents
       currency: 'usd',
-      description: 'Complete suite for larger portfolios',
+      description: 'Complete suite for growing family wealth',
       icon: Sparkles,
       color: 'text-blue-400',
       bgGradient: 'bg-gradient-to-r from-blue-500 to-cyan-600',
       yearlyOnly: true,
       features: [
+        'Balance Section',
+        'Budget Section',
+        'Cockpit Section',
+        'Future Planning Section',
+        'Bitcoin Self Custody Security Matrix',
         '4 Family members',
-        'CHF 3M Portfolio Limit',
         '50 Securities Maximum',
-        'CHF 300K Income Limit',
         '4 Bitcoin setups & 6 Precious metals',
         '3 Real estate & 5 Mortgages',
         '4 Pension accounts',
         '8 Liquidity accounts',
         '12 Budget categories & 100 Budget items',
         '8 Financial institutions',
-        '8 Vaults (4 physical, 4 digital)',
-        'Complete Wealth Suite',
-        'Priority Support'
+        '8 Vaults'
       ],
       isPopular: true,
       buttonText: 'Choose Nova'
@@ -153,14 +128,18 @@ const PlanCards: React.FC<PlanCardsProps> = ({
       priceValueMonthly: 39000, // $390 yearly in cents
       priceValueYearly: 39000, // $390 yearly in cents
       currency: 'usd',
-      description: 'For wealthy families with complex structures',
+      description: 'For families reaching for the stars',
       icon: Globe,
       color: 'text-purple-400',
       bgGradient: 'bg-gradient-to-r from-purple-500 to-indigo-600',
       yearlyOnly: true,
       features: [
+        'Balance Section',
+        'Budget Section',
+        'Cockpit Section',
+        'Future Planning Section',
+        'Bitcoin Self Custody Security Matrix',
         'Unlimited Family members',
-        'Unlimited Portfolio Value',
         'Unlimited Securities',
         'Unlimited Bitcoin setups & Precious metals',
         'Unlimited Real estate & Mortgages',
@@ -168,38 +147,21 @@ const PlanCards: React.FC<PlanCardsProps> = ({
         'Unlimited Liquidity accounts',
         'Unlimited Budget categories & Items',
         'Unlimited Financial institutions',
-        'Unlimited Vaults',
-        'Complete Wealth Suite',
-        'Priority Support',
-        '* Technical limits for abuse protection'
+        'Unlimited Vaults'
       ],
       buttonText: 'Choose Galaxy'
-    },
-    {
-      id: 'Apex',
-      name: 'Apex',
-      priceMonthly: '$1990',
-      priceYearly: '$1990',
-      priceValueMonthly: 199000, // $1990 yearly in cents
-      priceValueYearly: 199000, // $1990 yearly in cents
-      currency: 'usd',
-      description: 'For wealth advisors and family offices',
-      icon: Crown,
-      color: 'text-yellow-400',
-      bgGradient: 'bg-gradient-to-r from-yellow-500 to-yellow-600',
-      yearlyOnly: true,
-      features: [
-        'Family Offices',
-        'Wealth Advisors',
-        '30+ Managed Accounts',
-        'White-Label Solutions',
-        'Dedicated Support',
-        'Management Cockpit'
-      ],
-      comingSoon: true,
-      buttonText: 'Coming Soon'
     }
   ];
+
+  // Bold numbers and "Unlimited" in feature strings
+  const boldFeature = (text: string) => {
+    const parts = text.split(/(\d+|Unlimited)/g);
+    return parts.map((part, i) =>
+      /^\d+$/.test(part) || part === 'Unlimited'
+        ? <strong key={i} className="font-bold text-white">{part}</strong>
+        : part
+    );
+  };
 
   // Show all plans but disable non-selectable ones
   const plans = allPlans;
@@ -217,7 +179,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
       {/* Header Text - Yearly Plans Only */}
       <div className="text-center mb-8">
         <p className="text-gray-400 text-lg">
-          All plans are billed annually • Cancel anytime
+          All plans include a 14-day free trial • Billed annually • Cancel anytime
         </p>
       </div>
 
@@ -291,11 +253,16 @@ const PlanCards: React.FC<PlanCardsProps> = ({
                       per year
                     </p>
                   )}
-                  {plan.yearlyOnly && (
-                    <div className="mt-2 inline-block">
-                      <span className="bg-blue-500/20 text-blue-400 px-2 py-1 rounded text-xs font-semibold">
-                        Annual billing only
+                  {priceValue > 0 && (
+                    <div className="flex flex-wrap justify-center gap-2 mt-2">
+                      <span className="bg-green-500/20 text-green-400 px-2 py-1 rounded text-xs font-semibold">
+                        14 days free trial
                       </span>
+                      {plan.yearlyOnly && (
+                        <span className="bg-blue-500/20 text-blue-400 px-2 py-1 rounded text-xs font-semibold">
+                          Annual billing
+                        </span>
+                      )}
                     </div>
                   )}
                 </div>
@@ -313,7 +280,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
                 {plan.features.map((feature, featureIndex) => (
                   <div key={featureIndex} className="flex items-start gap-2">
                     <Check className={`w-4 h-4 ${plan.color} flex-shrink-0 mt-0.5`} />
-                    <span className="text-gray-300 leading-relaxed">{feature}</span>
+                    <span className="text-gray-300 leading-relaxed">{boldFeature(feature)}</span>
                   </div>
                 ))}
               </div>
