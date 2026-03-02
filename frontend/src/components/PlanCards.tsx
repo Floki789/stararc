@@ -71,11 +71,6 @@ const PlanCards: React.FC<PlanCardsProps> = ({
       bgGradient: 'bg-gradient-to-r from-orange-500 to-red-600',
       yearlyOnly: true,
       features: [
-        'Balance Section',
-        'Budget Section',
-        'Cockpit Section',
-        'Future Planning Section',
-        'Bitcoin Self Custody Security Matrix',
         '1 Family member',
         '12 Securities Maximum',
         '2 Bitcoin setups & 1 Precious metal',
@@ -102,11 +97,6 @@ const PlanCards: React.FC<PlanCardsProps> = ({
       bgGradient: 'bg-gradient-to-r from-blue-500 to-cyan-600',
       yearlyOnly: true,
       features: [
-        'Balance Section',
-        'Budget Section',
-        'Cockpit Section',
-        'Future Planning Section',
-        'Bitcoin Self Custody Security Matrix',
         '4 Family members',
         '50 Securities Maximum',
         '4 Bitcoin setups & 6 Precious metals',
@@ -134,11 +124,6 @@ const PlanCards: React.FC<PlanCardsProps> = ({
       bgGradient: 'bg-gradient-to-r from-purple-500 to-indigo-600',
       yearlyOnly: true,
       features: [
-        'Balance Section',
-        'Budget Section',
-        'Cockpit Section',
-        'Future Planning Section',
-        'Bitcoin Self Custody Security Matrix',
         'Unlimited Family members',
         'Unlimited Securities',
         'Unlimited Bitcoin setups & Precious metals',
@@ -276,7 +261,26 @@ const PlanCards: React.FC<PlanCardsProps> = ({
             
             {/* Features - Flexible height */}
             <div className="flex-grow">
-              <div className="space-y-3 mb-6 text-left text-sm">
+              {/* Sections container */}
+              {plan.id === 'Spark' ? (
+                <div className="border border-gray-600 rounded-lg p-3 mb-4 text-left text-sm">
+                  <div className="space-y-1.5">
+                    {['Balance Section', 'Budget Section', 'Cockpit Section', 'Future Planning Section', 'Bitcoin Self Custody Security Matrix'].map((section, i) => (
+                      <div key={i} className="flex items-start gap-2">
+                        <Check className={`w-4 h-4 ${plan.color} flex-shrink-0 mt-0.5`} />
+                        <span className="text-gray-300 leading-relaxed">{section}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className="border border-gray-600 rounded-lg p-3 mb-4 text-center text-sm flex items-center justify-center" style={{ minHeight: '160px' }}>
+                  <p className="text-gray-400 italic">Same as in Spark plan</p>
+                </div>
+              )}
+
+              {/* Limit features */}
+              <div className="space-y-2 mb-6 text-left text-sm">
                 {plan.features.map((feature, featureIndex) => (
                   <div key={featureIndex} className="flex items-start gap-2">
                     <Check className={`w-4 h-4 ${plan.color} flex-shrink-0 mt-0.5`} />

@@ -52,6 +52,26 @@ const Home: React.FC = () => {
     <div className="min-h-screen">      
       {/* Hero Section */}
       <HeroSection />
+
+      {/* Subscription Plans */}
+      <div id="plans" className="py-20 bg-gray-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-12">
+            <h2 className="text-3xl font-bold text-white text-center mb-4">
+              Choose Your Plan
+            </h2>
+            <p className="text-xl text-gray-400 text-center mb-12">
+              Select the plan that fits your needs
+            </p>
+            
+            {/* Main Plans */}
+            <PlanCards 
+              onPlanSelect={handleNavigateToRegister}
+              className="mb-12"
+            />
+          </div>
+        </div>
+      </div>
       
       {/* Overview Section */}
       <OverviewShowcase />
@@ -124,26 +144,6 @@ const Home: React.FC = () => {
       {/* Getting Started Showcase Section */}
       <div id="gettingstarted">
         <GettingStartedShowcase />
-      </div>
-
-      {/* Subscription Plans - No Animation */}
-      <div id="plans" className="py-20 bg-gray-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-12">
-            <h2 className="text-3xl font-bold text-white text-center mb-4">
-              Choose Your Plan
-            </h2>
-            <p className="text-xl text-gray-400 text-center mb-12">
-              Select the plan that fits your needs
-            </p>
-            
-            {/* Main Plans */}
-            <PlanCards 
-              onPlanSelect={handleNavigateToRegister}
-              className="mb-12"
-            />
-          </div>
-        </div>
       </div>
     </div>
   );

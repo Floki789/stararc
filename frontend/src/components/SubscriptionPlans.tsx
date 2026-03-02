@@ -289,7 +289,7 @@ const SubscriptionPlans: React.FC = () => {
                 )}
               </div>
 
-              <ul className="space-y-3 mb-8">
+              <ul className="space-y-2 mb-8">
                 {plan.features.map((feature, featureIndex) => (
                   <li key={featureIndex} className="flex items-start gap-3">
                     <CheckIcon className="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" />
