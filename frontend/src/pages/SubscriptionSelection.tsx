@@ -417,7 +417,7 @@ const SubscriptionSelection: React.FC = () => {
                   {/* Buttons */}
                   <div className="flex gap-2">
                     <button
-                      onClick={() => handleGenesisConfirm(false)}
+                      onClick={() => handleGenesisConfirm()}
                       className="flex-1 px-4 py-2.5 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-900 font-bold rounded-xl transition-all duration-300 text-sm"
                     >
                       {t('subscriptionSelection.genesisModalConfirm')}
