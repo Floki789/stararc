@@ -695,11 +695,18 @@ router.post('/launch-checkout', authMiddleware, async (req, res): Promise<any> =
       await pool.query('UPDATE users SET stripe_customer_id = $1 WHERE id = $2', [stripeCustomerId, userId]);
     }
 
-    // Check for existing active subscription (upgrade flow)
+    // If user has an existing active subscription, cancel it immediately (upgrade to launch pricing)
     const existingSub = userResult.rows[0]?.stripe_subscription_id;
     const subStatus = userResult.rows[0]?.subscription_status;
-    if (existingSub && ['active', 'past_due'].includes(subStatus)) {
-      return res.status(400).json({ error: 'Launch pricing is for new subscriptions only. Please use the upgrade option.' });
+    if (existingSub && ['active', 'past_due', 'trialing'].includes(subStatus)) {
+      try {
+        const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+        await stripe.subscriptions.cancel(existingSub);
+        console.log(`📋 Cancelled old subscription ${existingSub} for launch upgrade to ${planId}`);
+      } catch (cancelErr: any) {
+        console.warn(`⚠️ Could not cancel old subscription ${existingSub}:`, cancelErr.message);
+        // Continue anyway — Stripe will handle duplicate customer subscriptions
+      }
     }
 
     // Create checkout session with launch price
