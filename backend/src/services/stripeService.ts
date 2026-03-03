@@ -213,7 +213,8 @@ export class StripeService {
     planId: string,
     successUrl: string,
     cancelUrl: string,
-    locale: string = 'de'
+    locale: string = 'de',
+    additionalMetadata: Record<string, string> = {}
   ): Promise<Stripe.Checkout.Session> {
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
@@ -230,7 +231,8 @@ export class StripeService {
       locale: locale === 'en' ? 'en' : 'de',
       metadata: {
         userId: userId.toString(),
-        planId: planId
+        planId: planId,
+        ...additionalMetadata
       },
       subscription_data: {
         trial_period_days: 14,
@@ -238,7 +240,8 @@ export class StripeService {
           userId: userId.toString(),
           planId: planId,
           source: 'stararc',
-          mode: isProductionMode() ? 'live' : 'test'
+          mode: isProductionMode() ? 'live' : 'test',
+          ...additionalMetadata
         }
       },
       allow_promotion_codes: true,

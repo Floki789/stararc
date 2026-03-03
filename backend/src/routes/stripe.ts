@@ -660,30 +660,23 @@ router.post('/launch-checkout', authMiddleware, async (req, res): Promise<any> =
       return res.status(400).json({ error: 'You already purchased this plan at launch pricing' });
     }
 
-    // Atomically reserve a launch slot
-    const reserveResult = await pool.query(
-      `UPDATE launch_counters 
-       SET remaining_slots = remaining_slots - 1, updated_at = NOW()
-       WHERE plan_code = $1 AND remaining_slots > 0 AND is_active = true
-       RETURNING remaining_slots`,
+    // Check launch slot availability (read-only — actual decrement happens after payment in webhook)
+    const availResult = await pool.query(
+      `SELECT remaining_slots FROM launch_counters 
+       WHERE plan_code = $1 AND remaining_slots > 0 AND is_active = true`,
       [planCode]
     );
 
-    if (reserveResult.rows.length === 0) {
+    if (availResult.rows.length === 0) {
       return res.status(410).json({ error: 'Launch pricing is no longer available for this plan' });
     }
 
-    const remainingSlots = reserveResult.rows[0].remaining_slots;
-    console.log(`🚀 Launch slot reserved for ${planId}: ${remainingSlots} remaining`);
+    const remainingSlots = availResult.rows[0].remaining_slots;
+    console.log(`🚀 Launch checkout initiated for ${planId}: ${remainingSlots} slots available`);
 
     // Get launch price ID
     const launchPriceId = StripeService.getLaunchPriceId(plan);
     if (!launchPriceId) {
-      // Rollback the reservation
-      await pool.query(
-        'UPDATE launch_counters SET remaining_slots = remaining_slots + 1 WHERE plan_code = $1',
-        [planCode]
-      );
       return res.status(500).json({ error: 'Launch price not configured' });
     }
 
@@ -706,11 +699,6 @@ router.post('/launch-checkout', authMiddleware, async (req, res): Promise<any> =
     const existingSub = userResult.rows[0]?.stripe_subscription_id;
     const subStatus = userResult.rows[0]?.subscription_status;
     if (existingSub && ['active', 'past_due'].includes(subStatus)) {
-      // Rollback — can't use launch checkout for upgrades
-      await pool.query(
-        'UPDATE launch_counters SET remaining_slots = remaining_slots + 1 WHERE plan_code = $1',
-        [planCode]
-      );
       return res.status(400).json({ error: 'Launch pricing is for new subscriptions only. Please use the upgrade option.' });
     }
 
@@ -727,14 +715,8 @@ router.post('/launch-checkout', authMiddleware, async (req, res): Promise<any> =
       planId,
       successUrl,
       cancelUrl,
-      locale
-    );
-
-    // Record the launch purchase (pending — will be confirmed via webhook)
-    await pool.query(
-      `INSERT INTO launch_purchases (user_id, plan_code, stripe_session_id, price_paid)
-       VALUES ($1, $2, $3, $4)`,
-      [userId, planCode, session.id, plan.launchPrice || 0]
+      locale,
+      { isLaunch: 'true', launchPlanCode: planCode }
     );
 
     // TEST MODE: Auto-activate like normal select-plan
@@ -743,6 +725,19 @@ router.post('/launch-checkout', authMiddleware, async (req, res): Promise<any> =
 
     if (isTestMode && !forceWebhookFlow) {
       console.log('🔧 TEST MODE: Auto-activating launch subscription for user:', userId, 'plan:', planId);
+
+      // Decrement launch counter + record purchase (same as webhook does in production)
+      await pool.query(
+        `UPDATE launch_counters SET remaining_slots = remaining_slots - 1, updated_at = NOW()
+         WHERE plan_code = $1 AND remaining_slots > 0 AND is_active = true`,
+        [planCode]
+      );
+      await pool.query(
+        `INSERT INTO launch_purchases (user_id, plan_code, stripe_session_id, price_paid)
+         VALUES ($1, $2, $3, $4)`,
+        [userId, planCode, session.id, plan.launchPrice || 0]
+      );
+
       await pool.query(
         `UPDATE users SET 
          subscription_plan = $1, 
@@ -1021,17 +1016,33 @@ router.post('/webhook', async (req, res): Promise<any> => {
             console.log(`✅ WEBHOOK - User ${userId} subscription activated successfully`);
             processed = true;
 
-            // Update launch_purchases record with subscription ID (if this was a launch checkout)
-            try {
-              await pool.query(
-                `UPDATE launch_purchases 
-                 SET stripe_subscription_id = $1 
-                 WHERE stripe_session_id = $2 AND user_id = $3`,
-                [session.subscription, session.id, userId]
-              );
-            } catch (lpErr) {
-              // Non-critical — just logging
-              console.warn('⚠️ WEBHOOK - launch_purchases update skipped (not a launch checkout or table missing)');
+            // Record launch purchase + decrement counter (only after successful payment)
+            if (session.metadata?.isLaunch === 'true') {
+              const launchPlanCode = session.metadata?.launchPlanCode || planId.toLowerCase();
+              try {
+                // Atomically decrement launch counter
+                const slotResult = await pool.query(
+                  `UPDATE launch_counters SET remaining_slots = remaining_slots - 1, updated_at = NOW()
+                   WHERE plan_code = $1 AND remaining_slots > 0 AND is_active = true
+                   RETURNING remaining_slots`,
+                  [launchPlanCode]
+                );
+                if (slotResult.rows.length > 0) {
+                  console.log(`🚀 WEBHOOK - Launch slot confirmed for ${planId}: ${slotResult.rows[0].remaining_slots} remaining`);
+                } else {
+                  console.warn(`⚠️ WEBHOOK - Launch counter decrement failed (no slots?) for ${launchPlanCode}`);
+                }
+
+                // Insert launch purchase record
+                await pool.query(
+                  `INSERT INTO launch_purchases (user_id, plan_code, stripe_session_id, stripe_subscription_id, price_paid)
+                   VALUES ($1, $2, $3, $4, $5)`,
+                  [userId, launchPlanCode, session.id, session.subscription, session.amount_total || 0]
+                );
+                console.log(`✅ WEBHOOK - Launch purchase recorded for user ${userId}`);
+              } catch (lpErr) {
+                console.error('⚠️ WEBHOOK - Launch purchase recording failed:', lpErr);
+              }
             }
             
             // Send admin notification
