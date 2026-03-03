@@ -786,10 +786,10 @@ router.post('/genesis-checkout', authMiddleware, async (req, res): Promise<any> 
 
     // Check if user is already a genesis member
     const genesisCheck = await pool.query(
-      'SELECT genesis_member FROM users WHERE id = $1',
+      'SELECT admin_encrypted_genesis_hall_of_fame_name FROM users WHERE id = $1',
       [userId]
     );
-    if (genesisCheck.rows[0]?.genesis_member) {
+    if (genesisCheck.rows[0]?.admin_encrypted_genesis_hall_of_fame_name) {
       return res.status(400).json({ error: 'You are already a Genesis Member' });
     }
 
@@ -828,17 +828,17 @@ router.post('/genesis-checkout', authMiddleware, async (req, res): Promise<any> 
 
     if (isTestMode && !forceWebhookFlow) {
       console.log('🔧 TEST MODE: Auto-activating genesis for user:', userId);
+      const { UserEncryptionService } = require('../services/userEncryptionService');
+      const encryptedName = JSON.stringify(UserEncryptionService.encryptWithMasterKey(hallOfFameName.trim()));
       await pool.query(
         `UPDATE users SET 
          subscription_plan = 'Galaxy',
          subscription_status = 'lifetime',
-         genesis_member = true,
-         genesis_purchased_at = NOW(),
-         genesis_hall_of_fame_name = $1,
+         admin_encrypted_genesis_hall_of_fame_name = $1,
          onboarding_step = CASE WHEN onboarding_step = 'completed' THEN 'completed' ELSE 'auth_method_selection' END,
          updated_at = CURRENT_TIMESTAMP
          WHERE id = $2`,
-        [hallOfFameName.trim(), userId]
+        [encryptedName, userId]
       );
     }
 
@@ -946,21 +946,21 @@ router.post('/webhook', async (req, res): Promise<any> => {
           if (sessionType === 'genesis' && session.mode === 'payment') {
             console.log(`👑 WEBHOOK - Processing Genesis purchase for user ${userId}`);
             const hallOfFameName = session.metadata?.hallOfFameName || 'Anonymous';
+            const { UserEncryptionService } = require('../services/userEncryptionService');
+            const encryptedName = JSON.stringify(UserEncryptionService.encryptWithMasterKey(hallOfFameName));
 
             await pool.query(
               `UPDATE users SET 
                subscription_plan = 'Galaxy',
                subscription_status = 'lifetime',
-               genesis_member = true,
-               genesis_purchased_at = NOW(),
-               genesis_hall_of_fame_name = $1,
+               admin_encrypted_genesis_hall_of_fame_name = $1,
                onboarding_step = CASE WHEN onboarding_step = 'completed' THEN 'completed' ELSE 'auth_method_selection' END,
                updated_at = CURRENT_TIMESTAMP
                WHERE id = $2`,
-              [hallOfFameName, userId]
+              [encryptedName, userId]
             );
 
-            console.log(`✅ WEBHOOK - Genesis member activated: user ${userId}, Hall of Fame: ${hallOfFameName}`);
+            console.log(`✅ WEBHOOK - Genesis member activated: user ${userId}, Hall of Fame: [encrypted]`);
             processed = true;
 
             // Admin notification
