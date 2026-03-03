@@ -829,7 +829,7 @@ router.post('/genesis-checkout', authMiddleware, async (req, res): Promise<any> 
     if (isTestMode && !forceWebhookFlow) {
       console.log('🔧 TEST MODE: Auto-activating genesis for user:', userId);
       const { UserEncryptionService } = require('../services/userEncryptionService');
-      const encryptedName = JSON.stringify(UserEncryptionService.encryptWithMasterKey(hallOfFameName.trim()));
+      const encryptedName = UserEncryptionService.encryptWithMasterKey(hallOfFameName.trim());
       await pool.query(
         `UPDATE users SET 
          subscription_plan = 'Galaxy',
@@ -947,7 +947,7 @@ router.post('/webhook', async (req, res): Promise<any> => {
             console.log(`👑 WEBHOOK - Processing Genesis purchase for user ${userId}`);
             const hallOfFameName = session.metadata?.hallOfFameName || 'Anonymous';
             const { UserEncryptionService } = require('../services/userEncryptionService');
-            const encryptedName = JSON.stringify(UserEncryptionService.encryptWithMasterKey(hallOfFameName));
+            const encryptedName = UserEncryptionService.encryptWithMasterKey(hallOfFameName);
 
             await pool.query(
               `UPDATE users SET 
