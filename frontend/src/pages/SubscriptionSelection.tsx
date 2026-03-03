@@ -6,7 +6,7 @@ import StripeAPIService from '../services/stripeService';
 import { loadStripe } from '@stripe/stripe-js';
 import PlanCards from '../components/PlanCards';
 import { useLanguage } from '../contexts/LanguageContext';
-import { Crown, Star, Globe } from 'lucide-react';
+import { Crown } from 'lucide-react';
 
 interface UpgradePreview {
   currentPlan: string;
@@ -293,7 +293,7 @@ const SubscriptionSelection: React.FC = () => {
     setTimeout(() => genesisInputRef.current?.focus(), 100);
   };
 
-  const handleGenesisConfirm = async (anonymous: boolean = false) => {
+  const handleGenesisConfirm = async () => {
     const hallOfFameName = genesisName.trim() || 'Anonymous';
     setShowGenesisModal(false);
     setLoading(prev => ({ ...prev, genesis: true }));
