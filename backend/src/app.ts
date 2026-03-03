@@ -18,8 +18,8 @@ import twoFactorRoutes from './routes/twoFactor';
 import { errorHandler } from './middleware/errorHandler';
 import { notFound } from './middleware/notFound';
 
-// Load environment variables
-dotenv.config();
+// Load environment variables (resolve path relative to this file for reliability)
+dotenv.config({ path: path.resolve(__dirname, '..', '.env') });
 
 const app = express();
 const PORT = process.env.PORT || 3004;
