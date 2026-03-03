@@ -156,6 +156,36 @@ export class StripeAPIService {
       throw error;
     }
   }
+
+  // Launch checkout — subscribe at 50% launch price
+  static async launchCheckout(planId: string): Promise<{ success: boolean; sessionId?: string; url?: string; remainingSlots?: number }> {
+    const response = await this.fetchWithAuth('/launch-checkout', {
+      method: 'POST',
+      body: JSON.stringify({ planId }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Launch checkout failed');
+    }
+
+    return response.json();
+  }
+
+  // Genesis checkout — one-time payment for lifetime Galaxy
+  static async genesisCheckout(hallOfFameName: string): Promise<{ success: boolean; sessionId?: string; url?: string }> {
+    const response = await this.fetchWithAuth('/genesis-checkout', {
+      method: 'POST',
+      body: JSON.stringify({ hallOfFameName }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Genesis checkout failed');
+    }
+
+    return response.json();
+  }
 }
 
 export default StripeAPIService;

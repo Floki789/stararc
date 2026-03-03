@@ -249,6 +249,65 @@ const SubscriptionSelection: React.FC = () => {
     setUpgradePreview(null);
   };
 
+  // Launch checkout — 50% launch pricing for Nova/Galaxy
+  const handleLaunchSelect = async (planId: string) => {
+    if (!user) {
+      alert('Sie müssen eingeloggt sein.');
+      return;
+    }
+
+    setLoading(prev => ({ ...prev, [`${planId}-launch`]: true }));
+
+    try {
+      const result = await StripeAPIService.launchCheckout(planId);
+
+      if (result.success) {
+        if (result.sessionId) {
+          await StripeAPIService.redirectToCheckout(result.sessionId);
+        } else if (result.url) {
+          window.location.href = result.url;
+        }
+      }
+    } catch (error) {
+      console.error('Launch checkout error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Launch checkout failed';
+      alert(errorMessage);
+    } finally {
+      setLoading(prev => ({ ...prev, [`${planId}-launch`]: false }));
+    }
+  };
+
+  // Genesis checkout — one-time $1,999 payment
+  const handleGenesisSelect = async () => {
+    if (!user) {
+      alert('Sie müssen eingeloggt sein.');
+      return;
+    }
+
+    const hallOfFameName = prompt(t('subscriptionSelection.genesisNamePrompt') || 'Enter your Hall of Fame name:');
+    if (!hallOfFameName || hallOfFameName.trim().length === 0) return;
+
+    setLoading(prev => ({ ...prev, genesis: true }));
+
+    try {
+      const result = await StripeAPIService.genesisCheckout(hallOfFameName.trim());
+
+      if (result.success) {
+        if (result.sessionId) {
+          await StripeAPIService.redirectToCheckout(result.sessionId);
+        } else if (result.url) {
+          window.location.href = result.url;
+        }
+      }
+    } catch (error) {
+      console.error('Genesis checkout error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Genesis checkout failed';
+      alert(errorMessage);
+    } finally {
+      setLoading(prev => ({ ...prev, genesis: false }));
+    }
+  };
+
 
 
   return (
@@ -285,6 +344,8 @@ const SubscriptionSelection: React.FC = () => {
         <div className="flex justify-center">
           <PlanCards 
             onPlanSelect={(planId, priceValue, interval) => handlePlanSelection(planId, priceValue, interval)}
+            onLaunchSelect={handleLaunchSelect}
+            onGenesisSelect={handleGenesisSelect}
             loading={loading}
             currentPlan={currentPlan || undefined}
             className="max-w-7xl w-full"
