@@ -182,6 +182,7 @@ export class StripeService {
       success_url: successUrl,
       cancel_url: cancelUrl,
       locale: locale === 'en' ? 'en' : 'de',
+      allow_promotion_codes: true,
       metadata: {
         userId: userId.toString(),
         planId: 'Genesis',
