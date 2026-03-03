@@ -445,7 +445,16 @@
     "welcome": "Welcome to Stararc",
     "choosePlan": "Choose Your Plan",
     "choosePlanSubtitle": "Start for free or choose a premium plan right away",
-    "planSelectionError": "Error selecting plan. Please try again."
+    "planSelectionError": "Error selecting plan. Please try again.",
+    "genesisNamePrompt": "Enter your Hall of Fame name (displayed publicly as a Genesis Member):",
+    "genesisModalTitle": "Become a Genesis Member",
+    "genesisModalSubtitle": "Secure your place in StarArc history",
+    "genesisModalNameLabel": "Your Hall of Fame Name",
+    "genesisModalNamePlaceholder": "Your name or nickname",
+    "genesisModalNameHint": "Displayed publicly on the StarArc Hall of Fame. Leave blank to remain anonymous.",
+    "genesisModalAnonymous": "Continue anonymously",
+    "genesisModalConfirm": "Continue to Payment →",
+    "genesisModalCancel": "Cancel"
   },
   "upgradePreview": {
     "title": "Upgrade Summary",

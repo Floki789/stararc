@@ -580,7 +580,16 @@
     "welcome": "Willkommen bei Stararc",
     "choosePlan": "Wähle deinen Plan",
     "choosePlanSubtitle": "Starte kostenlos oder wähle gleich einen Premium-Plan",
-    "planSelectionError": "Fehler bei der Plan-Auswahl. Bitte versuche es erneut."
+    "planSelectionError": "Fehler bei der Plan-Auswahl. Bitte versuche es erneut.",
+    "genesisNamePrompt": "Gib deinen Hall of Fame Namen ein (wird öffentlich als Genesis-Mitglied angezeigt):",
+    "genesisModalTitle": "Werde ein Genesis-Mitglied",
+    "genesisModalSubtitle": "Sichere dir deinen Platz in der StarArc Geschichte",
+    "genesisModalNameLabel": "Dein Hall of Fame Name",
+    "genesisModalNamePlaceholder": "Dein Name oder Spitzname",
+    "genesisModalNameHint": "Wird öffentlich in der StarArc Hall of Fame angezeigt. Lass das Feld leer, um anonym zu bleiben.",
+    "genesisModalAnonymous": "Anonym fortfahren",
+    "genesisModalConfirm": "Weiter zur Zahlung →",
+    "genesisModalCancel": "Abbrechen"
   },
   "upgradePreview": {
     "title": "Upgrade-Übersicht",

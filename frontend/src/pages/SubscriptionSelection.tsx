@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
@@ -6,6 +6,7 @@ import StripeAPIService from '../services/stripeService';
 import { loadStripe } from '@stripe/stripe-js';
 import PlanCards from '../components/PlanCards';
 import { useLanguage } from '../contexts/LanguageContext';
+import { Crown, Star, Globe } from 'lucide-react';
 
 interface UpgradePreview {
   currentPlan: string;
@@ -278,19 +279,27 @@ const SubscriptionSelection: React.FC = () => {
   };
 
   // Genesis checkout — one-time $1,999 payment
-  const handleGenesisSelect = async () => {
+  const [showGenesisModal, setShowGenesisModal] = useState(false);
+  const [genesisName, setGenesisName] = useState('');
+  const genesisInputRef = useRef<HTMLInputElement>(null);
+
+  const handleGenesisSelect = () => {
     if (!user) {
       alert('Sie müssen eingeloggt sein.');
       return;
     }
+    setGenesisName('');
+    setShowGenesisModal(true);
+    setTimeout(() => genesisInputRef.current?.focus(), 100);
+  };
 
-    const hallOfFameName = prompt(t('subscriptionSelection.genesisNamePrompt') || 'Enter your Hall of Fame name:');
-    if (!hallOfFameName || hallOfFameName.trim().length === 0) return;
-
+  const handleGenesisConfirm = async (anonymous: boolean = false) => {
+    const hallOfFameName = genesisName.trim() || 'Anonymous';
+    setShowGenesisModal(false);
     setLoading(prev => ({ ...prev, genesis: true }));
 
     try {
-      const result = await StripeAPIService.genesisCheckout(hallOfFameName.trim());
+      const result = await StripeAPIService.genesisCheckout(hallOfFameName || 'Anonymous');
 
       if (result.success) {
         if (result.sessionId) {
@@ -353,6 +362,79 @@ const SubscriptionSelection: React.FC = () => {
         </div>
 
       </div>
+
+      {/* Genesis Name Modal */}
+      <AnimatePresence>
+        {showGenesisModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            onClick={() => setShowGenesisModal(false)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ duration: 0.3, ease: 'easeOut' }}
+              className="relative max-w-sm w-full"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-amber-500 to-yellow-600 rounded-2xl blur opacity-15"></div>
+              
+              <div className="relative bg-slate-900/95 backdrop-blur-xl border border-amber-500/20 rounded-2xl shadow-2xl overflow-hidden">
+                <div className="h-0.5 bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500"></div>
+                
+                <div className="p-6">
+                  {/* Header */}
+                  <div className="flex items-center gap-3 mb-5">
+                    <Crown className="w-5 h-5 text-amber-400" />
+                    <h3 className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-yellow-400">
+                      {t('subscriptionSelection.genesisModalNameLabel')}
+                    </h3>
+                  </div>
+
+                  {/* Name input */}
+                  <div className="mb-5">
+                    <input
+                      ref={genesisInputRef}
+                      type="text"
+                      value={genesisName}
+                      onChange={(e) => setGenesisName(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && genesisName.trim()) handleGenesisConfirm();
+                      }}
+                      placeholder={t('subscriptionSelection.genesisModalNamePlaceholder')}
+                      className="w-full px-4 py-3 bg-slate-800/80 border border-amber-500/20 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-amber-400/50 focus:ring-1 focus:ring-amber-400/30 transition-all"
+                      maxLength={50}
+                    />
+                    <p className="text-slate-500 text-xs mt-2">
+                      {t('subscriptionSelection.genesisModalNameHint')}
+                    </p>
+                  </div>
+
+                  {/* Buttons */}
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleGenesisConfirm(false)}
+                      className="flex-1 px-4 py-2.5 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-900 font-bold rounded-xl transition-all duration-300 text-sm"
+                    >
+                      {t('subscriptionSelection.genesisModalConfirm')}
+                    </button>
+                    <button
+                      onClick={() => setShowGenesisModal(false)}
+                      className="px-4 py-2.5 rounded-xl border border-slate-600 text-slate-400 hover:bg-slate-700/50 transition-colors text-sm"
+                    >
+                      {t('subscriptionSelection.genesisModalCancel')}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Upgrade Preview Modal */}
       <AnimatePresence>
