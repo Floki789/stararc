@@ -1271,6 +1271,12 @@ router.post('/generate-spaceship-token', authMiddleware, async (req: Request, re
     // Detect first Spaceship login and send notifications
     const isFirstSpaceshipLogin = !result.rows[0]?.spaceship_integration_completed;
     if (isFirstSpaceshipLogin) {
+      // Mark as completed immediately to prevent duplicate emails on subsequent cross-app logins
+      await pool.query(
+        'UPDATE users SET spaceship_integration_completed = true WHERE id = $1',
+        [user.id]
+      );
+
       try {
         const dbRow = result.rows[0];
         if (dbRow.admin_encrypted_email) {
