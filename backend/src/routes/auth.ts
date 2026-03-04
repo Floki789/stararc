@@ -1269,15 +1269,13 @@ router.post('/generate-spaceship-token', authMiddleware, async (req: Request, re
       : process.env.SPACESHIP_URL || 'http://localhost:3000';
     
     // Detect first Spaceship login and send notifications
-    console.log(`🔍 generate-spaceship-token: user.id=${user.id}, spaceship_integration_completed=${result.rows[0]?.spaceship_integration_completed}`);
     const isFirstSpaceshipLogin = !result.rows[0]?.spaceship_integration_completed;
     if (isFirstSpaceshipLogin) {
       // Mark as completed immediately to prevent duplicate emails on subsequent cross-app logins
-      const updateResult = await pool.query(
-        'UPDATE users SET spaceship_integration_completed = true WHERE id = $1 RETURNING id, spaceship_integration_completed',
+      await pool.query(
+        'UPDATE users SET spaceship_integration_completed = true WHERE id = $1',
         [user.id]
       );
-      console.log(`🔍 UPDATE result: rowCount=${updateResult.rowCount}, rows=`, JSON.stringify(updateResult.rows));
 
       try {
         const dbRow = result.rows[0];
