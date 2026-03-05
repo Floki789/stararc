@@ -27,7 +27,7 @@ const SpaceshipAccessButton: React.FC<SpaceshipAccessButtonProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [hasAccess, setHasAccess] = useState<boolean | null>(null);
   const [error, setError] = useState<string>('');
-  const { logout, user } = useAuth();
+  const { user } = useAuth();
   const { t } = useLanguage();
   
   // Check if user is using Zero-Knowledge encryption
@@ -55,30 +55,27 @@ const SpaceshipAccessButton: React.FC<SpaceshipAccessButtonProps> = ({
     setError('');
 
     try {
-      if (hasAccess) {
-        // User already has access - start Spaceship login then logout from StarArc
-        setIsLoading(false); // Reset loading before redirect
-        
-        // Start Spaceship login (needs current token)
-        await spaceshipService.loginToSpaceship();
-        
-        // Logout from StarArc after successful redirect initiation
-        console.log('🚪 Logging out from StarArc after Spaceship redirect...');
-        logout();
-      } else {
+      if (!hasAccess) {
         // Create access first
         await spaceshipService.createSpaceshipAccess();
-        setHasAccess(true); // Update access status
-        
-        setIsLoading(false); // Reset loading before redirect
-        
-        // Start Spaceship login (needs current token)
-        await spaceshipService.loginToSpaceship();
-        
-        // Logout from StarArc after successful redirect initiation
-        console.log('🚪 Logging out from StarArc after Spaceship redirect...');
-        logout();
+        setHasAccess(true);
       }
+
+      setIsLoading(false);
+
+      // Start Spaceship login — this sets window.location.href which queues 
+      // a full page navigation. We must NOT call logout() afterward because
+      // window.location.href is asynchronous: JS continues executing, React 
+      // re-renders with isAuthenticated=false, and the login form flashes 
+      // briefly before the browser actually navigates away.
+      // Instead we clear localStorage directly (no React re-render) so the 
+      // StarArc session is cleaned up for when the user returns.
+      await spaceshipService.loginToSpaceship();
+
+      // Silently clear session data without triggering React state updates
+      console.log('🚪 Clearing StarArc session after Spaceship redirect...');
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
     } catch (error: any) {
       setError(error.message || t('spaceshipAccess.error'));
       setIsLoading(false);
