@@ -98,26 +98,26 @@ const PlanCards: React.FC<PlanCardsProps> = ({
       priceValueMonthly: 9000, // $90 yearly in cents
       priceValueYearly: 9000, // $90 yearly in cents
       currency: 'usd',
-      description: 'For individuals with startup portfolios',
+      description: t('plans.spark.description'),
       icon: Flame,
       color: 'text-orange-400',
       bgGradient: 'bg-gradient-to-r from-orange-500 to-red-600',
       yearlyOnly: true,
       features: [
-        '1 Family member',
-        '10 Securities',
-        '1 Precious metal',
-        '1 Real estate & 1 Mortgage',
-        '2 Pension accounts',
-        '2 Liquidity accounts',
-        '10 Budget categories & 50 Budget items',
-        '3 Financial institutions',
-        '3 Vaults',
-        '2 Bitcoin single sig setups (no passphrase)',
-        '2 Hardware & Software wallets each',
-        '4 Seed & Descriptor backups each'
+        t('plans.spark.features.familyMembers', { count: 1 }),
+        t('plans.spark.features.securities', { count: 10 }),
+        t('plans.spark.features.preciousMetals', { count: 1 }),
+        t('plans.spark.features.realEstate', { count: 1, mortgages: 1 }),
+        t('plans.spark.features.pensionAccounts', { count: 2 }),
+        t('plans.spark.features.liquidityAccounts', { count: 2 }),
+        t('plans.spark.features.budgetCategories', { categories: 10, items: 50 }),
+        t('plans.spark.features.financialInstitutions', { count: 3 }),
+        t('plans.spark.features.vaults', { count: 3 }),
+        t('plans.spark.features.bitcoinSetups', { count: 2 }),
+        t('plans.spark.features.wallets', { count: 2 }),
+        t('plans.spark.features.backups', { count: 4 })
       ],
-      buttonText: 'Choose Spark'
+      buttonText: t('plans.spark.button')
     },
     {
       id: 'Nova',
@@ -127,27 +127,27 @@ const PlanCards: React.FC<PlanCardsProps> = ({
       priceValueMonthly: 19000, // $190 yearly in cents
       priceValueYearly: 19000, // $190 yearly in cents
       currency: 'usd',
-      description: 'Complete suite for growing family wealth',
+      description: t('plans.nova.description'),
       icon: Sparkles,
       color: 'text-blue-400',
       bgGradient: 'bg-gradient-to-r from-blue-500 to-cyan-600',
       yearlyOnly: true,
       features: [
-        '4 Family members',
-        '25 Securities',
-        '4 Precious metals',
-        '2 Real estate & 3 Mortgages',
-        '4 Pension accounts',
-        '4 Liquidity accounts',
-        '12 Budget categories & 70 Budget items',
-        '5 Financial institutions',
-        '5 Vaults',
-        '4 Bitcoin single sig setups with passphrase',
-        '4 Hardware & Software wallets each',
-        '8 Seed, Passphrase & Descriptor backups each'
+        t('plans.nova.features.familyMembers', { count: 4 }),
+        t('plans.nova.features.securities', { count: 25 }),
+        t('plans.nova.features.preciousMetals', { count: 4 }),
+        t('plans.nova.features.realEstate', { count: 2, mortgages: 3 }),
+        t('plans.nova.features.pensionAccounts', { count: 4 }),
+        t('plans.nova.features.liquidityAccounts', { count: 4 }),
+        t('plans.nova.features.budgetCategories', { categories: 12, items: 70 }),
+        t('plans.nova.features.financialInstitutions', { count: 5 }),
+        t('plans.nova.features.vaults', { count: 5 }),
+        t('plans.nova.features.bitcoinSetups', { count: 4 }),
+        t('plans.nova.features.wallets', { count: 4 }),
+        t('plans.nova.features.backups', { count: 8 })
       ],
       isPopular: true,
-      buttonText: 'Choose Nova'
+      buttonText: t('plans.nova.button')
     },
     {
       id: 'Galaxy',
@@ -157,34 +157,34 @@ const PlanCards: React.FC<PlanCardsProps> = ({
       priceValueMonthly: 39000, // $390 yearly in cents
       priceValueYearly: 39000, // $390 yearly in cents
       currency: 'usd',
-      description: 'For families reaching for the stars',
+      description: t('plans.galaxy.description'),
       icon: Globe,
       color: 'text-purple-400',
       bgGradient: 'bg-gradient-to-r from-purple-500 to-indigo-600',
       yearlyOnly: true,
       features: [
-        'Unlimited Family members',
-        'Unlimited Securities',
-        'Unlimited Precious metals',
-        'Unlimited Real estate & Mortgages',
-        'Unlimited Pension accounts',
-        'Unlimited Liquidity accounts',
-        'Unlimited Budget categories & Items',
-        'Unlimited Financial institutions',
-        'Unlimited Vaults',
-        'Unlimited Bitcoin setups',
-        'Unlimited Hardware & Software wallets',
-        'Unlimited Seed, Passphrase & Descriptor backups'
+        t('plans.galaxy.features.familyMembers'),
+        t('plans.galaxy.features.securities'),
+        t('plans.galaxy.features.preciousMetals'),
+        t('plans.galaxy.features.realEstate'),
+        t('plans.galaxy.features.pensionAccounts'),
+        t('plans.galaxy.features.liquidityAccounts'),
+        t('plans.galaxy.features.budgetCategories'),
+        t('plans.galaxy.features.financialInstitutions'),
+        t('plans.galaxy.features.vaults'),
+        t('plans.galaxy.features.bitcoinSetups'),
+        t('plans.galaxy.features.wallets'),
+        t('plans.galaxy.features.backups')
       ],
-      buttonText: 'Choose Galaxy'
+      buttonText: t('plans.galaxy.button')
     }
   ];
 
-  // Bold numbers and "Unlimited" in feature strings
+  // Bold numbers and "Unlimited"/"Unbegrenzt" in feature strings
   const boldFeature = (text: string) => {
-    const parts = text.split(/(\d+|Unlimited)/g);
+    const parts = text.split(/(\d+|Unlimited|Unbegrenzt)/g);
     return parts.map((part, i) =>
-      /^\d+$/.test(part) || part === 'Unlimited'
+      /^\d+$/.test(part) || part === 'Unlimited' || part === 'Unbegrenzt'
         ? <strong key={i} className="font-bold text-white">{part}</strong>
         : part
     );
@@ -270,7 +270,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
       {/* Header Text - Yearly Plans Only */}
       <div className="text-center mb-8">
         <p className="text-gray-400 text-lg">
-          All plans include a 14-day free trial • Billed annually • Cancel anytime
+          {t('plans.headerText')}
         </p>
       </div>
 
@@ -300,7 +300,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
             {currentPlan === plan.id && (
               <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
                 <span className="bg-blue-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
-                  Current Plan
+                  {t('plans.currentPlan')}
                 </span>
               </div>
             )}
@@ -309,7 +309,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
             {plan.isPopular && currentPlan !== plan.id && !plan.comingSoon && (
               <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
                 <span className="bg-purple-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
-                  Popular
+                  {t('plans.popular')}
                 </span>
               </div>
             )}
@@ -318,7 +318,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
             {plan.comingSoon && (
               <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
                 <span className="bg-orange-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
-                  Coming Soon
+                  {t('plans.comingSoon')}
                 </span>
               </div>
             )}
@@ -340,8 +340,8 @@ const PlanCards: React.FC<PlanCardsProps> = ({
                   {launchActive && (plan.id === 'Nova' || plan.id === 'Galaxy') ? (
                     <>
                       <div className="flex items-center justify-center gap-1 mb-2">
-                        <span className="text-amber-400 text-xs font-bold">🔥 Launch Special</span>
-                        <span className="bg-amber-500/20 text-amber-400 px-1.5 py-0.5 rounded text-xs font-bold ml-1">50% OFF</span>
+                        <span className="text-amber-400 text-xs font-bold">{t('plans.launchSpecial')}</span>
+                        <span className="bg-amber-500/20 text-amber-400 px-1.5 py-0.5 rounded text-xs font-bold ml-1">{t('plans.discount')}</span>
                       </div>
                       <div className="flex items-baseline justify-center gap-2">
                         <span className="text-gray-500 line-through text-xl">{price}</span>
@@ -349,7 +349,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
                           {plan.id === 'Nova' ? '$95' : '$195'}
                         </span>
                       </div>
-                      <p className="text-sm text-gray-400 mt-1">per year</p>
+                      <p className="text-sm text-gray-400 mt-1">{t('plans.perYear')}</p>
                       {/* Counter */}
                       <div className="mt-3 px-2">
                         <div className="flex items-center justify-between mb-1">
@@ -371,10 +371,10 @@ const PlanCards: React.FC<PlanCardsProps> = ({
                       </div>
                       <div className="flex flex-wrap justify-center gap-2 mt-3">
                         <span className="bg-green-500/20 text-green-400 px-2 py-1 rounded text-xs font-semibold">
-                          14 days free trial
+                          {t('plans.freeTrial')}
                         </span>
                         <span className="bg-blue-500/20 text-blue-400 px-2 py-1 rounded text-xs font-semibold">
-                          Annual billing
+                          {t('plans.annualBilling')}
                         </span>
                       </div>
                     </>
@@ -385,17 +385,17 @@ const PlanCards: React.FC<PlanCardsProps> = ({
                       </p>
                       {priceValue > 0 && (
                         <p className="text-sm text-gray-400 mt-1">
-                          per year
+                          {t('plans.perYear')}
                         </p>
                       )}
                       {priceValue > 0 && (
                         <div className="flex flex-wrap justify-center gap-2 mt-2">
                           <span className="bg-green-500/20 text-green-400 px-2 py-1 rounded text-xs font-semibold">
-                            14 days free trial
+                            {t('plans.freeTrial')}
                           </span>
                           {plan.yearlyOnly && (
                             <span className="bg-blue-500/20 text-blue-400 px-2 py-1 rounded text-xs font-semibold">
-                              Annual billing
+                              {t('plans.annualBilling')}
                             </span>
                           )}
                         </div>
@@ -417,7 +417,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
               {plan.id === 'Spark' ? (
                 <div className="border border-gray-600 rounded-lg p-3 mb-4 text-left text-sm">
                   <div className="space-y-1.5">
-                    {['Balance Section', 'Budget Section', 'Cockpit Section', 'Future Planning Section', 'Standard or Zero-Knowledge Login', 'Bitcoin Self Custody Security Matrix'].map((section, i) => (
+                    {[t('plans.spark.sections.balance'), t('plans.spark.sections.budget'), t('plans.spark.sections.cockpit'), t('plans.spark.sections.futurePlanning'), t('plans.spark.sections.login'), t('plans.spark.sections.bitcoinMatrix')].map((section, i) => (
                       <div key={i} className="flex items-start gap-2">
                         <Check className={`w-4 h-4 ${plan.color} flex-shrink-0 mt-0.5`} />
                         <span className="text-gray-300 leading-relaxed font-bold">{section}</span>
@@ -427,7 +427,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
                 </div>
               ) : (
                 <div className="border border-gray-600 rounded-lg p-3 mb-4 text-center text-sm flex items-center justify-center" style={{ minHeight: launchActive ? '123px' : '188px' }}>
-                  <p className="text-gray-400 italic">Same as in Spark plan</p>
+                  <p className="text-gray-400 italic">{t('plans.sameAsSpark')}</p>
                 </div>
               )}
 
@@ -468,13 +468,13 @@ const PlanCards: React.FC<PlanCardsProps> = ({
                   }`}
                 >
                   {currentPlan === plan.id 
-                    ? 'Active Plan' 
+                    ? t('plans.activePlan') 
                     : !isPlanSelectable(plan.id, currentPlan, plan)
-                      ? plan.comingSoon ? 'Coming Soon' : 'Not available'
+                      ? plan.comingSoon ? t('plans.comingSoon') : t('plans.notAvailable')
                       : (loading[plan.id] || loading[`${plan.id}-launch`])
-                        ? 'Loading...' 
+                        ? t('plans.loading') 
                         : launchActive && (plan.id === 'Nova' || plan.id === 'Galaxy')
-                          ? `${plan.buttonText} — Launch Price →`
+                          ? `${plan.buttonText} ${t('plans.launchPrice')}`
                           : plan.buttonText
                   }
                 </button>

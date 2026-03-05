@@ -868,29 +868,84 @@
   "plans": {
     "title": "Pläne & Preise",
     "subtitle": "Wähle den perfekten Plan für deine Bedürfnisse",
-    "free": {
-      "name": "Free",
-      "description": "Zum Kennenlernen"
-    },
+    "headerText": "Alle Pläne beinhalten 14 Tage kostenlose Testphase • Jährliche Abrechnung • Jederzeit kündbar",
+    "perYear": "pro Jahr",
+    "launchSpecial": "🔥 Launch Special",
+    "discount": "50% RABATT",
+    "freeTrial": "14 Tage kostenlos testen",
+    "annualBilling": "Jährliche Abrechnung",
+    "currentPlan": "Aktueller Plan",
+    "popular": "Beliebt",
+    "comingSoon": "Demnächst verfügbar",
+    "activePlan": "Aktiver Plan",
+    "notAvailable": "Nicht verfügbar",
+    "loading": "Laden...",
+    "launchPrice": "— Launch-Preis →",
+    "sameAsSpark": "Gleich wie im Spark-Plan",
     "spark": {
       "name": "Spark",
-      "description": "Komplette Suite für kleine und mittlere Portfolios"
+      "description": "Für Einzelpersonen mit Start-Portfolios",
+      "button": "Spark wählen",
+      "features": {
+        "familyMembers": "{{count}} Familienmitglied",
+        "securities": "{{count}} Wertpapiere",
+        "preciousMetals": "{{count}} Edelmetall",
+        "realEstate": "{{count}} Immobilie & {{mortgages}} Hypothek",
+        "pensionAccounts": "{{count}} Vorsorgekonten",
+        "liquidityAccounts": "{{count}} Liquiditätskonten",
+        "budgetCategories": "{{categories}} Budgetkategorien & {{items}} Budgetposten",
+        "financialInstitutions": "{{count}} Finanzinstitute",
+        "vaults": "{{count}} Tresore",
+        "bitcoinSetups": "{{count}} Bitcoin Single-Sig Setups (ohne Passphrase)",
+        "wallets": "{{count}} Hardware- & Software-Wallets je",
+        "backups": "{{count}} Seed- & Deskriptor-Backups je"
+      },
+      "sections": {
+        "balance": "Bilanz-Sektion",
+        "budget": "Budget-Sektion",
+        "cockpit": "Cockpit-Sektion",
+        "futurePlanning": "Zukunftsplanungs-Sektion",
+        "login": "Standard- oder Zero-Knowledge-Login",
+        "bitcoinMatrix": "Bitcoin Self-Custody Sicherheitsmatrix"
+      }
     },
-    "nakamoto": {
-      "name": "Nakamoto",
-      "description": "So viele Bitcoin Setups wie du willst"
+    "nova": {
+      "name": "Nova",
+      "description": "Komplette Suite für wachsendes Familienvermögen",
+      "button": "Nova wählen",
+      "features": {
+        "familyMembers": "{{count}} Familienmitglieder",
+        "securities": "{{count}} Wertpapiere",
+        "preciousMetals": "{{count}} Edelmetalle",
+        "realEstate": "{{count}} Immobilien & {{mortgages}} Hypotheken",
+        "pensionAccounts": "{{count}} Vorsorgekonten",
+        "liquidityAccounts": "{{count}} Liquiditätskonten",
+        "budgetCategories": "{{categories}} Budgetkategorien & {{items}} Budgetposten",
+        "financialInstitutions": "{{count}} Finanzinstitute",
+        "vaults": "{{count}} Tresore",
+        "bitcoinSetups": "{{count}} Bitcoin Single-Sig Setups mit Passphrase",
+        "wallets": "{{count}} Hardware- & Software-Wallets je",
+        "backups": "{{count}} Seed-, Passphrase- & Deskriptor-Backups je"
+      }
     },
-    "core": {
-      "name": "Core",
-      "description": "Komplette Suite für grosse Portfolios"
-    },
-    "apex": {
-      "name": "Apex",
-      "description": "Für Vermögensberater und Family Offices"
-    },
-    "sathosi": {
-      "name": "Sathosi",
-      "description": "Bitcoin only. Because there is no second best."
+    "galaxy": {
+      "name": "Galaxy",
+      "description": "Für Familien, die nach den Sternen greifen",
+      "button": "Galaxy wählen",
+      "features": {
+        "familyMembers": "Unbegrenzt Familienmitglieder",
+        "securities": "Unbegrenzt Wertpapiere",
+        "preciousMetals": "Unbegrenzt Edelmetalle",
+        "realEstate": "Unbegrenzt Immobilien & Hypotheken",
+        "pensionAccounts": "Unbegrenzt Vorsorgekonten",
+        "liquidityAccounts": "Unbegrenzt Liquiditätskonten",
+        "budgetCategories": "Unbegrenzt Budgetkategorien & -posten",
+        "financialInstitutions": "Unbegrenzt Finanzinstitute",
+        "vaults": "Unbegrenzt Tresore",
+        "bitcoinSetups": "Unbegrenzt Bitcoin-Setups",
+        "wallets": "Unbegrenzt Hardware- & Software-Wallets",
+        "backups": "Unbegrenzt Seed-, Passphrase- & Deskriptor-Backups"
+      }
     }
   },
   "authMethod": {

@@ -179,7 +179,7 @@ const HeroSection: React.FC = () => {
                   <div className="flex items-center gap-2 mb-3">
                     <Zap className="w-5 h-5 text-blue-400" />
                     <span className="text-lg font-bold text-white">Nova</span>
-                    <span className="ml-auto px-2 py-0.5 bg-amber-500/15 border border-amber-500/30 rounded-full text-amber-400 text-xs font-semibold">50% OFF</span>
+                    <span className="ml-auto px-2 py-0.5 bg-amber-500/15 border border-amber-500/30 rounded-full text-amber-400 text-xs font-semibold">{t('plans.discount')}</span>
                   </div>
                   <div className="flex items-baseline gap-3 mb-3">
                     <span className="text-2xl text-slate-500 line-through font-bold">$190</span>
@@ -212,7 +212,7 @@ const HeroSection: React.FC = () => {
                   <div className="flex items-center gap-2 mb-3">
                     <Globe className="w-5 h-5 text-purple-400" />
                     <span className="text-lg font-bold text-white">Galaxy</span>
-                    <span className="ml-auto px-2 py-0.5 bg-amber-500/15 border border-amber-500/30 rounded-full text-amber-400 text-xs font-semibold">50% OFF</span>
+                    <span className="ml-auto px-2 py-0.5 bg-amber-500/15 border border-amber-500/30 rounded-full text-amber-400 text-xs font-semibold">{t('plans.discount')}</span>
                   </div>
                   <div className="flex items-baseline gap-3 mb-3">
                     <span className="text-2xl text-slate-500 line-through font-bold">$390</span>

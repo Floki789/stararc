@@ -10,41 +10,28 @@ const Footer: React.FC = () => {
   const privacyRoute = language === 'de' ? '/datenschutz' : '/privacy';
 
   return (
-    <footer className="bg-gray-900 border-t border-gray-800 py-12">
+    <footer className="bg-gray-900 border-t border-gray-800 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid md:grid-cols-4 gap-8">
-          <div className="md:col-span-2">
-            <div className="flex items-center space-x-2 mb-4">
-              <span className="text-2xl">🚀</span>
-              <span className="text-xl font-bold text-gradient">Stararc.one</span>
-            </div>
-
+        <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+          <div className="flex items-center space-x-2">
+            <span className="text-xl font-bold text-gradient">StarArc</span>
           </div>
 
-          <div>
-            <h3 className="text-white font-semibold mb-4">Product</h3>
-            <ul className="space-y-2">
-              <li><Link to="/#plans" className="text-gray-400 hover:text-white transition-colors">Pricing</Link></li>
-              <li><a href="#features" className="text-gray-400 hover:text-white transition-colors">Features</a></li>
-              <li><a href="#security" className="text-gray-400 hover:text-white transition-colors">Security</a></li>
-              <li><a href="#api" className="text-gray-400 hover:text-white transition-colors">API Docs</a></li>
-            </ul>
+          <div className="flex items-center space-x-6">
+            <a
+              href="https://www.stararc.one"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-400 hover:text-white transition-colors text-sm"
+            >
+              www.stararc.one
+            </a>
+            <Link to={termsRoute} className="text-gray-400 hover:text-white transition-colors text-sm">{t('nav.terms')}</Link>
+            <Link to={privacyRoute} className="text-gray-400 hover:text-white transition-colors text-sm">{t('nav.privacy')}</Link>
           </div>
 
-          <div>
-            <h3 className="text-white font-semibold mb-4">Legal & Privacy</h3>
-            <ul className="space-y-2">
-              <li><Link to={termsRoute} className="text-gray-400 hover:text-white transition-colors">{t('nav.terms')}</Link></li>
-              <li><Link to={privacyRoute} className="text-gray-400 hover:text-white transition-colors">{t('nav.privacy')}</Link></li>
-              <li><a href="#data-processing" className="text-gray-400 hover:text-white transition-colors">Data Processing</a></li>
-              <li><a href="#zero-knowledge" className="text-gray-400 hover:text-white transition-colors">Zero-Knowledge</a></li>
-            </ul>
-          </div>
-        </div>
-
-        <div className="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-500 text-sm">
-            © 2025 Stararc.one. All rights reserved.
+            © {new Date().getFullYear()} StarArc. All rights reserved.
           </p>
         </div>
       </div>

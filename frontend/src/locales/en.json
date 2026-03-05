@@ -709,29 +709,84 @@
   "plans": {
     "title": "Plans & Pricing",
     "subtitle": "Choose the perfect plan for your needs",
-    "free": {
-      "name": "Free",
-      "description": "Get to know us"
-    },
+    "headerText": "All plans include a 14-day free trial • Billed annually • Cancel anytime",
+    "perYear": "per year",
+    "launchSpecial": "🔥 Launch Special",
+    "discount": "50% OFF",
+    "freeTrial": "14 days free trial",
+    "annualBilling": "Annual billing",
+    "currentPlan": "Current Plan",
+    "popular": "Popular",
+    "comingSoon": "Coming Soon",
+    "activePlan": "Active Plan",
+    "notAvailable": "Not available",
+    "loading": "Loading...",
+    "launchPrice": "— Launch Price →",
+    "sameAsSpark": "Same as in Spark plan",
     "spark": {
       "name": "Spark",
-      "description": "Complete suite for small and medium portfolios"
+      "description": "For individuals with startup portfolios",
+      "button": "Choose Spark",
+      "features": {
+        "familyMembers": "{{count}} Family member",
+        "securities": "{{count}} Securities",
+        "preciousMetals": "{{count}} Precious metal",
+        "realEstate": "{{count}} Real estate & {{mortgages}} Mortgage",
+        "pensionAccounts": "{{count}} Pension accounts",
+        "liquidityAccounts": "{{count}} Liquidity accounts",
+        "budgetCategories": "{{categories}} Budget categories & {{items}} Budget items",
+        "financialInstitutions": "{{count}} Financial institutions",
+        "vaults": "{{count}} Vaults",
+        "bitcoinSetups": "{{count}} Bitcoin single sig setups (no passphrase)",
+        "wallets": "{{count}} Hardware & Software wallets each",
+        "backups": "{{count}} Seed & Descriptor backups each"
+      },
+      "sections": {
+        "balance": "Balance Section",
+        "budget": "Budget Section",
+        "cockpit": "Cockpit Section",
+        "futurePlanning": "Future Planning Section",
+        "login": "Standard or Zero-Knowledge Login",
+        "bitcoinMatrix": "Bitcoin Self Custody Security Matrix"
+      }
     },
-    "nakamoto": {
-      "name": "Nakamoto",
-      "description": "As many Bitcoin setups as you want"
+    "nova": {
+      "name": "Nova",
+      "description": "Complete suite for growing family wealth",
+      "button": "Choose Nova",
+      "features": {
+        "familyMembers": "{{count}} Family members",
+        "securities": "{{count}} Securities",
+        "preciousMetals": "{{count}} Precious metals",
+        "realEstate": "{{count}} Real estate & {{mortgages}} Mortgages",
+        "pensionAccounts": "{{count}} Pension accounts",
+        "liquidityAccounts": "{{count}} Liquidity accounts",
+        "budgetCategories": "{{categories}} Budget categories & {{items}} Budget items",
+        "financialInstitutions": "{{count}} Financial institutions",
+        "vaults": "{{count}} Vaults",
+        "bitcoinSetups": "{{count}} Bitcoin single sig setups with passphrase",
+        "wallets": "{{count}} Hardware & Software wallets each",
+        "backups": "{{count}} Seed, Passphrase & Descriptor backups each"
+      }
     },
-    "core": {
-      "name": "Core",
-      "description": "Complete suite for large portfolios"
-    },
-    "apex": {
-      "name": "Apex",
-      "description": "For wealth advisors and family offices"
-    },
-    "sathosi": {
-      "name": "Sathosi",
-      "description": "Bitcoin only. Because there is no second best."
+    "galaxy": {
+      "name": "Galaxy",
+      "description": "For families reaching for the stars",
+      "button": "Choose Galaxy",
+      "features": {
+        "familyMembers": "Unlimited Family members",
+        "securities": "Unlimited Securities",
+        "preciousMetals": "Unlimited Precious metals",
+        "realEstate": "Unlimited Real estate & Mortgages",
+        "pensionAccounts": "Unlimited Pension accounts",
+        "liquidityAccounts": "Unlimited Liquidity accounts",
+        "budgetCategories": "Unlimited Budget categories & Items",
+        "financialInstitutions": "Unlimited Financial institutions",
+        "vaults": "Unlimited Vaults",
+        "bitcoinSetups": "Unlimited Bitcoin setups",
+        "wallets": "Unlimited Hardware & Software wallets",
+        "backups": "Unlimited Seed, Passphrase & Descriptor backups"
+      }
     }
   },
   "authMethod": {
