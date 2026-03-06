@@ -164,7 +164,6 @@ const HeroSection: React.FC = () => {
                       <span className="text-base font-semibold text-blue-400">{t('hero.launchSpecial')}</span>
                     </div>
                     <h3 className="text-2xl font-bold text-white mb-2">{t('hero.lifetimeDiscount')}</h3>
-                    <p className="text-slate-400 text-sm">{t('hero.useCode')} <span className="font-mono font-bold text-amber-400 text-base">STAR50</span></p>
                   </div>
                   <div className="mb-4 p-4 bg-slate-800/60 border border-blue-500/20 rounded-xl">
                     <div className="flex items-center gap-2 mb-3">
@@ -277,7 +276,6 @@ const HeroSection: React.FC = () => {
                     <span className="text-base font-semibold text-blue-400">{t('hero.launchSpecial')}</span>
                   </div>
                   <h3 className="text-2xl font-bold text-white mb-2">{t('hero.lifetimeDiscount')}</h3>
-                  <p className="text-slate-400 text-sm">{t('hero.useCode')} <span className="font-mono font-bold text-amber-400 text-base">STAR50</span></p>
                 </div>
                 <div className="mb-4 p-4 bg-slate-800/60 border border-blue-500/20 rounded-xl">
                   <div className="flex items-center gap-2 mb-3">
