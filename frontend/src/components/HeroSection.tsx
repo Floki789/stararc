@@ -146,25 +146,131 @@ const HeroSection: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Column - Alternating Offer Cards (2 columns) */}
+          {/* Right Column - Offer Cards */}
+          {/* Mobile: both cards stacked, Desktop: alternating */}
           <div className="lg:col-span-2">
             {launchActive ? (
-            <div className="relative" style={{ minHeight: '700px' }}>
+            <>
+            {/* === MOBILE: Both cards stacked vertically === */}
+            <div className="flex flex-col gap-6 lg:hidden">
               
-              {/* === Launch Special Card === */}
+              {/* Launch Special Card (Mobile) */}
+              <div className="relative">
+                <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-2xl blur-xl opacity-30"></div>
+                <div className="relative bg-slate-900/80 backdrop-blur-xl border border-slate-800 rounded-2xl p-6 shadow-2xl">
+                  <div className="text-center mb-5">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full mb-3">
+                      <Sparkles className="w-5 h-5 text-blue-400" />
+                      <span className="text-base font-semibold text-blue-400">{t('hero.launchSpecial')}</span>
+                    </div>
+                    <h3 className="text-2xl font-bold text-white mb-2">{t('hero.lifetimeDiscount')}</h3>
+                    <p className="text-slate-400 text-sm">{t('hero.useCode')} <span className="font-mono font-bold text-amber-400 text-base">STAR50</span></p>
+                  </div>
+                  <div className="mb-4 p-4 bg-slate-800/60 border border-blue-500/20 rounded-xl">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Zap className="w-5 h-5 text-blue-400" />
+                      <span className="text-lg font-bold text-white">Nova</span>
+                      <span className="ml-auto px-2 py-0.5 bg-amber-500/15 border border-amber-500/30 rounded-full text-amber-400 text-xs font-semibold">{t('plans.discount')}</span>
+                    </div>
+                    <div className="flex items-baseline gap-3 mb-3">
+                      <span className="text-2xl text-slate-500 line-through font-bold">$190</span>
+                      <span className="text-3xl font-bold text-white">$95</span>
+                      <span className="text-slate-400 text-sm">/ {t('hero.perYear')}</span>
+                    </div>
+                    <div className="mb-2">
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span className="text-xs font-medium text-slate-400">{t('hero.stillAvailable')}</span>
+                        <span className="text-sm font-bold text-blue-400">{remainingNova} / 100</span>
+                      </div>
+                      <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
+                        <div className="h-full bg-gradient-to-r from-blue-500 to-cyan-500 transition-all duration-500 rounded-full" style={{ width: `${remainingNova}%` }} />
+                      </div>
+                    </div>
+                    <button onClick={() => navigate('/register?plan=nova')} className="w-full mt-3 px-4 py-2.5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/30 text-sm">
+                      {t('hero.getStartedNow')}
+                    </button>
+                  </div>
+                  <div className="mb-4 p-4 bg-slate-800/60 border border-purple-500/20 rounded-xl">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Globe className="w-5 h-5 text-purple-400" />
+                      <span className="text-lg font-bold text-white">Galaxy</span>
+                      <span className="ml-auto px-2 py-0.5 bg-amber-500/15 border border-amber-500/30 rounded-full text-amber-400 text-xs font-semibold">{t('plans.discount')}</span>
+                    </div>
+                    <div className="flex items-baseline gap-3 mb-3">
+                      <span className="text-2xl text-slate-500 line-through font-bold">$390</span>
+                      <span className="text-3xl font-bold text-white">$195</span>
+                      <span className="text-slate-400 text-sm">/ {t('hero.perYear')}</span>
+                    </div>
+                    <div className="mb-2">
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span className="text-xs font-medium text-slate-400">{t('hero.stillAvailable')}</span>
+                        <span className="text-sm font-bold text-purple-400">{remainingGalaxy} / 100</span>
+                      </div>
+                      <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
+                        <div className="h-full bg-gradient-to-r from-purple-500 to-indigo-500 transition-all duration-500 rounded-full" style={{ width: `${remainingGalaxy}%` }} />
+                      </div>
+                    </div>
+                    <button onClick={() => navigate('/register?plan=galaxy')} className="w-full mt-3 px-4 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/30 text-sm">
+                      {t('hero.getStartedNow')}
+                    </button>
+                  </div>
+                  <p className="text-center text-slate-500 text-xs mt-3">{t('hero.trialIncluded')}</p>
+                </div>
+              </div>
+
+              {/* Genesis Member Card (Mobile) */}
+              <div className="relative">
+                <div className="absolute -inset-1 bg-gradient-to-r from-amber-500 to-yellow-600 rounded-2xl blur-xl opacity-30"></div>
+                <div className="relative bg-slate-900/80 backdrop-blur-xl border border-amber-500/30 rounded-2xl p-6 shadow-2xl">
+                  <div className="text-center mb-6">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-500/10 border border-amber-500/30 rounded-full mb-4">
+                      <Crown className="w-5 h-5 text-amber-400" />
+                      <span className="text-base font-semibold text-amber-400">{t('hero.genesisExclusive')}</span>
+                    </div>
+                    <h3 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-300 mb-2">
+                      {t('hero.genesisTitle')}
+                    </h3>
+                    <p className="text-slate-400 text-sm">{t('hero.genesisSubtitle')}</p>
+                  </div>
+                  <div className="text-center mb-6 py-5 bg-gradient-to-b from-amber-500/10 to-transparent border border-amber-500/20 rounded-xl">
+                    <div className="text-5xl font-bold text-white mb-1">$1,999</div>
+                    <div className="text-amber-400 font-semibold text-sm">{t('hero.genesisOneTime')}</div>
+                  </div>
+                  <div className="space-y-4 mb-6">
+                    <div className="flex items-start gap-3 p-3 bg-slate-800/60 border border-purple-500/20 rounded-lg">
+                      <Globe className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
+                      <div>
+                        <div className="text-white font-semibold text-sm">{t('hero.genesisGalaxy')}</div>
+                        <div className="text-slate-400 text-xs">{t('hero.genesisGalaxyDesc')}</div>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3 p-3 bg-slate-800/60 border border-amber-500/20 rounded-lg">
+                      <Star className="w-5 h-5 text-amber-400 mt-0.5 flex-shrink-0" />
+                      <div>
+                        <div className="text-white font-semibold text-sm">{t('hero.genesisHallOfFame')}</div>
+                        <div className="text-slate-400 text-xs">{t('hero.genesisHallOfFameDesc')}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <button onClick={() => navigate('/register?plan=genesis')} className="w-full px-6 py-3.5 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-900 font-bold rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-amber-500/30 text-base">
+                    {t('hero.genesisButton')}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* === DESKTOP: Alternating cards with animation === */}
+            <div className="hidden lg:block relative" style={{ minHeight: '700px' }}>
+              
+              {/* Launch Special Card (Desktop) */}
               <div
                 className={`absolute inset-x-0 top-0 bottom-10 transition-all duration-700 ease-in-out ${
                   showGenesis ? 'opacity-0 pointer-events-none translate-x-4' : 'opacity-100 translate-x-0'
                 }`}
               >
               <div className="relative h-full">
-              {/* Glow effect behind card */}
               <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-2xl blur-xl opacity-30"></div>
-              
-              {/* Main card */}
               <div className="relative bg-slate-900/80 backdrop-blur-xl border border-slate-800 rounded-2xl p-6 shadow-2xl">
-                
-                {/* Header */}
                 <div className="text-center mb-5">
                   <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full mb-3">
                     <Sparkles className="w-5 h-5 text-blue-400" />
@@ -173,8 +279,6 @@ const HeroSection: React.FC = () => {
                   <h3 className="text-2xl font-bold text-white mb-2">{t('hero.lifetimeDiscount')}</h3>
                   <p className="text-slate-400 text-sm">{t('hero.useCode')} <span className="font-mono font-bold text-amber-400 text-base">STAR50</span></p>
                 </div>
-
-                {/* Nova Plan Card */}
                 <div className="mb-4 p-4 bg-slate-800/60 border border-blue-500/20 rounded-xl">
                   <div className="flex items-center gap-2 mb-3">
                     <Zap className="w-5 h-5 text-blue-400" />
@@ -186,28 +290,19 @@ const HeroSection: React.FC = () => {
                     <span className="text-3xl font-bold text-white">$95</span>
                     <span className="text-slate-400 text-sm">/ {t('hero.perYear')}</span>
                   </div>
-                  {/* Nova Counter */}
                   <div className="mb-2">
                     <div className="flex items-center justify-between mb-1.5">
                       <span className="text-xs font-medium text-slate-400">{t('hero.stillAvailable')}</span>
                       <span className="text-sm font-bold text-blue-400">{remainingNova} / 100</span>
                     </div>
                     <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
-                      <div 
-                        className="h-full bg-gradient-to-r from-blue-500 to-cyan-500 transition-all duration-500 rounded-full"
-                        style={{ width: `${remainingNova}%` }}
-                      />
+                      <div className="h-full bg-gradient-to-r from-blue-500 to-cyan-500 transition-all duration-500 rounded-full" style={{ width: `${remainingNova}%` }} />
                     </div>
                   </div>
-                  <button
-                    onClick={() => navigate('/register?plan=nova')}
-                    className="w-full mt-3 px-4 py-2.5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/30 text-sm"
-                  >
+                  <button onClick={() => navigate('/register?plan=nova')} className="w-full mt-3 px-4 py-2.5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/30 text-sm">
                     {t('hero.getStartedNow')}
                   </button>
                 </div>
-
-                {/* Galaxy Plan Card */}
                 <div className="mb-4 p-4 bg-slate-800/60 border border-purple-500/20 rounded-xl">
                   <div className="flex items-center gap-2 mb-3">
                     <Globe className="w-5 h-5 text-purple-400" />
@@ -219,46 +314,33 @@ const HeroSection: React.FC = () => {
                     <span className="text-3xl font-bold text-white">$195</span>
                     <span className="text-slate-400 text-sm">/ {t('hero.perYear')}</span>
                   </div>
-                  {/* Galaxy Counter */}
                   <div className="mb-2">
                     <div className="flex items-center justify-between mb-1.5">
                       <span className="text-xs font-medium text-slate-400">{t('hero.stillAvailable')}</span>
                       <span className="text-sm font-bold text-purple-400">{remainingGalaxy} / 100</span>
                     </div>
                     <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
-                      <div 
-                        className="h-full bg-gradient-to-r from-purple-500 to-indigo-500 transition-all duration-500 rounded-full"
-                        style={{ width: `${remainingGalaxy}%` }}
-                      />
+                      <div className="h-full bg-gradient-to-r from-purple-500 to-indigo-500 transition-all duration-500 rounded-full" style={{ width: `${remainingGalaxy}%` }} />
                     </div>
                   </div>
-                  <button
-                    onClick={() => navigate('/register?plan=galaxy')}
-                    className="w-full mt-3 px-4 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/30 text-sm"
-                  >
+                  <button onClick={() => navigate('/register?plan=galaxy')} className="w-full mt-3 px-4 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/30 text-sm">
                     {t('hero.getStartedNow')}
                   </button>
                 </div>
-
-                {/* Footer info */}
                 <p className="text-center text-slate-500 text-xs mt-3">{t('hero.trialIncluded')}</p>
               </div>
               </div>
               </div>
 
-              {/* === Genesis Member Card === */}
+              {/* Genesis Member Card (Desktop) */}
               <div
                 className={`absolute inset-x-0 top-0 bottom-10 transition-all duration-700 ease-in-out ${
                   showGenesis ? 'opacity-100 translate-x-0' : 'opacity-0 pointer-events-none -translate-x-4'
                 }`}
               >
               <div className="relative h-full">
-              {/* Glow effect - golden */}
               <div className="absolute -inset-1 bg-gradient-to-r from-amber-500 to-yellow-600 rounded-2xl blur-xl opacity-30"></div>
-              
               <div className="relative bg-slate-900/80 backdrop-blur-xl border border-amber-500/30 rounded-2xl p-6 shadow-2xl h-full flex flex-col">
-                
-                {/* Genesis Header */}
                 <div className="text-center mb-6">
                   <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-500/10 border border-amber-500/30 rounded-full mb-4">
                     <Crown className="w-5 h-5 text-amber-400" />
@@ -269,14 +351,10 @@ const HeroSection: React.FC = () => {
                   </h3>
                   <p className="text-slate-400 text-sm">{t('hero.genesisSubtitle')}</p>
                 </div>
-
-                {/* Price */}
                 <div className="text-center mb-6 py-5 bg-gradient-to-b from-amber-500/10 to-transparent border border-amber-500/20 rounded-xl">
                   <div className="text-5xl font-bold text-white mb-1">$1,999</div>
                   <div className="text-amber-400 font-semibold text-sm">{t('hero.genesisOneTime')}</div>
                 </div>
-
-                {/* Benefits */}
                 <div className="space-y-4 mb-6 flex-grow">
                   <div className="flex items-start gap-3 p-3 bg-slate-800/60 border border-purple-500/20 rounded-lg">
                     <Globe className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
@@ -293,19 +371,14 @@ const HeroSection: React.FC = () => {
                     </div>
                   </div>
                 </div>
-
-                {/* CTA */}
-                <button
-                  onClick={() => navigate('/register?plan=genesis')}
-                  className="w-full px-6 py-3.5 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-900 font-bold rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-amber-500/30 text-base"
-                >
+                <button onClick={() => navigate('/register?plan=genesis')} className="w-full px-6 py-3.5 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-900 font-bold rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-amber-500/30 text-base">
                   {t('hero.genesisButton')}
                 </button>
               </div>
               </div>
               </div>
 
-              {/* Dot indicators */}
+              {/* Dot indicators (Desktop only) */}
               <div className="absolute bottom-0 left-0 right-0 flex justify-center gap-2">
                 <button
                   onClick={() => setShowGenesis(false)}
@@ -321,6 +394,7 @@ const HeroSection: React.FC = () => {
                 />
               </div>
             </div>
+            </>
             ) : null}
           </div>
 
