@@ -517,6 +517,26 @@
     "zkRecoveryHint": "Falls du dein Spaceship-Passwort vergessen hast, kannst du es mit deiner 6-Wort Wiederherstellungsphrase zurücksetzen.",
     "zkRecoverButton": "Spaceship-Passwort wiederherstellen"
   },
+  "serverOverview": {
+    "title": "Login-Methode: Sovereignty-Modus",
+    "subtitle": "Deine Daten sind auf zwei unabhängige Server verteilt",
+    "stararc": {
+      "subtitle": "Authentifizierung & Kontoverwaltung",
+      "emailLogin": "E-Mail-Adresse",
+      "emailLoginDesc": "Deine registrierte E-Mail zur Identifikation",
+      "passwordLogin": "StarArc-Passwort",
+      "passwordLoginDesc": "Dein Kontopasswort für die Anmeldung",
+      "twoFactorInfo": "Optionale 2FA mit Authenticator-App und Backup-Codes für zusätzlichen Schutz deines StarArc-Kontos"
+    },
+    "spaceship": {
+      "subtitle": "Zero-Knowledge Datenverschlüsselung",
+      "passwordLogin": "Spaceship-Passwort",
+      "passwordLoginDesc": "Separates Passwort – nur du kennst es, der Server nie",
+      "recoveryWords": "6 Wiederherstellungswörter",
+      "recoveryWordsDesc": "BIP39-Passphrase zur Wiederherstellung deines Spaceship-Zugangs",
+      "zkInfo": "Zero-Knowledge Architektur: Der Server sieht nie deinen Schlüssel. Nur dein Passwort oder deine 6 Wörter können deine Daten entschlüsseln."
+    }
+  },
   "verifyEmailPage": {
     "title": "E-Mail-Bestätigung",
     "verifying": "Bestätige deine E-Mail-Adresse...",
@@ -608,8 +628,8 @@
   },
   "spaceshipAccess": {
     "unlockApp": "App freischalten",
-    "goToPortfolio": "Zum Stararc Portfolio",
-    "goToPortfolioZK": "Zum Portfolio (ZK-geschützt)",
+    "goToPortfolio": "Login to Spaceship Portfolio",
+    "goToPortfolioZK": "Login to Spaceship Portfolio",
     "loading": "Wird geladen...",
     "error": "Fehler beim Zugriff auf die Spaceship App"
   },
@@ -623,9 +643,9 @@
     "enabledOn": "Aktiviert am:",
     "securityIncreased": "Sicherheit erhöht",
     "securityIncreasedMessage": "Dein Konto und alle App-Zugriffe sind durch 2FA geschützt.",
-    "disableTitle": "2FA deaktivieren",
+    "disableTitle": "2FA für StarArc Login deaktivieren",
     "disableWarning": "Das Deaktivieren von 2FA reduziert die Sicherheit deines Kontos erheblich. Nur du solltest Zugriff auf deine Authenticator-App haben.",
-    "currentPassword": "Aktuelles Passwort:",
+    "currentPassword": "Aktuelles StarArc Login-Passwort:",
     "fillAllFields": "Bitte fülle alle Felder aus",
     "backupCodes": {
       "title": "Backup-Codes",

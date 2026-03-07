@@ -358,6 +358,26 @@
     "zkRecoveryHint": "If you forgot your Spaceship password, you can reset it using your 6-word recovery phrase.",
     "zkRecoverButton": "Recover Spaceship Password"
   },
+  "serverOverview": {
+    "title": "Login Method: Sovereignty Mode",
+    "subtitle": "Your data is distributed across two independent servers",
+    "stararc": {
+      "subtitle": "Authentication & Account Management",
+      "emailLogin": "Email Address",
+      "emailLoginDesc": "Your registered email for identification",
+      "passwordLogin": "StarArc Password",
+      "passwordLoginDesc": "Your account password for login",
+      "twoFactorInfo": "Optional 2FA with authenticator app and backup codes for additional protection of your StarArc account"
+    },
+    "spaceship": {
+      "subtitle": "Zero-Knowledge Data Encryption",
+      "passwordLogin": "Spaceship Password",
+      "passwordLoginDesc": "Separate password – only you know it, the server never does",
+      "recoveryWords": "6 Recovery Words",
+      "recoveryWordsDesc": "BIP39 passphrase for recovering your Spaceship access",
+      "zkInfo": "Zero-Knowledge architecture: The server never sees your key. Only your password or your 6 words can decrypt your data."
+    }
+  },
   "verifyEmailPage": {
     "title": "Email Verification",
     "verifying": "Verifying your email address...",
@@ -473,8 +493,8 @@
   },
   "spaceshipAccess": {
     "unlockApp": "Unlock App",
-    "goToPortfolio": "Go to Stararc Portfolio",
-    "goToPortfolioZK": "Go to Portfolio (ZK-Protected)",
+    "goToPortfolio": "Login to Spaceship Portfolio",
+    "goToPortfolioZK": "Login to Spaceship Portfolio",
     "loading": "Loading...",
     "error": "Error accessing Spaceship App"
   },
@@ -488,9 +508,9 @@
     "enabledOn": "Enabled on:",
     "securityIncreased": "Security Increased",
     "securityIncreasedMessage": "Your account and all app access are protected by 2FA.",
-    "disableTitle": "Disable 2FA",
+    "disableTitle": "Disable 2FA for StarArc Login",
     "disableWarning": "Disabling 2FA significantly reduces the security of your account. Only you should have access to your Authenticator app.",
-    "currentPassword": "Current Password:",
+    "currentPassword": "Current StarArc Login Password:",
     "fillAllFields": "Please fill in all fields",
     "backupCodes": {
       "title": "Backup Codes",

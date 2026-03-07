@@ -8,6 +8,7 @@ import SpaceshipAccessButton from '../components/SpaceshipAccessButton';
 import ApexManagement from '../components/ApexManagement';
 import TwoFactorManagement from '../components/TwoFactorManagement';
 import ZKRecoveryModal from '../components/ZKRecoveryModal';
+import ServerSecurityOverview from '../components/ServerSecurityOverview';
 import { useLanguage } from '../contexts/LanguageContext';
 
 interface Subscription {
@@ -531,42 +532,11 @@ const Dashboard: React.FC = () => {
 
 
 
-        {/* Two-Factor Authentication Management */}
-        <TwoFactorManagement />
-
-        {/* Zero-Knowledge Recovery - Only show for ZK users */}
-        {isZKUser && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="bg-slate-800/40 backdrop-blur-sm border border-amber-500/30 rounded-2xl p-6 mb-6"
-          >
-            <div className="flex items-center gap-4 mb-4">
-              <div className="p-3 rounded-full bg-amber-500/20">
-                <Key className="w-6 h-6 text-amber-400" />
-              </div>
-              <div className="flex-1">
-                <h2 className="text-xl font-bold text-white">
-                  {t('dashboard.zkEncryption')}
-                </h2>
-                <p className="text-amber-300 text-sm">
-                  {t('dashboard.zkSubtitle')}
-                </p>
-              </div>
-            </div>
-            
-            <p className="text-slate-300 text-sm mb-4">
-              {t('dashboard.zkRecoveryHint')}
-            </p>
-            
-            <button
-              onClick={() => setShowZKRecoveryModal(true)}
-              className="px-4 py-2 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 text-amber-300 rounded-lg font-medium transition-colors"
-            >
-              {t('dashboard.zkRecoverButton')}
-            </button>
-          </motion.div>
+        {/* Security Overview: ZK users get two-column layout, standard users get just 2FA */}
+        {isZKUser ? (
+          <ServerSecurityOverview onOpenZKRecovery={() => setShowZKRecoveryModal(true)} />
+        ) : (
+          <TwoFactorManagement />
         )}
 
         {/* ZK Recovery Modal */}
