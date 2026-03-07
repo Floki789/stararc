@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Shield, Star, Crown, Key } from 'lucide-react';
+import { Shield, Star, Crown } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import StripeAPIService from '../services/stripeService';
