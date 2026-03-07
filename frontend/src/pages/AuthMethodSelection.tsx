@@ -20,14 +20,13 @@ interface AuthMethod {
   cons: string[];
   bestFor: string;
   warningLevel: 'low' | 'high';
-  recommended?: boolean;
 }
 
 const AuthMethodSelection: React.FC = () => {
   const navigate = useNavigate();
   const { t } = useLanguage();
   const { updateUser } = useAuth();
-  const [selectedMethod, setSelectedMethod] = useState<AuthMethodType>('standard');
+  const [selectedMethod, setSelectedMethod] = useState<AuthMethodType | null>(null);
   const [showZKSetup, setShowZKSetup] = useState(false);
 
   const authMethods: AuthMethod[] = [
@@ -41,17 +40,13 @@ const AuthMethodSelection: React.FC = () => {
       borderColor: 'border-blue-500/50',
       pros: [
         t('authMethod.standard.pros.recovery'),
-        t('authMethod.standard.pros.changePassword'),
-        t('authMethod.standard.pros.encrypted'),
-        t('authMethod.standard.pros.recoveryPhrase')
+        t('authMethod.standard.pros.encrypted')
       ],
       cons: [
-        t('authMethod.standard.cons.serverData'),
-        t('authMethod.standard.cons.emailRequired')
+        t('authMethod.standard.cons.adminAccess')
       ],
       bestFor: t('authMethod.standard.bestFor'),
-      warningLevel: 'low',
-      recommended: true
+      warningLevel: 'low'
     },
     {
       id: 'sovereignty',
@@ -63,15 +58,11 @@ const AuthMethodSelection: React.FC = () => {
       borderColor: 'border-orange-500/50',
       pros: [
         t('authMethod.sovereignty.pros.zeroKnowledge'),
-        t('authMethod.sovereignty.pros.noServer'),
-        t('authMethod.sovereignty.pros.maxPrivacy'),
-        t('authMethod.sovereignty.pros.noEmail')
+        t('authMethod.sovereignty.pros.maxPrivacy')
       ],
       cons: [
-        t('authMethod.sovereignty.cons.noRecovery'),
-        t('authMethod.sovereignty.cons.lostForever'),
-        t('authMethod.sovereignty.cons.noPasswordChange'),
-        t('authMethod.sovereignty.cons.highResponsibility')
+        t('authMethod.sovereignty.cons.dualPassword'),
+        t('authMethod.sovereignty.cons.passphraseRecovery')
       ],
       bestFor: t('authMethod.sovereignty.bestFor'),
       warningLevel: 'high'
@@ -79,6 +70,7 @@ const AuthMethodSelection: React.FC = () => {
   ];
 
   const handleContinue = async () => {
+    if (!selectedMethod) return;
     if (selectedMethod === 'sovereignty') {
       setShowZKSetup(true);
       return;
@@ -156,18 +148,8 @@ const AuthMethodSelection: React.FC = () => {
                   : 'hover:bg-gray-700/50'
               }`}
             >
-              {/* Recommended Badge */}
-              {method.recommended && (
-                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                  <span className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
-                    <CheckCircle className="w-4 h-4" />
-                    {t('authMethod.recommended')}
-                  </span>
-                </div>
-              )}
-
-              {/* New: Privacy-First Badge for sovereignty */}
-              {method.id === 'sovereignty' && !method.recommended && (
+              {/* Badge for sovereignty */}
+              {method.id === 'sovereignty' && (
                 <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
                   <span className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-4 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
                     <Key className="w-4 h-4" />
@@ -190,8 +172,38 @@ const AuthMethodSelection: React.FC = () => {
                 )}
               </div>
 
+              {/* Pros */}
+              <div className="mb-3">
+                <span className="text-sm font-semibold text-green-400 mb-2 block">
+                  {t('authMethod.advantages')}
+                </span>
+                <ul className="space-y-1">
+                  {method.pros.map((pro, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm text-gray-300">
+                      <CheckCircle className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />
+                      {pro}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Cons */}
+              <div className="mb-4">
+                <span className="text-sm font-semibold text-red-400 mb-2 block">
+                  {t('authMethod.disadvantages')}
+                </span>
+                <ul className="space-y-1">
+                  {method.cons.map((con, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm text-gray-400">
+                      <AlertTriangle className="w-4 h-4 text-red-400 mt-0.5 flex-shrink-0" />
+                      {con}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
               {/* Best For */}
-              <div className="mb-4 p-3 bg-gray-800/50 rounded-lg border border-gray-700">
+              <div className="p-3 bg-gray-800/50 rounded-lg border border-gray-700">
                 <div className="flex items-center gap-2 mb-1">
                   <Info className="w-4 h-4 text-gray-400" />
                   <span className="text-sm font-semibold text-gray-300">
@@ -217,7 +229,8 @@ const AuthMethodSelection: React.FC = () => {
         >
           <button
             onClick={handleContinue}
-            className="px-8 py-3 font-semibold rounded-lg transition-all duration-200 flex items-center justify-center gap-2 btn-primary hover:shadow-lg hover:scale-105"
+            disabled={!selectedMethod}
+            className={`px-8 py-3 font-semibold rounded-lg transition-all duration-200 flex items-center justify-center gap-2 ${selectedMethod ? 'btn-primary hover:shadow-lg hover:scale-105' : 'bg-gray-600 text-gray-400 cursor-not-allowed'}`}
           >
             {t('authMethod.continue')}
             <span>→</span>

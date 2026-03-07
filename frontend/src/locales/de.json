@@ -626,7 +626,26 @@
     "disableTitle": "2FA deaktivieren",
     "disableWarning": "Das Deaktivieren von 2FA reduziert die Sicherheit deines Kontos erheblich. Nur du solltest Zugriff auf deine Authenticator-App haben.",
     "currentPassword": "Aktuelles Passwort:",
-    "fillAllFields": "Bitte fülle alle Felder aus"
+    "fillAllFields": "Bitte fülle alle Felder aus",
+    "backupCodes": {
+      "title": "Backup-Codes",
+      "used": "Backup-Code verwendet. Noch {{remaining}} Codes verfügbar.",
+      "lowWarning": "Nur noch {{remaining}} Backup-Codes übrig! Bitte generiere neue Codes in den Sicherheitseinstellungen.",
+      "allUsedWarning": "Alle Backup-Codes aufgebraucht! Ohne Authenticator-App kannst du dich nicht mehr einloggen. Generiere jetzt neue Codes.",
+      "regenerate": "Neue Backup-Codes generieren",
+      "regenerateTitle": "Backup-Codes erneuern",
+      "regenerateWarning": "Alle bisherigen Backup-Codes werden ungültig und durch 10 neue ersetzt.",
+      "regenerateConfirm": "Neue Codes generieren",
+      "regenerated": "10 neue Backup-Codes wurden generiert.",
+      "enterToken": "Bitte gib einen gültigen 2FA-Code (6-stellig) oder Backup-Code (8-stellig) ein.",
+      "enterTokenLabel": "2FA-Code oder Backup-Code:",
+      "cancel": "Abbrechen",
+      "copyAll": "Alle Codes kopieren",
+      "copied": "Kopiert!",
+      "saveWarning": "Speichere diese Codes an einem sicheren Ort. Sie werden nur einmal angezeigt.",
+      "forceRegenerateHint": "Du wirst nach dem Login automatisch zur Erneuerung deiner Backup-Codes weitergeleitet.",
+      "done": "Fertig"
+    }
   },
   "assetOrganization": {
     "wealthAssetsTitle": "Vermögenswerte",
@@ -962,14 +981,11 @@
       "name": "Standard-Modus",
       "tagline": "Sicher mit Wiederherstellungsoptionen",
       "pros": {
-        "recovery": "Passwort-Wiederherstellung möglich",
-        "changePassword": "Passwort jederzeit änderbar",
-        "encrypted": "Verschlüsselte Schlüssel-Speicherung",
-        "recoveryPhrase": "6-Wort-Wiederherstellungsphrase als Backup"
+        "recovery": "Passwort-Wiederherstellung möglich via Email",
+        "encrypted": "Daten werden auf deinem Gerät verschlüsselt und an den Server gesendet"
       },
       "cons": {
-        "serverData": "Verschlüsselter Schlüssel auf Server gespeichert",
-        "emailRequired": "E-Mail-Adresse erforderlich"
+        "adminAccess": "StarArc Admin kann theoretisch deine Daten lesen"
       },
       "bestFor": "Die meisten Nutzer, die Sicherheit mit Seelenfrieden wünschen"
     },
@@ -977,16 +993,12 @@
       "name": "Souveränitäts-Modus",
       "tagline": "Maximale Privatsphäre, Maximale Verantwortung",
       "pros": {
-        "zeroKnowledge": "Echtes Zero-Knowledge (Server weiß nichts)",
-        "noServer": "Keine Daten auf Server gespeichert",
-        "maxPrivacy": "Maximale Privatsphäre-Garantie",
-        "noEmail": "Keine E-Mail erforderlich"
+        "zeroKnowledge": "Nur du kannst deine Daten lesen, niemand sonst (Zero-Knowledge)",
+        "maxPrivacy": "Maximale Privatsphäre-Garantie"
       },
       "cons": {
-        "noRecovery": "KEINE Passwort-Wiederherstellung möglich",
-        "lostForever": "Verloren = Für immer verloren",
-        "noPasswordChange": "Login-Code kann nicht geändert werden",
-        "highResponsibility": "100% Nutzer-Verantwortung"
+        "dualPassword": "Für ein Login benötigst du E-Mail & Passwort sowie ein zweites Passwort für die Entschlüsselung deiner Daten",
+        "passphraseRecovery": "Passwort-Wiederherstellung für Entschlüsselung nur mit Passphrase (6 Wörter)"
       },
       "bestFor": "Privatsphäre-Puristen, Bitcoin-Maximalisten, fortgeschrittene Nutzer",
       "warning": {

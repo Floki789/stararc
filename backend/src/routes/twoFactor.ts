@@ -300,6 +300,49 @@ router.get('/status', authMiddleware, async (req: AuthRequest, res): Promise<any
   }
 });
 
+// Get remaining backup codes count
+router.get('/backup-codes/remaining', authMiddleware, async (req: AuthRequest, res): Promise<any> => {
+  try {
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return res.status(401).json({ error: 'User not authenticated' });
+    }
+
+    const user = await pool.query(
+      'SELECT two_factor_enabled, encrypted_backup_codes FROM users WHERE id = $1',
+      [userId]
+    );
+
+    if (!user.rows[0]?.two_factor_enabled) {
+      return res.json({ remaining: 0, total: 10, warning: null, enabled: false });
+    }
+
+    let remaining = 0;
+    if (user.rows[0].encrypted_backup_codes) {
+      try {
+        const { UserEncryptionService } = require('../services/userEncryptionService');
+        const decryptedCodesJson = UserEncryptionService.decryptWithMasterKey(user.rows[0].encrypted_backup_codes);
+        const backupCodes: string[] = JSON.parse(decryptedCodesJson);
+        remaining = backupCodes.length;
+      } catch (error) {
+        console.error('Error decrypting backup codes for count:', error);
+      }
+    }
+
+    res.json({
+      remaining,
+      total: 10,
+      warning: remaining === 0 ? 'all_used' : remaining <= 3 ? 'low' : null,
+      enabled: true
+    });
+
+  } catch (error) {
+    console.error('Backup codes remaining error:', error);
+    res.status(500).json({ error: 'Failed to check backup codes' });
+  }
+});
+
 // Verify backup code
 router.post('/verify-backup', authMiddleware, async (req: AuthRequest, res): Promise<any> => {
   try {
@@ -311,26 +354,30 @@ router.post('/verify-backup', authMiddleware, async (req: AuthRequest, res): Pro
     }
 
     const user = await pool.query(
-      'SELECT two_factor_backup_codes FROM users WHERE id = $1 AND two_factor_enabled = TRUE',
+      'SELECT encrypted_backup_codes FROM users WHERE id = $1 AND two_factor_enabled = TRUE',
       [userId]
     );
 
-    if (!user.rows[0]?.two_factor_backup_codes) {
+    if (!user.rows[0]?.encrypted_backup_codes) {
       return res.status(400).json({ error: 'No backup codes available' });
     }
 
-    const backupCodes = user.rows[0].two_factor_backup_codes;
-    const codeIndex = backupCodes.indexOf(backupCode.toUpperCase());
+    // Decrypt backup codes
+    const { UserEncryptionService } = require('../services/userEncryptionService');
+    const decryptedCodesJson = UserEncryptionService.decryptWithMasterKey(user.rows[0].encrypted_backup_codes);
+    const backupCodes: string[] = JSON.parse(decryptedCodesJson);
+    const codeIndex = backupCodes.findIndex(code => code.toUpperCase() === backupCode.toUpperCase());
 
     if (codeIndex === -1) {
       return res.status(400).json({ error: 'Invalid backup code' });
     }
 
-    // Remove used backup code
+    // Remove used backup code and re-encrypt
     backupCodes.splice(codeIndex, 1);
+    const encryptedUpdatedCodes = UserEncryptionService.encryptWithMasterKey(JSON.stringify(backupCodes));
     await pool.query(
-      'UPDATE users SET two_factor_backup_codes = $1 WHERE id = $2',
-      [backupCodes, userId]
+      'UPDATE users SET encrypted_backup_codes = $1 WHERE id = $2',
+      [encryptedUpdatedCodes, userId]
     );
 
     res.json({ 
@@ -355,13 +402,13 @@ router.post('/regenerate-backup-codes', authMiddleware, async (req: AuthRequest,
       return res.status(401).json({ error: 'User not authenticated' });
     }
 
-    if (!token || token.length !== 6) {
-      return res.status(400).json({ error: '2FA token required' });
+    if (!token || (token.length !== 6 && token.length !== 8)) {
+      return res.status(400).json({ error: '2FA token or backup code required' });
     }
 
     // Get user's 2FA secret and status
     const user = await pool.query(
-      'SELECT encrypted_two_factor_secret, two_factor_enabled FROM users WHERE id = $1',
+      'SELECT encrypted_two_factor_secret, encrypted_backup_codes, two_factor_enabled FROM users WHERE id = $1',
       [userId]
     );
 
@@ -369,25 +416,47 @@ router.post('/regenerate-backup-codes', authMiddleware, async (req: AuthRequest,
       return res.status(400).json({ error: '2FA is not enabled' });
     }
 
-    // Verify 2FA token
+    // Verify token: backup code (8 hex chars) or TOTP (6 digits)
     const { UserEncryptionService } = require('../services/userEncryptionService');
-    let twoFactorSecret;
-    try {
-      twoFactorSecret = UserEncryptionService.decryptWithMasterKey(user.rows[0].encrypted_two_factor_secret);
-    } catch (error) {
-      return res.status(500).json({ error: 'Failed to decrypt 2FA secret' });
+    let verified = false;
+    const isBackupCode = /^[0-9A-Fa-f]{8}$/.test(token);
+
+    if (isBackupCode && user.rows[0].encrypted_backup_codes) {
+      try {
+        const decryptedCodesJson = UserEncryptionService.decryptWithMasterKey(user.rows[0].encrypted_backup_codes);
+        const existingCodes: string[] = JSON.parse(decryptedCodesJson);
+        const codeIndex = existingCodes.findIndex(code => code.toUpperCase() === token.toUpperCase());
+        if (codeIndex !== -1) {
+          // Remove the used backup code before regenerating
+          existingCodes.splice(codeIndex, 1);
+          verified = true;
+          console.log(`✅ Backup code verified for regeneration. Was ${existingCodes.length + 1}, now regenerating.`);
+        }
+      } catch (error) {
+        console.error('Error verifying backup code for regeneration:', error);
+      }
     }
 
-    const speakeasy = require('speakeasy');
-    const verified = speakeasy.totp.verify({
-      secret: twoFactorSecret,
-      encoding: 'base32',
-      token: token,
-      window: 1
-    });
+    if (!verified) {
+      // Try as regular 2FA TOTP token
+      let twoFactorSecret;
+      try {
+        twoFactorSecret = UserEncryptionService.decryptWithMasterKey(user.rows[0].encrypted_two_factor_secret);
+      } catch (error) {
+        return res.status(500).json({ error: 'Failed to decrypt 2FA secret' });
+      }
+
+      const speakeasy = require('speakeasy');
+      verified = speakeasy.totp.verify({
+        secret: twoFactorSecret,
+        encoding: 'base32',
+        token: token,
+        window: 1
+      });
+    }
 
     if (!verified) {
-      return res.status(400).json({ error: 'Invalid 2FA token' });
+      return res.status(400).json({ error: 'Invalid 2FA token or backup code' });
     }
 
     // Generate 10 new backup codes (replaces old ones)

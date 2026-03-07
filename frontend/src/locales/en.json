@@ -491,7 +491,26 @@
     "disableTitle": "Disable 2FA",
     "disableWarning": "Disabling 2FA significantly reduces the security of your account. Only you should have access to your Authenticator app.",
     "currentPassword": "Current Password:",
-    "fillAllFields": "Please fill in all fields"
+    "fillAllFields": "Please fill in all fields",
+    "backupCodes": {
+      "title": "Backup Codes",
+      "used": "Backup code used. {{remaining}} codes remaining.",
+      "lowWarning": "Only {{remaining}} backup codes left! Please generate new codes in your security settings.",
+      "allUsedWarning": "All backup codes used up! You won't be able to log in without your authenticator app. Generate new codes now.",
+      "regenerate": "Generate new backup codes",
+      "regenerateTitle": "Regenerate Backup Codes",
+      "regenerateWarning": "All existing backup codes will become invalid and be replaced with 10 new ones.",
+      "regenerateConfirm": "Generate new codes",
+      "regenerated": "10 new backup codes have been generated.",
+      "enterToken": "Please enter a valid 2FA code (6 digits) or backup code (8 characters).",
+      "enterTokenLabel": "2FA code or backup code:",
+      "cancel": "Cancel",
+      "copyAll": "Copy all codes",
+      "copied": "Copied!",
+      "saveWarning": "Save these codes in a secure place. They will only be shown once.",
+      "forceRegenerateHint": "You will be automatically redirected to regenerate your backup codes after login.",
+      "done": "Done"
+    }
   },
   "heroSection": {
     "animations": {
@@ -803,14 +822,11 @@
       "name": "Standard Mode",
       "tagline": "Secure with Recovery Options",
       "pros": {
-        "recovery": "Password recovery available",
-        "changePassword": "Change password anytime",
-        "encrypted": "Encrypted data key storage",
-        "recoveryPhrase": "6-word recovery phrase backup"
+        "recovery": "Password recovery possible via email",
+        "encrypted": "Data is encrypted on your device and sent to the server"
       },
       "cons": {
-        "serverData": "Encrypted key stored on server",
-        "emailRequired": "Email address required"
+        "adminAccess": "StarArc admin could theoretically read your data"
       },
       "bestFor": "Most users who want security with peace of mind"
     },
@@ -818,16 +834,12 @@
       "name": "Sovereignty Mode",
       "tagline": "Maximum Privacy, Maximum Responsibility",
       "pros": {
-        "zeroKnowledge": "True Zero-Knowledge (server knows nothing)",
-        "noServer": "No data stored on server",
-        "maxPrivacy": "Maximum privacy guarantee",
-        "noEmail": "No email required"
+        "zeroKnowledge": "Only you can read your data, no one else (Zero-Knowledge)",
+        "maxPrivacy": "Maximum privacy guarantee"
       },
       "cons": {
-        "noRecovery": "NO password recovery possible",
-        "lostForever": "Lost access = Lost forever",
-        "noPasswordChange": "Cannot change login code",
-        "highResponsibility": "100% user responsibility"
+        "dualPassword": "Login requires email & password plus a second password for decrypting your data",
+        "passphraseRecovery": "Password recovery for decryption only possible with passphrase (6 words)"
       },
       "bestFor": "Privacy purists, Bitcoin maximalists, advanced users",
       "warning": {

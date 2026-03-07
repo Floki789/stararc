@@ -5,6 +5,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { useLanguage } from '../contexts/LanguageContext';
 import { unwrapDEKForLogin, storeDEKInSession } from '../utils/clientCrypto';
+import { AlertTriangle, CheckCircle, X } from 'lucide-react';
 
 interface LoginFormData {
   email: string;
@@ -37,6 +38,8 @@ const Login: React.FC = () => {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isLoading, setIsLoading] = useState(false);
   const [requires2FA, setRequires2FA] = useState(false);
+  const [backupCodeModal, setBackupCodeModal] = useState<{ type: 'success' | 'warning' | 'critical'; remaining: number } | null>(null);
+  const [pendingNavigate, setPendingNavigate] = useState<string | null>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -105,15 +108,14 @@ const Login: React.FC = () => {
         // Check if backup code was used
         if (data.backupCodeUsed) {
           const remaining = data.remainingBackupCodes;
-          let message = `✓ Backup-Code verwendet und verbraucht.\nNoch ${remaining} Backup-Codes verfügbar.`;
           
-          if (data.shouldRegenerateBackupCodes) {
-            message += `\n\n⚠️ Warnung: Nur noch ${remaining} Backup-Code${remaining !== 1 ? 's' : ''} übrig!\n\nUm neue Backup-Codes zu erhalten, deaktivieren Sie 2FA in den Sicherheitseinstellungen und aktivieren Sie es anschließend wieder.\n\nSie erhalten dann automatisch 10 neue Backup-Codes.\n(Sie haben auch eine E-Mail mit dieser Information erhalten)`;
+          if (remaining === 0) {
+            setBackupCodeModal({ type: 'critical', remaining });
+          } else if (data.shouldRegenerateBackupCodes) {
+            setBackupCodeModal({ type: 'warning', remaining });
+          } else {
+            setBackupCodeModal({ type: 'success', remaining });
           }
-          
-          setTimeout(() => {
-            alert(message);
-          }, 100);
         }
 
         // Store token and user data in localStorage
@@ -146,30 +148,28 @@ const Login: React.FC = () => {
         // Check user's onboarding step and redirect accordingly
         const onboardingStep = data.user.onboardingStep || 'registration';
         
+        // Determine navigation target
+        let navTarget = '/subscription-selection';
         switch (onboardingStep) {
           case 'registration':
-            // User just registered, needs to select subscription
-            navigate('/subscription-selection', { replace: true });
+            navTarget = '/subscription-selection';
             break;
-            
           case 'subscription_selection':
-            // User has subscription but needs to select auth method
-            navigate('/auth-method-selection', { replace: true });
-            break;
-            
           case 'auth_method_selection':
-            // User selected auth method but hasn't completed setup
-            navigate('/auth-method-selection', { replace: true });
+            navTarget = '/auth-method-selection';
             break;
-            
           case 'completed':
-            // User completed onboarding - go to dashboard first
-            navigate(from, { replace: true });
+            navTarget = from;
             break;
-            
           default:
-            // Fallback to subscription selection
-            navigate('/subscription-selection', { replace: true });
+            navTarget = '/subscription-selection';
+        }
+
+        // If backup code modal needs to show, defer navigation
+        if (data.backupCodeUsed) {
+          setPendingNavigate(navTarget);
+        } else {
+          navigate(navTarget, { replace: true });
         }
       } else {
         if (data.errors && Array.isArray(data.errors)) {
@@ -376,6 +376,96 @@ const Login: React.FC = () => {
           </div>
         </motion.form>
       </motion.div>
+
+      {/* Backup Code Warning Modal */}
+      {backupCodeModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-gray-900 rounded-xl border border-gray-700 max-w-md w-full"
+          >
+            <div className="p-6 border-b border-gray-700">
+              <div className="flex items-center justify-between">
+                <h2 className="text-lg font-bold text-white flex items-center">
+                  {backupCodeModal.type === 'critical' ? (
+                    <AlertTriangle className="w-5 h-5 text-red-400 mr-2" />
+                  ) : backupCodeModal.type === 'warning' ? (
+                    <AlertTriangle className="w-5 h-5 text-yellow-400 mr-2" />
+                  ) : (
+                    <CheckCircle className="w-5 h-5 text-green-400 mr-2" />
+                  )}
+                  {t('twoFactor.backupCodes.title')}
+                </h2>
+                <button
+                  onClick={() => {
+                    setBackupCodeModal(null);
+                    if (pendingNavigate) {
+                      navigate(pendingNavigate, { replace: true });
+                      setPendingNavigate(null);
+                    }
+                  }}
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+            
+            <div className="p-6">
+              {backupCodeModal.type === 'critical' ? (
+                <div className="bg-red-900/20 border border-red-500/30 rounded-lg p-4 mb-4">
+                  <p className="text-red-300 text-sm">
+                    {t('twoFactor.backupCodes.allUsedWarning')}
+                  </p>
+                </div>
+              ) : backupCodeModal.type === 'warning' ? (
+                <div className="bg-yellow-900/20 border border-yellow-500/30 rounded-lg p-4 mb-4">
+                  <p className="text-yellow-300 text-sm">
+                    {t('twoFactor.backupCodes.lowWarning').replace('{{remaining}}', String(backupCodeModal.remaining))}
+                  </p>
+                </div>
+              ) : (
+                <div className="bg-green-900/20 border border-green-500/30 rounded-lg p-4 mb-4">
+                  <p className="text-green-300 text-sm">
+                    {t('twoFactor.backupCodes.used').replace('{{remaining}}', String(backupCodeModal.remaining))}
+                  </p>
+                </div>
+              )}
+
+              <div className="text-center text-sm text-gray-400 mb-4">
+                <span className={`font-mono font-bold text-lg ${
+                  backupCodeModal.remaining === 0 ? 'text-red-400' : backupCodeModal.remaining <= 3 ? 'text-yellow-400' : 'text-green-400'
+                }`}>
+                  {backupCodeModal.remaining} / 10
+                </span>
+                <span className="block mt-1">{t('twoFactor.backupCodes.title')}</span>
+              </div>
+
+              {backupCodeModal.remaining <= 2 && backupCodeModal.remaining > 0 && (
+                <div className="bg-yellow-900/20 border border-yellow-500/30 rounded-lg p-3 mb-4">
+                  <p className="text-yellow-300 text-xs">
+                    {t('twoFactor.backupCodes.forceRegenerateHint')}
+                  </p>
+                </div>
+              )}
+
+              <button
+                onClick={() => {
+                  setBackupCodeModal(null);
+                  if (pendingNavigate) {
+                    navigate(pendingNavigate, { replace: true });
+                    setPendingNavigate(null);
+                  }
+                }}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition-colors"
+              >
+                OK
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 };
