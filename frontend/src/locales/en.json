@@ -748,11 +748,11 @@
   "plans": {
     "title": "Plans & Pricing",
     "subtitle": "Choose the perfect plan for your needs",
-    "headerText": "All plans include a 14-day free trial • Billed annually • Cancel anytime",
+    "headerText": "All plans include a 30-day free trial • Billed annually • Cancel anytime",
     "perYear": "per year",
     "launchSpecial": "🔥 Launch Special",
     "discount": "50% OFF",
-    "freeTrial": "14 days free trial",
+    "freeTrial": "30 days free trial",
     "annualBilling": "Annual billing",
     "currentPlan": "Current Plan",
     "popular": "Popular",
