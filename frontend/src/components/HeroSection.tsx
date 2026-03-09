@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import { Sparkles, Calendar, Zap, Globe, Crown, Star } from 'lucide-react';
-import { TypewriterSubtitle } from './TypewriterSubtitle';
+import { ClaimsSubtitle } from './ClaimsSubtitle';
 
 const HeroSection: React.FC = () => {
   const { t } = useLanguage();
@@ -112,10 +112,10 @@ const HeroSection: React.FC = () => {
 
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full py-16">
-        <div className="grid lg:grid-cols-5 gap-12 items-center">
+        <div className="grid lg:grid-cols-6 gap-12 items-center">
           
-          {/* Left Column - Main Message (3 columns) */}
-          <div className="lg:col-span-3 space-y-8">
+          {/* Left Column - Main Message (4 columns) */}
+          <div className="lg:col-span-4 space-y-8">
             {/* Launch Banner */}
             <div className="text-center mb-8">
               <div className="inline-flex flex-wrap items-center justify-center gap-4">
@@ -141,7 +141,7 @@ const HeroSection: React.FC = () => {
                 </span>
               </h1>
               
-              <TypewriterSubtitle />
+              <ClaimsSubtitle />
 
             </div>
           </div>

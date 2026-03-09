@@ -236,7 +236,7 @@ export class StripeService {
         ...additionalMetadata
       },
       subscription_data: {
-        trial_period_days: 14,
+        trial_period_days: 30,
         metadata: {
           userId: userId.toString(),
           planId: planId,

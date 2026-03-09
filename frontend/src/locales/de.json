@@ -16,11 +16,11 @@
     "launchSpecial": "Launch Special",
     "launchPrice": "Launch-Preis",
     "perYear": "pro Jahr",
-    "freeTrialButton": "14 Tage kostenlos testen",
+    "freeTrialButton": "30 Tage kostenlos testen",
     "registerAndStart": "Jetzt registrieren & starten",
     "lifetimeDiscount": "50% Lifetime Rabatt",
     "useCode": "Nutze Code",
-    "trialIncluded": "Inkl. 14 Tage kostenlose Testphase • Jederzeit kündbar",
+    "trialIncluded": "Inkl. 30 Tage kostenlose Testphase • Jederzeit kündbar",
     "novaPlan": "Nova Plan",
     "officialLaunch": "Offizieller StarArc Launch am 21. März 2026",
     "daysRemaining": "Tage verbleibend",
@@ -907,11 +907,11 @@
   "plans": {
     "title": "Pläne & Preise",
     "subtitle": "Wähle den perfekten Plan für deine Bedürfnisse",
-    "headerText": "Alle Pläne beinhalten 14 Tage kostenlose Testphase • Jährliche Abrechnung • Jederzeit kündbar",
+    "headerText": "Alle Pläne beinhalten 30 Tage kostenlose Testphase • Jährliche Abrechnung • Jederzeit kündbar",
     "perYear": "pro Jahr",
     "launchSpecial": "🔥 Launch Special",
     "discount": "50% RABATT",
-    "freeTrial": "14 Tage kostenlos testen",
+    "freeTrial": "30 Tage kostenlos testen",
     "annualBilling": "Jährliche Abrechnung",
     "currentPlan": "Aktueller Plan",
     "popular": "Beliebt",
@@ -1090,14 +1090,25 @@
   "animations": {
     "wealthManager": {
       "headline": {
-        "part1": "Auf dem Weg",
-        "part2": "zu den Sternen"
+        "part1": "Plane deine",
+        "part2": "finanzielle Zukunft"
       },
       "subtext": "Übernimm die Kontrolle über dein Vermögen und Budget. Entwirf Zukunftsszenarien. Verwahre dezentral, verwalte zentral.",
       "subtitles": [
         "Dein persönlicher Vermögensverwaltungs-Hub mit Fokus auf Privatsphäre, Security und Eigenverwahrung.",
         "Übernimm die Kontrolle über dein Vermögen und Budget. Entwirf Zukunftsszenarien. Verwahre dezentral, verwalte zentral.",
         "Wähle unser limitiertes Startup-Angebot mit 53% Rabatt oder teste StarArc einen Monat kostenlos."
+      ],
+      "claims": [
+        "Dein persönlicher Wealth-Management-Hub.",
+        "Übernimm die Kontrolle über dein gesamtes Vermögen und Budget.",
+        "Speichere dezentral, verwalte zentral.",
+        "Alle Anlageklassen, ein Überblick.",
+        "Bitcoin-Eigenverwahrung integriert.",
+        "Entwirf Zukunftsszenarien.",
+        "Deine Daten - durch Verschlüsselung geschützt.",
+        "Zero-Knowledge, wenn du möchtest!",
+        "Vermögensschutz für Generationen."
       ],
       "features": {
         "control": "Budget und Portfolio-Kontrolle",

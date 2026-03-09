@@ -16,11 +16,11 @@
     "launchSpecial": "Launch Special",
     "launchPrice": "Launch Price",
     "perYear": "per year",
-    "freeTrialButton": "Try 14 days for free",
+    "freeTrialButton": "Try 30 days for free",
     "registerAndStart": "Register now & get started",
     "lifetimeDiscount": "50% Lifetime Discount",
     "useCode": "Use code",
-    "trialIncluded": "Includes 14-day free trial • Cancel anytime",
+    "trialIncluded": "Includes 30-day free trial • Cancel anytime",
     "novaPlan": "Nova Plan",
     "officialLaunch": "Official StarArc Launch on March 21, 2026",
     "daysRemaining": "days remaining",
@@ -931,14 +931,25 @@
   "animations": {
     "wealthManager": {
       "headline": {
-        "part1": "Reaching for",
-        "part2": "the stars"
+        "part1": "Plan your",
+        "part2": "financial future"
       },
       "subtext": "Take control of your wealth and budget. Design future scenarios. Store decentrally, manage centrally.",
       "subtitles": [
         "Your personal Wealth Management Hub with a focus on privacy, security and self-custody.",
         "Take control of your wealth and budget. Design future scenarios. Store decentrally, manage centrally.",
         "Choose our limited startup offer with 53% discount or try StarArc free for one month."
+      ],
+      "claims": [
+        "Your personal Wealth Management Hub.",
+        "Take control of your entire wealth and budget.",
+        "Store decentrally, manage centrally.",
+        "Every asset class, one overview.",
+        "With Bitcoin self-custody integration.",
+        "Design future scenarios.",
+        "Your data protected by encryption.",
+        "Zero-Knowledge if you want!",
+        "Safeguard wealth access for generations."
       ],
       "features": {
         "control": "Portfolio Control",
