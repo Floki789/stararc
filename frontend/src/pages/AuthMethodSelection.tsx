@@ -649,13 +649,22 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
               <label className="block text-sm font-medium text-gray-300 mb-2">
                 {t('zkSetup.confirmPasswordLabel')}
               </label>
-              <input
-                type={showPassword ? 'text' : 'password'}
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full px-4 py-3 bg-gray-900 border border-gray-600 rounded-lg text-white focus:border-orange-500 focus:ring-1 focus:ring-orange-500 outline-none"
-                placeholder={t('zkSetup.confirmPasswordPlaceholder')}
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="w-full px-4 py-3 bg-gray-900 border border-gray-600 rounded-lg text-white focus:border-orange-500 focus:ring-1 focus:ring-orange-500 outline-none"
+                  placeholder={t('zkSetup.confirmPasswordPlaceholder')}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
+                >
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </div>
               {confirmPassword && !passwordsMatch && (
                 <p className="text-red-400 text-sm mt-1">{t('zkSetup.passwordsMismatch')}</p>
               )}
