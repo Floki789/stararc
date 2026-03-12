@@ -39,14 +39,14 @@ const Dashboard: React.FC = () => {
       try {
         const token = localStorage.getItem('token');
         if (!token) return false;
-        
+
         const apiUrl = (import.meta as any).env.VITE_API_URL || 'http://localhost:3004';
         const response = await fetch(`${apiUrl}/api/auth/me`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
         });
-        
+
         if (response.ok) {
           const data = await response.json();
           const freshUserData = {
@@ -59,16 +59,15 @@ const Dashboard: React.FC = () => {
             loginMethodSelected: data.user.loginMethodSelected,
             spaceshipIntegrationCompleted: data.user.spaceshipIntegrationCompleted
           };
-          
+
           // Update localStorage with fresh data
           localStorage.setItem('user', JSON.stringify(freshUserData));
-          
+
           // Check onboarding status with fresh data (skip redirect if coming from Stripe)
           if (!skipOnboardingRedirect) {
             // First, check if user has completed onboarding but hasn't selected login method
             // (for users created before auth method selection was implemented)
             if (freshUserData.onboardingStep === 'completed' && !freshUserData.loginMethodSelected) {
-              console.log('User has completed onboarding but no login method selected, redirecting to auth-method-selection');
               navigate('/auth-method-selection');
               return false;
             }
@@ -131,17 +130,14 @@ const Dashboard: React.FC = () => {
     try {
       // If this is a new subscription from Stripe, poll for activation
       if (isNew) {
-        console.log('🔧 TEST MODE: Checking for auto-activated subscription...');
         let attempts = 0;
-        const maxAttempts = 3; // Reduced to 3 seconds for test mode with auto-activation
-        
+        const maxAttempts = 3;
+
         while (attempts < maxAttempts) {
           const subData = await StripeAPIService.getSubscriptionStatus();
-          
+
           // Check if subscription is activated
           if (subData.hasSubscription && ['Free', 'Spark', 'Nova', 'Galaxy', 'Apex'].includes(subData.plan)) {
-            console.log('🔧 Subscription activated!', subData.plan);
-            
             // Subscription confirmed - check onboarding status
             // For new users: webhook sets onboarding_step to 'auth_method_selection' → redirect
             // For upgrades: webhook preserves 'completed' → stay on dashboard
@@ -153,11 +149,10 @@ const Dashboard: React.FC = () => {
             if (meResponse.ok) {
               const meData = await meResponse.json();
               const step = meData.user.onboardingStep;
-              console.log('🔍 Onboarding step after subscription:', step);
-              
+
               // Only redirect if onboarding is NOT completed (new user flow)
               if (step === 'completed') {
-                console.log('✅ Upgrade detected - onboarding already completed, staying on dashboard');
+                // Upgrade detected - onboarding already completed, staying on dashboard
               } else if (step === 'auth_method_selection' || step === 'subscription_selection') {
                 navigate('/auth-method-selection');
                 return;
@@ -186,8 +181,6 @@ const Dashboard: React.FC = () => {
         }
         
         // Timeout - auto-activation might have failed, try manual activation
-        console.error('TEST MODE: Auto-activation timeout - subscription not activated after 3 seconds');
-        console.log('🔧 Attempting manual subscription activation...');
         
         try {
           // Try to get session ID from URL params or session storage
@@ -206,9 +199,8 @@ const Dashboard: React.FC = () => {
             });
             
             if (response.ok) {
-              const result = await response.json();
-              console.log('🔧 Manual activation successful:', result);
-              
+              await response.json();
+
               // Refresh subscription data
               const subData = await StripeAPIService.getSubscriptionStatus();
               if (subData.hasSubscription) {
@@ -235,11 +227,7 @@ const Dashboard: React.FC = () => {
       }
       
       // Normal load (not new subscription)
-      // Load actual subscription data from backend
-      console.log('🔍 Dashboard: Loading subscription data for normal user...');
       try {
-        console.log('🔍 Dashboard: Calling getSubscriptionStatus()...');
-        
         // Add timeout to prevent hanging
         const timeoutPromise = new Promise((_, reject) => 
           setTimeout(() => reject(new Error('Subscription API timeout')), 1000)
@@ -250,7 +238,6 @@ const Dashboard: React.FC = () => {
           timeoutPromise
         ]) as any;
         
-        console.log('🔍 Dashboard: Got subscription data:', subData);
         setSubscription({
           plan: subData.plan || 'free',
           status: subData.status || 'active',
@@ -259,7 +246,6 @@ const Dashboard: React.FC = () => {
           canceledAt: subData.canceledAt,
           spaceshipIntegrationCompleted: subData.spaceshipIntegrationCompleted
         });
-        console.log('🔍 Dashboard: Subscription set successfully');
       } catch (error) {
         console.error('Failed to load subscription data:', error);
         // Fallback to free plan
@@ -270,7 +256,6 @@ const Dashboard: React.FC = () => {
         });
       }
       
-      console.log('🔍 Dashboard: Setting loading to false');
       setLoading(false);
       
     } catch (error) {

@@ -808,9 +808,9 @@ router.post('/create-spaceship-access', authMiddleware, async (req: Request, res
       parentUserId: user.id,
       languageCode: userData.language_code || 'de'
     });    if (!spaceshipResponse.success) {
-      return res.status(500).json({ 
-        error: 'Failed to create spaceship access',
-        details: spaceshipResponse.error
+      console.error('Spaceship access creation failed:', spaceshipResponse.error);
+      return res.status(500).json({
+        error: 'Failed to create spaceship access'
       });
     }
     
