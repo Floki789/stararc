@@ -16,7 +16,7 @@ export class AuthService {
       throw new Error('JWT_SECRET environment variable is required');
     }
     this.jwtSecret = process.env.JWT_SECRET;
-    this.jwtExpiration = process.env.JWT_EXPIRATION || '7d';
+    this.jwtExpiration = process.env.JWT_EXPIRATION || '24h';
   }
 
   // Hash password
@@ -563,7 +563,7 @@ export class AuthService {
         secret: secret,
         encoding: 'base32',
         token: token,
-        window: 2 // Allow 2 time steps of tolerance
+        window: 1 // Allow 1 time step of tolerance (±30 seconds)
       });
     } catch (error) {
       console.error('2FA verification error:', error);

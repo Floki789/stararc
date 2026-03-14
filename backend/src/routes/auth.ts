@@ -599,13 +599,14 @@ router.post('/resend-verification', authLimiter, async (req: Request, res: Respo
     const { token: verificationToken, language: userLang } = await authService.resendEmailVerification(email);
     await emailService.sendEmailVerification(email, '', verificationToken, userLang);
 
-    res.json({ message: 'Verification email sent successfully' });
+    res.json({ message: 'Verification email sent if account exists and is not yet verified' });
   } catch (error: any) {
-    console.error('Resend verification error:', error);
-    
     if (error.message === 'User not found') {
-      return res.status(404).json({ error: 'User not found' });
+      // Don't reveal whether the account exists - return same response as success
+      return res.json({ message: 'Verification email sent if account exists and is not yet verified' });
     }
+
+    console.error('Resend verification error:', error);
     
     if (error.message === 'Email already verified') {
       return res.status(400).json({ error: 'Email is already verified' });
@@ -1752,47 +1753,6 @@ router.get('/apex-client-spaceship-details/:clientId', authMiddleware, async (re
   } catch (error: any) {
     console.error('Get client Spaceship details error:', error);
     res.status(500).json({ error: 'Failed to get client details' });
-  }
-});
-
-// Generate cross-app token for automatic Spaceship login
-router.post('/generate-cross-app-token', authMiddleware, async (req: Request, res: Response): Promise<any> => {
-  try {
-    const user = (req as any).user;
-    
-    // Generate auth key for cross-app authentication
-    const authKey = crypto.randomBytes(32).toString('hex');
-    
-    // Store auth key in database temporarily (expires in 5 minutes)
-    const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes from now
-    
-    await pool.query(
-      'INSERT INTO user_auth_keys (user_id, auth_key, expires_at) VALUES ($1, $2, $3) ON CONFLICT (user_id) DO UPDATE SET auth_key = $2, expires_at = $3',
-      [user.id, authKey, expiresAt]
-    );
-    
-    // Generate JWT token for cross-app authentication
-    const jwt = require('jsonwebtoken');
-    const secret = process.env.JWT_SECRET || 'fallback-secret';
-    
-    const token = jwt.sign({
-      authKey,
-      authMethod: 'stararc_key',
-      subscriptionPlan: user.subscription_plan,
-      crossApp: true,
-      source: 'stararc',
-      userId: user.id
-    }, secret, { expiresIn: '5m' });
-    
-    res.json({
-      success: true,
-      token,
-      expiresIn: 300 // 5 minutes in seconds
-    });
-    
-  } catch (error: any) {
-    console.error('Generate cross-app token error:', error);
-    res.status(500).json({ error: 'Failed to generate cross-app token' });
   }
 });
 
