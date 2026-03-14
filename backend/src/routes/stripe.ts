@@ -594,9 +594,12 @@ router.get('/subscription', authMiddleware, async (req, res): Promise<any> => {
 });
 
 // Test endpoint to verify logging works
-router.post('/test-webhook', async (req, res) => {
+router.post('/test-webhook', async (req, res): Promise<any> => {
+  if (process.env.NODE_ENV === 'production') {
+    return res.status(404).json({ error: 'Not found' });
+  }
   console.log('🚨 TEST WEBHOOK CALLED - This should appear in logs!');
-  res.json({ test: 'success', timestamp: new Date().toISOString() });
+  return res.json({ test: 'success', timestamp: new Date().toISOString() });
 });
 
 // ============================================================
