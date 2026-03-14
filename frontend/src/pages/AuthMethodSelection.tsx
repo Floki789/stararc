@@ -31,6 +31,24 @@ const AuthMethodSelection: React.FC = () => {
 
   const authMethods: AuthMethod[] = [
     {
+      id: 'standard',
+      name: t('authMethod.standard.name'),
+      tagline: t('authMethod.standard.tagline'),
+      icon: Shield,
+      iconColor: 'text-blue-400',
+      bgGradient: 'from-blue-500/10 to-purple-500/10',
+      borderColor: 'border-blue-500/50',
+      pros: [
+        t('authMethod.standard.pros.recovery'),
+        t('authMethod.standard.pros.encrypted')
+      ],
+      cons: [
+        t('authMethod.standard.cons.adminAccess')
+      ],
+      bestFor: t('authMethod.standard.bestFor'),
+      warningLevel: 'low'
+    },
+    {
       id: 'sovereignty',
       name: t('authMethod.sovereignty.name'),
       tagline: t('authMethod.sovereignty.tagline'),
@@ -48,24 +66,6 @@ const AuthMethodSelection: React.FC = () => {
       ],
       bestFor: t('authMethod.sovereignty.bestFor'),
       warningLevel: 'high'
-    },
-    {
-      id: 'standard',
-      name: t('authMethod.standard.name'),
-      tagline: t('authMethod.standard.tagline'),
-      icon: Shield,
-      iconColor: 'text-blue-400',
-      bgGradient: 'from-blue-500/10 to-purple-500/10',
-      borderColor: 'border-blue-500/50',
-      pros: [
-        t('authMethod.standard.pros.recovery'),
-        t('authMethod.standard.pros.encrypted')
-      ],
-      cons: [
-        t('authMethod.standard.cons.adminAccess')
-      ],
-      bestFor: t('authMethod.standard.bestFor'),
-      warningLevel: 'low'
     }
   ];
 
