@@ -156,7 +156,7 @@ router.post('/verify', authMiddleware, async (req: AuthRequest, res): Promise<an
         const userEmail = UserEncryptionService.decryptWithMasterKey(userData.rows[0].admin_encrypted_email);
         const userAlias = UserEncryptionService.decryptWithMasterKey(userData.rows[0].admin_encrypted_alias);
         await emailService.send2FAEnabled(userEmail, userAlias, userData.rows[0].language_code || 'de');
-        console.log(`✅ 2FA enabled notification sent to ${userEmail}`);
+        console.log(`✅ 2FA enabled notification sent to user ${userId}`);
       }
     } catch (emailError) {
       console.error('⚠️ Failed to send 2FA enabled email (non-critical):', emailError);

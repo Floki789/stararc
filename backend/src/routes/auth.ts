@@ -230,27 +230,17 @@ router.get('/verify-email', async (req: Request, res: Response): Promise<any> =>
     
     // Optionally send welcome email and admin notification
     try {
-      // Decrypt email for welcome message
-      const adminKey = process.env.ADMIN_ENCRYPTION_KEY;
-      if (adminKey && user.admin_encrypted_email) {
-        const decipher = crypto.createDecipheriv(
-          'aes-256-gcm',
-          Buffer.from(adminKey, 'hex'),
-          Buffer.from(user.admin_encrypted_email.iv, 'hex')
-        );
-        decipher.setAuthTag(Buffer.from(user.admin_encrypted_email.authTag, 'hex'));
-        let email = decipher.update(user.admin_encrypted_email.encryptedData, 'hex', 'utf8');
-        email += decipher.final('utf8');
+      if (user.admin_encrypted_email) {
+        const userEmail = UserEncryptionService.decryptWithMasterKey(user.admin_encrypted_email);
         
-        await emailService.sendWelcomeEmail(email, 'User', user.language_code || 'de');
+        await emailService.sendWelcomeEmail(userEmail, 'User', user.language_code || 'de');
         console.log(`📧 Welcome email sent to user ${user.id}`);
         
-        // Send admin notification
+        // Send admin notification (no PII in log, only in email body)
         emailService.sendAdminNotification(`User hat Email verifiziert`, {
-          'Email': email,
           'User-ID': user.id,
           'Zeitpunkt': new Date().toLocaleString('de-CH', { timeZone: 'Europe/Zurich' })
-        }).catch(err => console.error('Admin notification failed:', err));
+        }).catch((err: Error) => console.error('Admin notification failed:', err));
       }
     } catch (welcomeError) {
       console.error('❌ Failed to send welcome email:', welcomeError);
@@ -286,7 +276,7 @@ router.post('/login', authLimiter, loginValidation, async (req: Request, res: Re
     
     // Check if user has 2FA enabled
     const userQuery = await pool.query(
-      'SELECT two_factor_enabled, encrypted_two_factor_secret, encrypted_backup_codes, language_code FROM users WHERE id = $1',
+      'SELECT two_factor_enabled, encrypted_two_factor_secret, encrypted_backup_codes, language_code, admin_encrypted_email, admin_encrypted_alias FROM users WHERE id = $1',
       [loginResult.user.id]
     );
     
@@ -340,17 +330,18 @@ router.post('/login', authLimiter, loginValidation, async (req: Request, res: Re
             (loginResult as any).shouldRegenerateBackupCodes = remainingCodes <= 3;
             
             // Send email warning if ≤3 codes remaining
-            if (remainingCodes <= 3) {
+            if (remainingCodes <= 3 && userWith2FA.admin_encrypted_email) {
               try {
-                const { EmailService } = require('../services/emailService');
-                const emailService = new EmailService();
+                const decryptedEmail = UserEncryptionService.decryptWithMasterKey(userWith2FA.admin_encrypted_email);
+                const decryptedAlias = userWith2FA.admin_encrypted_alias
+                  ? UserEncryptionService.decryptWithMasterKey(userWith2FA.admin_encrypted_alias)
+                  : 'User';
                 await emailService.sendBackupCodesLowWarning(
-                  userWith2FA.email,
-                  userWith2FA.alias || userWith2FA.email,
+                  decryptedEmail,
+                  decryptedAlias,
                   remainingCodes,
                   userWith2FA.language_code || 'de'
                 );
-                console.log(`📧 Sent backup codes low warning email (${remainingCodes} codes remaining)`);
               } catch (emailError) {
                 console.error('Failed to send backup codes warning email:', emailError);
                 // Don't fail login if email fails
@@ -641,18 +632,13 @@ router.post('/forgot-password', authLimiter, forgotPasswordValidation, async (re
     // Request password reset
     const { token: resetToken, language: userLang } = await authService.requestPasswordReset(email);
     
-    console.log(`🔍 DEBUG: Email: ${email}, ResetToken: ${resetToken}`);
-    
     if (resetToken !== 'Password reset email sent if account exists') {
       // Send reset email (only if user exists, but don't reveal this)
       try {
         await emailService.sendPasswordReset(email, '', resetToken, userLang);
-        console.log(`📧 Email sent successfully to ${email}`);
       } catch (emailError) {
-        console.log(`📧 Email failed (DEV MODE - ignored):`, (emailError as Error).message);
+        console.error('Password reset email failed:', (emailError as Error).message);
       }
-    } else {
-      console.log(`❌ User with email ${email} not found`);
     }
 
     // Return response with optional dev token
@@ -791,7 +777,6 @@ router.post('/create-spaceship-access', authMiddleware, async (req: Request, res
     }
     
     const userData = userWithPlan.rows[0];
-    console.log('🔍 User data from DB:', { id: userData.id, email: userData.email, subscription_plan: userData.subscription_plan, language_code: userData.language_code });
     
     // Check if user already has spaceship access
     if (userData.spaceship_auth_key) {
@@ -852,6 +837,9 @@ router.post('/create-spaceship-access', authMiddleware, async (req: Request, res
 
 // GET /api/auth/debug-user-plan - Debug endpoint to check user subscription plan
 router.get('/debug-user-plan', authMiddleware, async (req: Request, res: Response): Promise<any> => {
+  if (process.env.NODE_ENV !== 'development') {
+    return res.status(404).json({ error: 'Not found' });
+  }
   try {
     const user = (req as any).user;
     
@@ -1310,7 +1298,7 @@ router.post('/generate-spaceship-token', authMiddleware, async (req: Request, re
       success: true,
       spaceshipToken,
       expiresIn: 300, // 5 minutes in seconds
-      redirectUrl: `${spaceshipUrl}/login/cross-app?token=${encodeURIComponent(spaceshipToken)}`
+      redirectUrl: `${spaceshipUrl}/login/cross-app#?token=${encodeURIComponent(spaceshipToken)}`
     });
     
   } catch (error: any) {
