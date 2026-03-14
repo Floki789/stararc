@@ -22,19 +22,12 @@ export class UserEncryptionService {
     if (!masterKey) {
       throw new Error('ADMIN_USER_DATA_ENCRYPTION_KEY environment variable is required');
     }
-    // SECURITY NOTE (M2): The key is stored as a UTF-8 string and the first 32 bytes are used.
-    // If ADMIN_USER_DATA_ENCRYPTION_KEY is a 64-char hex string (e.g. generated via
-    // `openssl rand -hex 32`), this takes the ASCII bytes of the hex chars — NOT the decoded
-    // 256-bit value. This reduces effective entropy to the key's ASCII character range.
-    // Changing this derivation would require a full re-encryption migration of all admin-
-    // encrypted columns. Until then: keep behavior consistent (encrypt/decrypt matched).
-    // TODO: Plan a migration to `Buffer.from(masterKey, 'hex')` with re-encryption of all
-    //        admin_encrypted_* columns.
-    const keyBuffer = Buffer.from(masterKey, 'utf8');
-    if (keyBuffer.length < 32) {
-      throw new Error('ADMIN_USER_DATA_ENCRYPTION_KEY must be at least 32 bytes (UTF-8)');
+    // Key is a 64-char hex string (openssl rand -hex 32) → decode to 32 raw bytes (256 bit)
+    const keyBuffer = Buffer.from(masterKey, 'hex');
+    if (keyBuffer.length !== 32) {
+      throw new Error('ADMIN_USER_DATA_ENCRYPTION_KEY must be a 64-character hex string (openssl rand -hex 32)');
     }
-    return keyBuffer.slice(0, 32);
+    return keyBuffer;
   }
 
   private static getEmailHashSalt(): string {
