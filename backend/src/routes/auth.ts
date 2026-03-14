@@ -721,6 +721,13 @@ router.post('/reset-password', authLimiter, resetPasswordValidation, async (req:
       });
     }
     
+    if (error.message === '2FA_BACKUP_MISSING') {
+      return res.status(400).json({
+        error: '2FA_BACKUP_MISSING',
+        message: 'Password reset is not possible because the 2FA backup is unavailable. Please contact support to disable 2FA before resetting your password.'
+      });
+    }
+    
     if (error.message === 'Invalid 2FA code') {
       return res.status(400).json({ error: 'Invalid 2FA code' });
     }
@@ -1092,7 +1099,8 @@ router.post('/recover-zk', authMiddleware, async (req: Request, res: Response): 
       if (authKeyResult.rows[0]?.spaceship_auth_key) {
         // Decrypt the auth key
         const masterKey = process.env.SPACESHIP_AUTH_ENCRYPTION_KEY;
-        if (masterKey) {
+        const internalSecret = process.env.STARARC_INTERNAL_SECRET;
+        if (masterKey && internalSecret) {
           const encryptedData = JSON.parse(authKeyResult.rows[0].spaceship_auth_key);
           const authKey = decryptAuthKey(encryptedData, masterKey);
           
@@ -1101,7 +1109,7 @@ router.post('/recover-zk', authMiddleware, async (req: Request, res: Response): 
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'X-StarArc-Internal': process.env.STARARC_INTERNAL_SECRET || 'dev-secret'
+              'X-StarArc-Internal': internalSecret
             },
             body: JSON.stringify({
               auth_key: authKey,
@@ -1336,7 +1344,10 @@ async function createSpaceshipUser({ authKey, subscriptionPlan, parentUserId, la
     
     // Create JWT token for StarArc authentication
     const jwt = require('jsonwebtoken');
-    const CROSS_APP_JWT_SECRET = process.env.CROSS_APP_JWT_SECRET || 'shared-cross-app-secret';
+    const CROSS_APP_JWT_SECRET = process.env.CROSS_APP_JWT_SECRET;
+    if (!CROSS_APP_JWT_SECRET) {
+      throw new Error('CROSS_APP_JWT_SECRET environment variable is required');
+    }
     
     const stararcToken = jwt.sign({
       authKey: authKey,  // Use the raw auth key

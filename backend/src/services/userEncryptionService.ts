@@ -26,7 +26,11 @@ export class UserEncryptionService {
   }
 
   private static getEmailHashSalt(): string {
-    return process.env.EMAIL_HASH_SALT || 'default-salt-change-in-production';
+    const salt = process.env.EMAIL_HASH_SALT;
+    if (!salt) {
+      throw new Error('EMAIL_HASH_SALT environment variable is required');
+    }
+    return salt;
   }
 
   /**

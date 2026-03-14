@@ -12,7 +12,10 @@ export class AuthService {
 
   constructor(pool: Pool) {
     this.pool = pool;
-    this.jwtSecret = process.env.JWT_SECRET || 'your-secret-key';
+    if (!process.env.JWT_SECRET) {
+      throw new Error('JWT_SECRET environment variable is required');
+    }
+    this.jwtSecret = process.env.JWT_SECRET;
     this.jwtExpiration = process.env.JWT_EXPIRATION || '7d';
   }
 
@@ -59,7 +62,10 @@ export class AuthService {
 
   // Create server-side wrapped DEK for admin password reset capability
   private createWrappedDEKServer(dekBase64: string, uniqueIdentifier: string): string {
-    const serverSecret = process.env.DEK_SERVER_SECRET || process.env.SPACESHIP_AUTH_ENCRYPTION_KEY || 'default-server-secret';
+    const serverSecret = process.env.DEK_SERVER_SECRET || process.env.SPACESHIP_AUTH_ENCRYPTION_KEY;
+    if (!serverSecret) {
+      throw new Error('DEK_SERVER_SECRET (or SPACESHIP_AUTH_ENCRYPTION_KEY) environment variable is required');
+    }
     
     // Derive server KEK from secret + unique identifier
     // Note: 100000 iterations is sufficient for server KEK since SECRET is already strong
@@ -83,7 +89,10 @@ export class AuthService {
 
   // Unwrap server-side DEK for cross-app login (standard users only)
   public unwrapDEKServer(wrappedDekServer: string, uniqueIdentifier: string): string {
-    const serverSecret = process.env.DEK_SERVER_SECRET || process.env.SPACESHIP_AUTH_ENCRYPTION_KEY || 'default-server-secret';
+    const serverSecret = process.env.DEK_SERVER_SECRET || process.env.SPACESHIP_AUTH_ENCRYPTION_KEY;
+    if (!serverSecret) {
+      throw new Error('DEK_SERVER_SECRET (or SPACESHIP_AUTH_ENCRYPTION_KEY) environment variable is required');
+    }
     
     // Derive server KEK from secret + unique identifier (same as createWrappedDEKServer)
     const salt = crypto.createHash('sha256').update(uniqueIdentifier).digest();
@@ -408,7 +417,10 @@ export class AuthService {
           
           console.log('✅ 2FA verified for password reset using admin-encrypted secret');
         } else {
-          console.log('⚠️ 2FA enabled but no admin-encrypted secret found - allowing reset without 2FA');
+          // No admin backup of 2FA secret – block the reset to prevent 2FA bypass.
+          // This can happen for accounts created before admin-encrypted 2FA backup was introduced.
+          // The user must contact support to disable 2FA before resetting their password.
+          throw new Error('2FA_BACKUP_MISSING');
         }
       }
 
