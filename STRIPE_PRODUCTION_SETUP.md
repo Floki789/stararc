@@ -47,7 +47,7 @@ Apex Live:   price_ZZZZZZZZZZZZZ (ersetze diesen Wert)
 ### Im Stripe Dashboard:
 1. **Navigiere zu**: Developers → Webhooks
 2. **Klicke auf**: "Add endpoint"
-3. **Endpoint URL**: `https://stararc-app-e576e504324e.herokuapp.com/api/stripe/webhook`
+3. **Endpoint URL**: `https://www.stararc.one/api/stripe/webhook`
 4. **Events auswählen**:
    - `checkout.session.completed`
    - `customer.subscription.updated`
