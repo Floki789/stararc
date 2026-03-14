@@ -14,7 +14,7 @@ export class UserEncryptionService {
   private static readonly IV_LENGTH = 12;  // 96 bits for GCM
   private static readonly TAG_LENGTH = 16; // 128 bits auth tag
   private static readonly SALT_LENGTH = 32; // 256 bits
-  private static readonly PBKDF2_ITERATIONS = 100000;
+  private static readonly PBKDF2_ITERATIONS = 600000; // OWASP 2024 recommendation (matches frontend)
   
   // Environment variables getter methods
   private static getMasterKey(): Buffer {
