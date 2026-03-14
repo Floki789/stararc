@@ -1,169 +1,311 @@
 # Heroku US → EU Region Migration Plan
 
 **Created:** 2 March 2026  
-**Status:** Not started  
-**Apps:** `stararc-app` + `spaceship-app`
+**Updated:** 14 March 2026  
+**Status:** Ready to execute  
+**Apps:** `stararc-app` + `spaceship-app` (US) → `stararc` + `spaceship` (EU)
+
+> **Entscheidung:** Essential-0 Postgres ($10/Monat für beide Apps)  
+> **Erwarteter Gewinn:** 75% Latenz-Reduktion (150-200ms → 20-50ms für CH/EU)
 
 > Heroku apps can't be moved between regions — you must create new apps in EU, transfer config/data/domains, then delete the old US apps.
 
 ---
 
-## Phase 1: Preparation
+## Phase 1: Backups erstellen (~10 Minuten)
 
-- [ ] **Backup both databases locally**
+**Zeitpunkt:** Jederzeit (keine Downtime)
+
+- [ ] **Datenbank-Backups erstellen**
   ```bash
-  heroku pg:backups:capture -a stararc-app
-  heroku pg:backups:download -a stararc-app -o stararc-backup.dump
+  # Backups triggern
   heroku pg:backups:capture -a spaceship-app
-  heroku pg:backups:download -a spaceship-app -o spaceship-backup.dump
+  heroku pg:backups:capture -a stararc-app
+  
+  # Lokal herunterladen (mit Datum im Dateinamen)
+  heroku pg:backups:download -a spaceship-app -o spaceship-backup-20260314.dump
+  heroku pg:backups:download -a stararc-app -o stararc-backup-20260314.dump
   ```
 
-- [ ] **Export all config vars** from both apps
+- [ ] **Config Vars exportieren**
   ```bash
-  heroku config -a stararc-app -s > stararc-config.env
-  heroku config -a spaceship-app -s > spaceship-config.env
+  heroku config -a spaceship-app -s > spaceship-config-20260314.env
+  heroku config -a stararc-app -s > stararc-config-20260314.env
   ```
 
-- [ ] **Note current addon details** (Postgres plan, any others)
+- [ ] **Aktuelle Addon-Info notieren**
   ```bash
-  heroku addons -a stararc-app
   heroku addons -a spaceship-app
-  heroku pg:info -a stararc-app
+  heroku addons -a stararc-app
   heroku pg:info -a spaceship-app
+  heroku pg:info -a stararc-app
   ```
 
 ---
 
-## Phase 2: Create New EU Apps
+## Phase 2: EU-Apps erstellen (~5 Minuten)
 
-- [ ] **Create new apps in EU region**
+**Zeitpunkt:** Jederzeit (keine Downtime)
+
+- [ ] **Apps in EU-Region erstellen**
   ```bash
-  heroku create stararc-eu --region eu
-  heroku create spaceship-eu --region eu
+  # Finale Namen (kein -eu Suffix nötig, da spaceship ≠ spaceship-app)
+  heroku create spaceship --region eu
+  heroku create stararc --region eu
+  
+  # Region verifizieren
+  heroku info -a spaceship | grep Region    # → eu
+  heroku info -a stararc | grep Region      # → eu
   ```
 
-- [ ] **Add Postgres addons** (match current plan tier)
+- [ ] **Essential-0 Postgres hinzufügen**
   ```bash
-  heroku addons:create heroku-postgresql:essential-0 -a stararc-eu
-  heroku addons:create heroku-postgresql:essential-0 -a spaceship-eu
+  heroku addons:create heroku-postgresql:essential-0 -a spaceship
+  heroku addons:create heroku-postgresql:essential-0 -a stararc
+  
+  # Warten bis provisioniert
+  heroku addons:wait -a spaceship
+  heroku addons:wait -a stararc
   ```
+  
+  **Kosten:** $5/Monat pro App = **$10/Monat total**
 
-- [ ] **Restore databases** to new apps
+- [ ] **Datenbanken wiederherstellen**
   ```bash
-  heroku pg:backups:restore stararc-backup.dump DATABASE_URL -a stararc-eu --confirm stararc-eu
-  heroku pg:backups:restore spaceship-backup.dump DATABASE_URL -a spaceship-eu --confirm spaceship-eu
+  heroku pg:backups:restore spaceship-backup-20260314.dump DATABASE_URL -a spaceship --confirm spaceship
+  heroku pg:backups:restore stararc-backup-20260314.dump DATABASE_URL -a stararc --confirm stararc
   ```
 
 ---
 
-## Phase 3: Configure New Apps
+## Phase 3: Konfiguration (~10 Minuten)
 
-- [ ] **Set all config vars** on new apps from exported files
-  - Do NOT override `DATABASE_URL` (auto-set by new Postgres addon)
-  - All shared secrets must be identical between apps:
-    - `SPACESHIP_HMAC_SECRET`
-    - `CROSS_APP_JWT_SECRET`
-    - `INTERNAL_API_SECRET`
-    - `JWT_SECRET`
+**Zeitpunkt:** Jederzeit (keine Downtime)
 
-- [ ] **Update cross-app URL references** in config vars
+- [ ] **Alle Config Vars setzen**
+  
+  **Wichtig:** Diese 4 Secrets MÜSSEN zwischen beiden Apps identisch sein:
+  - `CROSS_APP_JWT_SECRET`
+  - `SPACESHIP_HMAC_SECRET`
+  - `INTERNAL_API_SECRET`
+  - `JWT_SECRET`
+  
+  Verwende die Werte aus `SECRETS_BACKUP.txt` (v240)!
 
-  | Variable | Old Value | New Value |
-  |----------|-----------|-----------|
-  | `VITE_STARSHIP_API_URL` (stararc) | `https://spaceship-app-05fdc7b20f43.herokuapp.com` | New spaceship-eu Heroku URL |
-  | `SPACESHIP_URL` (stararc) | `https://spaceship.stararc.one` | Same (custom domain) |
-  | `STARARC_API_URL` (spaceship) | `https://stararc.one` | Same (custom domain) |
-
----
-
-## Phase 4: Deploy Code
-
-- [ ] **Add new Heroku remotes and push code**
   ```bash
-  cd stararc && heroku git:remote -a stararc-eu -r heroku-eu && git push heroku-eu main
-  cd spaceship && heroku git:remote -a spaceship-eu -r heroku-eu && git push heroku-eu main
+  # Config vars einzeln setzen oder batch via heroku config:set
+  # NICHT DATABASE_URL überschreiben (wird automatisch gesetzt)
   ```
 
-- [ ] **Verify builds succeed** and apps start on new EU dynos
+- [ ] **Cross-App URLs aktualisieren**
+  
+  | Variable | Wert |
+  |----------|------|
+  | `VITE_STARSHIP_API_URL` (stararc) | Neue spaceship Heroku URL |
+  | `SPACESHIP_URL` (stararc) | `https://spaceship.stararc.one` |
+  | `STARARC_API_URL` (spaceship) | `https://stararc.one` |
+
+- [ ] **Backup Schedule einrichten**
+  ```bash
+  # Tägliche Backups um 02:00 Schweizer Zeit
+  heroku pg:backups:schedule DATABASE_URL --at "02:00 Europe/Zurich" -a spaceship
+  heroku pg:backups:schedule DATABASE_URL --at "02:00 Europe/Zurich" -a stararc
+  
+  # Retention auf 2 Wochen setzen
+  heroku pg:backups:retention DATABASE_URL --weeks 2 -a spaceship
+  heroku pg:backups:retention DATABASE_URL --weeks 2 -a stararc
+  ```
+
+- [ ] **Preboot aktivieren** (Zero-Downtime Deployments)
+  ```bash
+  heroku features:enable preboot -a spaceship
+  heroku features:enable preboot -a stararc
+  ```
 
 ---
 
-## Phase 5: Domain Migration (Short Downtime ~5-30 min)
+## Phase 4: Code deployen (~10 Minuten)
 
-> Do this during off-peak hours!
+**Zeitpunkt:** Jederzeit (keine Downtime)
 
-- [ ] **Remove custom domains from old apps**
+- [ ] **Git Remotes hinzufügen**
   ```bash
+  # Spaceship
+  cd /Users/sam/mydata/MyApps/ArchimedesApps/spaceship
+  heroku git:remote -a spaceship
+  
+  # StarArc
+  cd /Users/sam/mydata/MyApps/ArchimedesApps/stararc
+  heroku git:remote -a stararc
+  ```
+
+- [ ] **Code pushen**
+  ```bash
+  # Spaceship
+  cd /Users/sam/mydata/MyApps/ArchimedesApps/spaceship
+  git push heroku main
+  
+  # StarArc
+  cd /Users/sam/mydata/MyApps/ArchimedesApps/stararc
+  git push heroku main
+  ```
+
+- [ ] **Build-Logs prüfen**
+  ```bash
+  heroku logs --tail -a spaceship
+  heroku logs --tail -a stararc
+  ```
+
+- [ ] **Apps testen** (via Heroku URLs)
+  ```bash
+  heroku open -a spaceship
+  heroku open -a stararc
+  ```
+
+---
+
+## Phase 5: Domain-Migration (~10-30 Minuten DOWNTIME)
+
+**⚠️ WICHTIG:** Während der Off-Peak-Zeit ausführen!
+
+- [ ] **Domains von alten Apps entfernen**
+  ```bash
+  heroku domains:remove spaceship.stararc.one -a spaceship-app
   heroku domains:remove stararc.one -a stararc-app
   heroku domains:remove www.stararc.one -a stararc-app
-  heroku domains:remove spaceship.stararc.one -a spaceship-app
   ```
 
-- [ ] **Add custom domains to new EU apps**
+- [ ] **Domains zu neuen Apps hinzufügen**
   ```bash
-  heroku domains:add stararc.one -a stararc-eu
-  heroku domains:add www.stararc.one -a stararc-eu
-  heroku domains:add spaceship.stararc.one -a spaceship-eu
+  heroku domains:add spaceship.stararc.one -a spaceship
+  heroku domains:add stararc.one -a stararc
+  heroku domains:add www.stararc.one -a stararc
   ```
 
-- [ ] **Update DNS records** at domain registrar with new CNAME values from Heroku
-
-- [ ] **Enable SSL** (Heroku ACM auto-provisions after DNS propagation)
+- [ ] **Neue CNAME-Werte notieren**
   ```bash
-  heroku certs:auto:enable -a stararc-eu
-  heroku certs:auto:enable -a spaceship-eu
+  heroku domains -a spaceship
+  heroku domains -a stararc
+  ```
+
+- [ ] **DNS bei Domain-Registrar aktualisieren**
+  - Alte CNAME-Einträge durch neue ersetzen
+  - TTL: 300 Sekunden (5 Minuten) für schnelle Propagation
+
+- [ ] **SSL aktivieren**
+  ```bash
+  heroku certs:auto:enable -a spaceship
+  heroku certs:auto:enable -a stararc
+  ```
+  
+  (ACM wird automatisch nach DNS-Propagation provisioniert)
+
+---
+
+## Phase 6: Verification (~15 Minuten)
+
+**Zeitpunkt:** Direkt nach Phase 5
+
+- [ ] **DNS-Propagation prüfen**
+  ```bash
+  dig spaceship.stararc.one
+  dig stararc.one
+  dig www.stararc.one
+  ```
+
+- [ ] **HTTPS-Zugriff testen**
+  - https://spaceship.stararc.one
+  - https://stararc.one
+  - https://www.stararc.one
+
+- [ ] **Funktionstest**
+  - ✅ Login als bestehender User
+  - ✅ Neuer User registrieren
+  - ✅ Email-Verification
+  - ✅ Cross-App Navigation (StarArc → Spaceship)
+  - ✅ Asset-Anzeige (Verschlüsselung funktioniert)
+  - ✅ Stripe Payment Test
+  - ✅ Latenz messen (sollte ~20-50ms sein)
+
+- [ ] **Database Integrity prüfen**
+  ```bash
+  heroku pg:psql -a spaceship -c "SELECT COUNT(*) FROM users;"
+  heroku pg:psql -a stararc -c "SELECT COUNT(*) FROM users;"
+  ```
+
+- [ ] **Region-Check**
+  ```bash
+  heroku info -a spaceship | grep Region    # → eu
+  heroku info -a stararc | grep Region      # → eu
   ```
 
 ---
 
-## Phase 6: Update Code References
+## Phase 7: Cleanup (~5 Minuten)
 
-- [ ] **Update hardcoded Heroku URLs** in codebase (old `*-e576e504324e.herokuapp.com` / `*-05fdc7b20f43.herokuapp.com`):
-  - `stararc/frontend/.env.production` — `VITE_API_URL`
-  - `stararc/backend/src/app.ts` — CORS allowed origins
-  - `spaceship/backend/.env.production`
-  - Any other files referencing old Heroku URLs
+**⚠️ NUR nach 24+ Stunden stabiler Operation!**
 
-- [ ] **Redeploy** both apps after URL updates
-
----
-
-## Phase 7: Verify & Cleanup
-
-- [ ] **Test everything:**
-  - Auth flow (login, register, email verification)
-  - Cross-app navigation (StarArc ↔ Spaceship)
-  - Stripe webhooks and payments
-  - Email sending (SMTP via Hostpoint)
-  - Database operations (CRUD, encryption/decryption)
-  - Latency improvement from EU
-
-- [ ] **Update Stripe webhook endpoints** in Stripe Dashboard if they point to old Heroku URLs
-
-- [ ] **Verify region:**
+- [ ] **Alte Apps löschen**
   ```bash
-  heroku info -a stararc-eu    # Should show Region: eu
-  heroku info -a spaceship-eu  # Should show Region: eu
-  ```
-
-- [ ] **Delete old US apps** (only after everything confirmed working!)
-  ```bash
-  heroku apps:destroy stararc-app --confirm stararc-app
   heroku apps:destroy spaceship-app --confirm spaceship-app
+  heroku apps:destroy stararc-app --confirm stararc-app
   ```
 
-- [ ] **(Optional) Rename EU apps** to original names
+- [ ] **Git Remotes aufräumen**
   ```bash
-  heroku apps:rename stararc-app -a stararc-eu
-  heroku apps:rename spaceship-app -a spaceship-eu
+  # Alte remotes entfernen (falls vorhanden)
+  cd /Users/sam/mydata/MyApps/ArchimedesApps/spaceship
+  git remote remove heroku-old
+  
+  cd /Users/sam/mydata/MyApps/ArchimedesApps/stararc
+  git remote remove heroku-old
   ```
 
 ---
 
-## Notes
+## 🔄 Rollback-Plan
 
-- **Downtime:** Steps in Phase 5 cause ~5-30 min downtime depending on DNS propagation
-- **App names:** Using temporary names (`stararc-eu`) is safer — rename after old apps are deleted
-- **Database plan:** Match current Postgres plan tier (check with `heroku pg:info`)
-- **Stripe:** Webhook endpoints must be updated if they use `*.herokuapp.com` URLs
-- **SMTP:** Hostpoint SMTP (`asmtp.mail.hostpoint.ch`) is independent of Heroku region — no change needed
+Falls Probleme in Phase 5:
+
+1. **DNS zurücksetzen** auf alte Heroku CNAMEs
+2. **Alte Apps bleiben verfügbar** bis Phase 7
+3. **Datenbank-Backups lokal gespeichert** für Restore
+
+---
+
+## 💡 Upgrade-Pfad zu Essential-1
+
+Falls später mehr Performance benötigt:
+
+```bash
+# Jederzeit ohne Downtime upgraden
+heroku addons:upgrade heroku-postgresql:essential-1 -a spaceship
+heroku addons:upgrade heroku-postgresql:essential-1 -a stararc
+```
+
+**Kosten:** +$4/Monat pro App (total $18/Monat statt $10/Monat)  
+**Vorteile:** 4x RAM (4GB), 2x Connections (40)
+
+---
+
+## 📊 Erwartete Verbesserungen
+
+- **Latenz:** 150-200ms → 20-50ms (75% Reduktion) für CH/EU-User
+- **GDPR:** Daten in EU-Region (Irland)
+- **Sauberkeit:** App-Namen = Localhost-Namen (spaceship, stararc)
+- **Kosten:** Identisch ($10/Monat, Essential-0)
+
+---
+
+## ⏱️ Gesamtdauer
+
+- **Phase 1-4:** ~35 Minuten (ohne Downtime, während Geschäftszeiten möglich)
+- **Phase 5:** ~10-30 Minuten **DOWNTIME** (Off-Peak!)
+- **Phase 6:** ~15 Minuten (Testing)
+- **Phase 7:** Nach 24h (~5 Minuten)
+
+**Total:** ~1 Stunde Arbeit, ~20 Minuten Downtime
+
+---
+
+**Status:** ⏸️ Bereit für Execution am 14. März 2026
