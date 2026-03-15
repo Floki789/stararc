@@ -108,7 +108,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
         t('plans.spark.features.securities', { count: 10 }),
         t('plans.spark.features.preciousMetals', { count: 1 }),
         t('plans.spark.features.realEstate', { count: 1, mortgages: 1 }),
-        t('plans.spark.features.pensionAccounts', { count: 2 }),
+        t('plans.spark.features.pensionAccounts', { count: 1 }),
         t('plans.spark.features.liquidityAccounts', { count: 2 }),
         t('plans.spark.features.budgetCategories', { categories: 10, items: 50 }),
         t('plans.spark.features.financialInstitutions', { count: 3 }),
@@ -141,7 +141,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
         t('plans.nova.features.liquidityAccounts', { count: 4 }),
         t('plans.nova.features.budgetCategories', { categories: 12, items: 70 }),
         t('plans.nova.features.financialInstitutions', { count: 5 }),
-        t('plans.nova.features.vaults', { count: 5 }),
+        t('plans.nova.features.vaults', { count: 7 }),
         t('plans.nova.features.bitcoinSetups', { count: 4 }),
         t('plans.nova.features.wallets', { count: 4 }),
         t('plans.nova.features.backups', { count: 8 })

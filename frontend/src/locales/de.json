@@ -934,7 +934,7 @@
         "liquidityAccounts": "{{count}} Liquiditätskonten",
         "budgetCategories": "{{categories}} Budgetkategorien & {{items}} Budgetposten",
         "financialInstitutions": "{{count}} Finanzinstitute",
-        "vaults": "{{count}} Tresore",
+        "vaults": "{{count}} Tresore (physisch & digital je)",
         "bitcoinSetups": "{{count}} Bitcoin Single-Sig Setups (ohne Passphrase)",
         "wallets": "{{count}} Hardware- & Software-Wallets je",
         "backups": "{{count}} Seed- & Deskriptor-Backups je"
@@ -961,7 +961,7 @@
         "liquidityAccounts": "{{count}} Liquiditätskonten",
         "budgetCategories": "{{categories}} Budgetkategorien & {{items}} Budgetposten",
         "financialInstitutions": "{{count}} Finanzinstitute",
-        "vaults": "{{count}} Tresore",
+        "vaults": "{{count}} Tresore (physisch & digital je)",
         "bitcoinSetups": "{{count}} Bitcoin Single-Sig Setups mit Passphrase",
         "wallets": "{{count}} Hardware- & Software-Wallets je",
         "backups": "{{count}} Seed-, Passphrase- & Deskriptor-Backups je"
@@ -980,7 +980,7 @@
         "liquidityAccounts": "Unbegrenzt Liquiditätskonten",
         "budgetCategories": "Unbegrenzt Budgetkategorien & -posten",
         "financialInstitutions": "Unbegrenzt Finanzinstitute",
-        "vaults": "Unbegrenzt Tresore",
+        "vaults": "Unbegrenzte Tresore (physisch & digital)",
         "bitcoinSetups": "Unbegrenzt Bitcoin-Setups",
         "wallets": "Unbegrenzt Hardware- & Software-Wallets",
         "backups": "Unbegrenzt Seed-, Passphrase- & Deskriptor-Backups"

@@ -775,7 +775,7 @@
         "liquidityAccounts": "{{count}} Liquidity accounts",
         "budgetCategories": "{{categories}} Budget categories & {{items}} Budget items",
         "financialInstitutions": "{{count}} Financial institutions",
-        "vaults": "{{count}} Vaults",
+        "vaults": "{{count}} Vaults (physical & digital each)",
         "bitcoinSetups": "{{count}} Bitcoin single sig setups (no passphrase)",
         "wallets": "{{count}} Hardware & Software wallets each",
         "backups": "{{count}} Seed & Descriptor backups each"
@@ -802,7 +802,7 @@
         "liquidityAccounts": "{{count}} Liquidity accounts",
         "budgetCategories": "{{categories}} Budget categories & {{items}} Budget items",
         "financialInstitutions": "{{count}} Financial institutions",
-        "vaults": "{{count}} Vaults",
+        "vaults": "{{count}} Vaults (physical & digital each)",
         "bitcoinSetups": "{{count}} Bitcoin single sig setups with passphrase",
         "wallets": "{{count}} Hardware & Software wallets each",
         "backups": "{{count}} Seed, Passphrase & Descriptor backups each"
@@ -821,7 +821,7 @@
         "liquidityAccounts": "Unlimited Liquidity accounts",
         "budgetCategories": "Unlimited Budget categories & Items",
         "financialInstitutions": "Unlimited Financial institutions",
-        "vaults": "Unlimited Vaults",
+        "vaults": "Unlimited Vaults (physical & digital)",
         "bitcoinSetups": "Unlimited Bitcoin setups",
         "wallets": "Unlimited Hardware & Software wallets",
         "backups": "Unlimited Seed, Passphrase & Descriptor backups"
