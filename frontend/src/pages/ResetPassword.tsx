@@ -235,6 +235,7 @@ const ResetPassword: React.FC = () => {
                       : 'border-white/20 focus:ring-purple-500/50 focus:border-purple-500/50'
                   }`}
                   placeholder="Mindestens 8 Zeichen"
+                  autoComplete="new-password"
                   disabled={isLoading}
                 />
                 <button
@@ -276,6 +277,7 @@ const ResetPassword: React.FC = () => {
                       : 'border-white/20 focus:ring-purple-500/50 focus:border-purple-500/50'
                   }`}
                   placeholder="Passwort wiederholen"
+                  autoComplete="new-password"
                   disabled={isLoading}
                 />
                 <button
