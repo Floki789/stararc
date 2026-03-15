@@ -355,8 +355,8 @@
     "manageSubscription": "Manage Payment & Cancellation",
     "zkEncryption": "Zero-Knowledge Encryption",
     "zkSubtitle": "Your Spaceship data is encrypted client-side",
-    "zkRecoveryHint": "If you forgot your Spaceship password, you can reset it using your 6-word recovery phrase.",
-    "zkRecoverButton": "Recover Spaceship Password"
+    "zkRecoveryHint": "If you forgot your Sovereignty password, you can reset it using your 6-word recovery phrase.",
+    "zkRecoverButton": "Recover Sovereignty Password"
   },
   "serverOverview": {
     "title": "Login Method: Sovereignty Mode",
@@ -371,7 +371,7 @@
     },
     "spaceship": {
       "subtitle": "Zero-Knowledge Data Encryption",
-      "passwordLogin": "Spaceship Password",
+      "passwordLogin": "Sovereignty Password",
       "passwordLoginDesc": "Separate password – only you know it, the server never does",
       "recoveryWords": "6 Recovery Words",
       "recoveryWordsDesc": "BIP39 passphrase for recovering your Spaceship access",

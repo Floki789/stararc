@@ -514,8 +514,8 @@
     "manageSubscription": "Zahlung & Kündigung verwalten",
     "zkEncryption": "Zero-Knowledge Verschlüsselung",
     "zkSubtitle": "Deine Spaceship-Daten sind client-seitig verschlüsselt",
-    "zkRecoveryHint": "Falls du dein Spaceship-Passwort vergessen hast, kannst du es mit deiner 6-Wort Wiederherstellungsphrase zurücksetzen.",
-    "zkRecoverButton": "Spaceship-Passwort wiederherstellen"
+    "zkRecoveryHint": "Falls du dein Sovereignty-Passwort vergessen hast, kannst du es mit deiner 6-Wort Wiederherstellungsphrase zurücksetzen.",
+    "zkRecoverButton": "Sovereignty-Passwort wiederherstellen"
   },
   "serverOverview": {
     "title": "Login-Methode: Sovereignty-Modus",
@@ -530,7 +530,7 @@
     },
     "spaceship": {
       "subtitle": "Zero-Knowledge Datenverschlüsselung",
-      "passwordLogin": "Spaceship-Passwort",
+      "passwordLogin": "Sovereignty-Passwort",
       "passwordLoginDesc": "Separates Passwort – nur du kennst es, der Server nie",
       "recoveryWords": "6 Wiederherstellungswörter",
       "recoveryWordsDesc": "BIP39-Passphrase zur Wiederherstellung deines Spaceship-Zugangs",
