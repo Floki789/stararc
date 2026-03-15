@@ -271,16 +271,12 @@ export class EmailService {
         heading: 'Willkommen bei StarArc',
         body: 'Dein Konto ist aktiviert. Du kannst dich jetzt einloggen und mit StarArc beginnen.',
         button: 'Jetzt einloggen',
-        afterLoginTitle: 'Nach dem Login:',
-        afterLoginBody: 'Du wirst durch <em>Getting Started</em> und <em>Getting Better</em> geführt. Diese Schritte helfen dir, StarArc optimal zu nutzen – können aber auch jederzeit übersprungen werden.'
       },
       en: {
         subject: 'Welcome to StarArc',
         heading: 'Welcome to StarArc',
         body: 'Your account is activated. You can now log in and start using StarArc.',
-        button: 'Log in now',
-        afterLoginTitle: 'After login:',
-        afterLoginBody: 'You\'ll be guided through <em>Getting Started</em> and <em>Getting Better</em>. These steps help you get the most out of StarArc – but can be skipped at any time.'
+        button: 'Log in now'
       }
     };
     const t = texts[lang];
@@ -303,13 +299,6 @@ export class EmailService {
                       text-decoration: none; border-radius: 6px; font-weight: 500;">
               ${t.button}
             </a>
-          </div>
-          
-          <div style="background: #f9fafb; padding: 20px; border-radius: 6px; margin: 30px 0; border-left: 3px solid #3b82f6;">
-            <p style="color: #4b5563; line-height: 1.6; margin: 0;">
-              <strong>${t.afterLoginTitle}</strong><br>
-              ${t.afterLoginBody}
-            </p>
           </div>
           
           <p style="color: #9ca3af; font-size: 12px; margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
@@ -928,23 +917,80 @@ export class EmailService {
     }
   }
 
-  // Send first Spaceship login notification to user
-  async sendFirstSpaceshipLogin(email: string, alias: string, language: string = 'de'): Promise<void> {
+  // Send welcome email on first Spaceship login (includes login method info)
+  async sendFirstSpaceshipLogin(email: string, alias: string, language: string = 'de', loginMethod: string = 'password'): Promise<void> {
     await this.ensureReady();
     const lang = language === 'en' ? 'en' : 'de';
+    const dashboardUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/dashboard`;
     
+    const isSovereignty = loginMethod === 'password_zk';
+
     const texts = {
       de: {
-        subject: 'StarArc – Erster Login in Spaceship',
-        heading: 'Willkommen in Spaceship',
-        body: 'Du hast dich zum ersten Mal in StarArc Spaceship eingeloggt. Spaceship ist die sichere Asset-Management-Plattform von StarArc.',
-        info: 'Du kannst Spaceship jederzeit über dein StarArc Dashboard starten.'
+        subject: 'Willkommen bei StarArc',
+        heading: 'Willkommen bei StarArc',
+        body: 'Dein Konto ist vollständig eingerichtet. Du kannst StarArc ab sofort in vollem Umfang nutzen.',
+        loginMethodHeading: `Login-Methode: ${isSovereignty ? 'Sovereignty' : 'Standard'}`,
+        standardBody: `
+          <p style="color: #4b5563; line-height: 1.6; margin-bottom: 24px;">
+            Du kannst dich mit deiner <strong>E-Mail und deinem Passwort</strong> anmelden.
+          </p>
+        `,
+        sovereigntyBody: `
+          <p style="color: #4b5563; line-height: 1.6; margin-bottom: 16px;">
+            Du benötigst <strong>zwei Passwörter</strong> zum Einloggen:
+          </p>
+          <table style="width: 100%; border-collapse: collapse; margin-bottom: 16px;">
+            <tr>
+              <td style="padding: 12px 16px; border: 1px solid #e5e7eb; background: #f9fafb; width: 140px; font-weight: 600; color: #1f2937;">StarArc</td>
+              <td style="padding: 12px 16px; border: 1px solid #e5e7eb; color: #4b5563;">E-Mail + Passwort aus der Registrierung</td>
+            </tr>
+            <tr>
+              <td style="padding: 12px 16px; border: 1px solid #e5e7eb; background: #f9fafb; font-weight: 600; color: #1f2937;">Finanzdaten</td>
+              <td style="padding: 12px 16px; border: 1px solid #e5e7eb; color: #4b5563;">Sovereignty-Passwort (12 Zeichen), das du nach der Methodenwahl gesetzt hast</td>
+            </tr>
+          </table>
+          <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 12px 16px; margin-bottom: 24px; border-radius: 4px;">
+            <p style="color: #92400e; margin: 0; font-size: 14px; line-height: 1.5;">
+              <strong>⚠️ Wichtig:</strong> Das Sovereignty-Passwort kann nur mit deiner <strong>6-Worte-Passphrase</strong> wiederhergestellt werden.
+              Verwahre diese sicher – wir empfehlen mindestens <strong>zwei geografisch getrennte Backups</strong>.
+            </p>
+          </div>
+        `,
+        dashboard: 'Zum Dashboard'
       },
       en: {
-        subject: 'StarArc – First Login to Spaceship',
-        heading: 'Welcome to Spaceship',
-        body: 'You\'ve logged into StarArc Spaceship for the first time. Spaceship is StarArc\'s secure asset management platform.',
-        info: 'You can launch Spaceship anytime from your StarArc Dashboard.'
+        subject: 'Welcome to StarArc',
+        heading: 'Welcome to StarArc',
+        body: 'Your account is fully set up. You can now use StarArc to its full extent.',
+        loginMethodHeading: `Login Method: ${isSovereignty ? 'Sovereignty' : 'Standard'}`,
+        standardBody: `
+          <p style="color: #4b5563; line-height: 1.6; margin-bottom: 24px;">
+            You can sign in with your <strong>email and password</strong>.
+          </p>
+        `,
+        sovereigntyBody: `
+          <p style="color: #4b5563; line-height: 1.6; margin-bottom: 16px;">
+            You need <strong>two passwords</strong> to sign in:
+          </p>
+          <table style="width: 100%; border-collapse: collapse; margin-bottom: 16px;">
+            <tr>
+              <td style="padding: 12px 16px; border: 1px solid #e5e7eb; background: #f9fafb; width: 140px; font-weight: 600; color: #1f2937;">StarArc</td>
+              <td style="padding: 12px 16px; border: 1px solid #e5e7eb; color: #4b5563;">Email + password from registration</td>
+            </tr>
+            <tr>
+              <td style="padding: 12px 16px; border: 1px solid #e5e7eb; background: #f9fafb; font-weight: 600; color: #1f2937;">Financial Data</td>
+              <td style="padding: 12px 16px; border: 1px solid #e5e7eb; color: #4b5563;">Sovereignty password (12 characters) set after choosing this method</td>
+            </tr>
+          </table>
+          <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 12px 16px; margin-bottom: 24px; border-radius: 4px;">
+            <p style="color: #92400e; margin: 0; font-size: 14px; line-height: 1.5;">
+              <strong>⚠️ Important:</strong> The Sovereignty password can only be recovered with your <strong>6-word passphrase</strong>.
+              Store it securely – we recommend at least <strong>two geographically separate backups</strong>.
+            </p>
+          </div>
+        `,
+        dashboard: 'Go to Dashboard'
       }
     };
     const t = texts[lang];
@@ -960,10 +1006,17 @@ export class EmailService {
           <p style="color: #4b5563; line-height: 1.6; margin-bottom: 30px;">
             ${t.body}
           </p>
+
+          <h3 style="color: #1f2937; margin-bottom: 12px; font-size: 16px;">${t.loginMethodHeading}</h3>
+          ${isSovereignty ? t.sovereigntyBody : t.standardBody}
           
-          <p style="color: #6b7280; font-size: 14px;">
-            ${t.info}
-          </p>
+          <div style="margin: 24px 0;">
+            <a href="${dashboardUrl}" 
+               style="display: inline-block; background: #3b82f6; color: white; padding: 12px 30px; 
+                      text-decoration: none; border-radius: 6px; font-weight: 500;">
+              ${t.dashboard}
+            </a>
+          </div>
           
           <p style="color: #9ca3af; font-size: 12px; margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
             © ${new Date().getFullYear()} Stararc.one
@@ -974,12 +1027,12 @@ export class EmailService {
 
     try {
       const info = await this.transporter.sendMail(mailOptions);
-      console.log(`✅ First Spaceship login email sent to ${email}`);
+      console.log(`✅ Welcome email sent to ${email}`);
       if (process.env.NODE_ENV !== 'production') {
         console.log(`🔗 Preview URL: ${nodemailer.getTestMessageUrl(info)}`);
       }
     } catch (error) {
-      console.error('❌ Failed to send first Spaceship login email:', error);
+      console.error('❌ Failed to send welcome email:', error);
     }
   }
 }

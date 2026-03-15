@@ -228,24 +228,11 @@ router.get('/verify-email', async (req: Request, res: Response): Promise<any> =>
     const user = result.rows[0];
     console.log(`✅ Email verified for user ID: ${user.id}`);
     
-    // Optionally send welcome email and admin notification
-    try {
-      if (user.admin_encrypted_email) {
-        const userEmail = UserEncryptionService.decryptWithMasterKey(user.admin_encrypted_email);
-        
-        await emailService.sendWelcomeEmail(userEmail, 'User', user.language_code || 'de');
-        console.log(`📧 Welcome email sent to user ${user.id}`);
-        
-        // Send admin notification (no PII in log, only in email body)
-        emailService.sendAdminNotification(`User hat Email verifiziert`, {
-          'User-ID': user.id,
-          'Zeitpunkt': new Date().toLocaleString('de-CH', { timeZone: 'Europe/Zurich' })
-        }).catch((err: Error) => console.error('Admin notification failed:', err));
-      }
-    } catch (welcomeError) {
-      console.error('❌ Failed to send welcome email:', welcomeError);
-      // Don't fail the verification if welcome email fails
-    }
+    // Send admin notification on email verification
+    emailService.sendAdminNotification(`User hat Email verifiziert`, {
+      'User-ID': user.id,
+      'Zeitpunkt': new Date().toLocaleString('de-CH', { timeZone: 'Europe/Zurich' })
+    }).catch((err: Error) => console.error('Admin notification failed:', err));
     
     res.json({ 
       message: 'E-Mail erfolgreich verifiziert! Sie können sich jetzt anmelden.',
@@ -487,9 +474,6 @@ router.post('/update-onboarding-step', authMiddleware, async (req: Request, res:
               ? UserEncryptionService.decryptWithMasterKey(userRow.admin_encrypted_alias) 
               : 'User';
             const userLang = userRow.language_code || 'de';
-            // Email to user
-            emailService.sendAuthMethodConfirmation(userEmail, userAlias, loginMethod, userLang)
-              .catch((err: any) => console.error('Auth method user email failed:', err));
             // Email to admin
             emailService.sendAdminNotification('User hat Auth-Methode gewählt', {
               'User-ID': userId,
@@ -555,9 +539,6 @@ router.post('/verify-email', async (req: Request, res: Response): Promise<any> =
     // Verify email
     const user = await authService.verifyEmail(token);
 
-    // Send welcome email
-    await emailService.sendWelcomeEmail(user.email, (user as any).alias, (user as any).language_code || 'de');
-    
     // Send admin notification
     const userIdentifier = (user as any).alias || user.email;
     emailService.sendAdminNotification(`User ${userIdentifier} hat Email verifiziert`, {
@@ -965,9 +946,6 @@ router.post('/setup-zk-encryption', authMiddleware, async (req: Request, res: Re
           ? UserEncryptionService.decryptWithMasterKey(userRow.admin_encrypted_alias) 
           : 'User';
         const userLang = userRow.language_code || 'de';
-        // Email to user
-        emailService.sendAuthMethodConfirmation(userEmail, userAlias, login_method, userLang)
-          .catch((err: any) => console.error('ZK auth method user email failed:', err));
         // Email to admin
         emailService.sendAdminNotification('User hat Auth-Methode gewählt (ZK)', {
           'User-ID': user.id,
@@ -1281,8 +1259,8 @@ router.post('/generate-spaceship-token', authMiddleware, async (req: Request, re
           const userAlias = dbRow.admin_encrypted_alias 
             ? UserEncryptionService.decryptWithMasterKey(dbRow.admin_encrypted_alias) 
             : 'User';
-          // Email to user
-          emailService.sendFirstSpaceshipLogin(userEmail, userAlias, dbRow.language_code || 'de')
+          // Email to user: Welcome to StarArc (with login method info)
+          emailService.sendFirstSpaceshipLogin(userEmail, userAlias, dbRow.language_code || 'de', dbRow.login_method_selected)
             .catch((err: any) => console.error('First Spaceship login user email failed:', err));
           // Email to admin
           emailService.sendAdminNotification('Erster Spaceship Login', {
