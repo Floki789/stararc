@@ -13,6 +13,7 @@ import userRoutes from './routes/users';
 import subscriptionRoutes from './routes/subscriptions';
 import stripeRoutes from './routes/stripe';
 import twoFactorRoutes from './routes/twoFactor';
+import publicRoutes from './routes/public';
 
 // Import middleware
 import { errorHandler } from './middleware/errorHandler';
@@ -148,6 +149,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/subscriptions', subscriptionRoutes);
 app.use('/api/stripe', stripeRoutes);
 app.use('/api/2fa', twoFactorRoutes);
+app.use('/api/public', publicRoutes);
 
 // Privacy policy endpoint
 app.get('/api/privacy', (req, res) => {
