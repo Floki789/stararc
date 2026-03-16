@@ -26,7 +26,7 @@ const AuthMethodSelection: React.FC = () => {
   const navigate = useNavigate();
   const { t } = useLanguage();
   const { updateUser } = useAuth();
-  const [selectedMethod, setSelectedMethod] = useState<AuthMethodType | null>(null);
+  const [selectedMethod, setSelectedMethod] = useState<AuthMethodType | null>('standard');
   const [showZKSetup, setShowZKSetup] = useState(false);
 
   const authMethods: AuthMethod[] = [
