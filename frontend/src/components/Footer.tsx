@@ -14,7 +14,7 @@ const Footer: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
           <div className="flex items-center space-x-2">
-            <span className="text-xl font-bold text-gradient">StarArc</span>
+            <span className="text-xl font-bold text-gradient">Stararc</span>
           </div>
 
           <div className="flex items-center space-x-6">
@@ -28,10 +28,11 @@ const Footer: React.FC = () => {
             </a>
             <Link to={termsRoute} className="text-gray-400 hover:text-white transition-colors text-sm">{t('nav.terms')}</Link>
             <Link to={privacyRoute} className="text-gray-400 hover:text-white transition-colors text-sm">{t('nav.privacy')}</Link>
+            <Link to="/genesis-members" className="text-gray-400 hover:text-white transition-colors text-sm">{t('nav.genesisMembers')}</Link>
           </div>
 
           <p className="text-gray-500 text-sm">
-            © {new Date().getFullYear()} StarArc. All rights reserved.
+            © {new Date().getFullYear()} Stararc. All rights reserved.
           </p>
         </div>
       </div>

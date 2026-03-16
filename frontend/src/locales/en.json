@@ -7,7 +7,8 @@
     "register": "Register",
     "logout": "Logout",
     "terms": "Terms & Conditions",
-    "privacy": "Privacy Policy"
+    "privacy": "Privacy Policy",
+    "genesisMembers": "Genesis Members"
   },
   "hero": {
     "title": "Your entire investment universe under one roof",
@@ -2151,5 +2152,13 @@
         "description": "Overview of all financial institutions with predefined and user-defined management"
       }
     }
+  },
+  "genesis_members": {
+    "title": "Genesis Members",
+    "subtitle": "The founding members who believed in Stararc from the very beginning.",
+    "loading": "Loading...",
+    "error": "Could not load genesis members.",
+    "empty": "No genesis members yet.",
+    "count": "{{count}} founding members"
   }
 }

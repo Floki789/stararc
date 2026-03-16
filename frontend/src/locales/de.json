@@ -7,7 +7,8 @@
     "register": "Registrieren",
     "logout": "Abmelden",
     "terms": "AGB",
-    "privacy": "Datenschutz"
+    "privacy": "Datenschutz",
+    "genesisMembers": "Genesis Members"
   },
   "hero": {
     "title": "Dein ganzes Anlageuniversum unter einem Dach",
@@ -2149,5 +2150,13 @@
         "description": "Übersicht über alle Finanzinstitutionen mit vordefinierter und benutzerdefinierter Verwaltung"
       }
     }
+  },
+  "genesis_members": {
+    "title": "Genesis Members",
+    "subtitle": "Die Gründungsmitglieder, die von Anfang an an Stararc geglaubt haben.",
+    "loading": "Laden...",
+    "error": "Genesis Members konnten nicht geladen werden.",
+    "empty": "Noch keine Genesis Members.",
+    "count": "{{count}} Gründungsmitglieder"
   }
 }
