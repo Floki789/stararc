@@ -654,13 +654,17 @@ router.post('/launch-checkout', authMiddleware, async (req, res): Promise<any> =
       return res.status(400).json({ error: 'Plan not found' });
     }
 
-    // Check if user already got launch pricing
+    // Check if user already has an active launch subscription for this plan
+    // (trial cancellations remove the launch_purchases record, so re-purchase is allowed)
     const existingLaunch = await pool.query(
-      'SELECT id FROM launch_purchases WHERE user_id = $1 AND plan_code = $2',
+      `SELECT lp.id FROM launch_purchases lp
+       JOIN users u ON u.id = lp.user_id
+       WHERE lp.user_id = $1 AND lp.plan_code = $2
+         AND u.subscription_status IN ('active', 'trialing', 'past_due')`,
       [userId, planCode]
     );
     if (existingLaunch.rows.length > 0) {
-      return res.status(400).json({ error: 'You already purchased this plan at launch pricing' });
+      return res.status(400).json({ error: 'You already have an active subscription at launch pricing' });
     }
 
     // Check launch slot availability (read-only — actual decrement happens after payment in webhook)
@@ -735,18 +739,9 @@ router.post('/launch-checkout', authMiddleware, async (req, res): Promise<any> =
 
     if (isTestMode && !forceWebhookFlow) {
       console.log('🔧 TEST MODE: Auto-activating launch subscription for user:', userId, 'plan:', planId);
-
-      // Decrement launch counter + record purchase (same as webhook does in production)
-      await pool.query(
-        `UPDATE launch_counters SET remaining_slots = remaining_slots - 1, updated_at = NOW()
-         WHERE plan_code = $1 AND remaining_slots > 0 AND is_active = true`,
-        [planCode]
-      );
-      await pool.query(
-        `INSERT INTO launch_purchases (user_id, plan_code, stripe_session_id, price_paid)
-         VALUES ($1, $2, $3, $4)`,
-        [userId, planCode, session.id, plan.launchPrice || 0]
-      );
+      // Note: decrement + launch_purchases insert is intentionally skipped here.
+      // The Stripe CLI forwards checkout.session.completed to the webhook handler which
+      // handles both atomically (and guards against duplicates via session_id check).
 
       await pool.query(
         `UPDATE users SET 
@@ -1027,31 +1022,76 @@ router.post('/webhook', async (req, res): Promise<any> => {
             processed = true;
 
             // Record launch purchase + decrement counter (only after successful payment)
+            // Guard against double-execution via advisory lock on session_id hash
             if (session.metadata?.isLaunch === 'true') {
               const launchPlanCode = session.metadata?.launchPlanCode || planId.toLowerCase();
+              const client = await pool.connect();
               try {
-                // Atomically decrement launch counter
-                const slotResult = await pool.query(
-                  `UPDATE launch_counters SET remaining_slots = remaining_slots - 1, updated_at = NOW()
-                   WHERE plan_code = $1 AND remaining_slots > 0 AND is_active = true
-                   RETURNING remaining_slots`,
-                  [launchPlanCode]
-                );
-                if (slotResult.rows.length > 0) {
-                  console.log(`🚀 WEBHOOK - Launch slot confirmed for ${planId}: ${slotResult.rows[0].remaining_slots} remaining`);
-                } else {
-                  console.warn(`⚠️ WEBHOOK - Launch counter decrement failed (no slots?) for ${launchPlanCode}`);
-                }
+                await client.query('BEGIN');
 
-                // Insert launch purchase record
-                await pool.query(
-                  `INSERT INTO launch_purchases (user_id, plan_code, stripe_session_id, stripe_subscription_id, price_paid)
-                   VALUES ($1, $2, $3, $4, $5)`,
-                  [userId, launchPlanCode, session.id, session.subscription, session.amount_total || 0]
+                // Advisory lock keyed on session_id hash — serializes concurrent webhook deliveries
+                const lockKey = parseInt(Buffer.from(session.id).toString('hex').slice(0, 8), 16);
+                await client.query('SELECT pg_advisory_xact_lock($1)', [lockKey]);
+
+                // Re-check inside the transaction (now serialized)
+                const alreadyRecorded = await client.query(
+                  'SELECT id FROM launch_purchases WHERE stripe_session_id = $1',
+                  [session.id]
                 );
-                console.log(`✅ WEBHOOK - Launch purchase recorded for user ${userId}`);
+
+                if (alreadyRecorded.rows.length > 0) {
+                  console.log(`⏭️ WEBHOOK - Launch purchase already recorded for session ${session.id}, skipping decrement`);
+                  await client.query('COMMIT');
+                } else {
+                  // Atomically decrement launch counter
+                  const slotResult = await client.query(
+                    `UPDATE launch_counters SET remaining_slots = remaining_slots - 1, updated_at = NOW()
+                     WHERE plan_code = $1 AND remaining_slots > 0 AND is_active = true
+                     RETURNING remaining_slots`,
+                    [launchPlanCode]
+                  );
+                  if (slotResult.rows.length > 0) {
+                    console.log(`🚀 WEBHOOK - Launch slot confirmed for ${planId}: ${slotResult.rows[0].remaining_slots} remaining`);
+                  } else {
+                    console.warn(`⚠️ WEBHOOK - Launch counter decrement failed (no slots?) for ${launchPlanCode}`);
+                  }
+
+                  // Insert launch purchase record
+                  await client.query(
+                    `INSERT INTO launch_purchases (user_id, plan_code, stripe_session_id, stripe_subscription_id, price_paid)
+                     VALUES ($1, $2, $3, $4, $5)`,
+                    [userId, launchPlanCode, session.id, session.subscription, session.amount_total || 0]
+                  );
+                  console.log(`✅ WEBHOOK - Launch purchase recorded for user ${userId}`);
+
+                  // If this is an upgrade from another launch plan, return the old slot
+                  if (previousPlan && previousPlan.toLowerCase() !== launchPlanCode) {
+                    const oldPlanCode = previousPlan.toLowerCase();
+                    const oldLaunchResult = await client.query(
+                      'SELECT id FROM launch_purchases WHERE user_id = $1 AND plan_code = $2',
+                      [userId, oldPlanCode]
+                    );
+                    if (oldLaunchResult.rows.length > 0) {
+                      await client.query(
+                        `UPDATE launch_counters
+                         SET remaining_slots = LEAST(remaining_slots + 1, total_slots), updated_at = NOW()
+                         WHERE plan_code = $1`,
+                        [oldPlanCode]
+                      );
+                      await client.query(
+                        'DELETE FROM launch_purchases WHERE user_id = $1 AND plan_code = $2',
+                        [userId, oldPlanCode]
+                      );
+                      console.log(`🔄 WEBHOOK - Returned ${oldPlanCode} slot (upgrade to ${launchPlanCode}, user ${userId})`);
+                    }
+                  }
+                  await client.query('COMMIT');
+                }
               } catch (lpErr) {
+                await client.query('ROLLBACK').catch(() => {});
                 console.error('⚠️ WEBHOOK - Launch purchase recording failed:', lpErr);
+              } finally {
+                client.release();
               }
             }
             
@@ -1116,6 +1156,7 @@ router.post('/webhook', async (req, res): Promise<any> => {
           );
           
           console.log(`✅ WEBHOOK - Subscription ${subscription.id} status: ${subscription.status}, cancel_at_period_end: ${cancelAtPeriodEnd}`);
+
           processed = true;
           break;
         }
@@ -1135,6 +1176,9 @@ router.post('/webhook', async (req, res): Promise<any> => {
           );
           
           console.log(`✅ WEBHOOK - Subscription ${subscription.id} marked as canceled (period ended)`);
+          // Note: launch slots are intentionally not returned on cancellation.
+          // Adjust remaining_slots manually via SQL if needed.
+
           processed = true;
           break;
         }
