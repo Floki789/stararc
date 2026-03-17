@@ -874,7 +874,7 @@ router.post('/mark-spaceship-integrated', authMiddleware, async (req: Request, r
 router.post('/setup-zk-encryption', authMiddleware, async (req: Request, res: Response): Promise<any> => {
   try {
     const user = (req as any).user;
-    const { login_method, wrapped_dek, wrapped_dek_recovery, dek_salt, recovery_salt, recovery_key_hash } = req.body;
+    const { login_method, wrapped_dek, wrapped_dek_recovery, dek_salt, recovery_salt, recovery_key_hash, encrypted_recovery_phrase } = req.body;
 
     // Validate required fields
     if (login_method !== 'password_zk') {
@@ -918,6 +918,7 @@ router.post('/setup-zk-encryption', authMiddleware, async (req: Request, res: Re
     }
 
     // Store ZK data AND update login method in StarArc DB
+    // encrypted_recovery_phrase is stored in StarArc only – Spaceship has no recovery phrase column
     await pool.query(
       `UPDATE users SET 
         login_method_selected = $1, 
@@ -927,9 +928,10 @@ router.post('/setup-zk-encryption', authMiddleware, async (req: Request, res: Re
         dek_salt = $5,
         recovery_salt = $6,
         recovery_key_hash = $7,
+        encrypted_recovery_phrase = COALESCE($9, encrypted_recovery_phrase),
         updated_at = CURRENT_TIMESTAMP 
       WHERE id = $8`,
-      [login_method, 'completed', wrapped_dek, wrapped_dek_recovery, dek_salt, recovery_salt, recovery_key_hash, user.id]
+      [login_method, 'completed', wrapped_dek, wrapped_dek_recovery, dek_salt, recovery_salt, recovery_key_hash, user.id, encrypted_recovery_phrase || null]
     );
     console.log(`✅ StarArc: ZK data + login_method_selected = '${login_method}', onboarding_step = 'completed' for user ${user.id}`);
 
