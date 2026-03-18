@@ -8,6 +8,7 @@ import SpaceshipAccessButton from '../components/SpaceshipAccessButton';
 import ApexManagement from '../components/ApexManagement';
 import TwoFactorManagement from '../components/TwoFactorManagement';
 import ZKRecoveryModal from '../components/ZKRecoveryModal';
+import ZKRevealRecoveryPhraseModal from '../components/ZKRevealRecoveryPhraseModal';
 import ServerSecurityOverview from '../components/ServerSecurityOverview';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -28,6 +29,7 @@ const Dashboard: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [pollingError, setPollingError] = useState(false);
   const [showZKRecoveryModal, setShowZKRecoveryModal] = useState(false);
+  const [showRevealPhraseModal, setShowRevealPhraseModal] = useState(false);
   
   // Check if user is a ZK user
   const isZKUser = user?.loginMethodSelected === 'password_zk';
@@ -519,7 +521,10 @@ const Dashboard: React.FC = () => {
 
         {/* Security Overview: ZK users get two-column layout, standard users get just 2FA */}
         {isZKUser ? (
-          <ServerSecurityOverview onOpenZKRecovery={() => setShowZKRecoveryModal(true)} />
+          <ServerSecurityOverview
+            onOpenZKRecovery={() => setShowZKRecoveryModal(true)}
+            onOpenRevealPhrase={() => setShowRevealPhraseModal(true)}
+          />
         ) : (
           <TwoFactorManagement />
         )}
@@ -530,8 +535,13 @@ const Dashboard: React.FC = () => {
           onClose={() => setShowZKRecoveryModal(false)}
           onSuccess={() => {
             setShowZKRecoveryModal(false);
-            // Optionally show success message
           }}
+        />
+
+        {/* ZK Reveal Recovery Phrase Modal */}
+        <ZKRevealRecoveryPhraseModal
+          isOpen={showRevealPhraseModal}
+          onClose={() => setShowRevealPhraseModal(false)}
         />
 
         {/* Apex Client Management - Only show for Apex subscription users */}

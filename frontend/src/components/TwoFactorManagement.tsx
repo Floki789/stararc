@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Shield, Settings, Smartphone, AlertTriangle, CheckCircle, Key, Copy, RefreshCw } from 'lucide-react';
+import { Shield, Settings, Smartphone, AlertTriangle, CheckCircle, Key, Copy, RefreshCw, Eye, EyeOff } from 'lucide-react';
 import TwoFactorSetup from './TwoFactorSetup';
 import { useLanguage } from '../contexts/LanguageContext';
 import toast from 'react-hot-toast';
@@ -22,6 +22,7 @@ const TwoFactorManagement: React.FC = () => {
   // Backup codes state
   const [remainingCodes, setRemainingCodes] = useState<number | null>(null);
   const [showRegenerate, setShowRegenerate] = useState(false);
+  const [showDisablePassword, setShowDisablePassword] = useState(false);
   const [regenerateToken, setRegenerateToken] = useState('');
   const [regenerateLoading, setRegenerateLoading] = useState(false);
   const [newBackupCodes, setNewBackupCodes] = useState<string[] | null>(null);
@@ -320,13 +321,23 @@ const TwoFactorManagement: React.FC = () => {
                   <label className="block text-sm font-medium text-gray-300 mb-2">
                     {t('twoFactor.currentPassword')}
                   </label>
-                  <input
-                    type="password"
-                    value={disableForm.password}
-                    onChange={(e) => setDisableForm({ ...disableForm, password: e.target.value })}
-                    className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white"
-                    placeholder="Ihr aktuelles Passwort"
-                  />
+                  <div className="relative">
+                    <input
+                      type={showDisablePassword ? 'text' : 'password'}
+                      value={disableForm.password}
+                      onChange={(e) => setDisableForm({ ...disableForm, password: e.target.value })}
+                      className="w-full px-3 py-2 pr-10 bg-gray-800 border border-gray-600 rounded-lg text-white"
+                      placeholder="Ihr aktuelles Passwort"
+                      autoComplete="new-password"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowDisablePassword(v => !v)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200"
+                    >
+                      {showDisablePassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
+                  </div>
                 </div>
                 
                 <div>

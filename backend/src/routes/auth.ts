@@ -1022,6 +1022,50 @@ router.get('/get-zk-recovery-data', authMiddleware, async (req: Request, res: Re
   }
 });
 
+// GET /api/auth/zk-reveal-phrase-data
+// Returns encrypted_recovery_phrase + wrapped_dek + dek_salt so the client can
+// derive the DEK with the ZK password and decrypt the stored recovery phrase.
+router.get('/zk-reveal-phrase-data', authMiddleware, async (req: Request, res: Response): Promise<any> => {
+  try {
+    const user = (req as any).user;
+
+    const result = await pool.query(
+      `SELECT encrypted_recovery_phrase, wrapped_dek, dek_salt, login_method_selected
+       FROM users WHERE id = $1`,
+      [user.id]
+    );
+
+    const userData = result.rows[0];
+
+    if (!userData) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    if (userData.login_method_selected !== 'password_zk') {
+      return res.status(400).json({ error: 'Only available for ZK users' });
+    }
+
+    if (!userData.encrypted_recovery_phrase) {
+      return res.status(404).json({ error: 'No recovery phrase stored' });
+    }
+
+    console.log(`🔐 ZK reveal-phrase data requested for user ${user.id}`);
+
+    res.json({
+      encrypted_recovery_phrase: userData.encrypted_recovery_phrase,
+      wrapped_dek: userData.wrapped_dek,
+      dek_salt: userData.dek_salt
+    });
+
+  } catch (error: any) {
+    console.error('❌ zk-reveal-phrase-data error:', error);
+    res.status(500).json({
+      error: 'Failed to get recovery phrase data',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+});
+
 // POST /api/auth/recover-zk
 // Updates the wrapped_dek after password recovery (dek_salt stays the same)
 router.post('/recover-zk', authMiddleware, async (req: Request, res: Response): Promise<any> => {

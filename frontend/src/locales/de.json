@@ -516,7 +516,23 @@
     "zkEncryption": "Zero-Knowledge Verschlüsselung",
     "zkSubtitle": "Deine Spaceship-Daten sind client-seitig verschlüsselt",
     "zkRecoveryHint": "Falls du dein Sovereignty-Passwort vergessen hast, kannst du es mit deiner 6-Wort Wiederherstellungsphrase zurücksetzen.",
-    "zkRecoverButton": "Sovereignty-Passwort wiederherstellen"
+    "zkRecoverButton": "Sovereignty-Passwort wiederherstellen",
+    "revealRecoveryPhraseButton": "Recovery Phrase anzeigen"
+  },
+  "revealRecoveryPhrase": {
+    "title": "Recovery Phrase anzeigen",
+    "hint": "Gib dein Sovereignty-Passwort ein, um deine 6 Wiederherstellungswörter zu entschlüsseln und anzuzeigen.",
+    "passwordLabel": "Sovereignty-Passwort",
+    "passwordPlaceholder": "Dein Sovereignty-Passwort",
+    "reveal": "Phrase anzeigen",
+    "loading": "Entschlüssle…",
+    "wordsTitle": "Deine 6 Wiederherstellungswörter",
+    "warning": "⚠️ Zeige diese Wörter niemandem. Notiere sie offline an einem sicheren Ort.",
+    "close": "Schliessen",
+    "errorNotStored": "Keine Recovery Phrase gespeichert. Diese Funktion steht nur für neu eingerichtete ZK-Konten zur Verfügung.",
+    "errorFetch": "Fehler beim Laden der Daten. Bitte versuche es erneut.",
+    "errorWrongPassword": "Falsches Passwort. Die Phrase konnte nicht entschlüsselt werden.",
+    "errorDecrypt": "Entschlüsselung fehlgeschlagen. Bitte neu einloggen."
   },
   "serverOverview": {
     "title": "Login-Methode: Sovereignty-Modus",

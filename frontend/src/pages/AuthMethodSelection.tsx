@@ -362,6 +362,18 @@ async function hashRecoveryPhrase(words: string[]): Promise<string> {
     .join('');
 }
 
+// Encrypt recovery phrase with DEK (AES-GCM) so server never sees plaintext
+async function encryptRecoveryPhraseWithDEK(dek: CryptoKey, words: string[]): Promise<string> {
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const plaintext = new TextEncoder().encode(words.join(' '));
+  const ciphertext = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, dek, plaintext);
+  // Format: base64(IV + ciphertext)
+  const combined = new Uint8Array(12 + ciphertext.byteLength);
+  combined.set(iv);
+  combined.set(new Uint8Array(ciphertext), 12);
+  return arrayBufferToBase64(combined.buffer);
+}
+
 // Convert ArrayBuffer to base64
 function arrayBufferToBase64(buffer: ArrayBuffer): string {
   const bytes = new Uint8Array(buffer);
@@ -535,13 +547,17 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
       // Hash recovery phrase for verification
       const recoveryKeyHash = await hashRecoveryPhrase(recoveryWords);
 
+      // Encrypt recovery phrase with DEK so it can be recovered later via password
+      const encryptedRecoveryPhrase = await encryptRecoveryPhraseWithDEK(dek, recoveryWords);
+
       // Prepare ZK data
       const zkData = {
         wrapped_dek: arrayBufferToBase64(wrappedDEK),
         wrapped_dek_recovery: arrayBufferToBase64(wrappedDEKRecovery),
         dek_salt: arrayBufferToBase64(dekSalt.buffer),
         recovery_salt: arrayBufferToBase64(recoverySalt.buffer),
-        recovery_key_hash: recoveryKeyHash
+        recovery_key_hash: recoveryKeyHash,
+        encrypted_recovery_phrase: encryptedRecoveryPhrase
       };
 
       // Send ZK data to StarArc backend for storage in DB
@@ -554,7 +570,7 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
         },
         body: JSON.stringify({
           login_method: 'password_zk',
-          ...zkData  // Send ZK data to be stored in StarArc DB
+          ...zkData  // Send ZK data to be stored in StarArc + forwarded to Spaceship
         })
       });
 
@@ -563,7 +579,7 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
         throw new Error(errorData.error || 'Failed to setup ZK encryption');
       }
 
-      console.log('🔐 ZK data stored in StarArc DB');
+      console.log('🔐 ZK data (incl. encrypted recovery phrase) stored');
 
       onComplete();
     } catch (err: any) {
