@@ -6,9 +6,10 @@ import { useLanguage } from '../contexts/LanguageContext';
 
 interface ServerSecurityOverviewProps {
   onOpenZKRecovery: () => void;
+  onOpenRevealPhrase: () => void;
 }
 
-const ServerSecurityOverview: React.FC<ServerSecurityOverviewProps> = ({ onOpenZKRecovery }) => {
+const ServerSecurityOverview: React.FC<ServerSecurityOverviewProps> = ({ onOpenZKRecovery, onOpenRevealPhrase }) => {
   const { t } = useLanguage();
 
   return (
@@ -146,12 +147,20 @@ const ServerSecurityOverview: React.FC<ServerSecurityOverviewProps> = ({ onOpenZ
               {t('dashboard.zkRecoveryHint')}
             </p>
             
-            <button
-              onClick={onOpenZKRecovery}
-              className="px-4 py-2 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 text-amber-300 rounded-lg font-medium transition-colors"
-            >
-              {t('dashboard.zkRecoverButton')}
-            </button>
+            <div className="flex flex-col gap-2">
+              <button
+                onClick={onOpenZKRecovery}
+                className="px-4 py-2 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 text-amber-300 rounded-lg font-medium transition-colors"
+              >
+                {t('dashboard.zkRecoverButton')}
+              </button>
+              <button
+                onClick={onOpenRevealPhrase}
+                className="px-4 py-2 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 text-amber-300 rounded-lg font-medium transition-colors"
+              >
+                {t('dashboard.revealRecoveryPhraseButton')}
+              </button>
+            </div>
           </motion.div>
         </div>
       </div>
