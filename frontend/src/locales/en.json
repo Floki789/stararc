@@ -1577,11 +1577,10 @@
   },
   "privacy": {
     "title": "Privacy Policy for Stararc.one",
-    "subtitle": "Effective: December 30, 2025",
+    "subtitle": "Effective: 19 March 2026",
     "section1": {
       "title": "1. Data Controller",
       "p1": "The data controller responsible for data processing within the meaning of the General Data Protection Regulation (GDPR) and the Swiss Data Protection Act (DSG) is:",
-      "contact": "Archimedes SB\nSamuel Bumann\nRapperswil-Jona, Switzerland\nEmail: info@stararc.one",
       "company": "Archimedes SB",
       "person": "Samuel Bumann",
       "location": "Rapperswil-Jona, Switzerland",
@@ -1591,21 +1590,46 @@
       "title": "2. Data Processing Principles",
       "p1": "Privacy-by-Design: Stararc.one is designed as a privacy-focused metadata management platform that explicitly warns against using the platform for storing security-relevant information.",
       "p2": "Data Minimization: We only process data that is technically required for the operation of the platform.",
-      "p3": "Client-side Encryption: All user data is encrypted on your device before being transmitted to our servers."
+      "p3": "Client-side Encryption: All personal content data (e.g. asset names, institution names, document references) is encrypted on your device before being transmitted to our servers. The key management method differs depending on the authentication method chosen at registration (see Section 3.1).",
+      "p4": "Operational Plaintext Data: A portion of data is stored unencrypted for technical reasons (performance, database queries, app logic). This exclusively concerns non-personal, non-sensitive structural data with no relation to personal identity, for example: subscription plan and status (e.g. \"Core\", \"Active\"), asset category and subcategory (e.g. \"Securities\", \"Equities\"), currency code (e.g. \"CHF\", \"USD\"), display order of categories, timestamps (creation date, last login, last update), app-internal status flags (e.g. is active, automatic price update enabled), reminder interval for manual updates (e.g. \"monthly\"). These data enable reliable and performant app rendering but contain no inferences about your specific financial situation."
     },
     "section3": {
       "title": "3. Types and Purposes of Data Processing",
       "registration": {
         "title": "3.1 Registration and Authentication",
-        "intro": "Processed data:",
-        "list": [
-          "Email address (encrypted)",
-          "Encrypted login code (encrypted)",
-          "First and last name (encrypted)",
-          "Time of Terms acceptance",
-          "IP address during registration (encrypted)"
+        "intro": "Stararc.one offers two authentication methods with fundamentally different privacy properties. You choose one method at registration.",
+        "emailIntro": "The email address is processed identically in both modes and is never stored in plain text:",
+        "emailList": [
+          "Email hash (one-way hashed) — for login lookup only, not reversible",
+          "Email address (encrypted, only decryptable by you) — for display in the app",
+          "Email address (operator-encrypted) — accessible solely for support and notifications; Legal basis: legitimate interest (Art. 6 para. 1 lit. f GDPR)"
         ],
-        "encryption": "Encryption: This data is encrypted with a Stararc master key and is unreadable to third parties. Even in the event of data access, the information cannot be decrypted without the corresponding key.",
+        "standardTitle": "3.1a Standard Login",
+        "standardIntro": "Additionally processed data:",
+        "standardList": [
+          "BCrypt hash of the password",
+          "Encrypted data encryption key (DEK) — user-side",
+          "Encrypted data encryption key (DEK) — server-side",
+          "Encrypted recovery key from 12 recovery phrases",
+          "Cryptographic salt",
+          "First and last name (user-encrypted, AES-256-GCM)",
+          "Time of Terms acceptance",
+          "IP address at registration (encrypted)"
+        ],
+        "standardNote": "With Standard Login, the server stores a server-side encrypted data encryption key. This enables an administrative password reset if you forget your password. Your password itself is never stored. All user data remains client-side encrypted via the DEK; the server decrypts your content only in the context of an explicitly requested password reset.",
+        "zkTitle": "3.1b Zero-Knowledge Login (Sovereignty Mode)",
+        "zkIntro": "Additionally processed data:",
+        "zkList": [
+          "BCrypt hash of the login code",
+          "Encrypted data encryption key (DEK) — user-side",
+          "Encrypted data encryption key (DEK) — recovery-side",
+          "Cryptographic salts",
+          "SHA-256 hash of the recovery key (for verification of recovery phrases)",
+          "First and last name (user-encrypted, AES-256-GCM)",
+          "Time of Terms acceptance",
+          "IP address at registration (encrypted)"
+        ],
+        "zkNote": "With Zero-Knowledge Login, the server never has access to your data encryption key. An administrative password reset is technically impossible. Only you can decrypt your data using your 12 recovery phrases. If your password and recovery phrases are lost, your data is permanently irretrievable.",
         "legal": "Legal basis: Contract performance (Art. 6 para. 1 lit. b GDPR)"
       },
       "metadata": {
@@ -1616,19 +1640,35 @@
           "Budget categories and items",
           "Vault names and custody references",
           "Institution names",
-          "Document references (not contents)"
+          "Document references (not contents)",
+          "xPub keys and derivation paths"
         ],
+        "note": "These data are stored client-side encrypted and are not readable by the operator.",
+        "legal": "Legal basis: Contract performance (Art. 6 para. 1 lit. b GDPR)"
+      },
+      "passwordReset": {
+        "title": "3.3 Password Reset (Standard Login only)",
+        "intro": "Processed data: Encrypted key material of the affected account.",
+        "description": "At the explicit request of the user, the operator performs a controlled recovery process. The account access is re-secured under the new password. Existing content data remains unchanged. This process is exclusively available to Standard Login users; it is technically not possible for Zero-Knowledge Login.",
         "legal": "Legal basis: Contract performance (Art. 6 para. 1 lit. b GDPR)"
       },
       "payment": {
-        "title": "3.3 Payment Processing",
+        "title": "3.4 Payment Processing",
         "intro": "Processed data:",
         "list": [
-          "Payment information (via external payment processors)",
+          "Payment information (via Stripe, Inc., San Francisco, USA)",
           "Billing address",
           "Subscription status"
         ],
+        "note": "Stripe processes payment data on servers in the USA. The transfer is based on the EU-U.S. Data Privacy Framework. Stripe's privacy policy is available at https://stripe.com/privacy.",
         "legal": "Legal basis: Contract performance (Art. 6 para. 1 lit. b GDPR)"
+      },
+      "notifications": {
+        "title": "3.5 Notifications and Communication",
+        "intro": "Processed data: Email address (operator-encrypted, decrypted for sending).",
+        "description": "Purpose: Sending notifications about material changes to the privacy policy or terms of service, and operationally necessary communications (e.g. security incidents).",
+        "note": "Legal basis: Legitimate interest (Art. 6 para. 1 lit. f GDPR). Promotional communications are only sent with explicit consent.",
+        "required": "Providing your email address is mandatory for creating an account. Without an email address, no account can be created."
       }
     },
     "section4": {
@@ -1639,36 +1679,42 @@
         "Login credentials for banks, brokers or other financial service providers",
         "Third-party passwords",
         "Access codes for vaults or buildings",
-        "Biometric data or PINs",
-        "Wallet addresses or derivation paths"
+        "Biometric data or PINs"
       ]
     },
     "section5": {
       "title": "5. Encryption and Technical Security",
-      "p1": "Client-side Encryption: All sensitive data is encrypted on your device before transmission.",
-      "p2": "No Plain Text Storage: We fundamentally do not store any privacy-relevant data in plain text on our servers.",
-      "p3": "No Access: Even we as operators cannot decrypt your encrypted data as long as you do not disclose your login credentials."
+      "p1": "Client-side Encryption: Sensitive user data is encrypted on your device before transmission. The scope depends on the chosen authentication method (see Section 3.1).",
+      "p2": "No Plain Text Storage: We do not store any privacy-relevant data in plain text on our servers.",
+      "p3": "Access depending on login method: With Zero-Knowledge Login (Sovereignty Mode), it is technically impossible for the operator to decrypt your content data. With Standard Login, the server holds protected key material that is used exclusively to perform an explicitly requested password reset."
     },
     "section6": {
       "title": "6. Recipients and Third Parties",
-      "p1": "Payment Processors: We use external, certified payment processors for payment handling.",
-      "p2": "Hosting Providers: Data is hosted on servers in Switzerland, EU or the United States.",
-      "p3": "No Data Commercialization: We never sell, rent or share your data with third parties for commercial purposes."
+      "p1": "Payment Processor: Stripe, Inc., 510 Townsend Street, San Francisco, CA 94103, USA. Stripe processes payment data in accordance with PCI-DSS standards.",
+      "p2": "Hosting Provider: The platform is operated via a cloud hosting provider (Heroku/Salesforce). Data is hosted on servers in the United States. The transfer to the USA is based on the EU-U.S. Data Privacy Framework.",
+      "p3": "Email Service: For sending notifications we use an email service provider. Your email address is transmitted solely for sending purposes and not stored by the provider.",
+      "p4": "No Data Commercialization: We never sell, rent or share your data with third parties for commercial purposes."
     },
     "section7": {
       "title": "7. Storage Duration",
-      "p1": "Active Accounts: Data is only stored as long as your account is active.",
-      "p2": "After Cancellation: Upon cancellation, all your data will be immediately and irrevocably deleted, unless legal retention obligations exist.",
-      "p3": "Legal Retention: Only legally required retention periods (e.g., for invoice data) remain in effect."
+      "p1": "Active Accounts: User data is only stored as long as your account is active.",
+      "p2": "IP address at registration: Automatically deleted after 30 days.",
+      "p3": "Invoicing and payment data: Retained for 10 years in accordance with Art. 958f OR (Swiss accounting obligation).",
+      "p4": "After cancellation: Upon cancellation, all your content data and authentication data will be immediately and irrevocably deleted. Invoice data remains stored pursuant to section 7.3.",
+      "p5": "Deletion after account deletion: Email hash, encrypted email and all other personal data will be completely removed upon account deletion."
     },
     "section8": {
       "title": "8. Your Rights (GDPR)",
       "p1": "Right of Access (Art. 15 GDPR): Information about processed data",
+      "p1note": "Note for Zero-Knowledge Login users: As the operator has no technical access to your encrypted content data, we can only provide information to the extent that data is accessible to us (e.g. email hash, subscription status). Your content data is only accessible via your own account.",
       "p2": "Right of Rectification (Art. 16 GDPR): Correction of incorrect data",
+      "p2note": "Note for Zero-Knowledge Login users: Correction of content data (e.g. name) by the operator is technically not possible. Corrections can only be made by you via your own account.",
       "p3": "Right of Erasure (Art. 17 GDPR): Deletion of your data",
       "p4": "Right of Restriction (Art. 18 GDPR): Restriction of processing",
       "p5": "Right of Data Portability (Art. 20 GDPR): Export of your data",
-      "p6": "Right of Objection (Art. 21 GDPR): Objection to processing"
+      "p6": "Right of Objection (Art. 21 GDPR): Objection to processing based on legitimate interests (Art. 6 para. 1 lit. f)",
+      "p7": "No consent required: Data processing is based exclusively on contract performance (Art. 6 para. 1 lit. b) and legitimate interest (Art. 6 para. 1 lit. f). No consents are collected; therefore no right of withdrawal under Art. 7 para. 3 GDPR applies.",
+      "p8": "No automated decision-making: We do not conduct profiling or automated decisions under Art. 22 GDPR that have legal or similarly significant effects on you."
     },
     "section9": {
       "title": "9. Cookies and Tracking",
@@ -1684,17 +1730,18 @@
     "section11": {
       "title": "11. Data Protection Impact Assessment",
       "p1": "Due to our Privacy-by-Design architecture and exclusive processing of metadata, the risk to your privacy is minimized.",
-      "p2": "Client-side encryption ensures that even in case of a security incident, no sensitive data can be compromised."
+      "p2": "With Zero-Knowledge Login (Sovereignty Mode), the architecture is designed so that content data cannot be decrypted even with full access to the server infrastructure. With Standard Login, the confidentiality of user data depends on the security of server-side secrets, which are appropriately protected and regularly reviewed."
     },
     "section12": {
       "title": "12. Changes to this Privacy Policy",
       "p1": "Changes to this privacy policy will be communicated to you at least 30 days in advance by email.",
-      "p2": "For significant changes, we will obtain your renewed consent."
+      "p2": "For material changes, we will obtain your renewed consent."
     },
     "section13": {
       "title": "13. Contact and Complaints",
       "p1": "Privacy inquiries: info@stararc.one",
-      "p2": "Complaint Authority: You have the right to file a complaint with the competent data protection authority."
+      "p2": "Swiss supervisory authority: Federal Data Protection and Information Commissioner (FDPIC), Feldeggweg 1, 3003 Bern, www.edoeb.admin.ch",
+      "p3": "EU supervisory authority: You have the right to file a complaint with the data protection authority of your EU member state if you believe that the processing of your data violates the GDPR."
     }
   },
   "pension": {
@@ -1902,6 +1949,8 @@
     "subtitle": "Click on a feature to jump directly to the detailed view",
     "features": {
       "portfolioManagement": "Portfolio Management",
+      "planning": "Financial Planning",
+      "retirement": "Retirement Planning",
       "securitiesManagement": "Securities Management",
       "bitcoinCrypto": "Bitcoin & Crypto",
       "selfCustody": "Bitcoin Self Custody",
@@ -1911,7 +1960,8 @@
       "multiCurrency": "Multi-Currency",
       "pensionInsurance": "Pension & Insurance",
       "clientSideEncryption": "Client-Side Encryption",
-      "twoLayerSecurity": "Two-Layer Security"
+      "twoLayerSecurity": "Two-Layer Security",
+      "gettingStarted": "Getting Started"
     }
   },
   "general": {
@@ -2110,26 +2160,6 @@
       "lastMonth": "Last month",
       "thisYear": "This year",
       "lastYear": "Last year"
-    }
-  },
-  "overview": {
-    "title": "Discover All Features",
-    "subtitle": "Click on a feature to jump directly to the detailed view",
-    "features": {
-      "portfolioManagement": "Portfolio Management",
-      "planning": "Financial Planning",
-      "retirement": "Retirement Planning",
-      "securitiesManagement": "Securities Management",
-      "bitcoinCrypto": "Bitcoin & Crypto",
-      "selfCustody": "Bitcoin Self Custody",
-      "immobilien": "Real Estate",
-      "profileManagement": "Profile & Management",
-      "documentScanner": "Document Scanner",
-      "multiCurrency": "Multi-Currency",
-      "pensionInsurance": "Pension & Insurance",
-      "clientSideEncryption": "Client-Side Encryption",
-      "twoLayerSecurity": "Two-Layer Security",
-      "gettingStarted": "Getting Started"
     }
   },
   "profile": {

@@ -67,6 +67,7 @@ const Privacy: React.FC = () => {
               <p><strong>2.1</strong> {t('privacy.section2.p1')}</p>
               <p><strong>2.2</strong> {t('privacy.section2.p2')}</p>
               <p><strong>2.3</strong> {t('privacy.section2.p3')}</p>
+              <p><strong>2.4</strong> {t('privacy.section2.p4')}</p>
             </div>
           </section>
 
@@ -81,10 +82,27 @@ const Privacy: React.FC = () => {
                 <h3 className="text-xl font-semibold text-white mb-4">
                   {t('privacy.section3.registration.title')}
                 </h3>
-                <p className="mb-2"><strong>{t('privacy.section3.registration.intro')}</strong></p>
-                {renderList(getArray('privacy.section3.registration.list'))}
-                <p className="mt-4 text-blue-300">{t('privacy.section3.registration.encryption')}</p>
-                <p className="mt-2 text-sm text-gray-400">{t('privacy.section3.registration.legal')}</p>
+                <p className="mb-3">{t('privacy.section3.registration.intro')}</p>
+                <p className="mb-2"><strong>{t('privacy.section3.registration.emailIntro')}</strong></p>
+                {renderList(getArray('privacy.section3.registration.emailList'))}
+
+                {/* Standard Login */}
+                <h4 className="text-lg font-semibold text-white mt-6 mb-2">
+                  {t('privacy.section3.registration.standardTitle')}
+                </h4>
+                <p className="mb-2">{t('privacy.section3.registration.standardIntro')}</p>
+                {renderList(getArray('privacy.section3.registration.standardList'))}
+                <p className="mt-3 text-blue-300 text-sm">{t('privacy.section3.registration.standardNote')}</p>
+
+                {/* Zero-Knowledge Login */}
+                <h4 className="text-lg font-semibold text-white mt-6 mb-2">
+                  {t('privacy.section3.registration.zkTitle')}
+                </h4>
+                <p className="mb-2">{t('privacy.section3.registration.zkIntro')}</p>
+                {renderList(getArray('privacy.section3.registration.zkList'))}
+                <p className="mt-3 text-yellow-300 text-sm">{t('privacy.section3.registration.zkNote')}</p>
+
+                <p className="mt-4 text-sm text-gray-400">{t('privacy.section3.registration.legal')}</p>
               </div>
 
               {/* Metadata */}
@@ -94,7 +112,18 @@ const Privacy: React.FC = () => {
                 </h3>
                 <p className="mb-2"><strong>{t('privacy.section3.metadata.intro')}</strong></p>
                 {renderList(getArray('privacy.section3.metadata.list'))}
+                <p className="mt-3 text-blue-300 text-sm">{t('privacy.section3.metadata.note')}</p>
                 <p className="mt-2 text-sm text-gray-400">{t('privacy.section3.metadata.legal')}</p>
+              </div>
+
+              {/* Password Reset */}
+              <div className="bg-gray-800/50 p-6 rounded-lg">
+                <h3 className="text-xl font-semibold text-white mb-4">
+                  {t('privacy.section3.passwordReset.title')}
+                </h3>
+                <p className="mb-2"><strong>{t('privacy.section3.passwordReset.intro')}</strong></p>
+                <p className="mb-2">{t('privacy.section3.passwordReset.description')}</p>
+                <p className="mt-2 text-sm text-gray-400">{t('privacy.section3.passwordReset.legal')}</p>
               </div>
 
               {/* Payment */}
@@ -104,7 +133,19 @@ const Privacy: React.FC = () => {
                 </h3>
                 <p className="mb-2"><strong>{t('privacy.section3.payment.intro')}</strong></p>
                 {renderList(getArray('privacy.section3.payment.list'))}
+                <p className="mt-3 text-sm text-gray-400 italic">{t('privacy.section3.payment.note')}</p>
                 <p className="mt-2 text-sm text-gray-400">{t('privacy.section3.payment.legal')}</p>
+              </div>
+
+              {/* Notifications */}
+              <div className="bg-gray-800/50 p-6 rounded-lg">
+                <h3 className="text-xl font-semibold text-white mb-4">
+                  {t('privacy.section3.notifications.title')}
+                </h3>
+                <p className="mb-2"><strong>{t('privacy.section3.notifications.intro')}</strong></p>
+                <p className="mb-2">{t('privacy.section3.notifications.description')}</p>
+                <p className="mt-2 text-sm text-gray-400">{t('privacy.section3.notifications.note')}</p>
+                <p className="mt-3 text-sm text-yellow-300/80">{t('privacy.section3.notifications.required')}</p>
               </div>
             </div>
           </section>
@@ -143,6 +184,7 @@ const Privacy: React.FC = () => {
               <p><strong>6.1</strong> {t('privacy.section6.p1')}</p>
               <p><strong>6.2</strong> {t('privacy.section6.p2')}</p>
               <p><strong>6.3</strong> {t('privacy.section6.p3')}</p>
+              <p><strong>6.4</strong> {t('privacy.section6.p4')}</p>
             </div>
           </section>
 
@@ -155,6 +197,8 @@ const Privacy: React.FC = () => {
               <p><strong>7.1</strong> {t('privacy.section7.p1')}</p>
               <p><strong>7.2</strong> {t('privacy.section7.p2')}</p>
               <p><strong>7.3</strong> {t('privacy.section7.p3')}</p>
+              <p><strong>7.4</strong> {t('privacy.section7.p4')}</p>
+              <p><strong>7.5</strong> {t('privacy.section7.p5')}</p>
             </div>
           </section>
 
@@ -165,11 +209,15 @@ const Privacy: React.FC = () => {
             </h2>
             <div className="space-y-4 text-gray-300">
               <p><strong>8.1</strong> {t('privacy.section8.p1')}</p>
+              <p className="ml-4 text-sm text-blue-300/80">{t('privacy.section8.p1note')}</p>
               <p><strong>8.2</strong> {t('privacy.section8.p2')}</p>
+              <p className="ml-4 text-sm text-blue-300/80">{t('privacy.section8.p2note')}</p>
               <p><strong>8.3</strong> {t('privacy.section8.p3')}</p>
               <p><strong>8.4</strong> {t('privacy.section8.p4')}</p>
               <p><strong>8.5</strong> {t('privacy.section8.p5')}</p>
               <p><strong>8.6</strong> {t('privacy.section8.p6')}</p>
+              <p><strong>8.7</strong> {t('privacy.section8.p7')}</p>
+              <p><strong>8.8</strong> {t('privacy.section8.p8')}</p>
             </div>
           </section>
 
@@ -226,6 +274,7 @@ const Privacy: React.FC = () => {
             <div className="space-y-4 text-gray-300">
               <p><strong>13.1</strong> {t('privacy.section13.p1')}</p>
               <p><strong>13.2</strong> {t('privacy.section13.p2')}</p>
+              <p><strong>13.3</strong> {t('privacy.section13.p3')}</p>
             </div>
           </section>
 

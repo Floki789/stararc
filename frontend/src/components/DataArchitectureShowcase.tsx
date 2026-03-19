@@ -114,7 +114,7 @@ const DataArchitectureShowcase: React.FC = () => {
                 <div className="p-2 bg-blue-500/20 rounded-lg">
                   <Database className="w-6 h-6 text-blue-400" />
                 </div>
-                <h3 className="text-2xl font-bold text-white">StarArc: Benutzerdaten</h3>
+                <h3 className="text-2xl font-bold text-white">{t('dataArchitecture.stararcUserData.title')}</h3>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
@@ -140,10 +140,9 @@ const DataArchitectureShowcase: React.FC = () => {
                 <div className="flex items-start space-x-3">
                   <Key className="w-6 h-6 text-blue-400 flex-shrink-0 mt-1" />
                   <div>
-                    <p className="text-blue-400 font-semibold mb-2">Admin-Key Verschlüsselung</p>
+                    <p className="text-blue-400 font-semibold mb-2">{t('dataArchitecture.stararcUserData.adminEncryption')}</p>
                     <p className="text-slate-300 leading-relaxed mb-3">
-                      Ihre Identitätsdaten (Email, Alias, etc.) werden in StarArc mit einem Master-Admin-Key verschlüsselt. 
-                      Dies ermöglicht Support und Account-Recovery, während Ihre Finanzdaten komplett privat bleiben.
+                      {t('dataArchitecture.stararcUserData.description')}
                     </p>
                     <div className="flex items-center space-x-2 text-sm text-slate-400">
                       <Shield className="w-4 h-4" />
@@ -158,24 +157,24 @@ const DataArchitectureShowcase: React.FC = () => {
               <div className="bg-slate-900/50 backdrop-blur-xl rounded-xl p-6 border border-slate-800/50">
                 <h4 className="text-lg font-bold text-white mb-3 flex items-center space-x-2">
                   <CheckCircle className="w-5 h-5 text-blue-400" />
-                  <span>Was wird gespeichert?</span>
+                  <span>{t('dataArchitecture.stararcUserData.whatStored')}</span>
                 </h4>
                 <ul className="space-y-2 text-slate-300">
                   <li className="flex items-start space-x-2">
                     <span className="text-blue-400 mt-1">•</span>
-                    <span>Email (admin-verschlüsselt)</span>
+                    <span>{t('dataArchitecture.stararcUserData.storedItems.0')}</span>
                   </li>
                   <li className="flex items-start space-x-2">
                     <span className="text-blue-400 mt-1">•</span>
-                    <span>Alias (admin-verschlüsselt)</span>
+                    <span>{t('dataArchitecture.stararcUserData.storedItems.1')}</span>
                   </li>
                   <li className="flex items-start space-x-2">
                     <span className="text-blue-400 mt-1">•</span>
-                    <span>Subscription Plan (plain)</span>
+                    <span>{t('dataArchitecture.stararcUserData.storedItems.2')}</span>
                   </li>
                   <li className="flex items-start space-x-2">
                     <span className="text-blue-400 mt-1">•</span>
-                    <span>Spaceship Auth Key (verschlüsselt)</span>
+                    <span>{t('dataArchitecture.stararcUserData.storedItems.3')}</span>
                   </li>
                 </ul>
               </div>
@@ -183,24 +182,24 @@ const DataArchitectureShowcase: React.FC = () => {
               <div className="bg-slate-900/50 backdrop-blur-xl rounded-xl p-6 border border-slate-800/50">
                 <h4 className="text-lg font-bold text-white mb-3 flex items-center space-x-2">
                   <Lock className="w-5 h-5 text-blue-400" />
-                  <span>Warum Admin-Verschlüsselung?</span>
+                  <span>{t('dataArchitecture.stararcUserData.whyAdminEncryption')}</span>
                 </h4>
                 <ul className="space-y-2 text-slate-300">
                   <li className="flex items-start space-x-2">
                     <span className="text-blue-400 mt-1">•</span>
-                    <span>Account Recovery möglich</span>
+                    <span>{t('dataArchitecture.stararcUserData.adminReasons.0')}</span>
                   </li>
                   <li className="flex items-start space-x-2">
                     <span className="text-blue-400 mt-1">•</span>
-                    <span>Support kann bei Login-Problemen helfen</span>
+                    <span>{t('dataArchitecture.stararcUserData.adminReasons.1')}</span>
                   </li>
                   <li className="flex items-start space-x-2">
                     <span className="text-blue-400 mt-1">•</span>
-                    <span>Email-Hash für eindeutige Konten</span>
+                    <span>{t('dataArchitecture.stararcUserData.adminReasons.2')}</span>
                   </li>
                   <li className="flex items-start space-x-2">
                     <span className="text-blue-400 mt-1">•</span>
-                    <span>Finanzdaten bleiben client-verschlüsselt</span>
+                    <span>{t('dataArchitecture.stararcUserData.adminReasons.3')}</span>
                   </li>
                 </ul>
               </div>
@@ -222,7 +221,7 @@ const DataArchitectureShowcase: React.FC = () => {
               <div className="space-y-6">
                 {/* JWT Token */}
                 <div className="space-y-2">
-                  <p className="text-sm text-slate-400">Short-Lived JWT Token (5 Minuten)</p>
+                  <p className="text-sm text-slate-400">{t('dataArchitecture.authorizationData.jwtToken')}</p>
                   <div className="bg-slate-950/50 rounded-lg p-4 border border-slate-800">
                     <code className="text-xs text-purple-400 font-mono break-all">
                       eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRoS2V5IjoiWDdKOG1LMjNwTDVuUjhWUTFoVzZ0WTkiLCJhdXRoTWV0aG9kIjoic3RhcmFyY19rZXkiLCJzdWJzY3JpcHRpb25QbGFuIjoiR2FsYXh5IiwiY3Jvc3NBcHAiOnRydWUsInNvdXJjZSI6InN0YXJhcmMiLCJ1c2VySWQiOjQyLCJpYXQiOjE3MDU1NjAwMDAsImV4cCI6MTcwNTU2MDMwMH0.K9pL2nR5vQ8hW1tY4uI7oP0aS3dF6gH9jK2lM5nQ8rT
@@ -232,7 +231,7 @@ const DataArchitectureShowcase: React.FC = () => {
 
                 {/* JWT Payload Decoded */}
                 <div className="space-y-2">
-                  <p className="text-sm text-slate-400">Decoded JWT Payload</p>
+                  <p className="text-sm text-slate-400">{t('dataArchitecture.authorizationData.decodedPayload')}</p>
                   <div className="bg-slate-950/50 rounded-lg p-4 border border-slate-800">
                     <pre className="text-xs text-purple-300 font-mono overflow-x-auto">
 {`{
@@ -251,7 +250,7 @@ const DataArchitectureShowcase: React.FC = () => {
 
                 {/* Auth Key Hash */}
                 <div className="space-y-2">
-                  <p className="text-sm text-slate-400">Auth Key Hash (HMAC-SHA256) in Spaceship DB</p>
+                  <p className="text-sm text-slate-400">{t('dataArchitecture.authorizationData.authKeyHash')}</p>
                   <div className="bg-slate-950/50 rounded-lg p-3 border border-slate-800">
                     <code className="text-xs text-purple-400 font-mono break-all">
                       3f8e9d2c5b7a1f4e8c3d9a6b2e5f8c1d4a7b0e3f6c9a2d5b8e1f4a7c0d3f6b9e2
@@ -265,27 +264,27 @@ const DataArchitectureShowcase: React.FC = () => {
               <div className="flex items-start space-x-3">
                 <Server className="w-6 h-6 text-purple-400 flex-shrink-0 mt-1" />
                 <div>
-                  <p className="text-purple-400 font-semibold mb-2">Wie funktioniert die Autorisierung?</p>
+                  <p className="text-purple-400 font-semibold mb-2">{t('dataArchitecture.authorizationData.howItWorksTitle')}</p>
                   <div className="space-y-3 text-slate-300">
                     <div className="flex items-start space-x-3">
                       <span className="text-purple-400 font-bold">1.</span>
-                      <p>StarArc generiert einen sicheren Auth-Key (256-bit Entropie) bei Account-Erstellung</p>
+                      <p>{t('dataArchitecture.authorizationData.steps.0')}</p>
                     </div>
                     <div className="flex items-start space-x-3">
                       <span className="text-purple-400 font-bold">2.</span>
-                      <p>Auth-Key wird mit AES-256-GCM verschlüsselt in StarArc gespeichert</p>
+                      <p>{t('dataArchitecture.authorizationData.steps.1')}</p>
                     </div>
                     <div className="flex items-start space-x-3">
                       <span className="text-purple-400 font-bold">3.</span>
-                      <p>Beim Login zu Spaceship: StarArc erstellt short-lived JWT Token (5 Min) mit Auth-Key</p>
+                      <p>{t('dataArchitecture.authorizationData.steps.2')}</p>
                     </div>
                     <div className="flex items-start space-x-3">
                       <span className="text-purple-400 font-bold">4.</span>
-                      <p>Spaceship validiert JWT, erstellt HMAC-SHA256 Hash vom Auth-Key</p>
+                      <p>{t('dataArchitecture.authorizationData.steps.3')}</p>
                     </div>
                     <div className="flex items-start space-x-3">
                       <span className="text-purple-400 font-bold">5.</span>
-                      <p>User wird authentifiziert mit subscription_plan und parent_stararc_user_id</p>
+                      <p>{t('dataArchitecture.authorizationData.steps.4')}</p>
                     </div>
                   </div>
                 </div>
@@ -298,10 +297,10 @@ const DataArchitectureShowcase: React.FC = () => {
                   <div className="p-2 bg-purple-500/20 rounded-lg">
                     <Lock className="w-5 h-5 text-purple-400" />
                   </div>
-                  <h4 className="text-lg font-bold text-white">Sicher</h4>
+                  <h4 className="text-lg font-bold text-white">{t('dataArchitecture.highlights.secure')}</h4>
                 </div>
                 <p className="text-slate-300 text-sm">
-                  JWT Token nur 5 Minuten gültig. Auth-Key niemals in plain text gespeichert.
+                  {t('dataArchitecture.highlights.secureDesc')}
                 </p>
               </div>
 
@@ -310,10 +309,10 @@ const DataArchitectureShowcase: React.FC = () => {
                   <div className="p-2 bg-purple-500/20 rounded-lg">
                     <Shield className="w-5 h-5 text-purple-400" />
                   </div>
-                  <h4 className="text-lg font-bold text-white">Isoliert</h4>
+                  <h4 className="text-lg font-bold text-white">{t('dataArchitecture.highlights.isolated')}</h4>
                 </div>
                 <p className="text-slate-300 text-sm">
-                  Separate Datenbanken. Subscription Plan wird synchronisiert.
+                  {t('dataArchitecture.highlights.isolatedDesc')}
                 </p>
               </div>
 
@@ -322,10 +321,10 @@ const DataArchitectureShowcase: React.FC = () => {
                   <div className="p-2 bg-purple-500/20 rounded-lg">
                     <Key className="w-5 h-5 text-purple-400" />
                   </div>
-                  <h4 className="text-lg font-bold text-white">Hash-basiert</h4>
+                  <h4 className="text-lg font-bold text-white">{t('dataArchitecture.highlights.hashBased')}</h4>
                 </div>
                 <p className="text-slate-300 text-sm">
-                  HMAC-SHA256 für rainbow table Resistenz. Kein plaintext auth key in DB.
+                  {t('dataArchitecture.highlights.hashBasedDesc')}
                 </p>
               </div>
             </div>
@@ -340,7 +339,7 @@ const DataArchitectureShowcase: React.FC = () => {
                 <div className="p-2 bg-green-500/20 rounded-lg">
                   <Shield className="w-6 h-6 text-green-400" />
                 </div>
-                <h3 className="text-2xl font-bold text-white">Spaceship: Finanzdaten</h3>
+                <h3 className="text-2xl font-bold text-white">{t('dataArchitecture.spaceshipData.title')}</h3>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
@@ -382,7 +381,7 @@ const DataArchitectureShowcase: React.FC = () => {
                 <div className="flex items-start space-x-3">
                   <Lock className="w-6 h-6 text-green-400 flex-shrink-0 mt-1" />
                   <div>
-                    <p className="text-green-400 font-semibold mb-2">Client-Side Verschlüsselung</p>
+                    <p className="text-green-400 font-semibold mb-2">{t('dataArchitecture.spaceshipData.clientSideEncryption')}</p>
                     <p className="text-slate-300 leading-relaxed mb-3">
                       {t('dataArchitecture.spaceshipData.description')}
                     </p>
@@ -399,28 +398,28 @@ const DataArchitectureShowcase: React.FC = () => {
               <div className="bg-slate-900/50 backdrop-blur-xl rounded-xl p-6 border border-slate-800/50">
                 <h4 className="text-lg font-bold text-white mb-3 flex items-center space-x-2">
                   <Shield className="w-5 h-5 text-green-400" />
-                  <span>Was wird verschlüsselt?</span>
+                  <span>{t('dataArchitecture.spaceshipData.whatEncrypted')}</span>
                 </h4>
                 <ul className="space-y-2 text-slate-300">
                   <li className="flex items-start space-x-2">
                     <span className="text-green-400 mt-1">•</span>
-                    <span>Asset Namen & Symbole</span>
+                    <span>{t('dataArchitecture.spaceshipData.encryptedItems.0')}</span>
                   </li>
                   <li className="flex items-start space-x-2">
                     <span className="text-green-400 mt-1">•</span>
-                    <span>ISIN, Mengen, Preise</span>
+                    <span>{t('dataArchitecture.spaceshipData.encryptedItems.1')}</span>
                   </li>
                   <li className="flex items-start space-x-2">
                     <span className="text-green-400 mt-1">•</span>
-                    <span>Budget Kategorien & Beträge</span>
+                    <span>{t('dataArchitecture.spaceshipData.encryptedItems.2')}</span>
                   </li>
                   <li className="flex items-start space-x-2">
                     <span className="text-green-400 mt-1">•</span>
-                    <span>Vault Namen & Inhalte</span>
+                    <span>{t('dataArchitecture.spaceshipData.encryptedItems.3')}</span>
                   </li>
                   <li className="flex items-start space-x-2">
                     <span className="text-green-400 mt-1">•</span>
-                    <span>Alle sensiblen Finanzdaten</span>
+                    <span>{t('dataArchitecture.spaceshipData.encryptedItems.4')}</span>
                   </li>
                 </ul>
               </div>
@@ -428,28 +427,28 @@ const DataArchitectureShowcase: React.FC = () => {
               <div className="bg-slate-900/50 backdrop-blur-xl rounded-xl p-6 border border-slate-800/50">
                 <h4 className="text-lg font-bold text-white mb-3 flex items-center space-x-2">
                   <Key className="w-5 h-5 text-green-400" />
-                  <span>Ihr privater Schlüssel</span>
+                  <span>{t('dataArchitecture.spaceshipData.yourPrivateKey')}</span>
                 </h4>
                 <ul className="space-y-2 text-slate-300">
                   <li className="flex items-start space-x-2">
                     <span className="text-green-400 mt-1">•</span>
-                    <span>Wird aus Ihrem Login-Code generiert</span>
+                    <span>{t('dataArchitecture.spaceshipData.privateKeyFeatures.0')}</span>
                   </li>
                   <li className="flex items-start space-x-2">
                     <span className="text-green-400 mt-1">•</span>
-                    <span>Verlässt nie Ihren Browser</span>
+                    <span>{t('dataArchitecture.spaceshipData.privateKeyFeatures.1')}</span>
                   </li>
                   <li className="flex items-start space-x-2">
                     <span className="text-green-400 mt-1">•</span>
-                    <span>Wird nie an Server gesendet</span>
+                    <span>{t('dataArchitecture.spaceshipData.privateKeyFeatures.2')}</span>
                   </li>
                   <li className="flex items-start space-x-2">
                     <span className="text-green-400 mt-1">•</span>
-                    <span>Maximale Privatsphäre garantiert</span>
+                    <span>{t('dataArchitecture.spaceshipData.privateKeyFeatures.3')}</span>
                   </li>
                   <li className="flex items-start space-x-2">
                     <span className="text-green-400 mt-1">•</span>
-                    <span>Zero-Knowledge Architektur</span>
+                    <span>{t('dataArchitecture.spaceshipData.privateKeyFeatures.4')}</span>
                   </li>
                 </ul>
               </div>
@@ -459,41 +458,41 @@ const DataArchitectureShowcase: React.FC = () => {
 
         {/* Summary Comparison */}
         <div className="mt-16 bg-slate-900/50 backdrop-blur-xl rounded-2xl p-8 border border-slate-800/50">
-          <h3 className="text-2xl font-bold text-white mb-6 text-center">Sicherheitsvergleich</h3>
+          <h3 className="text-2xl font-bold text-white mb-6 text-center">{t('dataArchitecture.comparisonTable.title')}</h3>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
                 <tr className="border-b border-slate-700">
-                  <th className="text-left py-3 px-4 text-sm font-semibold text-slate-400">Aspekt</th>
-                  <th className="text-left py-3 px-4 text-sm font-semibold text-blue-400">StarArc (Identität)</th>
-                  <th className="text-left py-3 px-4 text-sm font-semibold text-green-400">Spaceship (Finanzen)</th>
+                  <th className="text-left py-3 px-4 text-sm font-semibold text-slate-400">{t('dataArchitecture.comparisonTable.aspect')}</th>
+                  <th className="text-left py-3 px-4 text-sm font-semibold text-blue-400">{t('dataArchitecture.comparisonTable.stararcIdentity')}</th>
+                  <th className="text-left py-3 px-4 text-sm font-semibold text-green-400">{t('dataArchitecture.comparisonTable.spaceshipFinance')}</th>
                 </tr>
               </thead>
               <tbody>
                 <tr className="border-b border-slate-800/50">
-                  <td className="py-3 px-4 text-slate-300 font-semibold">Verschlüsselung</td>
-                  <td className="py-3 px-4 text-slate-300">Admin-Key (Server-Side)</td>
-                  <td className="py-3 px-4 text-slate-300">User-Key (Client-Side)</td>
+                  <td className="py-3 px-4 text-slate-300 font-semibold">{t('dataArchitecture.comparisonTable.encryption')}</td>
+                  <td className="py-3 px-4 text-slate-300">{t('dataArchitecture.comparisonTable.serverSide')}</td>
+                  <td className="py-3 px-4 text-slate-300">{t('dataArchitecture.comparisonTable.clientSide')}</td>
                 </tr>
                 <tr className="border-b border-slate-800/50">
-                  <td className="py-3 px-4 text-slate-300 font-semibold">Zweck</td>
-                  <td className="py-3 px-4 text-slate-300">Account Recovery möglich</td>
-                  <td className="py-3 px-4 text-slate-300">Zero-Knowledge Privacy</td>
+                  <td className="py-3 px-4 text-slate-300 font-semibold">{t('dataArchitecture.comparisonTable.purpose')}</td>
+                  <td className="py-3 px-4 text-slate-300">{t('dataArchitecture.comparisonTable.accountRecovery')}</td>
+                  <td className="py-3 px-4 text-slate-300">{t('dataArchitecture.comparisonTable.zeroKnowledge')}</td>
                 </tr>
                 <tr className="border-b border-slate-800/50">
-                  <td className="py-3 px-4 text-slate-300 font-semibold">Daten</td>
-                  <td className="py-3 px-4 text-slate-300">Email, Alias, Client Name</td>
-                  <td className="py-3 px-4 text-slate-300">Assets, Budgets, Vaults</td>
+                  <td className="py-3 px-4 text-slate-300 font-semibold">{t('dataArchitecture.comparisonTable.data')}</td>
+                  <td className="py-3 px-4 text-slate-300">{t('dataArchitecture.comparisonTable.identityData')}</td>
+                  <td className="py-3 px-4 text-slate-300">{t('dataArchitecture.comparisonTable.financeData')}</td>
                 </tr>
                 <tr className="border-b border-slate-800/50">
-                  <td className="py-3 px-4 text-slate-300 font-semibold">Algorithmus</td>
+                  <td className="py-3 px-4 text-slate-300 font-semibold">{t('dataArchitecture.comparisonTable.algorithm')}</td>
                   <td className="py-3 px-4 text-slate-300">AES-256-GCM + PBKDF2</td>
                   <td className="py-3 px-4 text-slate-300">AES-256-GCM + PBKDF2</td>
                 </tr>
                 <tr>
-                  <td className="py-3 px-4 text-slate-300 font-semibold">Support Zugriff</td>
-                  <td className="py-3 px-4 text-slate-300">✅ Für Account-Hilfe</td>
-                  <td className="py-3 px-4 text-slate-300">❌ Nie möglich</td>
+                  <td className="py-3 px-4 text-slate-300 font-semibold">{t('dataArchitecture.comparisonTable.supportAccess')}</td>
+                  <td className="py-3 px-4 text-slate-300">{t('dataArchitecture.comparisonTable.supportYes')}</td>
+                  <td className="py-3 px-4 text-slate-300">{t('dataArchitecture.comparisonTable.supportNo')}</td>
                 </tr>
               </tbody>
             </table>

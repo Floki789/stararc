@@ -1736,11 +1736,10 @@
   },
   "privacy": {
     "title": "Datenschutzerklärung für Stararc.one",
-    "subtitle": "Stand: 30. Dezember 2025",
+    "subtitle": "Stand: 18. März 2026",
     "section1": {
       "title": "1. Verantwortliche Stelle",
       "p1": "Verantwortlich für die Datenverarbeitung im Sinne der Datenschutz-Grundverordnung (DSGVO) und des Schweizer Datenschutzgesetzes (DSG) ist:",
-      "contact": "Archimedes SB\nSamuel Bumann\nRapperswil-Jona, Schweiz\nE-Mail: info@stararc.one",
       "company": "Archimedes SB",
       "person": "Samuel Bumann",
       "location": "Rapperswil-Jona, Schweiz",
@@ -1750,22 +1749,47 @@
       "title": "2. Grundsätze der Datenverarbeitung",
       "p1": "Privacy-by-Design: Stararc.one ist als privacy-fokussierte Metadaten-Verwaltungsplattform konzipiert, die explizit darauf aufmerksam macht, die Plattform nicht für die Speicherung sicherheitsrelevanter Informationen zu verwenden.",
       "p2": "Datenminimierung: Wir verarbeiten nur die Daten, die für den Betrieb der Plattform technisch erforderlich sind.",
-      "p3": "Client-seitige Verschlüsselung: Alle Nutzerdaten werden bereits auf deinem Gerät verschlüsselt, bevor sie an unsere Server übertragen werden."
+      "p3": "Client-seitige Verschlüsselung: Alle persönlichen Inhaltsdaten (z. B. Asset-Bezeichnungen, Institutionen-Namen, Dokumentenreferenzen) werden auf deinem Gerät verschlüsselt, bevor sie an unsere Server übertragen werden. Die Schlüsselverwaltungsmethode unterscheidet sich je nach der bei der Registrierung gewählten Authentifizierungsmethode (vgl. Abschnitt 3.1).",
+      "p4": "Betriebliche Klartextdaten: Ein Teil der Daten wird aus technischen Gründen (Performance, Datenbankabfragen, App-Logik) unverschlüsselt gespeichert. Dies betrifft ausschließlich nicht-personenbezogene, nicht-sensible Strukturdaten ohne Rückschluss auf persönliche Identität, zum Beispiel: Abonnement-Plan und -Status (z. B. \"Core\", \"Aktiv\"), Asset-Kategorie und -Unterkategorie (z. B. \"Wertpapiere\", \"Aktien\"), Währungscode (z. B. \"CHF\", \"USD\"), Anzeigereihenfolge von Kategorien, Zeitstempel (Erstellungsdatum, letzter Login, letzte Aktualisierung), App-interne Statusflags (z. B. ist aktiv, automatische Kursabfrage aktiviert), Erinnerungsintervall für manuelle Updates (z. B. \"monatlich\"). Diese Daten ermöglichen ein zuverlässiges und performantes App-Rendering, enthalten jedoch keinerlei Rückschlüsse auf deine konkrete Vermögenssituation."
     },
     "section3": {
       "title": "3. Art und Zweck der Datenverarbeitung",
       "registration": {
         "title": "3.1 Registrierung und Authentifizierung",
-        "intro": "Verarbeitete Daten:",
-        "list": [
-          "E-Mail-Adresse (verschlüsselt)",
-          "Verschlüsselter Login-Code (verschlüsselt)",
-          "Vor- und Nachname (verschlüsselt)",
+        "intro": "Stararc.one bietet zwei Authentifizierungsmethoden mit grundlegend unterschiedlichen Datenschutzeigenschaften. Die Methode wird einmalig bei der Registrierung gewählt.",
+        "emailIntro": "Die E-Mail-Adresse wird in beiden Modi identisch verarbeitet und niemals im Klartext gespeichert:",
+        "emailList": [
+          "E-Mail-Hash (Einwegfunktion) – ausschließlich für die Login-Suche, nicht umkehrbar",
+          "E-Mail-Adresse (nutzerverschlüsselt) – für die Anzeige in der App",
+          "E-Mail-Adresse (betreiberverschlüsselt) – ausschließlich zugänglich für Support und Benachrichtigungen; Rechtsgrundlage: berechtigtes Interesse (Art. 6 Abs. 1 lit. f DSGVO)"
+        ],
+        "standardTitle": "3.1a Standard-Login",
+        "standardIntro": "Zusätzlich verarbeitete Daten:",
+        "standardList": [
+          "BCrypt-Hash des Passworts",
+          "Verschlüsselter Datenverschlüsselungsschlüssel (DEK) – Nutzerseite",
+          "Verschlüsselter Datenverschlüsselungsschlüssel (DEK) – Serverseite",
+          "Verschlüsselter Recovery-Key aus 12 Wiederherstellungsphrasen",
+          "Kryptographisches Salt",
+          "Vor- und Nachname (nutzerverschlüsselt, AES-256-GCM)",
           "Zeitpunkt der AGB-Akzeptierung",
           "IP-Adresse bei Registrierung (verschlüsselt)"
         ],
-        "encryption": "Verschlüsselung: Diese Daten werden mit einem Stararc-Masterkey verschlüsselt und sind für Dritte nicht lesbar. Selbst bei einem Datenzugriff sind die Informationen ohne den entsprechenden Schlüssel nicht entschlüsselbar.",
-        "legal": "Rechtsgrundlage: Vertragserfüllung (Art. 6 Abs. 1 lit. b DSGVO)"
+        "standardNote": "Beim Standard-Login speichert der Server einen serverseitig verschlüsselten Datenverschlüsselungsschlüssel. Damit ist ein administrativer Passwort-Reset möglich, wenn du dein Passwort vergisst. Das Passwort selbst wird niemals gespeichert. Alle Nutzerdaten bleiben clientseitig über den DEK verschlüsselt; der Server entschlüsselt deine Inhalte ausschließlich im Rahmen eines explizit angeforderten Passwort-Resets.",
+        "zkTitle": "3.1b Zero-Knowledge-Login (Souveränitätsmodus)",
+        "zkIntro": "Zusätzlich verarbeitete Daten:",
+        "zkList": [
+          "BCrypt-Hash des Login-Codes",
+          "Verschlüsselter Datenverschlüsselungsschlüssel (DEK) – Nutzerseite",
+          "Verschlüsselter Datenverschlüsselungsschlüssel (DEK) – Recovery-Seite",
+          "Kryptographische Salts",
+          "SHA-256-Hash des Recovery-Keys (zur Verifikation der Wiederherstellungsphrasen)",
+          "Vor- und Nachname (nutzerverschlüsselt, AES-256-GCM)",
+          "Zeitpunkt der AGB-Akzeptierung",
+          "IP-Adresse bei Registrierung (verschlüsselt)"
+        ],
+        "zkNote": "Beim Zero-Knowledge-Login hat der Server zu keinem Zeitpunkt Zugriff auf deinen Datenverschlüsselungsschlüssel. Ein administrativer Passwort-Reset ist technisch unmöglich. Nur du kannst deine Daten entschlüsseln – mit deinen 12 Wiederherstellungsphrasen. Wenn Passwort und Wiederherstellungsphrasen verloren gehen, sind deine Daten dauerhaft nicht wiederherstellbar.",
+        "legal": "Rechtsgrundlage: Vertragserfüllung (Art. 6 Abs. 1 lit. b DSGVO)"
       },
       "metadata": {
         "title": "3.2 Metadaten-Verwaltung",
@@ -1775,19 +1799,35 @@
           "Budget-Kategorien und -Positionen",
           "Vault-Namen und Aufbewahrungsreferenzen",
           "Institutionen-Bezeichnungen",
-          "Dokumenten-Referenzen (nicht Inhalte)"
+          "Dokumenten-Referenzen (nicht Inhalte)",
+          "xPub-Schlüssel und Derivationspfade"
         ],
-        "legal": "Rechtsgrundlage: Vertragserfüllung (Art. 6 Abs. 1 lit. b DSGVO)"
+        "note": "Diese Daten werden clientseitig verschlüsselt gespeichert und sind für den Betreiber nicht lesbar.",
+        "legal": "Rechtsgrundlage: Vertragserfüllung (Art. 6 Abs. 1 lit. b DSGVO)"
+      },
+      "passwordReset": {
+        "title": "3.3 Passwort-Reset (nur Standard-Login)",
+        "intro": "Verarbeitete Daten: Verschlüsselte Schlüsselmaterialien des betroffenen Accounts.",
+        "description": "Auf ausdrücklichen Wunsch des Nutzers führt der Betreiber einen kontrollierten Wiederherstellungsprozess durch. Der Accountzugang wird unter dem neuen Passwort neu gesichert. Bestehende Inhaltsdaten bleiben unverändert. Dieser Prozess ist ausschließlich für Standard-Login-Nutzer verfügbar; beim Zero-Knowledge-Login ist er technisch nicht möglich.",
+        "legal": "Rechtsgrundlage: Vertragserfüllung (Art. 6 Abs. 1 lit. b DSGVO)"
       },
       "payment": {
-        "title": "3.3 Zahlungsabwicklung",
+        "title": "3.4 Zahlungsabwicklung",
         "intro": "Verarbeitete Daten:",
         "list": [
-          "Zahlungsinformationen (über externe Zahlungsdienstleister)",
+          "Zahlungsinformationen (über Stripe, Inc., San Francisco, USA)",
           "Rechnungsadresse",
           "Abonnement-Status"
         ],
-        "legal": "Rechtsgrundlage: Vertragserfüllung (Art. 6 Abs. 1 lit. b DSGVO)"
+        "note": "Stripe verarbeitet Zahlungsdaten auf Servern in den USA. Die Übertragung erfolgt auf Basis des EU-U.S. Data Privacy Framework. Die Datenschutzrichtlinie von Stripe ist verfügbar unter https://stripe.com/privacy.",
+        "legal": "Rechtsgrundlage: Vertragserfüllung (Art. 6 Abs. 1 lit. b DSGVO)"
+      },
+      "notifications": {
+        "title": "3.5 Benachrichtigungen und Kommunikation",
+        "intro": "Verarbeitete Daten: E-Mail-Adresse (betreiberverschlüsselt, zum Versand entschlüsselt).",
+        "description": "Zweck: Versand von Benachrichtigungen bei wesentlichen Änderungen der Datenschutzerklärung oder der AGB sowie betriebsnotwendige Kommunikation (z. B. Sicherheitsvorfälle).",
+        "note": "Rechtsgrundlage: Berechtigtes Interesse (Art. 6 Abs. 1 lit. f DSGVO). Werbliche Kommunikation erfolgt nur mit ausdrücklicher Einwilligung.",
+        "required": "Die Angabe deiner E-Mail-Adresse ist für die Erstellung eines Accounts zwingend erforderlich. Ohne E-Mail-Adresse kann kein Account angelegt werden."
       }
     },
     "section4": {
@@ -1798,36 +1838,42 @@
         "Login-Daten zu Banken, Brokern oder anderen Finanzdienstleistern",
         "Passwörter zu Drittanbietern",
         "Zugangscodes zu Tresoren oder Gebäuden",
-        "Biometrische Daten oder PINs",
-        "Wallet-Adressen oder Derivationspfade"
+        "Biometrische Daten oder PINs"
       ]
     },
     "section5": {
       "title": "5. Verschlüsselung und technische Sicherheit",
-      "p1": "Client-seitige Verschlüsselung: Alle sensiblen Daten werden bereits auf deinem Gerät verschlüsselt, bevor sie übertragen werden.",
-      "p2": "Keine Klartext-Speicherung: Wir speichern grundsätzlich keine privacy-relevanten Daten im Klartext auf unseren Servern.",
-      "p3": "Kein Zugriff: Selbst wir als Betreiber können deine verschlüsselten Daten nicht entschlüsseln, solange du deine Login-Daten nicht preisgibst."
+      "p1": "Client-seitige Verschlüsselung: Sensible Nutzerdaten werden auf deinem Gerät verschlüsselt, bevor sie übertragen werden. Der Umfang hängt von der gewählten Authentifizierungsmethode ab (vgl. Abschnitt 3.1).",
+      "p2": "Keine Klartext-Speicherung: Wir speichern keine privacy-relevanten Daten im Klartext auf unseren Servern.",
+      "p3": "Zugriff abhängig von der Login-Methode: Beim Zero-Knowledge-Login (Souveränitätsmodus) ist es dem Betreiber technisch unmöglich, deine Inhaltsdaten zu entschlüsseln. Beim Standard-Login hält der Server geschützte Schlüsselmaterialien, die ausschließlich für die Durchführung eines explizit angeforderten Passwort-Resets eingesetzt werden."
     },
     "section6": {
       "title": "6. Empfänger und Drittanbieter",
-      "p1": "Zahlungsdienstleister: Für die Zahlungsabwicklung nutzen wir externe, zertifizierte Zahlungsdienstleister.",
-      "p2": "Hosting-Provider: Die Daten werden auf Servern in der Schweiz, EU oder den Vereinigten Staaten gehostet.",
-      "p3": "Keine Datenvermarktung: Wir verkaufen, vermieten oder teilen deine Daten niemals mit Dritten zu kommerziellen Zwecken."
+      "p1": "Zahlungsdienstleister: Stripe, Inc., 510 Townsend Street, San Francisco, CA 94103, USA. Stripe verarbeitet Zahlungsdaten nach PCI-DSS-Standards.",
+      "p2": "Hosting-Provider: Die Plattform wird über einen Cloud-Hosting-Anbieter (Heroku/Salesforce) betrieben. Daten werden auf Servern in den USA gehostet. Die Übermittlung in die USA erfolgt auf Basis des EU-U.S. Data Privacy Framework.",
+      "p3": "E-Mail-Dienstleister: Für den Versand von Benachrichtigungen setzen wir einen E-Mail-Dienstleister ein. Deine E-Mail-Adresse wird ausschließlich zum Versand übermittelt und nicht beim Anbieter gespeichert.",
+      "p4": "Keine Datenvermarktung: Wir verkaufen, vermieten oder teilen deine Daten niemals mit Dritten zu kommerziellen Zwecken."
     },
     "section7": {
       "title": "7. Speicherdauer",
-      "p1": "Aktive Accounts: Daten werden nur solange gespeichert, wie dein Account aktiv ist.",
-      "p2": "Nach Kündigung: Bei Kündigung werden alle deine Daten sofort unwiderruflich gelöscht, soweit keine gesetzlichen Aufbewahrungspflichten bestehen.",
-      "p3": "Rechtliche Aufbewahrung: Nur gesetzlich vorgeschriebene Aufbewahrungsfristen (z.B. für Rechnungsdaten) bleiben bestehen."
+      "p1": "Aktive Accounts: Nutzerdaten werden nur solange gespeichert, wie dein Account aktiv ist.",
+      "p2": "IP-Adresse bei Registrierung: Wird nach 30 Tagen automatisch gelöscht.",
+      "p3": "Rechnungs- und Zahlungsdaten: Werden für 10 Jahre aufbewahrt gemäß Art. 958f OR (Schweizer Buchführungspflicht).",
+      "p4": "Nach Kündigung: Bei Kündigung werden alle deine Inhaltsdaten und Authentifizierungsdaten sofort und unwiderruflich gelöscht. Rechnungsdaten verbleiben gemäß 7.3 gespeichert.",
+      "p5": "Löschung nach Account-Löschung: E-Mail-Hash, verschlüsselte E-Mail und alle weiteren personenbezogenen Daten werden bei Account-Löschung vollständig entfernt."
     },
     "section8": {
       "title": "8. Deine Rechte (DSGVO)",
-      "p1": "Auskunftsrecht (Art. 15 DSGVO): Information über verarbeitete Daten",
-      "p2": "Berichtigungsrecht (Art. 16 DSGVO): Korrektur falscher Daten",
-      "p3": "Löschungsrecht (Art. 17 DSGVO): Löschung deiner Daten",
-      "p4": "Einschränkung (Art. 18 DSGVO): Einschränkung der Verarbeitung",
-      "p5": "Datenübertragbarkeit (Art. 20 DSGVO): Export deiner Daten",
-      "p6": "Widerspruchsrecht (Art. 21 DSGVO): Widerspruch gegen Verarbeitung"
+      "p1": "Auskunftsrecht (Art. 15 DSGVO): Information über verarbeitete Daten",
+      "p1note": "Hinweis für Zero-Knowledge-Login-Nutzer: Da der Betreiber keinen technischen Zugriff auf deine verschlüsselten Inhaltsdaten hat, können wir nur Auskunft erteilen, soweit Daten für uns zugänglich sind (z. B. E-Mail-Hash, Abonnement-Status). Deine Inhaltsdaten sind nur über deinen eigenen Account zugänglich.",
+      "p2": "Berichtigungsrecht (Art. 16 DSGVO): Korrektur falscher Daten",
+      "p2note": "Hinweis für Zero-Knowledge-Login-Nutzer: Eine Korrektur von Inhaltsdaten (z. B. Name) durch den Betreiber ist technisch nicht möglich. Korrekturen können nur von dir selbst über deinen Account vorgenommen werden.",
+      "p3": "Löschungsrecht (Art. 17 DSGVO): Löschung deiner Daten",
+      "p4": "Einschränkung (Art. 18 DSGVO): Einschränkung der Verarbeitung",
+      "p5": "Datenübertragbarkeit (Art. 20 DSGVO): Export deiner Daten",
+      "p6": "Widerspruchsrecht (Art. 21 DSGVO): Widerspruch gegen Verarbeitungen auf Basis berechtigter Interessen (Art. 6 Abs. 1 lit. f)",
+      "p7": "Keine Einwilligung erforderlich: Die Datenverarbeitung erfolgt ausschließlich auf Basis von Vertragserfüllung (Art. 6 Abs. 1 lit. b) und berechtigtem Interesse (Art. 6 Abs. 1 lit. f). Es werden keine Einwilligungen eingeholt; daher besteht kein Widerrufsrecht nach Art. 7 Abs. 3 DSGVO.",
+      "p8": "Kein automatisiertes Entscheiden: Wir führen kein Profiling oder automatisierte Entscheidungen nach Art. 22 DSGVO durch, die rechtliche oder ähnlich bedeutsame Auswirkungen auf dich haben."
     },
     "section9": {
       "title": "9. Cookies und Tracking",
@@ -1843,7 +1889,7 @@
     "section11": {
       "title": "11. Datenschutz-Folgenabschätzung",
       "p1": "Aufgrund unserer Privacy-by-Design-Architektur und der ausschließlichen Verarbeitung von Metadaten ist das Risiko für deine Privatsphäre minimiert.",
-      "p2": "Die client-seitige Verschlüsselung stellt sicher, dass selbst bei einem Sicherheitsvorfall keine sensiblen Daten kompromittiert werden können."
+      "p2": "Beim Zero-Knowledge-Login (Souveränitätsmodus) ist die Architektur so ausgelegt, dass Inhaltsdaten selbst bei vollständigem Zugriff auf die Server-Infrastruktur nicht entschlüsselt werden können. Beim Standard-Login hängt die Vertraulichkeit der Nutzerdaten von der Sicherheit der serverseitigen Geheimnisse ab, die angemessen geschützt und regelmäßig überprüft werden."
     },
     "section12": {
       "title": "12. Änderungen dieser Datenschutzerklärung",
@@ -1853,7 +1899,8 @@
     "section13": {
       "title": "13. Kontakt und Beschwerden",
       "p1": "Datenschutzanfragen: info@stararc.one",
-      "p2": "Beschwerdestelle: du hast das Recht, dich bei der zuständigen Datenschutzbehörde zu beschweren."
+      "p2": "Schweizer Aufsichtsbehörde: Eidgenössischer Datenschutz- und Öffentlichkeitsbeauftragter (EDÖB), Feldeggweg 1, 3003 Bern, www.edoeb.admin.ch",
+      "p3": "EU-Aufsichtsbehörde: Du hast das Recht, dich bei der Datenschutzbehörde deines EU-Mitgliedstaats zu beschweren, wenn du glaubst, dass die Verarbeitung deiner Daten gegen die DSGVO verstößt."
     }
   },
   "pension": {

@@ -1,5 +1,5 @@
 Datenschutzerklärung für Stararc.one
-Stand: 30. Dezember 2025
+Stand: 18. März 2026
 
 1. Verantwortliche Stelle
 1.1 Verantwortlich für die Datenverarbeitung im Sinne der Datenschutz-Grundverordnung (DSGVO) und des Schweizer Datenschutzgesetzes (DSG) ist:
@@ -14,19 +14,60 @@ E-Mail: info@stararc.one
 
 2.2 Datenminimierung: Wir verarbeiten nur die Daten, die für den Betrieb der Plattform technisch erforderlich sind.
 
-2.3 Client-seitige Verschlüsselung: Alle Nutzerdaten werden bereits auf Ihrem Gerät verschlüsselt, bevor sie an unsere Server übertragen werden.
+2.3 Client-seitige Verschlüsselung: Alle persönlichen Inhaltsdaten (z.B. Namen von Vermögenswerten, Institutionsbezeichnungen, Dokument-Referenzen) werden auf Ihrem Gerät verschlüsselt, bevor sie an unsere Server übertragen werden. Die Art der Schlüsselverwaltung unterscheidet sich je nach gewählter Authentifizierungsmethode (siehe Abschnitt 3.1).
+
+2.4 Betriebliche Klartextdaten: Ein Teil der Daten wird aus technischen Gründen (Performanz, Datenbankabfragen, App-Logik) unverschlüsselt gespeichert. Dabei handelt es sich ausschließlich um nicht-persönliche, nicht-sensible Strukturdaten ohne Persönlichkeitsbezug, zum Beispiel:
+
+Abonnement-Plan und -Status (z.B. „Core“, „Aktiv“)
+Asset-Kategorie und -Subkategorie (z.B. „Wertschriften“, „Aktien“)
+Währungscode (z.B. „CHF“, „USD“)
+Anzeigereihenfolge von Kategorien
+Zeitstempel (Erstellungsdatum, letzter Login, letzte Aktualisierung)
+App-interne Status-Flags (z.B. ist aktiv, automatische Preisaktualìsierung aktiviert)
+Erinnerungsintervall für manuelle Updates (z.B. „monatlich“)
+
+Diese Daten ermöglichen eine fehlerfreie und performante Darstellung der App, enthalten aber keine Rückschlüsse auf Ihre konkrete Vermögenssituation.
 
 3. Art und Zweck der Datenverarbeitung
 
 3.1 Registrierung und Authentifizierung
-Verarbeitete Daten:
 
-E-Mail-Adresse (verschlüsselt)
-Verschlüsselter Login-Code (verschlüsselt)
-Vor- und Nachname (verschlüsselt)
+Stararc.one bietet zwei Authentifizierungsmethoden, die sich in ihren Datenschutzeigenschaften grundlegend unterscheiden. Bei der Registrierung wählen Sie einmalig eine Methode aus.
+
+Die E-Mail-Adresse wird in beiden Modi auf dieselbe Weise verarbeitet und niemals im Klartext gespeichert:
+E-Mail-Hash (einweg-gehasht) — nur für den Login-Lookup, nicht umkehrbar
+E-Mail-Adresse (verschlüsselt, nur durch Sie entschlüsselbar) — für die Anzeige in der App
+E-Mail-Adresse (betreiber-verschlüsselt) — ausschließlich für Support und Benachrichtigungen zugänglich; Rechtsgrundlage: berechtigtes Interesse (Art. 6 Abs. 1 lit. f DSGVO)
+
+3.1a Standard-Login
+
+Zusätzlich verarbeitete Daten:
+BCrypt-Hash des Passworts
+Verschlüsselter Datenverschlüsselungsschlüssel (DEK) — User-seitig (wrapped_dek)
+Verschlüsselter Datenverschlüsselungsschlüssel (DEK) — Server-seitig (wrapped_dek_server)
+Verschlüsselter Recovery-Schlüssel aus 12 Wiederherstellungsphrasen (wrapped_dek_recovery)
+Kryptographisches Salt (dek_salt)
+Vor- und Nachname (user-verschlüsselt, AES-256-GCM)
 Zeitpunkt der AGB-Akzeptierung
 IP-Adresse bei Registrierung (verschlüsselt)
-Verschlüsselung: Diese Daten werden mit einem Stararc-Masterkey verschlüsselt und sind für Dritte nicht lesbar. Selbst bei einem Datenzugriff sind die Informationen ohne den entsprechenden Schlüssel nicht entschlüsselbar.
+
+Besonderheit: Beim Standard-Login speichert der Server einen serverseitig verschlüsselten Datenverschlüsselungsschlüssel (wrapped_dek_server). Dies ermöglicht einen administrativen Passwort-Reset, falls Sie Ihr Passwort vergessen. Ihr Passwort selbst wird niemals gespeichert. Alle Nutzerdaten bleiben durch den DEK client-seitig verschlüsselt; der Server entschlüsselt Ihre Inhalte nur im Rahmen eines explizit beauftragten Passwort-Resets.
+
+Rechtsgrundlage: Vertragserfüllung (Art. 6 Abs. 1 lit. b DSGVO)
+
+3.1b Zero-Knowledge-Login (Sovereignty Mode)
+
+Zusätzlich verarbeitete Daten:
+BCrypt-Hash des Login-Codes
+Verschlüsselter Datenverschlüsselungsschlüssel (DEK) — User-seitig (wrapped_dek)
+Verschlüsselter Datenverschlüsselungsschlüssel (DEK) — Recovery-seitig (wrapped_dek_recovery)
+Kryptographische Salts (dek_salt, recovery_salt)
+SHA-256-Hash des Recovery-Keys (zur Verifikation der Wiederherstellungsphrasen)
+Vor- und Nachname (user-verschlüsselt, AES-256-GCM)
+Zeitpunkt der AGB-Akzeptierung
+IP-Adresse bei Registrierung (verschlüsselt)
+
+Besonderheit: Beim Zero-Knowledge-Login hat der Server zu keinem Zeitpunkt Zugriff auf Ihren Datenverschlüsselungsschlüssel (kein wrapped_dek_server). Ein administrativer Passwort-Reset ist technisch unmöglich. Nur Sie selbst können Ihre Daten mittels Ihrer 12 Wiederherstellungsphrasen entschlüsseln. Bei Verlust des Passworts und der Wiederherstellungsphrasen sind Ihre Daten unwiederbringlich verloren.
 
 Rechtsgrundlage: Vertragserfüllung (Art. 6 Abs. 1 lit. b DSGVO)
 
@@ -38,15 +79,37 @@ Budget-Kategorien und -Positionen
 Vault-Namen und Aufbewahrungsreferenzen
 Institutionen-Bezeichnungen
 Dokumenten-Referenzen (nicht Inhalte)
+xPub-Schlüssel und Derivationspfade
+
+Diese Daten werden client-seitig verschlüsselt gespeichert und sind für den Betreiber nicht lesbar.
+
 Rechtsgrundlage: Vertragserfüllung (Art. 6 Abs. 1 lit. b DSGVO)
 
-3.3 Zahlungsabwicklung
+3.3 Passwort-Reset (nur Standard-Login)
+Verarbeitete Daten: Verschlüsselte Schlüsselmaterialien des betroffenen Accounts.
+
+Ablauf: Auf ausdrückliche Anfrage des Nutzers führt der Betreiber einen kontrollierten Wiederherstellungsprozess durch. Dabei wird der Kontozugang unter dem neuen Passwort neu gesichert. Bestehende Inhaltsdaten bleiben unverändert erhalten. Dieser Vorgang ist ausschließlich für Standard-Login-Nutzer möglich; beim Zero-Knowledge-Login ist er technisch nicht durchführbar.
+
+Rechtsgrundlage: Vertragserfüllung (Art. 6 Abs. 1 lit. b DSGVO)
+
+3.4 Zahlungsabwicklung
 Verarbeitete Daten:
 
-Zahlungsinformationen (über externe Zahlungsdienstleister)
+Zahlungsinformationen (über Stripe, Inc., San Francisco, USA)
 Rechnungsadresse
 Abonnement-Status
 Rechtsgrundlage: Vertragserfüllung (Art. 6 Abs. 1 lit. b DSGVO)
+
+Hinweis: Stripe verarbeitet Zahlungsdaten auf Servern in den USA. Die Übertragung erfolgt auf Basis des EU-U.S. Data Privacy Frameworks. Stripe's Datenschutzerklärung ist abrufbar unter https://stripe.com/privacy.
+
+3.5 Benachrichtigungen und Kommunikation
+Verarbeitete Daten: E-Mail-Adresse (betreiber-verschlüsselt, für Versand entschlüsselt).
+
+Zweck: Versand von Benachrichtigungen über wesentliche Änderungen der Datenschutzerklärung oder der Nutzungsbedingungen sowie betriebsnotwendige Mitteilungen (z.B. Sicherheitsvorfälle).
+
+Rechtsgrundlage: Berechtigtes Interesse (Art. 6 Abs. 1 lit. f DSGVO). Werbliche Kommunikation erfolgt nur mit ausdrücklicher Einwilligung.
+
+Die Bereitstellung Ihrer E-Mail-Adresse ist für den Vertragsabschluss zwingend erforderlich. Ohne E-Mail-Adresse kann kein Account erstellt werden.
 
 4. Ausdrücklich NICHT gespeicherte Daten
 4.1 Die Plattform ist ausdrücklich nicht für die Speicherung folgender sicherheitsrelevanter Informationen vorgesehen:
@@ -56,33 +119,42 @@ Login-Daten zu Banken, Brokern oder anderen Finanzdienstleistern
 Passwörter zu Drittanbietern
 Zugangscodes zu Tresoren oder Gebäuden
 Biometrische Daten oder PINs
-Wallet-Adressen oder Derivationspfade
 
 5. Verschlüsselung und technische Sicherheit
-5.1 Client-seitige Verschlüsselung: Alle sensiblen Daten werden bereits auf Ihrem Gerät verschlüsselt, bevor sie übertragen werden.
+5.1 Client-seitige Verschlüsselung: Sensible Nutzerdaten werden auf Ihrem Gerät verschlüsselt, bevor sie übertragen werden. Der Umfang hängt von der gewählten Authentifizierungsmethode ab (siehe Abschnitt 3.1).
 
 5.2 Keine Klartext-Speicherung: Wir speichern grundsätzlich keine privacy-relevanten Daten im Klartext auf unseren Servern.
 
-5.3 Kein Zugriff: Selbst wir als Betreiber können Ihre verschlüsselten Daten nicht entschlüsseln, solange Sie Ihre Login-Daten nicht preisgeben.
+5.3 Zugriff je nach gewählter Login-Methode: Beim Zero-Knowledge-Login (Sovereignty Mode) ist es dem Betreiber technisch nicht möglich, Ihre Inhaltsdaten zu entschlüsseln. Beim Standard-Login hält der Server geschützte Schlüsselmaterialien vor, die ausschließlich zur Durchführung eines ausdrücklich beantragten Passwort-Resets eingesetzt werden.
 
 6. Empfänger und Drittanbieter
-6.1 Zahlungsdienstleister: Für die Zahlungsabwicklung nutzen wir externe, zertifizierte Zahlungsdienstleister.
+6.1 Zahlungsdienstleister: Stripe, Inc., 510 Townsend Street, San Francisco, CA 94103, USA. Stripe verarbeitet Zahlungsdaten gemäß PCI-DSS-Standard.
 
-6.2 Hosting-Provider: Die Daten werden auf Servern in der Schweiz, EU oder den Vereinigten Staaten gehostet.
+6.2 Hosting-Provider: Der Betrieb der Plattform erfolgt über einen Cloud-Hosting-Anbieter (Heroku/Salesforce). Die Daten werden auf Servern in den Vereinigten Staaten gehostet. Die Übertragung in die USA erfolgt auf Basis des EU-U.S. Data Privacy Frameworks.
 
-6.3 Keine Datenvermarktung: Wir verkaufen, vermieten oder teilen Ihre Daten niemals mit Dritten zu kommerziellen Zwecken.
+6.3 E-Mail-Versand: Für den Versand von Benachrichtigungen nutzen wir einen E-Mail-Dienstleister. Dabei wird Ihre E-Mail-Adresse ausschließlich für den Versand übermittelt und nicht gespeichert.
+
+6.4 Keine Datenvermarktung: Wir verkaufen, vermieten oder teilen Ihre Daten niemals mit Dritten zu kommerziellen Zwecken.
 
 7. Speicherdauer
-7.1 Aktive Accounts: Daten werden nur solange gespeichert, wie Ihr Account aktiv ist.
+7.1 Aktive Accounts: Nutzerdaten werden nur solange gespeichert, wie Ihr Account aktiv ist.
 
-7.2 Nach Kündigung: Bei Kündigung werden alle Ihre Daten sofort unwiderruflich gelöscht, soweit keine gesetzlichen Aufbewahrungspflichten bestehen.
+7.2 IP-Adresse bei Registrierung: Wird nach 30 Tagen automatisch gelöscht.
 
-7.3 Rechtliche Aufbewahrung: Nur gesetzlich vorgeschriebene Aufbewahrungsfristen (z.B. für Rechnungsdaten) bleiben bestehen.
+7.3 Rechnungs- und Zahlungsdaten: Aufbewahrung für 10 Jahre gemäss OR Art. 958f (Schweizer Buchführungspflicht).
+
+7.4 Nach Kündigung: Bei Kündigung werden alle Ihre Inhaltsdaten sowie Authentifizierungsdaten sofort unwiderruflich gelöscht. Rechnungsdaten bleiben gemäss Abschnitt 7.3 gespeichert.
+
+7.5 Datenlöschung nach Account-Löschung: E-Mail-Hash, verschlüsselte E-Mail und alle weiteren personenbezogenen Daten werden bei Account-Löschung vollständig entfernt.
 
 8. Ihre Rechte (DSGVO)
 8.1 Auskunftsrecht (Art. 15 DSGVO): Information über verarbeitete Daten
 
+Hinweis für Zero-Knowledge-Login-Nutzer: Da wir als Betreiber technisch keinen Zugriff auf Ihre verschlüsselten Inhaltsdaten haben, können wir Auskunft nur in dem Umfang erteilen, in dem Daten für uns zugänglich sind (z.B. E-Mail-Hash, Abonnementstatus). Ihre Inhaltsdaten sind ausschließlich über Ihren eigenen Zugang abrufbar.
+
 8.2 Berichtigungsrecht (Art. 16 DSGVO): Korrektur falscher Daten
+
+Hinweis für Zero-Knowledge-Login-Nutzer: Eine Berichtigung von Inhaltsdaten (z.B. Name) durch den Betreiber ist technisch nicht möglich. Korrekturen können nur Sie selbst über Ihren Zugang vornehmen.
 
 8.3 Löschungsrecht (Art. 17 DSGVO): Löschung Ihrer Daten
 
@@ -90,7 +162,11 @@ Wallet-Adressen oder Derivationspfade
 
 8.5 Datenübertragbarkeit (Art. 20 DSGVO): Export Ihrer Daten
 
-8.6 Widerspruchsrecht (Art. 21 DSGVO): Widerspruch gegen Verarbeitung
+8.6 Widerspruchsrecht (Art. 21 DSGVO): Widerspruch gegen Verarbeitung auf Basis berechtigter Interessen (Art. 6 Abs. 1 lit. f)
+
+8.7 Keine Einwilligungen erforderlich: Die Verarbeitung Ihrer Daten erfolgt ausschliesslich auf Basis von Vertragserfüllung (Art. 6 Abs. 1 lit. b) und berechtigtem Interesse (Art. 6 Abs. 1 lit. f). Es werden keine Einwilligungen eingeholt, daher entfällt ein Widerrufrecht nach Art. 7 Abs. 3 DSGVO.
+
+8.8 Keine automatisierte Entscheidungsfindung: Wir führen kein Profiling und keine automatisierten Entscheidungen nach Art. 22 DSGVO durch, die rechtliche oder ähnlich erhebliche Wirkungen für Sie entfalten.
 
 9. Cookies und Tracking
 9.1 Minimaler Einsatz: Wir verwenden nur technisch notwendige Cookies für die Funktionalität der Plattform.
@@ -107,7 +183,7 @@ Wallet-Adressen oder Derivationspfade
 11. Datenschutz-Folgenabschätzung
 11.1 Aufgrund unserer Privacy-by-Design-Architektur und der ausschließlichen Verarbeitung von Metadaten ist das Risiko für Ihre Privatsphäre minimiert.
 
-11.2 Die client-seitige Verschlüsselung stellt sicher, dass selbst bei einem Sicherheitsvorfall keine sensiblen Daten kompromittiert werden können.
+11.2 Beim Zero-Knowledge-Login (Sovereignty Mode) ist die Architektur so gestaltet, dass Inhaltsdaten selbst bei einem vollständigen Zugriff auf die Serverinfrastruktur nicht entschlüsselt werden können. Beim Standard-Login hängt die Vertraulichkeit der Nutzerdaten von der Sicherheit serverseitiger Geheimnisse ab, die entsprechend geschützt und regelmäßig überprüft werden.
 
 12. Änderungen dieser Datenschutzerklärung
 12.1 Änderungen dieser Datenschutzerklärung werden Ihnen mindestens 30 Tage im Voraus per E-Mail mitgeteilt.
@@ -117,5 +193,7 @@ Wallet-Adressen oder Derivationspfade
 13. Kontakt und Beschwerden
 13.1 Datenschutzanfragen: info@stararc.one
 
-13.2 Beschwerdestelle: Sie haben das Recht, sich bei der zuständigen Datenschutzbehörde zu beschweren.
+13.2 Beschwerdestelle Schweiz: Eidgenössischer Datenschutz- und Öffentlichkeitsbeauftragter (EDÖB), Feldeggweg 1, 3003 Bern, www.edoeb.admin.ch
+
+13.3 Beschwerdestelle EU: Sie haben das Recht, sich bei der Datenschutzbehörde Ihres EU-Mitgliedstaats zu beschweren, wenn Sie der Ansicht sind, dass die Verarbeitung Ihrer Daten gegen die DSGVO verstösst.
 
