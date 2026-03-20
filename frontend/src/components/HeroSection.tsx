@@ -102,7 +102,7 @@ const HeroSection: React.FC = () => {
             {/* Headline */}
             <div className="space-y-4">
               <h1 className="text-5xl lg:text-8xl xl:text-8xl font-bold" style={{ lineHeight: '1.2' }}>
-                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-500 mb-3">
+                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-500">
                   {t('animations.wealthManager.headline.part1')}
                 </span>
                 <span className="block text-white">
