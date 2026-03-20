@@ -6,7 +6,7 @@ interface ClaimsSubtitleProps {
 }
 
 export const ClaimsSubtitle: React.FC<ClaimsSubtitleProps> = ({ 
-  className = 'text-3xl lg:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-300 max-w-3xl leading-relaxed min-h-[8rem] mb-8 font-semibold'
+  className = 'text-3xl lg:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-300 max-w-3xl leading-relaxed min-h-[13rem] lg:min-h-[8rem] mb-8 font-semibold'
 }) => {
   const { t } = useLanguage();
   const claims = useMemo(
