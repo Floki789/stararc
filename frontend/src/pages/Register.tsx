@@ -42,21 +42,6 @@ const Register: React.FC = () => {
   const [showSuccessScreen, setShowSuccessScreen] = useState(false);
   const [devPreviewUrl, setDevPreviewUrl] = useState<string | null>(null);
 
-  // Listen for email verification completion from the verification tab
-  useEffect(() => {
-    if (!showSuccessScreen) return;
-    let bc: BroadcastChannel | null = null;
-    try {
-      bc = new BroadcastChannel('stararc-email-verification');
-      bc.onmessage = (event) => {
-        if (event.data?.type === 'EMAIL_VERIFIED') {
-          navigate('/login');
-        }
-      };
-    } catch (_) { /* BroadcastChannel not supported */ }
-    return () => { bc?.close(); };
-  }, [showSuccessScreen, navigate]);
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
     setFormData(prev => ({
@@ -495,13 +480,24 @@ const Register: React.FC = () => {
 
           <div>
             <motion.button
-              whileHover={{ scale: 1.01 }}
-              whileTap={{ scale: 0.99 }}
+              whileHover={{ scale: isLoading || !formData.termsAccepted ? 1 : 1.02 }}
+              whileTap={{ scale: isLoading || !formData.termsAccepted ? 1 : 0.98 }}
               type="submit"
-              disabled={isLoading}
-              className="group relative w-full flex items-center justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-600 disabled:cursor-not-allowed focus:outline-none transition-all duration-200"
+              disabled={isLoading || !formData.termsAccepted}
+              className={`group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white ${
+                isLoading || !formData.termsAccepted
+                  ? 'bg-gray-600 cursor-not-allowed'
+                  : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700'
+              } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200`}
             >
-              {isLoading ? 'Registrierung...' : 'Registrieren'}
+              {isLoading ? (
+                <div className="flex items-center">
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                  {t('auth.registering')}
+                </div>
+              ) : (
+                t('auth.register')
+              )}
             </motion.button>
           </div>
         </motion.form>
