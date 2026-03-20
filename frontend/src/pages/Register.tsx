@@ -11,7 +11,6 @@ interface RegisterFormData {
   password: string;
   confirmPassword: string;
   termsAccepted: boolean;
-  inviteCode: string;
 }
 
 const Register: React.FC = () => {
@@ -33,7 +32,6 @@ const Register: React.FC = () => {
     password: '',
     confirmPassword: '',
     termsAccepted: false,
-    inviteCode: ''
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -86,10 +84,6 @@ const Register: React.FC = () => {
       newErrors.termsAccepted = t('auth.termsRequired');
     }
 
-    if (!formData.inviteCode.trim()) {
-      newErrors.inviteCode = 'Invite Code ist erforderlich';
-    }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -123,7 +117,6 @@ const Register: React.FC = () => {
           email: formData.email,
           password: formData.password,
           termsAccepted: formData.termsAccepted,
-          inviteCode: formData.inviteCode,
           languageCode: currentLanguage,
           // DEK data for client-side encryption
           dek: dekSetup.dekBase64,           // Raw DEK (sent once, for server to create wrapped_dek_server)
@@ -453,27 +446,6 @@ const Register: React.FC = () => {
             </button>
             {errors.confirmPassword && (
               <p className="mt-1 text-sm text-red-400">{errors.confirmPassword}</p>
-            )}
-          </div>
-
-          <div>
-            <label htmlFor="inviteCode" className="sr-only">
-              Invite Code
-            </label>
-            <input
-              id="inviteCode"
-              name="inviteCode"
-              type="text"
-              required
-              className={`appearance-none rounded-lg relative block w-full px-3 py-3 border ${
-                errors.inviteCode ? 'border-red-500' : 'border-gray-600'
-              } placeholder-gray-400 text-white bg-gray-800/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
-              placeholder="Invite Code (required for early access)"
-              value={formData.inviteCode}
-              onChange={handleInputChange}
-            />
-            {errors.inviteCode && (
-              <p className="mt-1 text-sm text-red-400">{errors.inviteCode}</p>
             )}
           </div>
 

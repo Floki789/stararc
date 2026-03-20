@@ -54,17 +54,6 @@ const registerValidation = [
       return true;
     })
     .withMessage('Terms and Privacy Policy acceptance is required'),
-  body('inviteCode')
-    .notEmpty()
-    .trim()
-    .custom(value => {
-      const validCodes = (process.env.INVITE_CODES || '').split(',').map(code => code.trim()).filter(Boolean);
-      if (validCodes.length === 0 || !validCodes.includes(value)) {
-        throw new Error('Valid invite code is required');
-      }
-      return true;
-    })
-    .withMessage('Valid invite code is required'),
   body('languageCode')
     .optional()
     .isIn(['de', 'en'])
@@ -115,7 +104,7 @@ router.post('/register', registerLimiter, registerValidation, async (req: Reques
       });
     }
 
-    const { email, password, alias = '', termsAccepted, inviteCode, languageCode, dek, wrapped_dek, dek_salt } = req.body;
+    const { email, password, alias = '', termsAccepted, languageCode, dek, wrapped_dek, dek_salt } = req.body;
 
     // Register user with DEK data for client-side encryption
     const user = await authService.registerUser(email, password, alias, termsAccepted, req.ip, languageCode, {
