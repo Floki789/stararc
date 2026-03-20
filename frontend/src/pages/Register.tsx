@@ -494,16 +494,14 @@ const Register: React.FC = () => {
           </div>
 
           <div>
-            {/* TEMP: Registration disabled until launch */}
             <motion.button
-              whileHover={{ scale: 1 }}
-              whileTap={{ scale: 1 }}
-              type="button"
-              disabled={true}
-              className="group relative w-full flex flex-col items-center justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-gray-600 cursor-not-allowed focus:outline-none transition-all duration-200"
+              whileHover={{ scale: 1.01 }}
+              whileTap={{ scale: 0.99 }}
+              type="submit"
+              disabled={isLoading}
+              className="group relative w-full flex items-center justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-600 disabled:cursor-not-allowed focus:outline-none transition-all duration-200"
             >
-              <span>Registration</span>
-              <span className="text-xs font-normal opacity-80 mt-0.5">Starts on 21. Mar 2026, 12:21</span>
+              {isLoading ? 'Registrierung...' : 'Registrieren'}
             </motion.button>
           </div>
         </motion.form>
