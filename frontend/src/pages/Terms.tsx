@@ -81,6 +81,7 @@ const Terms: React.FC = () => {
               <p><strong>5.2</strong> {t('terms.section5.p2')}</p>
               <p><strong>5.3</strong> {t('terms.section5.p3')}</p>
               <p><strong>5.4</strong> {t('terms.section5.p4')}</p>
+              <p><strong>5.5</strong> {t('terms.section5.p5')}</p>
             </div>
           </section>
 
@@ -91,7 +92,8 @@ const Terms: React.FC = () => {
             </h2>
             <div className="space-y-4 text-gray-300">
               <p><strong>6.1</strong> {t('terms.section6.p1')}</p>
-              <p><strong>6.2</strong> {t('terms.section6.p2')}</p>
+              <p><strong>6.2</strong> {t('terms.section6.p1b')}</p>
+              <p><strong>6.3</strong> {t('terms.section6.p2')}</p>
               
               {/* Encrypted Data Categories */}
               <div className="ml-4 space-y-4">
@@ -109,9 +111,9 @@ const Terms: React.FC = () => {
                 </div>
               </div>
               
-              <p><strong>6.3</strong> {t('terms.section6.p3')}</p>
-              <p><strong>6.4</strong> {t('terms.section6.p4')}</p>
-              <p><strong>6.5</strong> {t('terms.section6.p5')}</p>
+              <p><strong>6.4</strong> {t('terms.section6.p3')}</p>
+              <p><strong>6.5</strong> {t('terms.section6.p4')}</p>
+              <p><strong>6.6</strong> {t('terms.section6.p5')}</p>
             </div>
           </section>
 

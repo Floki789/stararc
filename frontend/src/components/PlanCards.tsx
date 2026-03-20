@@ -190,8 +190,10 @@ const PlanCards: React.FC<PlanCardsProps> = ({
     );
   };
 
-  // Show all plans but disable non-selectable ones
-  const plans = allPlans;
+  // Hide Spark during launch phase as long as Nova discounted slots are available
+  const plans = (launchActive && remainingNova > 0)
+    ? allPlans.filter(p => p.id !== 'Spark')
+    : allPlans;
 
   const handlePlanClick = (plan: PlanData) => {
     if (onPlanSelect) {
@@ -275,7 +277,10 @@ const PlanCards: React.FC<PlanCardsProps> = ({
       </div>
 
       {/* Plans Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 place-content-center">{plans.map((plan, index) => {
+      <div className={plans.length === 2
+        ? 'flex flex-col sm:flex-row justify-center gap-8'
+        : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 place-content-center'
+      }>{plans.map((plan, index) => {
         const IconComponent = plan.icon;
         const price = plan.priceYearly; // Always show yearly price
         const priceValue = plan.priceValueYearly; // Always use yearly value
@@ -288,7 +293,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
             viewport={{ once: true }}
-            className={`card p-6 text-center relative min-h-[500px] flex flex-col ${
+            className={`card p-6 text-center relative min-h-[500px] flex flex-col w-full sm:w-auto sm:flex-1 sm:max-w-sm ${
               plan.isPopular ? 'border-2 border-purple-500' : ''
             } ${
               currentPlan === plan.id ? 'border-2 border-blue-500 opacity-75' : ''
@@ -406,7 +411,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
               )}
 
               {/* Description */}
-              <p className="text-gray-400 text-sm mb-6 px-2 leading-relaxed">
+              <p className="text-gray-400 text-sm mb-6 px-2 leading-relaxed min-h-[3.5rem]">
                 {plan.description}
               </p>
             </div>
@@ -414,22 +419,19 @@ const PlanCards: React.FC<PlanCardsProps> = ({
             {/* Features - Flexible height */}
             <div className="flex-grow">
               {/* Sections container */}
-              {plan.id === 'Spark' ? (
-                <div className="border border-gray-600 rounded-lg p-3 mb-4 text-left text-sm">
-                  <div className="space-y-1.5">
-                    {[t('plans.spark.sections.balance'), t('plans.spark.sections.budget'), t('plans.spark.sections.cockpit'), t('plans.spark.sections.futurePlanning'), t('plans.spark.sections.login'), t('plans.spark.sections.bitcoinMatrix')].map((section, i) => (
-                      <div key={i} className="flex items-start gap-2">
-                        <Check className={`w-4 h-4 ${plan.color} flex-shrink-0 mt-0.5`} />
-                        <span className="text-gray-300 leading-relaxed font-bold">{section}</span>
-                      </div>
-                    ))}
-                  </div>
+              <div className="border border-gray-600 rounded-lg p-3 mb-4 text-left text-sm">
+                {plan.id !== 'Spark' && (
+                  <p className="text-gray-500 text-xs mb-2 italic">{t('plans.includedSections')}</p>
+                )}
+                <div className="space-y-1.5">
+                  {[t('plans.spark.sections.balance'), t('plans.spark.sections.budget'), t('plans.spark.sections.cockpit'), t('plans.spark.sections.futurePlanning'), t('plans.spark.sections.login'), t('plans.spark.sections.bitcoinMatrix')].map((section, i) => (
+                    <div key={i} className="flex items-start gap-2">
+                      <Check className={`w-4 h-4 ${plan.color} flex-shrink-0 mt-0.5`} />
+                      <span className="text-gray-300 leading-relaxed font-bold">{section}</span>
+                    </div>
+                  ))}
                 </div>
-              ) : (
-                <div className="border border-gray-600 rounded-lg p-3 mb-4 text-center text-sm flex items-center justify-center" style={{ minHeight: launchActive ? '123px' : '188px' }}>
-                  <p className="text-gray-400 italic">{t('plans.sameAsSpark')}</p>
-                </div>
-              )}
+              </div>
 
               {/* Limit features */}
               <div className="space-y-2 mb-6 text-left text-sm">

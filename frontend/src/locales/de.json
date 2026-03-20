@@ -310,7 +310,7 @@
   },
   "terms": {
     "title": "Allgemeine Geschäftsbedingungen",
-    "subtitle": "Gültig ab 30. Dezember 2025",
+    "subtitle": "Gültig ab 20. März 2026",
     "section1": {
       "title": "§ 1 Geltungsbereich und Vertragspartner",
       "p1": "Diese Allgemeinen Geschäftsbedingungen gelten für alle Leistungen der Stararc.one Plattform, einer webbasierten Anwendung zur Verwaltung und Organisation von Metadaten im Zusammenhang mit Vermögenswerten, Portfoliostrukturen und Sicherheitsdispositionen. Nutzer von Stararc sind ausdrücklich angewiesen, auf der Plattform keine sicherheitsrelevanten Daten wie Authentifizierungsschlüssel, private Schlüssel, Zugangscodes und andere Daten zu speichern, die den Zugang zu selbst- oder fremdverwahrten Assets ermöglichen.",
@@ -338,19 +338,22 @@
         "Budget-Kategorien und Budget-Positionen",
         "Finanzinstituten",
         "Aufbewahrungsorten (Vaults)",
-        "Dokumenten-Referenzen (nicht Dokumenteninhalte)"
+        "Dokumenten-Referenzen (nicht Dokumenteninhalte)",
+        "xPub-Schlüssel und Derivationspfade"
       ]
     },
     "section5": {
       "title": "§ 5 Privacy und Datenminimierung",
       "p1": "Grundprinzip: Privacy-fokussierte Metadatenverwaltung mit strikter Trennung zwischen Organisationsdaten und sicherheitsrelevanten Zugangsinformationen.",
       "p2": "Datenfokus: Die Plattform beschränkt sich auf die Speicherung von Metadaten und Organisationsstrukturen ohne Verarbeitung von Dokumenteninhalten oder sicherheitsrelevanten Informationen.",
-      "p3": "Verschlüsselung: Alle privacy-relevanten Daten werden auf dem Client des Nutzers verschlüsselt und sicher an den Stararc Server übertragen. Die verschlüsselten Daten sind auch für Stararc oder Dritte nicht lesbar, solange du deine Logindaten nicht preisgibst.",
-      "p4": "Datenschutzstandards: Einhaltung höchster Schweizer und europäischer Datenschutzgesetze (DSG, EU-DSGVO) sowie vergleichbarer internationaler Standards."
+      "p3": "Verschlüsselung (Privacy by Design): Alle persönlichen Inhaltsdaten werden vor der Übertragung auf deinem Gerät verschlüsselt (AES-256-GCM). Der Umfang der Verschlüsselung hängt von der gewählten Authentifizierungsmethode ab (Standard-Login vs. Zero-Knowledge-Login).",
+      "p4": "Datenschutzstandards: Einhaltung höchster Schweizer und europäischer Datenschutzgesetze (DSG, EU-DSGVO) sowie vergleichbarer internationaler Standards.",
+      "p5": "Betriebliche Klartextdaten: Aus technischen Gründen (Performanz, Datenbankabfragen) werden nicht-persönliche Strukturdaten unverschlüsselt gespeichert – z.B. Abonnement-Status, Asset-Kategorien (nicht Bezeichnungen), Währungscodes, Zeitstempel und App-interne Status-Flags. Diese Daten enthalten keinerlei Rückschlüsse auf deine konkrete Vermögenssituation."
     },
     "section6": {
       "title": "§ 6 Authentifizierung und Nutzersicherheit",
-      "p1": "Sichere Login-Codes: Verwendung kryptographisch sicherer Login-Codes mit verschlüsselter Speicherung nach industriellen Sicherheitsstandards.",
+      "p1": "Zwei Authentifizierungsmethoden: Stararc.one bietet zwei Login-Methoden, die sich grundlegend in ihrer Datenschutzarchitektur unterscheiden: den Standard-Login und den Zero-Knowledge-Login (Sovereignty Mode). Du wählst die Methode einmalig bei der Registrierung.",
+      "p1b": "Sichere Passwörter und Login-Codes: Beide Methoden verwenden kryptographisch sichere Verfahren mit verschlüsselter Speicherung nach industriellen Sicherheitsstandards. Passwörter werden niemals gespeichert – ausschliesslich ein BCrypt-Hash.",
       "p2": "Verschlüsselte Datenspeicherung: Nutzerdaten werden client-seitig verschlüsselt, bevor sie an den Server übertragen und gespeichert werden. Die Plattform speichert grundsätzlich keine privacy-relevanten Daten im Klartext. Explizit verschlüsselt gespeichert werden beispielsweise:",
       "encryptedDataCategories": {
         "assets": "Vermögenswerte und Portfolios:",
@@ -378,8 +381,8 @@
         ]
       },
       "p3": "Beträge, Mengen, Beschreibungen und Kommentare werden verschlüsselt gespeichert.",
-      "p4": "Nutzerverantwortung: Der Nutzer trägt die vollständige Verantwortung für die Sicherung seiner Anmeldedaten.",
-      "p5": "Begrenzte Wiederherstellungsmöglichkeiten: Eine Kontowiederherstellung ist nur möglich, wenn der Nutzer Zugang zu seiner registrierten E-Mail-Adresse, seinen Passwörtern oder Zwei-Faktor-Authentifizierungsmöglichkeiten hat. Bei Verlust aller Authentifizierungsmittel ist eine Wiederherstellung technisch nicht möglich."
+      "p4": "Nutzerverantwortung: Der Nutzer trägt die vollständige Verantwortung für die Sicherung seiner Anmeldedaten und – beim Zero-Knowledge-Login – seiner 12 Wiederherstellungsphrasen.",
+      "p5": "Wiederherstellungsmöglichkeiten je nach Login-Methode: Beim Standard-Login kann der Betreiber auf ausdrückliche Anfrage des Nutzers einen administrativen Passwort-Reset durchführen; deine Inhaltsdaten bleiben dabei unverändert erhalten. Beim Zero-Knowledge-Login (Sovereignty Mode) besitzt der Server zu keinem Zeitpunkt den Datenverschlüsselungsschlüssel – ein administrativer Reset ist technisch unmöglich. Nur du kannst deine Daten mit deinen 12 Wiederherstellungsphrasen entschlüsseln. Bei Verlust von Passwort und Wiederherstellungsphrasen sind deine Daten unwiederbringlich verloren."
     },
     "section7": {
       "title": "§ 7 Abonnement-Modell und Preisgestaltung",
@@ -938,6 +941,7 @@
     "loading": "Laden...",
     "launchPrice": "— Launch-Preis →",
     "sameAsSpark": "Gleich wie im Spark-Plan",
+    "includedSections": "Enthaltene Sektionen:",
     "spark": {
       "name": "Spark",
       "description": "Für Einzelpersonen mit Start-Portfolios",
@@ -953,7 +957,7 @@
         "financialInstitutions": "{{count}} Finanzinstitute",
         "vaults": "{{count}} Tresore (physisch & digital je)",
         "bitcoinSetups": "{{count}} Bitcoin Single-Sig Setups (ohne Passphrase)",
-        "wallets": "{{count}} Hardware- & Software-Wallets je",
+        "wallets": "{{count}} Hardware- & {{count}} Software-Wallets",
         "backups": "{{count}} Seed- & Deskriptor-Backups je"
       },
       "sections": {
@@ -980,7 +984,7 @@
         "financialInstitutions": "{{count}} Finanzinstitute",
         "vaults": "{{count}} Tresore (physisch & digital je)",
         "bitcoinSetups": "{{count}} Bitcoin Single-Sig Setups mit Passphrase",
-        "wallets": "{{count}} Hardware- & Software-Wallets je",
+        "wallets": "{{count}} Hardware- & {{count}} Software-Wallets",
         "backups": "{{count}} Seed-, Passphrase- & Deskriptor-Backups je"
       }
     },

@@ -201,7 +201,7 @@
   },
   "terms": {
     "title": "Terms and Conditions",
-    "subtitle": "Effective December 30, 2025",
+    "subtitle": "Effective March 20, 2026",
     "section1": {
       "title": "§ 1 Scope and Contracting Party",
       "p1": "These Terms and Conditions apply to all services of the Stararc.one platform, a web-based application for managing and organizing metadata related to assets, portfolio structures and security arrangements. Users of Stararc are explicitly instructed not to store security-relevant data such as authentication keys, private keys, access codes and other data that enable access to self-custody or third-party custody assets on the platform.",
@@ -229,19 +229,22 @@
         "Budget categories and budget items",
         "Financial institutions",
         "Storage locations (vaults)",
-        "Document references (not document contents)"
+        "Document references (not document contents)",
+        "xPub keys and derivation paths"
       ]
     },
     "section5": {
       "title": "§ 5 Privacy and Data Minimization",
       "p1": "Core Principle: Privacy-focused metadata management with strict separation between organizational data and security-relevant access information.",
       "p2": "Data Focus: The platform is limited to storing metadata and organizational structures without processing document contents or security-relevant information.",
-      "p3": "Encryption: All privacy-relevant data is encrypted on the user's client and securely transmitted to the Stararc server. The encrypted data is also unreadable to Stararc or third parties as long as you do not disclose your login data.",
-      "p4": "Data Protection Standards: Compliance with the highest Swiss and European data protection laws (DSG, EU-GDPR) as well as comparable international standards."
+      "p3": "Encryption (Privacy by Design): All personal content data is encrypted on your device before transmission using AES-256-GCM. The scope of encryption depends on your chosen authentication method (Standard Login vs. Zero-Knowledge Login).",
+      "p4": "Data Protection Standards: Compliance with the highest Swiss and European data protection laws (DSG, EU-GDPR) as well as comparable international standards.",
+      "p5": "Operational Plain-Text Data: For technical reasons (performance, database queries), non-personal structural data is stored unencrypted – e.g. subscription status, asset categories (not names), currency codes, timestamps, and app-internal status flags. This data contains no information about your specific financial situation."
     },
     "section6": {
       "title": "§ 6 Authentication and User Security",
-      "p1": "Secure Login Codes: Use of cryptographically secure login codes with encrypted storage according to industrial security standards.",
+      "p1": "Two Authentication Methods: Stararc.one offers two login methods that differ fundamentally in their privacy architecture: Standard Login and Zero-Knowledge Login (Sovereignty Mode). You choose your method once during registration.",
+      "p1b": "Secure Passwords and Login Codes: Both methods use cryptographically secure procedures with encrypted storage according to industry security standards. Passwords are never stored – only a BCrypt hash.",
       "p2": "Encrypted Data Storage: User data is encrypted client-side before being transmitted to and stored on the server. The platform fundamentally stores no privacy-relevant data in plain text. Examples of explicitly encrypted stored data include:",
       "encryptedDataCategories": {
         "assets": "Assets and Portfolios:",
@@ -269,8 +272,8 @@
         ]
       },
       "p3": "Amounts, quantities, descriptions and comments are stored encrypted.",
-      "p4": "User Responsibility: The user bears full responsibility for securing their login data.",
-      "p5": "Limited Recovery Options: Account recovery is only possible if the user has access to their registered email address, passwords or two-factor authentication methods. If all authentication means are lost, recovery is technically impossible."
+      "p4": "User Responsibility: The user bears full responsibility for securing their login credentials and – when using Zero-Knowledge Login – their 12 recovery phrases.",
+      "p5": "Recovery Options by Login Method: With Standard Login, the operator can perform an administrative password reset upon your explicit request; your content data remains unchanged. With Zero-Knowledge Login (Sovereignty Mode), the server never holds your data encryption key – an administrative reset is technically impossible. Only you can decrypt your data using your 12 recovery phrases. If both your password and recovery phrases are lost, your data is irrecoverably lost."
     },
     "section7": {
       "title": "§ 7 Subscription Model and Pricing",
@@ -779,6 +782,7 @@
     "loading": "Loading...",
     "launchPrice": "— Launch Price →",
     "sameAsSpark": "Same as in Spark plan",
+    "includedSections": "Included sections:",
     "spark": {
       "name": "Spark",
       "description": "For individuals with startup portfolios",
@@ -794,10 +798,7 @@
         "financialInstitutions": "{{count}} Financial institutions",
         "vaults": "{{count}} Vaults (physical & digital each)",
         "bitcoinSetups": "{{count}} Bitcoin single sig setups (no passphrase)",
-        "wallets": "{{count}} Hardware & Software wallets each",
-        "backups": "{{count}} Seed & Descriptor backups each"
-      },
-      "sections": {
+        "wallets": "{{count}} Hardware & {{count}} Software wallets",
         "balance": "Balance Section",
         "budget": "Budget Section",
         "cockpit": "Cockpit Section",
@@ -821,7 +822,7 @@
         "financialInstitutions": "{{count}} Financial institutions",
         "vaults": "{{count}} Vaults (physical & digital each)",
         "bitcoinSetups": "{{count}} Bitcoin single sig setups with passphrase",
-        "wallets": "{{count}} Hardware & Software wallets each",
+        "wallets": "{{count}} Hardware & {{count}} Software wallets",
         "backups": "{{count}} Seed, Passphrase & Descriptor backups each"
       }
     },
