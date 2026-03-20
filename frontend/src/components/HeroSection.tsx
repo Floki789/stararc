@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
-import { Sparkles, Calendar, Zap, Globe, Crown, Star } from 'lucide-react';
+import { Sparkles, Zap, Globe, Crown, Star } from 'lucide-react';
 import { ClaimsSubtitle } from './ClaimsSubtitle';
 
 const HeroSection: React.FC = () => {
@@ -13,8 +13,6 @@ const HeroSection: React.FC = () => {
   const [remainingGalaxy, setRemainingGalaxy] = useState(100);
   const [launchActive, setLaunchActive] = useState(true);
 
-  // Countdown to March 21, 2026
-  const [daysUntilLaunch, setDaysUntilLaunch] = useState(0);
   const [showGenesis, setShowGenesis] = useState(false);
 
   // Fetch launch availability from backend
@@ -45,21 +43,6 @@ const HeroSection: React.FC = () => {
       setShowGenesis(prev => !prev);
     }, 7000);
     return () => clearInterval(toggle);
-  }, []);
-
-  useEffect(() => {
-    const calculateDaysUntilLaunch = () => {
-      const launchDate = new Date('2026-03-21');
-      const today = new Date();
-      const timeDifference = launchDate.getTime() - today.getTime();
-      const daysDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
-      setDaysUntilLaunch(daysDifference);
-    };
-
-    calculateDaysUntilLaunch();
-    const interval = setInterval(calculateDaysUntilLaunch, 86400000); // Update daily
-
-    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -116,20 +99,6 @@ const HeroSection: React.FC = () => {
           
           {/* Left Column - Main Message (4 columns) */}
           <div className="lg:col-span-4 space-y-8">
-            {/* Launch Banner */}
-            <div className="text-center mb-8">
-              <div className="inline-flex flex-wrap items-center justify-center gap-4">
-                <div className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-purple-600/20 to-blue-600/20 border border-purple-500/30 rounded-full">
-                  <Calendar className="w-5 h-5 text-purple-400" />
-                  <span className="text-purple-300 font-semibold text-lg">{t('hero.officialLaunch')}</span>
-                </div>
-                <div className="inline-flex items-baseline gap-3 px-4 py-2 rounded-full bg-slate-900/60 border border-slate-700/60">
-                  <span className="text-3xl font-bold text-white">{daysUntilLaunch}</span>
-                  <span className="text-slate-400 text-sm uppercase tracking-wider">{t('hero.daysRemaining')}</span>
-                </div>
-              </div>
-            </div>
-
             {/* Headline */}
             <div className="space-y-4">
               <h1 className="text-5xl lg:text-8xl xl:text-8xl font-bold" style={{ lineHeight: '1.2' }}>

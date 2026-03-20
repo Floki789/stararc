@@ -1588,7 +1588,7 @@
     },
     "section2": {
       "title": "2. Data Processing Principles",
-      "p1": "Privacy-by-Design: Stararc.one is designed as a privacy-focused metadata management platform that explicitly warns against using the platform for storing security-relevant information.",
+      "p1": "Privacy-by-Design: Stararc.one is designed as a privacy-focused metadata management platform that explicitly warns against using the platform for storing asset access information (accounts, logins, passwords, private keys, etc.).",
       "p2": "Data Minimization: We only process data that is technically required for the operation of the platform.",
       "p3": "Client-side Encryption: All personal content data (e.g. asset names, institution names, document references) is encrypted on your device before being transmitted to our servers. The key management method differs depending on the authentication method chosen at registration (see Section 3.1).",
       "p4": "Operational Plaintext Data: A portion of data is stored unencrypted for technical reasons (performance, database queries, app logic). This exclusively concerns non-personal, non-sensitive structural data with no relation to personal identity, for example: subscription plan and status (e.g. \"Core\", \"Active\"), asset category and subcategory (e.g. \"Securities\", \"Equities\"), currency code (e.g. \"CHF\", \"USD\"), display order of categories, timestamps (creation date, last login, last update), app-internal status flags (e.g. is active, automatic price update enabled), reminder interval for manual updates (e.g. \"monthly\"). These data enable reliable and performant app rendering but contain no inferences about your specific financial situation."

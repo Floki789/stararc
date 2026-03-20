@@ -10,7 +10,7 @@ Rapperswil-Jona, Schweiz
 E-Mail: info@stararc.one
 
 2. Grundsätze der Datenverarbeitung
-2.1 Privacy-by-Design: Stararc.one ist als privacy-fokussierte Metadaten-Verwaltungsplattform konzipiert, die explizit darauf aufmerksam macht, die Plattform nicht für die Speicherung sicherheitsrelevanter Informationen zu verwenden.
+2.1 Privacy-by-Design: Stararc.one ist als privacy-fokussierte Metadaten-Verwaltungsplattform konzipiert, die explizit darauf aufmerksam macht, die Plattform nicht für die Speicherung von Asset-Zugangsinformationen (Accounts, Logins, Passwörter, Private Keys u. Ä.) zu verwenden.
 
 2.2 Datenminimierung: Wir verarbeiten nur die Daten, die für den Betrieb der Plattform technisch erforderlich sind.
 
