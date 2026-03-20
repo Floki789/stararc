@@ -37,7 +37,17 @@ const VerifyEmail: React.FC = () => {
           setStatus('success');
           setMessage(t('verifyEmailPage.successMessage'));
           
-          // Redirect to login after 3 seconds
+          // Notify the original registration tab via BroadcastChannel
+          try {
+            const bc = new BroadcastChannel('stararc-email-verification');
+            bc.postMessage({ type: 'EMAIL_VERIFIED' });
+            bc.close();
+          } catch (_) { /* BroadcastChannel not supported */ }
+
+          // Try to close this tab (works if opened by the browser from email)
+          setTimeout(() => { window.close(); }, 500);
+
+          // Redirect to login after 3 seconds as fallback
           setTimeout(() => {
             navigate('/login');
           }, 3000);
@@ -127,6 +137,9 @@ const VerifyEmail: React.FC = () => {
                 <p className="text-gray-300">{t('verifyEmailPage.successMessage')}</p>
                 <p className="text-sm text-gray-400">
                   {t('verifyEmailPage.redirecting')}
+                </p>
+                <p className="text-sm text-blue-300 mt-2">
+                  {t('verifyEmailPage.tabCloseHint')}
                 </p>
               </div>
             </motion.div>

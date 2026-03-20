@@ -564,6 +564,7 @@
     "successTitle": "E-Mail bestätigt!",
     "successMessage": "Deine E-Mail-Adresse wurde erfolgreich bestätigt. Du kannst dich jetzt anmelden.",
     "redirecting": "Du wirst in Kürze zur Anmeldung weitergeleitet...",
+    "tabCloseHint": "Du kannst diesen Tab schliessen – dein Registrierungs-Tab wird automatisch weitergeleitet.",
     "errorTitle": "Bestätigung fehlgeschlagen",
     "errorFallback": "E-Mail-Bestätigung fehlgeschlagen.",
     "networkError": "Netzwerkfehler. Bitte versuche es später erneut.",
