@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
@@ -40,6 +40,33 @@ const Register: React.FC = () => {
   const [registeredEmail, setRegisteredEmail] = useState('');
   const [showSuccessScreen, setShowSuccessScreen] = useState(false);
   const [devPreviewUrl, setDevPreviewUrl] = useState<string | null>(null);
+
+  // Countdown bis 12:21:00 Uhr heute
+  const getUnlockTime = useCallback(() => {
+    const t = new Date();
+    t.setHours(12, 21, 0, 0);
+    return t.getTime();
+  }, []);
+  const [countdown, setCountdown] = useState(() => Math.max(0, getUnlockTime() - Date.now()));
+  const isUnlocked = countdown <= 0;
+
+  useEffect(() => {
+    if (isUnlocked) return;
+    const iv = setInterval(() => {
+      const remaining = Math.max(0, getUnlockTime() - Date.now());
+      setCountdown(remaining);
+    }, 1000);
+    return () => clearInterval(iv);
+  }, [isUnlocked, getUnlockTime]);
+
+  const formatCountdown = (ms: number) => {
+    const totalSec = Math.floor(ms / 1000);
+    const h = Math.floor(totalSec / 3600);
+    const m = Math.floor((totalSec % 3600) / 60);
+    const s = totalSec % 60;
+    const pad = (n: number) => String(n).padStart(2, '0');
+    return h > 0 ? `${pad(h)}:${pad(m)}:${pad(s)}` : `${pad(m)}:${pad(s)}`;
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -475,16 +502,26 @@ const Register: React.FC = () => {
           </div>
 
           <div>
-            {/* TEMP: Registration disabled */}
             <motion.button
-              whileHover={{ scale: 1 }}
-              whileTap={{ scale: 1 }}
-              type="button"
-              disabled={true}
-              className="group relative w-full flex flex-col items-center justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-gray-600 cursor-not-allowed focus:outline-none transition-all duration-200"
+              whileHover={{ scale: isUnlocked && formData.termsAccepted ? 1.02 : 1 }}
+              whileTap={{ scale: isUnlocked && formData.termsAccepted ? 0.98 : 1 }}
+              type={isUnlocked ? 'submit' : 'button'}
+              disabled={isUnlocked ? !formData.termsAccepted : true}
+              className={`group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 ${
+                isUnlocked
+                  ? formData.termsAccepted
+                    ? 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700'
+                    : 'bg-gray-600 cursor-not-allowed'
+                  : 'bg-gray-700 cursor-not-allowed flex-col items-center'
+              }`}
             >
-              <span>{t('auth.register')}</span>
-              <span className="text-xs font-normal opacity-70 mt-0.5">Registrierung vorübergehend deaktiviert</span>
+              {isUnlocked ? (
+                t('auth.register')
+              ) : (
+                <span className="font-mono font-bold" style={{ fontSize: '1.6rem', letterSpacing: '0.15em', textShadow: '0 0 12px rgba(167,139,250,0.6)' }}>
+                  {formatCountdown(countdown)}
+                </span>
+              )}
             </motion.button>
           </div>
         </motion.form>
