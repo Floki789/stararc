@@ -443,21 +443,39 @@ const Dashboard: React.FC = () => {
               {/* Subscription Expiry Date (only when active, not cancelled) */}
               {!subscription.cancelAtPeriodEnd && subscription.status !== 'canceled' && subscription.plan && subscription.plan.toLowerCase() !== 'free' && subscription.expiresAt && (
                 <div className="mt-2 space-y-1">
-                  <p className="text-sm text-slate-300">
-                    {t('dashboard.expiresOn')} <span className="font-semibold text-white">
-                      {new Date(subscription.expiresAt).toLocaleDateString('de-DE', {
-                        day: '2-digit',
-                        month: 'long',
-                        year: 'numeric'
-                      })}
-                    </span>
-                  </p>
                   {(() => {
                     const daysLeft = Math.ceil((new Date(subscription.expiresAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
-                    return daysLeft > 0 && (
-                      <p className="text-xs text-slate-400">
-                        {daysLeft === 1 ? t('dashboard.renewsTomorrow') : `${t('dashboard.daysRemaining').replace('{{days}}', daysLeft.toString())}`}
-                      </p>
+                    const isTrialPhase = daysLeft <= 30; // Trial ends within 30 days
+                    const expiryDate = new Date(subscription.expiresAt).toLocaleDateString('de-DE', {
+                      day: '2-digit',
+                      month: 'long',
+                      year: 'numeric'
+                    });
+
+                    return (
+                      <>
+                        {isTrialPhase ? (
+                          <>
+                            <p className="text-sm text-slate-300">
+                              {t('dashboard.trialEndsOn')} <span className="font-semibold text-white">{expiryDate}</span>
+                            </p>
+                            <p className="text-xs text-slate-400">
+                              {t('dashboard.trialAutoRenews')}
+                            </p>
+                          </>
+                        ) : (
+                          <>
+                            <p className="text-sm text-slate-300">
+                              {t('dashboard.renewsOn')} <span className="font-semibold text-white">{expiryDate}</span>
+                            </p>
+                            {daysLeft > 0 && (
+                              <p className="text-xs text-slate-400">
+                                {daysLeft === 1 ? t('dashboard.renewsTomorrow') : `${t('dashboard.daysRemaining').replace('{{days}}', daysLeft.toString())}`}
+                              </p>
+                            )}
+                          </>
+                        )}
+                      </>
                     );
                   })()}
                 </div>
