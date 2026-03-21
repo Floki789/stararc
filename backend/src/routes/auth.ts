@@ -873,6 +873,11 @@ router.post('/setup-zk-encryption', authMiddleware, async (req: Request, res: Re
       return res.status(400).json({ error: 'Missing required ZK encryption fields' });
     }
 
+    // Ensure wrapped_dek values are non-trivial (basic sanity check)
+    if (typeof wrapped_dek !== 'string' || wrapped_dek.length < 20) {
+      return res.status(400).json({ error: 'Invalid wrapped_dek format' });
+    }
+
     console.log(`🔐 Setting up ZK encryption for user ${user.id}`);
 
     // Get user data
@@ -917,6 +922,7 @@ router.post('/setup-zk-encryption', authMiddleware, async (req: Request, res: Re
         dek_salt = $5,
         recovery_salt = $6,
         recovery_key_hash = $7,
+        wrapped_dek_server = NULL,
         encrypted_recovery_phrase = COALESCE($9, encrypted_recovery_phrase),
         updated_at = CURRENT_TIMESTAMP 
       WHERE id = $8`,

@@ -236,8 +236,8 @@ const ZKRecoveryModal: React.FC<ZKRecoveryModalProps> = ({ isOpen, onClose, onSu
   // ==========================================
   
   const handleSetNewPassword = async () => {
-    if (newPassword.length < 8) {
-      setError('Passwort muss mindestens 8 Zeichen haben');
+    if (newPassword.length < 12) {
+      setError('Passwort muss mindestens 12 Zeichen haben');
       return;
     }
     
