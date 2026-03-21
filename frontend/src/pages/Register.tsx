@@ -42,7 +42,7 @@ const Register: React.FC = () => {
   const [devPreviewUrl, setDevPreviewUrl] = useState<string | null>(null);
 
   // Registrierung vorübergehend deaktiviert
-  const isRegistrationEnabled = false;
+  const isRegistrationEnabled = true;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
