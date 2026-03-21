@@ -4,34 +4,43 @@ description: Security vulnerabilities and findings discovered during reviews of 
 type: project
 ---
 
-## Initial Review: 2026-03-12
+## Architecture Rewrite Note (March 2026)
 
-### Critical (unresolved)
-- **KRIT-01:** `supabaseAdmin` (Service Role Key) used directly in `src/components/Dashboard.tsx` — bypasses all Supabase RLS policies. Fix: move to Server Action or API Route only.
-- **KRIT-02:** `debug: true` hardcoded in NextAuth config (`src/app/api/auth/[...nextauth]/route.ts`) — logs sensitive auth data in production. Fix: `debug: process.env.NODE_ENV === 'development'`
+The project was fully rewritten from Next.js/Supabase/NextAuth to Express.js/React/PostgreSQL.
+All findings from the initial review (KRIT-01/02, HOCH-01/02/03, MITT-01/02/03/04, INFO-01/02/03) are **OBSOLETE** — the referenced files, libraries, and patterns no longer exist.
 
-### High (unresolved)
-- **HOCH-01:** `console.log(prompt)` in `src/app/api/generate/route.ts` — logs user prompts (PII/GDPR risk)
-- **HOCH-02:** No rate limiting on `/api/generate` — risk of API abuse and race condition in credits system
-- **HOCH-03:** `error.message` returned to client in `src/app/api/checkout/route.ts` — information disclosure
+---
 
-### Medium (unresolved)
-- **MITT-01:** `dangerouslySetInnerHTML` in `src/components/Dashboard.tsx` — XSS risk if content is user-controlled
-- **MITT-02:** Auth token stored in `localStorage` in Dashboard — vulnerable to XSS token theft
-- **MITT-03:** Wildcard `hostname: '**'` in `next.config.js` image remotePatterns — SSRF risk
-- **MITT-04:** No server-side whitelist validation of `priceId` in checkout API — price manipulation risk
-
-### Low/Info (unresolved)
-- **INFO-01:** Missing CSP and Permissions-Policy headers (HSTS, X-Frame, X-Content-Type present)
-- **INFO-02:** next-auth v4 (legacy) — no active feature updates
-- **INFO-03:** JWT role not re-validated against DB for admin routes — privilege persistence after role removal
+## Current Architecture Findings (March 2026)
 
 ### Positive Findings
+- AES-256-GCM field-level encryption with KEK/DEK envelope architecture
+- PBKDF2-SHA-256 with 600,000 iterations (matches Bitwarden 2024 standard)
+- Web Crypto API (`crypto.subtle`) — browser-native, no JS crypto libraries
 - Stripe webhook signature verification correctly implemented
-- All secrets via process.env (no hardcoded secrets)
+- All secrets via environment variables (no hardcoded secrets)
 - Zod validation used for input
-- getServerSession() used in all checked API routes
-- Middleware role-checks for /admin routes
+- Custom JWT auth with BCrypt (12 rounds) password hashing
+- DEK stored only in sessionStorage (dies with tab close)
+- 4-hour hard session timeout with activity monitoring
+- Dual encryption (user + admin copies) for PII in StarArc
+- Zero-Knowledge mode: server literally cannot decrypt (wrapped_dek_server = NULL)
+- Cross-app JWT with 5-minute expiry
+- Heroku EU (Ireland) hosting for GDPR compliance
+
+### Known Limitations (by design, documented)
+- **Standard Login:** Server holds wrapped_dek_server → can technically decrypt user data. By design for password reset convenience. Users who need maximum privacy use Sovereignty/ZK mode.
+- **Web-based E2E:** Server delivers JavaScript → user trusts served code. Same limitation as Proton Mail. Planned mitigation: open-source crypto layer.
+- **PBKDF2 vs. Argon2id:** PBKDF2 is GPU/ASIC-optimizable. Argon2id (memory-hard) would be stronger. Placeholder for future migration when browser support matures.
+- **6-word recovery:** ~66 bits entropy. Sufficient since brute-force must defeat PBKDF2 600k iterations per attempt.
+- **Plaintext gaps:** `passphrases` table not yet encrypted; some enum fields (software_name on wallets) may reveal metadata.
+
+### Areas for Future Review
+- Rate limiting on API endpoints
+- CSP and security headers configuration
+- Error message sanitization (ensure no stack traces leak to client)
+- Input validation completeness across all endpoints
+- Admin route authorization depth
 
 **Why:** Track known issues to prevent regression in future reviews.
 **How to apply:** Before starting a new review session, check these findings to see which are fixed and which are new regressions.
