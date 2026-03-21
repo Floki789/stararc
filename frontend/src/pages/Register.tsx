@@ -479,25 +479,16 @@ const Register: React.FC = () => {
           </div>
 
           <div>
+            {/* TEMP: Registration disabled */}
             <motion.button
-              whileHover={{ scale: isLoading || !formData.termsAccepted ? 1 : 1.02 }}
-              whileTap={{ scale: isLoading || !formData.termsAccepted ? 1 : 0.98 }}
-              type="submit"
-              disabled={isLoading || !formData.termsAccepted}
-              className={`group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white ${
-                isLoading || !formData.termsAccepted
-                  ? 'bg-gray-600 cursor-not-allowed'
-                  : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700'
-              } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200`}
+              whileHover={{ scale: 1 }}
+              whileTap={{ scale: 1 }}
+              type="button"
+              disabled={true}
+              className="group relative w-full flex flex-col items-center justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-gray-600 cursor-not-allowed focus:outline-none transition-all duration-200"
             >
-              {isLoading ? (
-                <div className="flex items-center">
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                  {t('auth.registering')}
-                </div>
-              ) : (
-                t('auth.register')
-              )}
+              <span>{t('auth.register')}</span>
+              <span className="text-xs font-normal opacity-70 mt-0.5">Registrierung vorübergehend deaktiviert</span>
             </motion.button>
           </div>
         </motion.form>
