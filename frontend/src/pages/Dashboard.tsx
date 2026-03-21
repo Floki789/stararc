@@ -19,6 +19,7 @@ interface Subscription {
   cancelAtPeriodEnd?: boolean;
   canceledAt?: string;
   spaceshipIntegrationCompleted?: boolean;
+  hallOfFameName?: string | null;
 }
 
 const Dashboard: React.FC = () => {
@@ -169,7 +170,8 @@ const Dashboard: React.FC = () => {
               status: subData.status,
               expiresAt: subData.expiresAt,
               cancelAtPeriodEnd: subData.cancelAtPeriodEnd,
-              canceledAt: subData.canceledAt
+              canceledAt: subData.canceledAt,
+              hallOfFameName: subData.hallOfFameName || null
             });
             setLoading(false);
             return;
@@ -211,7 +213,8 @@ const Dashboard: React.FC = () => {
                   status: subData.status,
                   expiresAt: subData.expiresAt,
                   cancelAtPeriodEnd: subData.cancelAtPeriodEnd,
-                  canceledAt: subData.canceledAt
+                  canceledAt: subData.canceledAt,
+                  hallOfFameName: subData.hallOfFameName || null
                 });
                 setLoading(false);
                 setPollingError(false);
@@ -246,7 +249,8 @@ const Dashboard: React.FC = () => {
           expiresAt: subData.expiresAt,
           cancelAtPeriodEnd: subData.cancelAtPeriodEnd,
           canceledAt: subData.canceledAt,
-          spaceshipIntegrationCompleted: subData.spaceshipIntegrationCompleted
+          spaceshipIntegrationCompleted: subData.spaceshipIntegrationCompleted,
+          hallOfFameName: subData.hallOfFameName || null
         });
       } catch (error) {
         console.error('Failed to load subscription data:', error);
@@ -366,6 +370,7 @@ const Dashboard: React.FC = () => {
   }
 
   const Icon = getPlanIcon(subscription.plan);
+  const isGenesis = subscription.status === 'lifetime';
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 pt-32 pb-6">
@@ -403,14 +408,14 @@ const Dashboard: React.FC = () => {
               subscription.plan === 'Free' ? 'bg-green-500/20' :
               subscription.plan === 'Spark' ? 'bg-blue-500/20' :
               subscription.plan === 'Nova' ? 'bg-purple-500/20' :
-              subscription.plan === 'Galaxy' ? 'bg-indigo-500/20' :
+              subscription.plan === 'Galaxy' ? (isGenesis ? 'bg-yellow-500/20' : 'bg-indigo-500/20') :
               subscription.plan === 'Apex' ? 'bg-yellow-500/20' : 'bg-gray-500/20'
             }`}>
               <Icon className={`w-6 h-6 ${
                 subscription.plan === 'Free' ? 'text-green-400' :
                 subscription.plan === 'Spark' ? 'text-blue-400' :
                 subscription.plan === 'Nova' ? 'text-purple-400' :
-                subscription.plan === 'Galaxy' ? 'text-indigo-400' :
+                subscription.plan === 'Galaxy' ? (isGenesis ? 'text-yellow-400' : 'text-indigo-400') :
                 subscription.plan === 'Apex' ? 'text-yellow-400' : 'text-gray-400'
               }`} />
             </div>
@@ -439,8 +444,23 @@ const Dashboard: React.FC = () => {
               ) : (
                 <p className="text-green-400 font-semibold">● {t('dashboard.active')}</p>
               )}
+
+              {/* Genesis Member Info */}
+              {isGenesis && (
+                <div className="mt-2 space-y-1.5">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-yellow-500/20 border border-yellow-500/40 text-yellow-300 text-xs font-semibold">
+                    ⭐ {t('dashboard.genesisMember')}
+                  </span>
+                  {subscription.hallOfFameName && (
+                    <p className="text-sm text-slate-300">
+                      {t('dashboard.genesisHallOfFame')} <span className="font-semibold text-yellow-200">{subscription.hallOfFameName}</span>
+                    </p>
+                  )}
+                  <p className="text-xs text-yellow-400/70">{t('dashboard.genesisLifetime')}</p>
+                </div>
+              )}
               
-              {/* Subscription Expiry Date (only when active, not cancelled) */}
+              {/* Subscription Expiry Date (only when active, not cancelled) */
               {!subscription.cancelAtPeriodEnd && subscription.status !== 'canceled' && subscription.plan && subscription.plan.toLowerCase() !== 'free' && subscription.expiresAt && (
                 <div className="mt-2 space-y-1">
                   {(() => {
@@ -484,6 +504,7 @@ const Dashboard: React.FC = () => {
             
             {/* Upgrade Option */}
             {(() => {
+              if (isGenesis) return null;
               const nextUpgrade = getNextUpgrade(subscription.plan);
               if (nextUpgrade) {
                 return (
@@ -516,7 +537,7 @@ const Dashboard: React.FC = () => {
           </div>
           
           {/* Subscription Management Actions */}
-          {subscription.plan && subscription.plan.toLowerCase() !== 'free' && (
+          {!isGenesis && subscription.plan && subscription.plan.toLowerCase() !== 'free' && (
             <div className="mt-4 pt-4 border-t border-slate-600/50">
               <button
                 onClick={handleManageSubscription}

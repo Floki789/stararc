@@ -230,7 +230,7 @@
         "Financial institutions",
         "Storage locations (vaults)",
         "Document references (not document contents)",
-        "xPub keys and derivation paths"
+        "xPub keys and derivation paths (optional)"
       ]
     },
     "section5": {
@@ -272,8 +272,8 @@
         ]
       },
       "p3": "Amounts, quantities, descriptions and comments are stored encrypted.",
-      "p4": "User Responsibility: The user bears full responsibility for securing their login credentials and – when using Zero-Knowledge Login – their 12 recovery phrases.",
-      "p5": "Recovery Options by Login Method: With Standard Login, the operator can perform an administrative password reset upon your explicit request; your content data remains unchanged. With Zero-Knowledge Login (Sovereignty Mode), the server never holds your data encryption key – an administrative reset is technically impossible. Only you can decrypt your data using your 12 recovery phrases. If both your password and recovery phrases are lost, your data is irrecoverably lost."
+      "p4": "User Responsibility: The user bears full responsibility for securing their login credentials and – when using Zero-Knowledge Login – their 6 recovery phrases.",
+      "p5": "Recovery Options by Login Method: With Standard Login, the operator can perform an administrative password reset upon your explicit request; your content data remains unchanged. With Zero-Knowledge Login (Sovereignty Mode), the server never holds your data encryption key – an administrative reset is technically impossible. Only you can decrypt your data using your 6 recovery phrases. If both your password and recovery phrases are lost, your data is irrecoverably lost."
     },
     "section7": {
       "title": "§ 7 Subscription Model and Pricing",
@@ -364,7 +364,10 @@
     "zkSubtitle": "Your Spaceship data is encrypted client-side",
     "zkRecoveryHint": "If you forgot your Sovereignty password, you can reset it using your 6-word recovery phrase.",
     "zkRecoverButton": "Recover Sovereignty Password",
-    "revealRecoveryPhraseButton": "Show Recovery Phrase"
+    "revealRecoveryPhraseButton": "Show Recovery Phrase",
+    "genesisMember": "Genesis Member",
+    "genesisLifetime": "Lifetime",
+    "genesisHallOfFame": "Hall of Fame:"
   },
   "revealRecoveryPhrase": {
     "title": "Show Recovery Phrase",
@@ -1614,9 +1617,9 @@
           "BCrypt hash of the password",
           "Encrypted data encryption key (DEK) — user-side",
           "Encrypted data encryption key (DEK) — server-side",
-          "Encrypted recovery key from 12 recovery phrases",
+          "Encrypted recovery key from 6 recovery phrases",
           "Cryptographic salt",
-          "First and last name (user-encrypted, AES-256-GCM)",
+          "Name or alias (user-encrypted, AES-256-GCM)",
           "Time of Terms acceptance",
           "IP address at registration (encrypted)"
         ],
@@ -1629,11 +1632,11 @@
           "Encrypted data encryption key (DEK) — recovery-side",
           "Cryptographic salts",
           "SHA-256 hash of the recovery key (for verification of recovery phrases)",
-          "First and last name (user-encrypted, AES-256-GCM)",
+          "Name or alias (user-encrypted, AES-256-GCM)",
           "Time of Terms acceptance",
           "IP address at registration (encrypted)"
         ],
-        "zkNote": "With Zero-Knowledge Login, the server never has access to your data encryption key. An administrative password reset is technically impossible. Only you can decrypt your data using your 12 recovery phrases. If your password and recovery phrases are lost, your data is permanently irretrievable.",
+        "zkNote": "With Zero-Knowledge Login, the server never has access to your data encryption key. An administrative password reset is technically impossible. Only you can decrypt your data using your 6 recovery phrases. If your password and recovery phrases are lost, your data is permanently irretrievable.",
         "legal": "Legal basis: Contract performance (Art. 6 para. 1 lit. b GDPR)"
       },
       "metadata": {
@@ -1645,9 +1648,9 @@
           "Vault names and custody references",
           "Institution names",
           "Document references (not contents)",
-          "xPub keys and derivation paths"
+          "xPub keys and derivation paths (optional)"
         ],
-        "note": "These data are stored client-side encrypted and are not readable by the operator.",
+        "note": "These data are stored client-side encrypted. With Zero-Knowledge Login, they are not readable by the operator. With Standard Login, the operator has technical access to the decryption key in the context of an explicitly requested password reset.",
         "legal": "Legal basis: Contract performance (Art. 6 para. 1 lit. b GDPR)"
       },
       "passwordReset": {
@@ -1695,7 +1698,7 @@
     "section6": {
       "title": "6. Recipients and Third Parties",
       "p1": "Payment Processor: Stripe, Inc., 510 Townsend Street, San Francisco, CA 94103, USA. Stripe processes payment data in accordance with PCI-DSS standards.",
-      "p2": "Hosting Provider: The platform is operated via a cloud hosting provider (Heroku/Salesforce). Data is hosted on servers in the United States. The transfer to the USA is based on the EU-U.S. Data Privacy Framework.",
+      "p2": "Hosting Provider: The platform is operated via Heroku (Salesforce). Data is hosted on servers in the European Union (Ireland).",
       "p3": "Email Service: For sending notifications we use an email service provider. Your email address is transmitted solely for sending purposes and not stored by the provider.",
       "p4": "No Data Commercialization: We never sell, rent or share your data with third parties for commercial purposes."
     },

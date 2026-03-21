@@ -339,7 +339,7 @@
         "Finanzinstituten",
         "Aufbewahrungsorten (Vaults)",
         "Dokumenten-Referenzen (nicht Dokumenteninhalte)",
-        "xPub-Schlüssel und Derivationspfade"
+        "xPub-Schlüssel und Derivationspfade (optionale Angabe)"
       ]
     },
     "section5": {
@@ -381,8 +381,8 @@
         ]
       },
       "p3": "Beträge, Mengen, Beschreibungen und Kommentare werden verschlüsselt gespeichert.",
-      "p4": "Nutzerverantwortung: Der Nutzer trägt die vollständige Verantwortung für die Sicherung seiner Anmeldedaten und – beim Zero-Knowledge-Login – seiner 12 Wiederherstellungsphrasen.",
-      "p5": "Wiederherstellungsmöglichkeiten je nach Login-Methode: Beim Standard-Login kann der Betreiber auf ausdrückliche Anfrage des Nutzers einen administrativen Passwort-Reset durchführen; deine Inhaltsdaten bleiben dabei unverändert erhalten. Beim Zero-Knowledge-Login (Sovereignty Mode) besitzt der Server zu keinem Zeitpunkt den Datenverschlüsselungsschlüssel – ein administrativer Reset ist technisch unmöglich. Nur du kannst deine Daten mit deinen 12 Wiederherstellungsphrasen entschlüsseln. Bei Verlust von Passwort und Wiederherstellungsphrasen sind deine Daten unwiederbringlich verloren."
+      "p4": "Nutzerverantwortung: Der Nutzer trägt die vollständige Verantwortung für die Sicherung seiner Anmeldedaten und – beim Zero-Knowledge-Login – seiner 6 Wiederherstellungsphrasen.",
+      "p5": "Wiederherstellungsmöglichkeiten je nach Login-Methode: Beim Standard-Login kann der Betreiber auf ausdrückliche Anfrage des Nutzers einen administrativen Passwort-Reset durchführen; deine Inhaltsdaten bleiben dabei unverändert erhalten. Beim Zero-Knowledge-Login (Sovereignty Mode) besitzt der Server zu keinem Zeitpunkt den Datenverschlüsselungsschlüssel – ein administrativer Reset ist technisch unmöglich. Nur du kannst deine Daten mit deinen 6 Wiederherstellungsphrasen entschlüsseln. Bei Verlust von Passwort und Wiederherstellungsphrasen sind deine Daten unwiederbringlich verloren."
     },
     "section7": {
       "title": "§ 7 Abonnement-Modell und Preisgestaltung",
@@ -523,7 +523,10 @@
     "zkSubtitle": "Deine Spaceship-Daten sind client-seitig verschlüsselt",
     "zkRecoveryHint": "Falls du dein Sovereignty-Passwort vergessen hast, kannst du es mit deiner 6-Wort Wiederherstellungsphrase zurücksetzen.",
     "zkRecoverButton": "Sovereignty-Passwort wiederherstellen",
-    "revealRecoveryPhraseButton": "Recovery Phrase anzeigen"
+    "revealRecoveryPhraseButton": "Recovery Phrase anzeigen",
+    "genesisMember": "Genesis Member",
+    "genesisLifetime": "Lifetime",
+    "genesisHallOfFame": "Hall of Fame:"
   },
   "revealRecoveryPhrase": {
     "title": "Recovery Phrase anzeigen",
@@ -1776,9 +1779,9 @@
           "BCrypt-Hash des Passworts",
           "Verschlüsselter Datenverschlüsselungsschlüssel (DEK) – Nutzerseite",
           "Verschlüsselter Datenverschlüsselungsschlüssel (DEK) – Serverseite",
-          "Verschlüsselter Recovery-Key aus 12 Wiederherstellungsphrasen",
+          "Verschlüsselter Recovery-Key aus 6 Wiederherstellungsphrasen",
           "Kryptographisches Salt",
-          "Vor- und Nachname (nutzerverschlüsselt, AES-256-GCM)",
+          "Name oder Alias (nutzerverschlüsselt, AES-256-GCM)",
           "Zeitpunkt der AGB-Akzeptierung",
           "IP-Adresse bei Registrierung (verschlüsselt)"
         ],
@@ -1791,11 +1794,11 @@
           "Verschlüsselter Datenverschlüsselungsschlüssel (DEK) – Recovery-Seite",
           "Kryptographische Salts",
           "SHA-256-Hash des Recovery-Keys (zur Verifikation der Wiederherstellungsphrasen)",
-          "Vor- und Nachname (nutzerverschlüsselt, AES-256-GCM)",
+          "Name oder Alias (nutzerverschlüsselt, AES-256-GCM)",
           "Zeitpunkt der AGB-Akzeptierung",
           "IP-Adresse bei Registrierung (verschlüsselt)"
         ],
-        "zkNote": "Beim Zero-Knowledge-Login hat der Server zu keinem Zeitpunkt Zugriff auf deinen Datenverschlüsselungsschlüssel. Ein administrativer Passwort-Reset ist technisch unmöglich. Nur du kannst deine Daten entschlüsseln – mit deinen 12 Wiederherstellungsphrasen. Wenn Passwort und Wiederherstellungsphrasen verloren gehen, sind deine Daten dauerhaft nicht wiederherstellbar.",
+        "zkNote": "Beim Zero-Knowledge-Login hat der Server zu keinem Zeitpunkt Zugriff auf deinen Datenverschlüsselungsschlüssel. Ein administrativer Passwort-Reset ist technisch unmöglich. Nur du kannst deine Daten entschlüsseln – mit deinen 6 Wiederherstellungsphrasen. Wenn Passwort und Wiederherstellungsphrasen verloren gehen, sind deine Daten dauerhaft nicht wiederherstellbar.",
         "legal": "Rechtsgrundlage: Vertragserfüllung (Art. 6 Abs. 1 lit. b DSGVO)"
       },
       "metadata": {
@@ -1807,9 +1810,9 @@
           "Vault-Namen und Aufbewahrungsreferenzen",
           "Institutionen-Bezeichnungen",
           "Dokumenten-Referenzen (nicht Inhalte)",
-          "xPub-Schlüssel und Derivationspfade"
+          "xPub-Schlüssel und Derivationspfade (optionale Angabe)"
         ],
-        "note": "Diese Daten werden clientseitig verschlüsselt gespeichert und sind für den Betreiber nicht lesbar.",
+        "note": "Diese Daten werden clientseitig verschlüsselt gespeichert. Beim Zero-Knowledge-Login sind sie für den Betreiber nicht lesbar. Beim Standard-Login hat der Betreiber im Rahmen eines explizit angeforderten Passwort-Resets technisch Zugriff auf den Entschlüsselungsschlüssel.",
         "legal": "Rechtsgrundlage: Vertragserfüllung (Art. 6 Abs. 1 lit. b DSGVO)"
       },
       "passwordReset": {
@@ -1857,7 +1860,7 @@
     "section6": {
       "title": "6. Empfänger und Drittanbieter",
       "p1": "Zahlungsdienstleister: Stripe, Inc., 510 Townsend Street, San Francisco, CA 94103, USA. Stripe verarbeitet Zahlungsdaten nach PCI-DSS-Standards.",
-      "p2": "Hosting-Provider: Die Plattform wird über einen Cloud-Hosting-Anbieter (Heroku/Salesforce) betrieben. Daten werden auf Servern in den USA gehostet. Die Übermittlung in die USA erfolgt auf Basis des EU-U.S. Data Privacy Framework.",
+      "p2": "Hosting-Provider: Die Plattform wird über Heroku (Salesforce) betrieben. Daten werden auf Servern in der Europäischen Union (Irland) gehostet.",
       "p3": "E-Mail-Dienstleister: Für den Versand von Benachrichtigungen setzen wir einen E-Mail-Dienstleister ein. Deine E-Mail-Adresse wird ausschließlich zum Versand übermittelt und nicht beim Anbieter gespeichert.",
       "p4": "Keine Datenvermarktung: Wir verkaufen, vermieten oder teilen deine Daten niemals mit Dritten zu kommerziellen Zwecken."
     },
