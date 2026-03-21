@@ -424,7 +424,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
                   <p className="text-gray-500 text-xs mb-2 italic">{t('plans.includedSections')}</p>
                 )}
                 <div className="space-y-1.5">
-                  {[t('plans.spark.sections.balance'), t('plans.spark.sections.budget'), t('plans.spark.sections.cockpit'), t('plans.spark.sections.futurePlanning'), t('plans.spark.sections.login'), t('plans.spark.sections.bitcoinMatrix')].map((section, i) => (
+                  {[t('plans.spark.features.balance'), t('plans.spark.features.budget'), t('plans.spark.features.cockpit'), t('plans.spark.features.futurePlanning'), t('plans.spark.features.login'), t('plans.spark.features.bitcoinMatrix')].map((section, i) => (
                     <div key={i} className="flex items-start gap-2">
                       <Check className={`w-4 h-4 ${plan.color} flex-shrink-0 mt-0.5`} />
                       <span className="text-gray-300 leading-relaxed font-bold">{section}</span>
