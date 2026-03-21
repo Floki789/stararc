@@ -238,14 +238,6 @@ const AuthMethodSelection: React.FC = () => {
         </motion.div>
 
         {/* Info Footer */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.5 }}
-          className="mt-8 text-center text-sm text-gray-400"
-        >
-          <p>{t('authMethod.footer.info')}</p>
-        </motion.div>
       </div>
 
       {/* ZK Setup Modal */}

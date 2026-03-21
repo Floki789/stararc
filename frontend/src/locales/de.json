@@ -30,7 +30,7 @@
     "getStartedNow": "Jetzt starten →",
     "discount53": "53% Rabatt",
     "genesisExclusive": "Exklusiv",
-    "genesisTitle": "Become a Genesis Member",
+    "genesisTitle": "Werde ein Genesis-Mitglied",
     "genesisSubtitle": "Sichere dir deinen Platz in der StarArc Geschichte",
     "genesisOneTime": "Einmalige Zahlung",
     "genesisGalaxy": "Galaxy Account – Lifetime",
@@ -620,7 +620,7 @@
   "subscriptionSelection": {
     "welcome": "Willkommen bei Stararc",
     "choosePlan": "Wähle deinen Plan",
-    "choosePlanSubtitle": "Starte kostenlos oder wähle gleich einen Premium-Plan",
+    "choosePlanSubtitle": "Alle Pläne inklusive 30 Tage kostenloser Testphase – jederzeit kündbar",
     "planSelectionError": "Fehler bei der Plan-Auswahl. Bitte versuche es erneut.",
     "genesisNamePrompt": "Gib deinen Hall of Fame Namen ein (wird öffentlich als Genesis-Mitglied angezeigt):",
     "genesisModalTitle": "Werde ein Genesis-Mitglied",
@@ -1071,7 +1071,6 @@
       "extreme": "Extrem"
     },
     "footer": {
-      "info": "Du kannst unabhängig von deiner Authentifizierungsmethode jederzeit sowohl auf die Starship-App als auch auf das StarArc-Abonnement-Portal zugreifen."
     }
   },
   "zkSetup": {

@@ -210,6 +210,21 @@
   animation: typewriter-glow 0.35s ease-out;
 }
 
+/* Launch celebration shooting stars (Sternschnuppen) */
+@keyframes launchShootingStar {
+  0% {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+  70% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translate(var(--star-tx, -380px), var(--star-ty, 270px));
+    opacity: 0;
+  }
+}
+
 /* Large shooting star */
 @keyframes shooting-star {
   0% {

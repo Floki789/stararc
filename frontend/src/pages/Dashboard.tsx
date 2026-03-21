@@ -311,7 +311,7 @@ const Dashboard: React.FC = () => {
       case 'Free': return { plan: 'Spark', color: 'blue' };
       case 'Spark': return { plan: 'Nova', color: 'purple' };
       case 'Nova': return { plan: 'Galaxy', color: 'indigo' };
-      case 'Galaxy': return { plan: 'Apex', color: 'yellow' };
+      case 'Galaxy': return { plan: 'Genius Membership', color: 'yellow' };
       case 'Apex': return null; // No upgrade available
       default: return null;
     }
@@ -468,7 +468,6 @@ const Dashboard: React.FC = () => {
             {(() => {
               const nextUpgrade = getNextUpgrade(subscription.plan);
               if (nextUpgrade) {
-                const isComingSoon = nextUpgrade.plan === 'Apex';
                 return (
                   <div className="flex items-center gap-3">
                     <div className="text-right">
@@ -480,19 +479,13 @@ const Dashboard: React.FC = () => {
                       }`}>
                         {nextUpgrade.plan}
                       </p>
-                      {isComingSoon && (
-                        <span className="text-xs text-amber-400 font-medium">Coming Soon</span>
-                      )}
                     </div>
                     <button
                       onClick={handleUpgrade}
-                      disabled={isComingSoon}
                       className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                        isComingSoon
-                          ? 'bg-slate-600 text-slate-400 cursor-not-allowed opacity-60'
-                          : nextUpgrade.color === 'blue' ? 'bg-blue-500 text-white hover:bg-blue-600' :
-                            nextUpgrade.color === 'purple' ? 'bg-purple-500 text-white hover:bg-purple-600' :
-                            nextUpgrade.color === 'yellow' ? 'bg-yellow-500 text-white hover:bg-yellow-600' : 'bg-gray-500 text-white hover:bg-gray-600'
+                        nextUpgrade.color === 'blue' ? 'bg-blue-500 text-white hover:bg-blue-600' :
+                        nextUpgrade.color === 'purple' ? 'bg-purple-500 text-white hover:bg-purple-600' :
+                        nextUpgrade.color === 'yellow' ? 'bg-yellow-500 text-white hover:bg-yellow-600' : 'bg-gray-500 text-white hover:bg-gray-600'
                       }`}
                     >
                       {t('dashboard.upgrade')}

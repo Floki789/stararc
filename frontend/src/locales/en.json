@@ -485,7 +485,7 @@
   "subscriptionSelection": {
     "welcome": "Welcome to Stararc",
     "choosePlan": "Choose Your Plan",
-    "choosePlanSubtitle": "Start for free or choose a premium plan right away",
+    "choosePlanSubtitle": "All plans include a 30-day free trial – cancel anytime",
     "planSelectionError": "Error selecting plan. Please try again.",
     "genesisNamePrompt": "Enter your Hall of Fame name (displayed publicly as a Genesis Member):",
     "genesisModalTitle": "Become a Genesis Member",
@@ -909,7 +909,6 @@
       "extreme": "Extreme"
     },
     "footer": {
-      "info": "You can always access both the Starship app and StarArc subscription portal regardless of your authentication method."
     }
   },
   "zkSetup": {
