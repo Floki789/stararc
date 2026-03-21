@@ -92,7 +92,6 @@ const Register: React.FC = () => {
     
     if (!validateForm()) return;
 
-    setIsLoading(true);
     setErrors({});
     setSuccessMessage('');
 
@@ -156,8 +155,6 @@ const Register: React.FC = () => {
       }
     } catch (error) {
       setErrors({ general: t('auth.networkError') });
-    } finally {
-      setIsLoading(false);
     }
   };
 
