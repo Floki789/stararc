@@ -8,7 +8,8 @@
     "logout": "Abmelden",
     "terms": "AGB",
     "privacy": "Datenschutz",
-    "genesisMembers": "Genesis Members"
+    "genesisMembers": "Genesis Members",
+    "security": "Sicherheit"
   },
   "hero": {
     "title": "Dein ganzes Anlageuniversum unter einem Dach",
@@ -2231,5 +2232,11 @@
     "error": "Genesis Members konnten nicht geladen werden.",
     "empty": "Noch keine Genesis Members.",
     "count": "{{count}} Gründungsmitglieder"
+  },
+  "securityWhitepaper": {
+    "badge": "Security Whitepaper",
+    "title": "StarArc Security Whitepaper",
+    "subtitle": "Unsere Sicherheitsarchitektur im Detail — transparent und nachvollziehbar",
+    "version": "Version 1.0 — März 2026 • Archimedes Apps"
   }
 }

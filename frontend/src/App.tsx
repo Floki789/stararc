@@ -15,6 +15,7 @@ import AuthMethodSelection from './pages/AuthMethodSelection';
 import Terms from './pages/Terms';
 import Privacy from './pages/Privacy';
 import GenesisMembersPage from './pages/GenesisMembersPage';
+import SecurityWhitepaper from './pages/SecurityWhitepaper';
 import { AuthProvider } from './hooks/useAuth';
 import { LanguageProvider } from './contexts/LanguageContext';
 
@@ -60,6 +61,8 @@ function App() {
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/datenschutz" element={<Privacy />} />
               <Route path="/genesis-members" element={<GenesisMembersPage />} />
+              <Route path="/security" element={<SecurityWhitepaper />} />
+              <Route path="/sicherheit" element={<SecurityWhitepaper />} />
               
               {/* New subscription flow */}
               <Route path="/subscription-selection" element={

@@ -8,6 +8,7 @@ const Footer: React.FC = () => {
   // Language-specific routes
   const termsRoute = language === 'de' ? '/agb' : '/terms';
   const privacyRoute = language === 'de' ? '/datenschutz' : '/privacy';
+  const securityRoute = language === 'de' ? '/sicherheit' : '/security';
 
   return (
     <footer className="bg-gray-900 border-t border-gray-800 py-8">
@@ -29,6 +30,7 @@ const Footer: React.FC = () => {
             <Link to={termsRoute} className="text-gray-400 hover:text-white transition-colors text-sm">{t('nav.terms')}</Link>
             <Link to={privacyRoute} className="text-gray-400 hover:text-white transition-colors text-sm">{t('nav.privacy')}</Link>
             <Link to="/genesis-members" className="text-gray-400 hover:text-white transition-colors text-sm">{t('nav.genesisMembers')}</Link>
+            <Link to={securityRoute} className="text-gray-400 hover:text-white transition-colors text-sm">{t('nav.security')}</Link>
           </div>
 
           <p className="text-gray-500 text-sm">
