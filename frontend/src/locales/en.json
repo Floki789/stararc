@@ -807,6 +807,7 @@
         "vaults": "{{count}} Vaults (physical & digital each)",
         "bitcoinSetups": "{{count}} Bitcoin single sig setups (no passphrase)",
         "wallets": "{{count}} Hardware & {{count}} Software wallets",
+        "backups": "{{count}} Seed & Descriptor backups each",
         "balance": "Balance Section",
         "budget": "Budget Section",
         "cockpit": "Cockpit Section",
