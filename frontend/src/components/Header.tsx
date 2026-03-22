@@ -49,6 +49,13 @@ const Header: React.FC = () => {
               </Link>
             )}
 
+            <Link
+              to={language === 'de' ? '/sicherheit' : '/security'}
+              className="text-slate-300 hover:text-white transition-colors font-medium"
+            >
+              {t('nav.security')}
+            </Link>
+
             {isAuthenticated ? (
               <>
                 <Link
@@ -185,6 +192,13 @@ const Header: React.FC = () => {
                     onClick={() => setIsMenuOpen(false)}
                   >
                     {t('nav.pricing')}
+                  </Link>
+                  <Link
+                    to={language === 'de' ? '/sicherheit' : '/security'}
+                    className="text-slate-300 hover:text-white transition-colors"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {t('nav.security')}
                   </Link>
                   <Link
                     to="/login"
