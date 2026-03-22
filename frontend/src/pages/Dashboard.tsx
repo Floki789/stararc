@@ -460,7 +460,7 @@ const Dashboard: React.FC = () => {
                 </div>
               )}
               
-              {/* Subscription Expiry Date (only when active, not cancelled) */
+              {/* Subscription Expiry Date (only when active, not cancelled) */}
               {!subscription.cancelAtPeriodEnd && subscription.status !== 'canceled' && subscription.plan && subscription.plan.toLowerCase() !== 'free' && subscription.expiresAt && (
                 <div className="mt-2 space-y-1">
                   {(() => {
