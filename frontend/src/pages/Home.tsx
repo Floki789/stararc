@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import HeroSection from '../components/HeroSection';
+import HeroSection from '../components/HeroSectionV2';
 import OverviewShowcase from '../components/OverviewShowcase';
 import PortfolioShowcase from '../components/PortfolioShowcase';
 import PlanningShowcase from '../components/PlanningShowcase';
@@ -50,7 +50,7 @@ const Home: React.FC = () => {
 
   return (
     <div className="min-h-screen">      
-      {/* Hero Section */}
+      {/* Hero Section V2 */}
       <HeroSection />
 
       {/* Subscription Plans */}
