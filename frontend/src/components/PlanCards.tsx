@@ -48,7 +48,6 @@ const PlanCards: React.FC<PlanCardsProps> = ({
 
   // Launch availability counters — fetched from backend
   const [remainingNova, setRemainingNova] = useState(100);
-  const [remainingGalaxy, setRemainingGalaxy] = useState(100);
   const [launchActive, setLaunchActive] = useState(true);
 
   // Fetch launch availability from backend
@@ -60,7 +59,6 @@ const PlanCards: React.FC<PlanCardsProps> = ({
         if (res.ok) {
           const data = await res.json();
           setRemainingNova(data.nova?.remaining ?? 0);
-          setRemainingGalaxy(data.galaxy?.remaining ?? 0);
           setLaunchActive(data.launchActive ?? false);
         }
       } catch (err) {
