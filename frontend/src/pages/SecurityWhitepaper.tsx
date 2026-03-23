@@ -606,8 +606,8 @@ Login to Spaceship:
             <SubTitle>{isDE ? 'SQL-Injection-Schutz' : 'SQL Injection Protection'}</SubTitle>
             <P>
               {isDE
-                ? '100 % parametrisierte Queries in beiden Anwendungen über pg (node-postgres) mit $1, $2, ... Platzhaltern. Keine String-Konkatenation in SQL-Abfragen.'
-                : '100% parameterized queries in both applications via pg (node-postgres) with $1, $2, ... placeholders. No string concatenation in SQL queries.'}
+                ? 'Alle Benutzereingaben werden über pg (node-postgres) mit $1, $2, ... Platzhaltern parametrisiert. Tabellen- und Spaltennamen stammen aus serverseitigen Whitelists und werden nie aus Benutzereingaben interpoliert.'
+                : 'All user inputs are parameterized via pg (node-postgres) with $1, $2, ... placeholders. Table and column names are sourced from server-side whitelists and are never interpolated from user input.'}
             </P>
 
             <SubTitle>{isDE ? 'Eingabevalidierung' : 'Input Validation'}</SubTitle>

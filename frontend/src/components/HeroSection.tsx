@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
-import { Sparkles, Zap, Globe, Crown, Star } from 'lucide-react';
+import { Sparkles, Zap, Globe } from 'lucide-react';
 import { ClaimsSubtitle } from './ClaimsSubtitle';
 import LaunchFireworks from './LaunchFireworks';
 
@@ -14,7 +14,6 @@ const HeroSection: React.FC = () => {
   const [remainingGalaxy, setRemainingGalaxy] = useState(100);
   const [launchActive, setLaunchActive] = useState(true);
 
-  const [showGenesis, setShowGenesis] = useState(false);
   const alreadySeen = sessionStorage.getItem('fw_seen') === '1';
   const [fireworksActive, setFireworksActive] = useState(!alreadySeen);
   const [contentOpacity, setContentOpacity] = useState(alreadySeen ? 1 : 0);
@@ -51,14 +50,6 @@ const HeroSection: React.FC = () => {
     // Refresh every 30 seconds for live counter updates
     const interval = setInterval(fetchLaunchAvailability, 30000);
     return () => clearInterval(interval);
-  }, []);
-
-  // Alternate between Launch Special and Genesis Member every 7 seconds
-  useEffect(() => {
-    const toggle = setInterval(() => {
-      setShowGenesis(prev => !prev);
-    }, 7000);
-    return () => clearInterval(toggle);
   }, []);
 
   return (
@@ -208,58 +199,13 @@ const HeroSection: React.FC = () => {
                   <p className="text-center text-slate-500 text-xs mt-3">{t('hero.trialIncluded')}</p>
                 </div>
               </div>
-
-              {/* Genesis Member Card (Mobile) */}
-              <div className="relative">
-                <div className="absolute -inset-1 bg-gradient-to-r from-amber-500 to-yellow-600 rounded-2xl blur-xl opacity-30"></div>
-                <div className="relative bg-slate-900/80 backdrop-blur-xl border border-amber-500/30 rounded-2xl p-6 shadow-2xl">
-                  <div className="text-center mb-6">
-                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-500/10 border border-amber-500/30 rounded-full mb-4">
-                      <Crown className="w-5 h-5 text-amber-400" />
-                      <span className="text-base font-semibold text-amber-400">{t('hero.genesisExclusive')}</span>
-                    </div>
-                    <h3 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-300 mb-2">
-                      {t('hero.genesisTitle')}
-                    </h3>
-                    <p className="text-slate-400 text-sm">{t('hero.genesisSubtitle')}</p>
-                  </div>
-                  <div className="text-center mb-6 py-5 bg-gradient-to-b from-amber-500/10 to-transparent border border-amber-500/20 rounded-xl">
-                    <div className="text-5xl font-bold text-white mb-1">$1,999</div>
-                    <div className="text-amber-400 font-semibold text-sm">{t('hero.genesisOneTime')}</div>
-                  </div>
-                  <div className="space-y-4 mb-6">
-                    <div className="flex items-start gap-3 p-3 bg-slate-800/60 border border-purple-500/20 rounded-lg">
-                      <Globe className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
-                      <div>
-                        <div className="text-white font-semibold text-sm">{t('hero.genesisGalaxy')}</div>
-                        <div className="text-slate-400 text-xs">{t('hero.genesisGalaxyDesc')}</div>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3 p-3 bg-slate-800/60 border border-amber-500/20 rounded-lg">
-                      <Star className="w-5 h-5 text-amber-400 mt-0.5 flex-shrink-0" />
-                      <div>
-                        <div className="text-white font-semibold text-sm">{t('hero.genesisHallOfFame')}</div>
-                        <div className="text-slate-400 text-xs">{t('hero.genesisHallOfFameDesc')}</div>
-                      </div>
-                    </div>
-                  </div>
-                  <button onClick={() => navigate('/register?plan=genesis')} className="w-full px-6 py-3.5 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-900 font-bold rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-amber-500/30 text-base">
-                    {t('hero.genesisButton')}
-                  </button>
-                </div>
-              </div>
             </div>
 
-            {/* === DESKTOP: Alternating cards with animation === */}
-            <div className="hidden lg:block relative" style={{ minHeight: '700px' }}>
+            {/* === DESKTOP: Card === */}
+            <div className="hidden lg:block relative">
               
               {/* Launch Special Card (Desktop) */}
-              <div
-                className={`absolute inset-x-0 top-0 bottom-10 transition-all duration-700 ease-in-out ${
-                  showGenesis ? 'opacity-0 pointer-events-none translate-x-4' : 'opacity-100 translate-x-0'
-                }`}
-              >
-              <div className="relative h-full">
+              <div className="relative">
               <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-2xl blur-xl opacity-30"></div>
               <div className="relative bg-slate-900/80 backdrop-blur-xl border border-slate-800 rounded-2xl p-6 shadow-2xl">
                 <div className="text-center mb-5">
@@ -319,69 +265,6 @@ const HeroSection: React.FC = () => {
                 </div>
                 <p className="text-center text-slate-500 text-xs mt-3">{t('hero.trialIncluded')}</p>
               </div>
-              </div>
-              </div>
-
-              {/* Genesis Member Card (Desktop) */}
-              <div
-                className={`absolute inset-x-0 top-0 bottom-10 transition-all duration-700 ease-in-out ${
-                  showGenesis ? 'opacity-100 translate-x-0' : 'opacity-0 pointer-events-none -translate-x-4'
-                }`}
-              >
-              <div className="relative h-full">
-              <div className="absolute -inset-1 bg-gradient-to-r from-amber-500 to-yellow-600 rounded-2xl blur-xl opacity-30"></div>
-              <div className="relative bg-slate-900/80 backdrop-blur-xl border border-amber-500/30 rounded-2xl p-6 shadow-2xl h-full flex flex-col">
-                <div className="text-center mb-6">
-                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-500/10 border border-amber-500/30 rounded-full mb-4">
-                    <Crown className="w-5 h-5 text-amber-400" />
-                    <span className="text-base font-semibold text-amber-400">{t('hero.genesisExclusive')}</span>
-                  </div>
-                  <h3 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-300 mb-2">
-                    {t('hero.genesisTitle')}
-                  </h3>
-                  <p className="text-slate-400 text-sm">{t('hero.genesisSubtitle')}</p>
-                </div>
-                <div className="text-center mb-6 py-5 bg-gradient-to-b from-amber-500/10 to-transparent border border-amber-500/20 rounded-xl">
-                  <div className="text-5xl font-bold text-white mb-1">$1,999</div>
-                  <div className="text-amber-400 font-semibold text-sm">{t('hero.genesisOneTime')}</div>
-                </div>
-                <div className="space-y-4 mb-6 flex-grow">
-                  <div className="flex items-start gap-3 p-3 bg-slate-800/60 border border-purple-500/20 rounded-lg">
-                    <Globe className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
-                    <div>
-                      <div className="text-white font-semibold text-sm">{t('hero.genesisGalaxy')}</div>
-                      <div className="text-slate-400 text-xs">{t('hero.genesisGalaxyDesc')}</div>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3 p-3 bg-slate-800/60 border border-amber-500/20 rounded-lg">
-                    <Star className="w-5 h-5 text-amber-400 mt-0.5 flex-shrink-0" />
-                    <div>
-                      <div className="text-white font-semibold text-sm">{t('hero.genesisHallOfFame')}</div>
-                      <div className="text-slate-400 text-xs">{t('hero.genesisHallOfFameDesc')}</div>
-                    </div>
-                  </div>
-                </div>
-                <button onClick={() => navigate('/register?plan=genesis')} className="w-full px-6 py-3.5 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-900 font-bold rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-amber-500/30 text-base">
-                  {t('hero.genesisButton')}
-                </button>
-              </div>
-              </div>
-              </div>
-
-              {/* Dot indicators (Desktop only) */}
-              <div className="absolute bottom-0 left-0 right-0 flex justify-center gap-2">
-                <button
-                  onClick={() => setShowGenesis(false)}
-                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                    !showGenesis ? 'bg-blue-400 w-6' : 'bg-slate-600 hover:bg-slate-500'
-                  }`}
-                />
-                <button
-                  onClick={() => setShowGenesis(true)}
-                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                    showGenesis ? 'bg-amber-400 w-6' : 'bg-slate-600 hover:bg-slate-500'
-                  }`}
-                />
               </div>
             </div>
             </>
