@@ -205,70 +205,6 @@ const PlanCards: React.FC<PlanCardsProps> = ({
 
   return (
     <div className={className}>
-      {/* Genesis Member Card - Full Width */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        viewport={{ once: true }}
-        className="mb-10"
-      >
-        <div className="relative">
-          <div className="absolute -inset-1 bg-gradient-to-r from-amber-500 to-yellow-600 rounded-2xl blur-xl opacity-20"></div>
-          <div className="relative bg-slate-900/80 backdrop-blur-xl border border-amber-500/30 rounded-2xl p-6 shadow-2xl">
-            <div className="grid md:grid-cols-[1fr_auto_1fr_auto] gap-6 items-center">
-              {/* Left: Title + Badge */}
-              <div className="text-center md:text-left">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-amber-500/10 border border-amber-500/30 rounded-full mb-3">
-                  <Crown className="w-4 h-4 text-amber-400" />
-                  <span className="text-sm font-semibold text-amber-400">{t('hero.genesisExclusive')}</span>
-                </div>
-                <h3 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-300 mb-1">
-                  {t('hero.genesisTitle')}
-                </h3>
-                <p className="text-slate-400 text-sm">{t('hero.genesisSubtitle')}</p>
-              </div>
-
-              {/* Price */}
-              <div className="text-center px-6">
-                <div className="text-4xl font-bold text-white">$1,999</div>
-                <div className="text-amber-400 font-semibold text-xs mt-1">{t('hero.genesisOneTime')}</div>
-              </div>
-
-              {/* Benefits */}
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <Globe className="w-4 h-4 text-purple-400 flex-shrink-0" />
-                  <div>
-                    <span className="text-white font-semibold text-sm">{t('hero.genesisGalaxy')}</span>
-                    <span className="text-slate-400 text-xs ml-2">{t('hero.genesisGalaxyDesc')}</span>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Star className="w-4 h-4 text-amber-400 flex-shrink-0" />
-                  <div>
-                    <span className="text-white font-semibold text-sm">{t('hero.genesisHallOfFame')}</span>
-                    <span className="text-slate-400 text-xs ml-2">{t('hero.genesisHallOfFameDesc')}</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* CTA */}
-              <div>
-                <button
-                  onClick={() => onGenesisSelect?.()}
-                  disabled={loading['genesis']}
-                  className="px-6 py-3 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-900 font-bold rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-amber-500/30 text-sm whitespace-nowrap"
-                >
-                  {loading['genesis'] ? 'Loading...' : t('hero.genesisButton')}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </motion.div>
-
       {/* Header Text - Yearly Plans Only */}
       <div className="text-center mb-8">
         <p className="text-gray-400 text-lg">
@@ -486,6 +422,70 @@ const PlanCards: React.FC<PlanCardsProps> = ({
         );
       })}
       </div>
+
+      {/* Genesis Member Card - Full Width */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        viewport={{ once: true }}
+        className="mt-10"
+      >
+        <div className="relative">
+          <div className="absolute -inset-1 bg-gradient-to-r from-amber-500 to-yellow-600 rounded-2xl blur-xl opacity-20"></div>
+          <div className="relative bg-slate-900/80 backdrop-blur-xl border border-amber-500/30 rounded-2xl p-6 shadow-2xl">
+            <div className="grid md:grid-cols-[1fr_auto_1fr_auto] gap-6 items-center">
+              {/* Left: Title + Badge */}
+              <div className="text-center md:text-left">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-amber-500/10 border border-amber-500/30 rounded-full mb-3">
+                  <Crown className="w-4 h-4 text-amber-400" />
+                  <span className="text-sm font-semibold text-amber-400">{t('hero.genesisExclusive')}</span>
+                </div>
+                <h3 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-300 mb-1">
+                  {t('hero.genesisTitle')}
+                </h3>
+                <p className="text-slate-400 text-sm">{t('hero.genesisSubtitle')}</p>
+              </div>
+
+              {/* Price */}
+              <div className="text-center px-6">
+                <div className="text-4xl font-bold text-white">$1,999</div>
+                <div className="text-amber-400 font-semibold text-xs mt-1">{t('hero.genesisOneTime')}</div>
+              </div>
+
+              {/* Benefits */}
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <Globe className="w-4 h-4 text-purple-400 flex-shrink-0" />
+                  <div>
+                    <span className="text-white font-semibold text-sm">{t('hero.genesisGalaxy')}</span>
+                    <span className="text-slate-400 text-xs ml-2">{t('hero.genesisGalaxyDesc')}</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Star className="w-4 h-4 text-amber-400 flex-shrink-0" />
+                  <div>
+                    <span className="text-white font-semibold text-sm">{t('hero.genesisHallOfFame')}</span>
+                    <span className="text-slate-400 text-xs ml-2">{t('hero.genesisHallOfFameDesc')}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* CTA */}
+              <div>
+                <button
+                  onClick={() => onGenesisSelect?.()}
+                  disabled={loading['genesis']}
+                  className="px-6 py-3 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-900 font-bold rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-amber-500/30 text-sm whitespace-nowrap"
+                >
+                  {loading['genesis'] ? 'Loading...' : t('hero.genesisButton')}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </motion.div>
     </div>
   );
 };

@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import { Sparkles, Zap, Globe } from 'lucide-react';
 import { ClaimsSubtitle } from './ClaimsSubtitle';
-import LaunchFireworks from './LaunchFireworks';
 
 const HeroSection: React.FC = () => {
   const { t } = useLanguage();
@@ -13,22 +12,6 @@ const HeroSection: React.FC = () => {
   const [remainingNova, setRemainingNova] = useState(100);
   const [remainingGalaxy, setRemainingGalaxy] = useState(100);
   const [launchActive, setLaunchActive] = useState(true);
-
-  const alreadySeen = sessionStorage.getItem('fw_seen') === '1';
-  const [fireworksActive, setFireworksActive] = useState(!alreadySeen);
-  const [contentOpacity, setContentOpacity] = useState(alreadySeen ? 1 : 0);
-
-  const handleFireworksDone = useCallback(() => {
-    setFireworksActive(false);
-  }, []);
-
-  // Feuerwerk beim Laden — Content einblenden; überspringen wenn bereits gesehen
-  useEffect(() => {
-    if (alreadySeen) return;
-    sessionStorage.setItem('fw_seen', '1');
-    const t = setTimeout(() => setContentOpacity(1), 50);
-    return () => clearTimeout(t);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Fetch launch availability from backend
   useEffect(() => {
@@ -54,8 +37,6 @@ const HeroSection: React.FC = () => {
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center overflow-hidden pt-20">
-      {/* Launch Fireworks overlay */}
-      {fireworksActive && <LaunchFireworks onDone={handleFireworksDone} />}
       {/* Starfield Background */}
       <div className="absolute inset-0">
         {/* Stars layer 1 - small and dim */}
@@ -105,7 +86,6 @@ const HeroSection: React.FC = () => {
       {/* Content */}
       <div
         className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full py-16"
-        style={{ opacity: contentOpacity, transition: 'opacity 25s cubic-bezier(0.85, 0, 0.95, 1)' }}
       >
         <div className="grid lg:grid-cols-6 gap-12 items-center">
           
@@ -126,7 +106,7 @@ const HeroSection: React.FC = () => {
 
             </div>
 
-            {/* Launch celebration button removed — fireworks start automatically on load */}
+
           </div>
 
           {/* Right Column - Offer Cards */}
