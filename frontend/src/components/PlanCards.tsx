@@ -291,25 +291,6 @@ const PlanCards: React.FC<PlanCardsProps> = ({
                         </span>
                       </div>
                       <p className="text-sm text-gray-400 mt-1">{t('plans.perYear')}</p>
-                      {/* Counter */}
-                      <div className="mt-3 px-2">
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-gray-500 text-xs">{t('hero.stillAvailable')}</span>
-                          <span className={`text-xs font-bold ${plan.id === 'Nova' ? 'text-blue-400' : 'text-purple-400'}`}>
-                            {plan.id === 'Nova' ? remainingNova : remainingGalaxy} / 100
-                          </span>
-                        </div>
-                        <div className="h-1.5 bg-slate-700 rounded-full overflow-hidden">
-                          <div
-                            className={`h-full rounded-full transition-all duration-500 ${
-                              plan.id === 'Nova' 
-                                ? 'bg-gradient-to-r from-blue-500 to-cyan-500' 
-                                : 'bg-gradient-to-r from-purple-500 to-indigo-500'
-                            }`}
-                            style={{ width: `${plan.id === 'Nova' ? remainingNova : remainingGalaxy}%` }}
-                          />
-                        </div>
-                      </div>
                       <div className="flex flex-wrap justify-center gap-2 mt-3">
                         <span className="bg-green-500/20 text-green-400 px-2 py-1 rounded text-xs font-semibold">
                           {t('plans.freeTrial')}

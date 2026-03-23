@@ -156,10 +156,10 @@ const HeroSectionV2: React.FC = () => {
 
           {/* ── Left column: Title ─────────────────────────────────────── */}
           <div className="flex-1 flex flex-col justify-center text-center lg:text-left">
-            <h1 className="text-5xl sm:text-6xl lg:text-6xl xl:text-7xl font-bold leading-tight tracking-tight">
+            <h1 className="text-5xl sm:text-6xl lg:text-6xl xl:text-7xl font-bold leading-tight tracking-tight pb-2">
               <span className="text-white">{t('hero2.titleLine1')}</span>
               <br />
-              <span className="block mt-6 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-500">
+              <span className="block mt-6 pb-2 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-500">
                 {t('hero2.titleLine2')}
               </span>
             </h1>
