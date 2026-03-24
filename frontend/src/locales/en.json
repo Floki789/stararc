@@ -818,7 +818,7 @@
     },
     "nova": {
       "name": "Nova",
-      "description": "Free access during the Beta phase",
+      "description": "Free access in beta",
       "button": "Register for free",
       "features": {
         "familyMembers": "{{count}} Family members",
@@ -2227,6 +2227,9 @@
     "titleLine2": "Plan your Future",
     "subtitleLine1": "Your Assets stay where they are.",
     "subtitleLine2": "Stararc provides overview, analytics and planning.",
+    "freeAccess": "Free access in beta",
+    "securityLabel": "Security & Privacy:",
+    "securityLink": "Read our Security & Privacy Whitepaper",
     "cta": "Get started for free",
     "ctaHint": "30-day free trial · No credit card required",
     "assets": {

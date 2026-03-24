@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import {
   TrendingUp,
@@ -156,10 +157,15 @@ const HeroSectionV2: React.FC = () => {
 
           {/* ── Left column: Title ─────────────────────────────────────── */}
           <div className="flex-1 flex flex-col justify-center text-center lg:text-left">
-            {/* Beta badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-500/10 border border-blue-500/30 rounded-full mb-5 self-center lg:self-start">
-              <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
-              <span className="text-sm font-semibold text-blue-400 uppercase tracking-wider">Beta</span>
+            {/* Badges */}
+            <div className="flex items-center gap-2 mb-5 self-center lg:self-start">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-500/10 border border-blue-500/30 rounded-full">
+                <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
+                <span className="text-sm font-semibold text-blue-400 uppercase tracking-wider">Beta</span>
+              </div>
+              <div className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-emerald-500/10 border border-emerald-500/30 rounded-full">
+                <span className="text-sm font-semibold text-emerald-400 tracking-wide">{t('hero2.freeAccess')}</span>
+              </div>
             </div>
             <h1 className="text-5xl sm:text-6xl lg:text-6xl xl:text-7xl font-bold leading-tight tracking-tight pb-2">
               <span className="text-white">{t('hero2.titleLine1')}</span>
@@ -168,6 +174,12 @@ const HeroSectionV2: React.FC = () => {
                 {t('hero2.titleLine2')}
               </span>
             </h1>
+            {/* Security badge */}
+            <div className="mt-5 self-center lg:self-start">
+              <Link to="/security" className="inline-flex items-center gap-1.5 px-3 py-1 bg-slate-700/60 border border-slate-600/50 rounded-full hover:bg-slate-700 hover:border-slate-500 transition-colors">
+                <span className="text-xs font-semibold text-blue-400 uppercase tracking-wider">{t('hero2.securityLink')}</span>
+              </Link>
+            </div>
           </div>
 
           {/* ── Right column: Visualization ────────────────────────────── */}

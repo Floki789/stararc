@@ -977,7 +977,7 @@
     },
     "nova": {
       "name": "Nova",
-      "description": "Kostenloser Zugang während der Beta-Phase",
+      "description": "Kostenloser Zugang in der Beta",
       "button": "Kostenlos registrieren",
       "features": {
         "familyMembers": "{{count}} Familienmitglieder",
@@ -2242,6 +2242,9 @@
     "titleLine2": "Plane deine Zukunft",
     "subtitleLine1": "Deine Assets bleiben, wo sie sind.",
     "subtitleLine2": "Stararc bietet Übersicht, Analysen und Planung.",
+    "freeAccess": "Kostenloser Zugang in der Beta",
+    "securityLabel": "Sicherheit & Datenschutz:",
+    "securityLink": "Security & Privacy Whitepaper lesen",
     "cta": "Kostenlos starten",
     "ctaHint": "30 Tage kostenlos testen · Keine Kreditkarte erforderlich",
     "assets": {
