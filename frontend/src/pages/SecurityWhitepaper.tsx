@@ -150,12 +150,14 @@ const SecurityWhitepaper: React.FC = () => {
               'Boolsche Konfigurationswerte',
               'Zeitstempel',
               'Verschlüsselungs-Metadaten (Version, Algorithmus)',
+              'Nicht-sensible Präferenzwerte (z. B. Währungscode, Zeitzone, Sprache, Datumsformat)',
             ] : [
               'Primary and foreign keys (structural relationships)',
               'Category IDs (not names)',
               'Boolean configuration values',
               'Timestamps',
               'Encryption metadata (version, algorithm)',
+              'Non-sensitive preference values (e.g. currency code, timezone, language, date format)',
             ]} />
           </section>
 
@@ -208,7 +210,7 @@ const SecurityWhitepaper: React.FC = () => {
               rows={[
                 [isDE ? 'Datenverschlüsselung' : 'Data encryption', 'AES-256-GCM', isDE ? '12 Byte IV, 128-Bit Auth-Tag' : '12-byte IV, 128-bit auth tag'],
                 [isDE ? 'Schlüsselableitung (KEK)' : 'Key derivation (KEK)', 'PBKDF2-SHA-256', isDE ? '600.000 Iterationen, 32 Byte Salt' : '600,000 iterations, 32-byte salt'],
-                [isDE ? 'Passwort-Hashing' : 'Password hashing', 'BCrypt', isDE ? '12 Runden, automatischer Salt' : '12 rounds, automatic salt'],
+                [isDE ? 'Passwort-Hashing' : 'Password hashing', 'BCrypt', isDE ? 'Branchenstandard-Kostenfaktor, automatischer Salt' : 'Industry-standard work factor, automatic salt'],
                 ['E-Mail-Lookup', 'SHA-256', isDE ? 'E-Mail + App-Salt' : 'Email + app-specific salt'],
                 [isDE ? 'Wiederherstellungsphrase' : 'Recovery phrase', 'BIP39', isDE ? '6 Wörter (~66 Bit Entropie)' : '6 words (~66 bits entropy)'],
                 ['Cross-App-Token', 'JWT (HMAC-SHA256)', isDE ? '5 Minuten Gültigkeit' : '5-minute validity'],
@@ -269,7 +271,7 @@ DEK (Data Encryption Key) — 256 Bit, nur verpackt gespeichert
 AES-256-GCM pro Datenfeld
     │
     ▼
-Base64(Salt[32] ‖ IV[12] ‖ Ciphertext ‖ AuthTag[16])`
+salt ‖ IV ‖ ciphertext ‖ auth-tag (Base64)`
               : `User Password (or Recovery Phrase)
     │
     ▼
@@ -288,22 +290,22 @@ DEK (Data Encryption Key) — 256-bit, stored only wrapped
 AES-256-GCM per data field
     │
     ▼
-Base64(Salt[32] ‖ IV[12] ‖ Ciphertext ‖ AuthTag[16])`}</CodeBlock>
+salt ‖ IV ‖ ciphertext ‖ auth-tag (Base64)`}</CodeBlock>
             <SubTitle>{isDE ? 'DEK-Lebenszyklus' : 'DEK Lifecycle'}</SubTitle>
             <BulletList items={isDE ? [
               'Erzeugung: Einmalig bei der Registrierung mittels crypto.subtle.generateKey()',
               'Speicherung: Der DEK wird nie im Klartext gespeichert — es existieren nur verpackte Kopien',
-              'wrapped_dek — verpackt mit dem Nutzer-KEK (beide Modi)',
-              'wrapped_dek_server — verpackt mit dem Server-KEK (nur Standard-Modus; NULL im Sovereignty-Modus)',
-              'wrapped_dek_recovery — verpackt mit dem Wiederherstellungs-KEK (nur Sovereignty-Modus)',
+              'Nutzer-Kopie — verpackt mit dem Nutzer-KEK (beide Modi)',
+              'Server-Kopie — verpackt mit dem Server-KEK (nur Standard-Modus; nicht vorhanden im Sovereignty-Modus)',
+              'Wiederherstellungs-Kopie — verpackt mit dem Wiederherstellungs-KEK (nur Sovereignty-Modus)',
               'Im Browser: Temporär in sessionStorage (wird beim Schließen des Tabs gelöscht)',
               'Zeitlimit: 4 Stunden harte Ablaufzeit mit Aktivitätsüberwachung',
             ] : [
               'Generation: Created once during registration via crypto.subtle.generateKey()',
               'Storage: The DEK is never stored in plaintext — only wrapped copies exist',
-              'wrapped_dek — wrapped with the user KEK (both modes)',
-              'wrapped_dek_server — wrapped with the server KEK (Standard mode only; NULL in Sovereignty mode)',
-              'wrapped_dek_recovery — wrapped with the recovery KEK (Sovereignty mode only)',
+              'User copy — wrapped with the user KEK (both modes)',
+              'Server copy — wrapped with the server KEK (Standard mode only; absent in Sovereignty mode)',
+              'Recovery copy — wrapped with the recovery KEK (Sovereignty mode only)',
               'In browser: Temporarily in sessionStorage (cleared when tab closes)',
               'Time limit: 4-hour hard expiry with activity monitoring',
             ]} />
@@ -328,19 +330,19 @@ Base64(Salt[32] ‖ IV[12] ‖ Ciphertext ‖ AuthTag[16])`}</CodeBlock>
             <CodeBlock>{isDE
               ? `Registrierung:
   Browser: DEK erzeugen → KEK aus Passwort ableiten → DEK verpacken
-  Browser: Rohen DEK + wrapped_dek + Salt an Server senden (einmalig)
-  Server:  Server-KEK ableiten → wrapped_dek_server erstellen → rohen DEK verwerfen
+  Browser: Rohen DEK + Nutzer-Schlüssel-Kopie + Salt an Server senden (einmalig)
+  Server:  Server-KEK ableiten → Server-Schlüssel-Kopie erstellen → rohen DEK verwerfen
 
 Anmeldung bei Spaceship:
-  Server:  DEK via wrapped_dek_server entpacken → für Transport verschlüsseln → JWT
+  Server:  DEK via Server-Schlüssel-Kopie entpacken → für Transport verschlüsseln → JWT
   Browser: DEK aus JWT entschlüsseln → sessionStorage → nahtloser Zugriff`
               : `Registration:
   Browser: Generate DEK → derive KEK from password → wrap DEK
-  Browser: Send raw DEK + wrapped_dek + salt to server (one-time)
-  Server:  Derive server KEK → create wrapped_dek_server → discard raw DEK
+  Browser: Send raw DEK + user-key-copy + salt to server (one-time)
+  Server:  Derive server KEK → create server-key-copy → discard raw DEK
 
 Login to Spaceship:
-  Server:  Unwrap DEK via wrapped_dek_server → encrypt for transport → JWT
+  Server:  Unwrap DEK via server-key-copy → encrypt for transport → JWT
   Browser: Decrypt DEK from JWT → sessionStorage → seamless access`}</CodeBlock>
             <P><strong>{isDE ? 'Vorteile:' : 'Advantages:'}</strong></P>
             <BulletList items={isDE ? [
@@ -359,36 +361,36 @@ Login to Spaceship:
   Browser: Sovereignty-Passwort erstellen (min. 12 Zeichen)
   Browser: 6 BIP39-Wiederherstellungswörter generieren
   Browser: DEK erzeugen
-  Browser: Passwort-KEK ableiten → wrapped_dek
-  Browser: Wiederherstellungs-KEK ableiten → wrapped_dek_recovery
+  Browser: Passwort-KEK ableiten → Nutzer-Schlüssel-Kopie
+  Browser: Wiederherstellungs-KEK ableiten → Wiederherstellungs-Schlüssel-Kopie
   Browser: Wiederherstellungsphrase mit DEK verschlüsseln
   Browser: Alle verpackten Artefakte an Server senden
            (Der rohe DEK verlässt den Browser NIE)
 
 Anmeldung bei Spaceship:
-  Server:  wrapped_dek + Salt im JWT senden (kein roher DEK)
+  Server:  Nutzer-Schlüssel-Kopie + Salt im JWT senden (kein roher DEK)
   Browser: Sovereignty-Passwort abfragen → KEK ableiten → DEK entpacken`
               : `Setup:
   Browser: Create Sovereignty password (min. 12 characters)
   Browser: Generate 6 BIP39 recovery words
   Browser: Generate DEK
-  Browser: Derive password KEK → wrapped_dek
-  Browser: Derive recovery KEK → wrapped_dek_recovery
+  Browser: Derive password KEK → user-key-copy
+  Browser: Derive recovery KEK → recovery-key-copy
   Browser: Encrypt recovery phrase with DEK
   Browser: Send all wrapped artifacts to server
            (Raw DEK NEVER leaves the browser)
 
 Login to Spaceship:
-  Server:  Send wrapped_dek + salt in JWT (no raw DEK)
+  Server:  Send user-key-copy + salt in JWT (no raw DEK)
   Browser: Prompt for Sovereignty password → derive KEK → unwrap DEK`}</CodeBlock>
             <P><strong>{isDE ? 'Garantien:' : 'Guarantees:'}</strong></P>
             <BulletList items={isDE ? [
-              'wrapped_dek_server = NULL — der Server hat physisch keinen Zugang zu den Daten',
+              'Server-Schlüssel-Kopie = nicht vorhanden — der Server hat physisch keinen Zugang zu den Daten',
               'Kein Administrator-Passwort-Reset möglich',
               'Wiederherstellung ausschließlich über die 6-Wort-Phrase (clientseitig)',
               'Der Server fungiert als „blinder Tresor" — speichert verschlüsselte Blobs, ohne deren Inhalt zu kennen',
             ] : [
-              'wrapped_dek_server = NULL — the server has physically no access to the data',
+              'Server key copy = absent — the server has physically no access to the data',
               'No administrator password reset possible',
               'Recovery exclusively via 6-word phrase (client-side)',
               'The server acts as a "blind vault" — stores encrypted blobs without knowing their contents',
@@ -413,20 +415,20 @@ Login to Spaceship:
                   ? 'E-Mail, Name/Alias, 2FA-Geheimnisse, Backup-Codes, Rechtskenntnis-Einwilligungen'
                   : 'Email, name/alias, 2FA secrets, backup codes, legal consent records'],
                 ['Spaceship', isDE
-                  ? 'Asset-Namen, Werte, Mengen, Währungen, ISINs, Bitcoin-xPubs, Ableitungspfade, Wallet-Details, Familiennamen, Geburtsjahre, Budget-Beträge, Immobilienwerte, Hypotheken, Edelmetallbestände, Seed-Informationen, Hardware-Seriennummern, Kontowerte, Verbindlichkeiten, Standortdaten'
-                  : 'Asset names, values, quantities, currencies, ISINs, Bitcoin xPubs, derivation paths, wallet details, family names, birth years, budget amounts, real estate values, mortgages, precious metal holdings, seed information, hardware serial numbers, account values, liabilities, location data'],
+                  ? 'Asset-Namen, Werte, Mengen, Währungen, ISINs, Bitcoin-xPubs, Ableitungspfade, Wallet-Details, Familiennamen, Geburtsjahre, Budget-Beträge, Immobilienwerte, Hypotheken, Edelmetallbestände, Seed-Informationen, Kontowerte, Verbindlichkeiten, Standortdaten'
+                  : 'Asset names, values, quantities, currencies, ISINs, Bitcoin xPubs, derivation paths, wallet details, family names, birth years, budget amounts, real estate values, mortgages, precious metal holdings, seed information, account values, liabilities, location data'],
               ]}
             />
             <SubTitle>{isDE ? 'Eigenschaften' : 'Properties'}</SubTitle>
             <BulletList items={isDE ? [
               'Frischer Salt (32 Byte) und frischer IV (12 Byte) pro Verschlüsselung',
               'Derselbe Wert ergibt bei zweimaliger Verschlüsselung unterschiedlichen Ciphertext (Schutz vor Musteranalyse)',
-              'Selbstbeschreibendes Format: Base64(Salt[32] ‖ IV[12] ‖ Ciphertext ‖ AuthTag[16])',
+              'Selbstbeschreibendes Format: Salt ‖ IV ‖ Ciphertext ‖ Auth-Tag (Base64-kodiert)',
               'Verschlüsselungs-Metadaten pro Datensatz: encryption_version, encryption_algorithm (ermöglicht nahtlose Migration)',
             ] : [
               'Fresh salt (32 bytes) and fresh IV (12 bytes) per encryption',
               'The same value encrypted twice produces different ciphertext (protection against pattern analysis)',
-              'Self-describing format: Base64(Salt[32] ‖ IV[12] ‖ Ciphertext ‖ AuthTag[16])',
+              'Self-describing format: salt ‖ IV ‖ ciphertext ‖ authentication tag (Base64-encoded)',
               'Encryption metadata per record: encryption_version, encryption_algorithm (enables seamless migration)',
             ]} />
             <SubTitle>{isDE ? 'Performance-Optimierung' : 'Performance Optimization'}</SubTitle>
@@ -461,7 +463,7 @@ Login to Spaceship:
                 ['Sovereignty-' + (isDE ? 'Passwort' : 'password'), isDE ? 'Nutzerwahl (min. 12 Zeichen)' : 'User-chosen (min. 12 chars)', isDE ? 'BCrypt-Hash in DB' : 'BCrypt hash in DB', isDE ? 'Nur Nutzer' : 'User only'],
                 ['DEK', 'crypto.subtle.generateKey()', isDE ? 'Nur verpackte Kopien' : 'Only wrapped copies', isDE ? 'Standard: Nutzer + Server; ZK: nur Nutzer' : 'Standard: user + server; ZK: user only'],
                 [isDE ? 'Nutzer-KEK' : 'User KEK', 'PBKDF2(password, salt, 600k)', isDE ? 'Nicht gespeichert' : 'Not stored', isDE ? 'Nur Nutzer' : 'User only'],
-                ['Server-KEK', 'PBKDF2(secret, user-salt, 100k)', isDE ? 'Nicht gespeichert' : 'Not stored', isDE ? 'Nur Server' : 'Server only'],
+                ['Server-KEK', 'PBKDF2(secret, user-salt)', isDE ? 'Nicht gespeichert' : 'Not stored', isDE ? 'Nur Server' : 'Server only'],
                 [isDE ? 'Wiederherstellungs-KEK' : 'Recovery KEK', 'PBKDF2(6 words, salt, 600k)', isDE ? 'Nicht gespeichert' : 'Not stored', isDE ? 'Nur Nutzer' : 'User only'],
                 [isDE ? 'Wiederherstellungsphrase' : 'Recovery phrase', isDE ? '6 BIP39-Wörter' : '6 BIP39 words', isDE ? 'Mit DEK verschlüsselt in DB' : 'Encrypted with DEK in DB', isDE ? 'Nur Nutzer' : 'User only'],
                 ['Admin-Masterkey', isDE ? 'Umgebungsvariable' : 'Environment variable', isDE ? 'Serverumgebung' : 'Server environment', isDE ? 'Nur Serveradministrator' : 'Server admin only'],
@@ -544,12 +546,12 @@ Login to Spaceship:
             ]} />
             <SubTitle>{isDE ? 'Sovereignty-Modus-Transport' : 'Sovereignty Mode Transport'}</SubTitle>
             <BulletList items={isDE ? [
-              'StarArc sendet wrapped_dek + dek_salt im JWT (kein roher DEK)',
+              'StarArc sendet Nutzer-Schlüssel-Kopie + Salt im JWT (kein roher DEK)',
               'Spaceship fordert das Sovereignty-Passwort vom Nutzer',
               'Client leitet KEK ab → entpackt DEK',
               'Kein nahtloser Login — by Design',
             ] : [
-              'StarArc sends wrapped_dek + dek_salt in the JWT (no raw DEK)',
+              'StarArc sends user-key-copy + salt in the JWT (no raw DEK)',
               'Spaceship prompts the user for the Sovereignty password',
               'Client derives KEK → unwraps DEK',
               'No seamless login — by design',
@@ -590,9 +592,10 @@ Login to Spaceship:
             <Table
               headers={[isDE ? 'Kategorie' : 'Category', 'StarArc', 'Spaceship']}
               rows={[
-                [isDE ? 'Globale API' : 'Global API', isDE ? '500 Anfragen / 15 Min' : '500 requests / 15 min', isDE ? '2.000 Anfragen / 15 Min' : '2,000 requests / 15 min'],
-                ['Login', isDE ? '200 Anfragen / 15 Min' : '200 requests / 15 min', '—'],
-                [isDE ? 'Registrierung' : 'Registration', isDE ? '100 Anfragen / Stunde' : '100 requests / hour', '—'],
+                [isDE ? 'Globale API' : 'Global API', isDE ? 'Aktiv' : 'Enforced', isDE ? 'Aktiv' : 'Enforced'],
+                ['Login', isDE ? 'Striktes Limit' : 'Strict limit', '—'],
+                [isDE ? 'Registrierung' : 'Registration', isDE ? 'Striktes Limit' : 'Strict limit', '—'],
+
               ]}
             />
 
@@ -637,14 +640,14 @@ Login to Spaceship:
             <SubTitle>Session Lifecycle</SubTitle>
             <CodeBlock>{isDE
               ? `Login → PBKDF2 (600k) → KEK → DEK entpacken
-  → sessionStorage ("DERIVED_KEY:{base64}")
+  → sessionStorage (verschlüsselter Schlüssel-Blob)
   → Aktivitäts-Timer startet (4h)
 
 Nutzer aktiv → Timer zurücksetzen
 Nutzer inaktiv >4h → DEK aus Speicher löschen → Re-Login
 Tab schließen → sessionStorage automatisch gelöscht`
               : `Login → PBKDF2 (600k) → KEK → unwrap DEK
-  → sessionStorage ("DERIVED_KEY:{base64}")
+  → sessionStorage (encrypted key blob)
   → Activity timer starts (4h)
 
 User active → Timer resets
@@ -666,10 +669,10 @@ Tab close → sessionStorage automatically cleared`}</CodeBlock>
             <SubTitle>{isDE ? 'Datenlöschung' : 'Data Deletion'}</SubTitle>
             <BulletList items={isDE ? [
               'Spaceship: Kaskadierende Löschung über 20+ Tabellen in korrekter Fremdschlüssel-Reihenfolge',
-              'StarArc: anonymize_user_data()-Funktion anonymisiert alle personenbezogenen Felder, löscht Zahlungsinformationen und deaktiviert Zugangschlüssel',
+              'StarArc: Automatisierte Anonymisierungsfunktion anonymisiert alle personenbezogenen Felder, löscht Zahlungsinformationen und deaktiviert Zugangsschlüssel',
             ] : [
               'Spaceship: Cascading deletion across 20+ tables in correct foreign key order',
-              'StarArc: anonymize_user_data() function anonymizes all personal fields, deletes payment information, and deactivates access keys',
+              'StarArc: An automated anonymization function anonymizes all personal fields, deletes payment information, and deactivates access keys',
             ]} />
             <SubTitle>{isDE ? 'Einwilligungsnachverfolgung (Art. 7 DSGVO)' : 'Consent Tracking (Art. 7 GDPR)'}</SubTitle>
             <P>
@@ -735,8 +738,8 @@ Tab close → sessionStorage automatically cleared`}</CodeBlock>
             </SubTitle>
             <P>
               {isDE
-                ? 'Im Standard-Modus hält der Server wrapped_dek_server und kann den DEK theoretisch ableiten. Dies ist bewusst so gestaltet, um Komfortfunktionen wie Passwort-Reset zu ermöglichen. Nutzer, die maximale Privatsphäre anstreben, sollten den Sovereignty-Modus verwenden.'
-                : 'In Standard mode, the server holds wrapped_dek_server and can theoretically derive the DEK. This is intentionally designed to enable convenience features like password reset. Users seeking maximum privacy should use Sovereignty mode.'}
+                ? 'Im Standard-Modus hält der Server eine verschlüsselte Kopie des DEK und kann den DEK theoretisch ableiten. Dies ist bewusst so gestaltet, um Komfortfunktionen wie Passwort-Reset zu ermöglichen. Nutzer, die maximale Privatsphäre anstreben, sollten den Sovereignty-Modus verwenden.'
+                : 'In Standard mode, the server holds an encrypted copy of the DEK and can theoretically derive the DEK. This is intentionally designed to enable convenience features like password reset. Users seeking maximum privacy should use Sovereignty mode.'}
             </P>
 
             <SubTitle>

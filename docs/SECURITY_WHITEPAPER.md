@@ -22,7 +22,6 @@
 13. [Datenschutz und DSGVO](#13-datenschutz-und-dsgvo)
 14. [Branchenvergleich](#14-branchenvergleich)
 15. [Bekannte Einschränkungen und Transparenz](#15-bekannte-einschränkungen-und-transparenz)
-16. [Zukunftsplanung](#16-zukunftsplanung)
 
 ---
 
@@ -65,7 +64,13 @@ Alle personenbezogenen und finanziellen Daten werden **vor dem Verlassen des Bro
 - Kategorie-IDs (nicht die Namen)
 - Boolsche Konfigurationswerte
 - Zeitstempel
-- Verschlüsselungs-Metadaten (Version, Algorithmus)
+- Verschlüsselungs-Metadaten (Version, Algorithmus, IV, Salt)
+- Funktionale Metadaten mit geringer Datenschutzrelevanz, zum Beispiel:
+  - Währungscodes (z. B. `CHF`, `EUR`, `USD`)
+  - Datenquellen-Typ (z. B. `manual`, `import`, `csv`)
+  - Erinnerungsintervall für Wertaktualisierungen (z. B. `monatlich`, `quartalsweise`)
+  - Szenario-Typ für Projektionen (z. B. `konservativ`, `optimistisch`)
+  - Verarbeitungs- und Importstatus-Flags (z. B. `pending`, `completed`)
 
 ---
 
@@ -105,7 +110,7 @@ Alle personenbezogenen und finanziellen Daten werden **vor dem Verlassen des Bro
 |---|---|---|
 | Datenverschlüsselung | **AES-256-GCM** | 12 Byte IV, 128-Bit Authentifizierungs-Tag |
 | Nutzer-Schlüsselableitung (KEK) | **PBKDF2-SHA-256** | 600.000 Iterationen, 32 Byte Zufalls-Salt |
-| Passwort-Hashing | **BCrypt** | 12 Runden, automatischer Salt |
+| Passwort-Hashing | **BCrypt** | Branchenstandard-Kostenfaktor, automatischer Salt |
 | E-Mail-Lookup | **SHA-256** | E-Mail + anwendungsspezifischer Salt |
 | Wiederherstellungsphrase | **BIP39-Wortliste** | 6 Wörter aus 2048-Wort-Liste (~66 Bit Entropie) |
 | Cross-App-Token | **JWT (HMAC-SHA256)** | 5 Minuten Gültigkeit |
@@ -149,7 +154,7 @@ DEK (Data Encryption Key) — 256 Bit, nur verpackt gespeichert
 AES-256-GCM pro Datenfeld
     │
     ▼
-Base64(Salt[32] ‖ IV[12] ‖ Ciphertext ‖ AuthTag[16])
+Salt ‖ IV ‖ Ciphertext ‖ Authentifizierungs-Tag (Base64-kodiert)
 ```
 
 ### DEK-Lebenszyklus
@@ -157,9 +162,9 @@ Base64(Salt[32] ‖ IV[12] ‖ Ciphertext ‖ AuthTag[16])
 1. **Erzeugung:** Einmalig bei der Registrierung mittels `crypto.subtle.generateKey('AES-GCM', 256)`
 2. **Speicherung:** Der DEK wird **nie im Klartext** gespeichert — es existieren nur verpackte (wrapped) Kopien
 3. **Verpackungen:**
-   - `wrapped_dek` — verpackt mit dem Nutzer-KEK (beide Modi)
-   - `wrapped_dek_server` — verpackt mit dem Server-KEK (nur Standard-Modus; NULL im Sovereignty-Modus)
-   - `wrapped_dek_recovery` — verpackt mit dem Wiederherstellungs-KEK (nur Sovereignty-Modus)
+   - Nutzer-Kopie — verpackt mit dem Nutzer-KEK (beide Modi)
+   - Server-Kopie — verpackt mit dem Server-KEK (nur Standard-Modus; nicht vorhanden im Sovereignty-Modus)
+   - Wiederherstellungs-Kopie — verpackt mit dem Wiederherstellungs-KEK (nur Sovereignty-Modus)
 4. **Im Browser:** Temporär in `sessionStorage` (wird beim Schließen des Tabs gelöscht)
 5. **Zeitlimit:** 4 Stunden harte Ablaufzeit mit Aktivitätsüberwachung
 
@@ -178,11 +183,11 @@ Base64(Salt[32] ‖ IV[12] ‖ Ciphertext ‖ AuthTag[16])
 ```
 Registrierung:
   Browser: DEK erzeugen → KEK aus Passwort ableiten → DEK verpacken
-  Browser: Rohen DEK + wrapped_dek + Salt an Server senden (einmalig)
-  Server:  Server-KEK ableiten → wrapped_dek_server erstellen → rohen DEK verwerfen
+  Browser: Rohen DEK + Nutzer-Schlüssel-Kopie + Salt an Server senden (einmalig)
+  Server:  Server-KEK ableiten → Server-Schlüssel-Kopie erstellen → rohen DEK verwerfen
 
 Anmeldung bei Spaceship:
-  Server:  DEK via wrapped_dek_server entpacken → für Transport verschlüsseln → JWT
+  Server:  DEK via Server-Schlüssel-Kopie entpacken → für Transport verschlüsseln → JWT
   Browser: DEK aus JWT entschlüsseln → sessionStorage → nahtloser Zugriff
 ```
 
@@ -191,7 +196,7 @@ Anmeldung bei Spaceship:
 - Administrator-Passwort-Reset möglich
 - Komfortabel für Nutzer, die dem Serverbetreiber vertrauen
 
-**Kompromiss:** Der Server hält `wrapped_dek_server` und kann den DEK bei Bedarf ableiten. Dies ist bewusst so gestaltet, um Komfortfunktionen zu ermöglichen.
+**Kompromiss:** Der Server hält eine verschlüsselte Kopie des DEK und kann den DEK bei Bedarf ableiten. Dies ist bewusst so gestaltet, um Komfortfunktionen zu ermöglichen.
 
 ### 6b. Sovereignty (Zero-Knowledge) Modus
 
@@ -200,19 +205,19 @@ Einrichtung:
   Browser: Sovereignty-Passwort erstellen (min. 12 Zeichen)
   Browser: 6 BIP39-Wiederherstellungswörter generieren
   Browser: DEK erzeugen
-  Browser: Passwort-KEK ableiten → wrapped_dek
-  Browser: Wiederherstellungs-KEK ableiten → wrapped_dek_recovery
+  Browser: Passwort-KEK ableiten → Nutzer-Schlüssel-Kopie
+  Browser: Wiederherstellungs-KEK ableiten → Wiederherstellungs-Schlüssel-Kopie
   Browser: Wiederherstellungsphrase mit DEK verschlüsseln
   Browser: Alle verpackten Artefakte an Server senden
            (Der rohe DEK verlässt den Browser NIE)
 
 Anmeldung bei Spaceship:
-  Server:  wrapped_dek + Salt im JWT senden (kein roher DEK)
+  Server:  Nutzer-Schlüssel-Kopie + Salt im JWT senden (kein roher DEK)
   Browser: Sovereignty-Passwort abfragen → KEK ableiten → DEK entpacken
 ```
 
 **Garantien:**
-- `wrapped_dek_server = NULL` — der Server hat physisch keinen Zugang zu den Daten
+- Server-Schlüssel-Kopie = nicht vorhanden — der Server hat physisch keinen Zugang zu den Daten
 - Kein Administrator-Passwort-Reset möglich
 - Wiederherstellung ausschließlich über die 6-Wort-Phrase (clientseitig)
 - Der Server fungiert als „blinder Tresor" — speichert verschlüsselte Blobs, ohne deren Inhalt zu kennen
@@ -234,7 +239,7 @@ Im Gegensatz zu vielen Anwendungen, die Daten auf Container- oder Datenbankebene
 
 - **Frischer Salt** (32 Byte) und **frischer IV** (12 Byte) pro Verschlüsselung
 - Derselbe Wert ergibt bei zweimaliger Verschlüsselung **unterschiedlichen Ciphertext** (Schutz vor Musteranalyse)
-- **Selbstbeschreibendes Format:** `Base64(Salt[32] ‖ IV[12] ‖ Ciphertext ‖ AuthTag[16])`
+- **Selbstbeschreibendes Format:** Salt ‖ IV ‖ Ciphertext ‖ Authentifizierungs-Tag (Base64-kodiert)
 - **Verschlüsselungs-Metadaten** pro Datensatz: `encryption_version: 1`, `encryption_algorithm: "AES-256-GCM"` (ermöglicht nahtlose Migration bei Algorithmus-Updates)
 
 ### Performance-Optimierung
@@ -254,7 +259,7 @@ Der DEK wird beim Login einmalig entpackt und für die Dauer der Sitzung vorgeha
 | Sovereignty-Passwort | Nutzerwahl (min. 12 Zeichen) | BCrypt-Hash in DB | Nur Nutzer |
 | DEK | `crypto.subtle.generateKey()` | Nur als verpackte Kopien | Standard: Nutzer + Server; ZK: nur Nutzer |
 | Nutzer-KEK | PBKDF2(Passwort, Salt, 600k) | Nicht gespeichert; bei Bedarf abgeleitet | Nur Nutzer |
-| Server-KEK | PBKDF2(Servergeheimnis, User-Salt, 100k) | Nicht gespeichert; bei Bedarf abgeleitet | Nur Server |
+| Server-KEK | PBKDF2(Servergeheimnis, User-Salt) | Nicht gespeichert; bei Bedarf abgeleitet | Nur Server |
 | Wiederherstellungs-KEK | PBKDF2(6 Wörter, Salt, 600k) | Nicht gespeichert; bei Bedarf abgeleitet | Nur Nutzer |
 | Wiederherstellungsphrase | 6 zufällige BIP39-Wörter | Mit DEK verschlüsselt in DB | Nur Nutzer |
 | Admin-Masterkey | Umgebungsvariable | Serverumgebung | Nur Serveradministrator |
@@ -277,7 +282,7 @@ StarArc bietet TOTP-basierte Zwei-Faktor-Authentifizierung (kompatibel mit Googl
 
 - **Algorithmus:** TOTP (RFC 6238) mit 30-Sekunden-Intervall
 - **Toleranz:** ±1 Intervall (30 Sekunden Kulanzzeit)
-- **Backup-Codes:** 10 Codes mit je 8 kryptografisch zufälligen Hex-Zeichen (`crypto.randomBytes(4)`)
+- **Backup-Codes:** 10 Codes mit je 8 kryptografisch zufälligen Hex-Zeichen
 - **Speicherung:** 2FA-Geheimnisse werden **verschlüsselt** in der Datenbank gespeichert (AES-256-GCM) — nie im Klartext
 - **Benachrichtigungen:** Sicherheits-E-Mails bei Aktivierung und Deaktivierung von 2FA
 
@@ -291,7 +296,7 @@ Die Kommunikation zwischen StarArc und Spaceship erfolgt über signierte, kurzle
 |---|---|
 | Algorithmus | HMAC-SHA256 |
 | Gültigkeit | 5 Minuten |
-| Geteiltes Geheimnis | `CROSS_APP_JWT_SECRET` (Umgebungsvariable) |
+| Geteiltes Geheimnis | Umgebungsvariable (nur serverseitig) |
 | Dateninhalt | User-ID, Auth-Methode, verschlüsselte DEK-Daten |
 
 ### Standard-Modus-Transport
@@ -303,7 +308,7 @@ Die Kommunikation zwischen StarArc und Spaceship erfolgt über signierte, kurzle
 
 ### Sovereignty-Modus-Transport
 
-1. StarArc sendet `wrapped_dek` + `dek_salt` im JWT (kein roher DEK)
+1. StarArc sendet die Nutzer-Schlüssel-Kopie + Salt im JWT (kein roher DEK)
 2. Spaceship fordert das Sovereignty-Passwort vom Nutzer
 3. Client leitet KEK ab → entpackt DEK
 4. Kein nahtloser Login — by Design
@@ -339,9 +344,9 @@ Die Content Security Policy ist pro Anwendung maßgeschneidert:
 
 | Kategorie | StarArc | Spaceship |
 |---|---|---|
-| Globale API | 500 Anfragen / 15 Min | 2.000 Anfragen / 15 Min |
-| Anmeldung (Login) | 200 Anfragen / 15 Min | — |
-| Registrierung | 100 Anfragen / Stunde | — |
+| Globale API | Aktiv | Aktiv |
+| Anmeldung (Login) | Striktes Limit | — |
+| Registrierung | Striktes Limit | — |
 
 ### CORS
 
@@ -386,7 +391,7 @@ StarArc verwendet `express-validator` für eine konsistente, deklarative Eingabe
 
 ```
 Login → PBKDF2 (600k) → KEK → DEK entpacken
-    → sessionStorage ("DERIVED_KEY:{base64}")
+    → sessionStorage (verschlüsselter Schlüssel-Blob)
     → Aktivitäts-Timer startet (4h)
 
 Nutzer aktiv → Timer zurücksetzen
@@ -407,7 +412,7 @@ Alle Daten werden auf **Heroku EU (Irland)** verarbeitet und gespeichert. Es fin
 Beide Anwendungen bieten vollständige Datenlöschung:
 
 - **Spaceship:** Kaskadierende Löschung über 20+ Tabellen in korrekter Fremdschlüssel-Reihenfolge
-- **StarArc:** `anonymize_user_data()`-Funktion anonymisiert alle personenbezogenen Felder, löscht Zahlungsinformationen und deaktiviert Zugangschlüssel
+- **StarArc:** Eine automatisierte Anonymisierungsfunktion anonymisiert alle personenbezogenen Felder, löscht Zahlungsinformationen und deaktiviert Zugangsschlüssel
 
 ### Einwilligungsnachverfolgung (Art. 7 DSGVO)
 
@@ -450,7 +455,7 @@ Als Webanwendung liefert der Server den JavaScript-Code aus, der die Verschlüss
 
 ### 2. Standard-Modus: Serverzugriff möglich
 
-Im Standard-Modus hält der Server `wrapped_dek_server` und kann den DEK theoretisch ableiten. Dies ist bewusst so gestaltet, um Komfortfunktionen wie Passwort-Reset zu ermöglichen. Nutzer, die maximale Privatsphäre anstreben, sollten den **Sovereignty-Modus** verwenden.
+Im Standard-Modus hält der Server eine verschlüsselte Kopie des DEK und kann den DEK theoretisch ableiten. Dies ist bewusst so gestaltet, um Komfortfunktionen wie Passwort-Reset zu ermöglichen. Nutzer, die maximale Privatsphäre anstreben, sollten den **Sovereignty-Modus** verwenden.
 
 ### 3. PBKDF2 vs. Argon2id
 
@@ -459,18 +464,6 @@ PBKDF2 ist der aktuell verwendete KDF. Argon2id (speicherharter Algorithmus) wü
 ### 4. 6-Wort-Wiederherstellungsphrase
 
 Die Wiederherstellungsphrase im Sovereignty-Modus umfasst 6 BIP39-Wörter (~66 Bit Entropie). Dies ist weniger als der 12-Wort-Standard in der Bitcoin-Welt (128 Bit), aber ausreichend für den Zweck der Schlüsselwiederherstellung, da jeder Brute-Force-Versuch 600.000 PBKDF2-Iterationen erfordert.
-
----
-
-## 16. Zukunftsplanung
-
-| Maßnahme | Status |
-|---|---|
-| Open-Source-Krypto-Schicht | Geplant |
-| Migration zu Argon2id (bei nativer Web Crypto-Unterstützung) | Vorbereitet |
-| Automatisierte Dependency-Sicherheitsscans (CI/CD) | Geplant |
-| Self-Service-Kontolöschung (StarArc) | In Entwicklung |
-| Regelmäßige externe Sicherheitsaudits | Geplant |
 
 ---
 
