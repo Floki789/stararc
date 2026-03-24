@@ -56,7 +56,7 @@ app.use(helmet({
       defaultSrc: ["'self'"],
       styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
       fontSrc: ["'self'", "https://fonts.gstatic.com"],
-      scriptSrc: ["'self'", "https://js.stripe.com"],
+      scriptSrc: ["'self'", "https://js.stripe.com", "https://challenges.cloudflare.com"],
       imgSrc: ["'self'", "data:", "https:"],
       connectSrc: [
         "'self'", 
@@ -65,9 +65,10 @@ app.use(helmet({
         "https://stararc-app-e576e504324e.herokuapp.com",
         "https://spaceship.stararc.one",
         "https://stararc.one",
-        "https://www.stararc.one"
+        "https://www.stararc.one",
+        "https://challenges.cloudflare.com"
       ],
-      frameSrc: ["'self'", "https://js.stripe.com"],
+      frameSrc: ["'self'", "https://js.stripe.com", "https://challenges.cloudflare.com"],
     },
   },
   crossOriginEmbedderPolicy: false
