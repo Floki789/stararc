@@ -120,16 +120,15 @@ const PlanCards: React.FC<PlanCardsProps> = ({
     {
       id: 'Nova',
       name: 'Nova',
-      priceMonthly: '$190',
-      priceYearly: '$190',
-      priceValueMonthly: 19000, // $190 yearly in cents
-      priceValueYearly: 19000, // $190 yearly in cents
+      priceMonthly: 'Free',
+      priceYearly: 'Free',
+      priceValueMonthly: 0,
+      priceValueYearly: 0,
       currency: 'usd',
       description: t('plans.nova.description'),
       icon: Sparkles,
       color: 'text-blue-400',
       bgGradient: 'bg-gradient-to-r from-blue-500 to-cyan-600',
-      yearlyOnly: true,
       features: [
         t('plans.nova.features.familyMembers', { count: 4 }),
         t('plans.nova.features.securities', { count: 25 }),
@@ -144,7 +143,6 @@ const PlanCards: React.FC<PlanCardsProps> = ({
         t('plans.nova.features.wallets', { count: 4 }),
         t('plans.nova.features.backups', { count: 8 })
       ],
-      isPopular: true,
       buttonText: t('plans.nova.button')
     },
     {
@@ -189,9 +187,10 @@ const PlanCards: React.FC<PlanCardsProps> = ({
   };
 
   // Hide Spark during launch phase as long as Nova discounted slots are available
+  // Galaxy hidden during Beta phase
   const plans = (launchActive && remainingNova > 0)
-    ? allPlans.filter(p => p.id !== 'Spark')
-    : allPlans;
+    ? allPlans.filter(p => p.id !== 'Spark' && p.id !== 'Galaxy')
+    : allPlans.filter(p => p.id !== 'Galaxy');
 
   const handlePlanClick = (plan: PlanData) => {
     if (onPlanSelect) {
@@ -203,22 +202,27 @@ const PlanCards: React.FC<PlanCardsProps> = ({
 
   return (
     <div className={className}>
-      {/* Header Text - Yearly Plans Only */}
+      {/* Header Text - hidden during Beta (single plan) */}
+      {plans.length > 1 && (
       <div className="text-center mb-8">
         <p className="text-gray-400 text-lg">
           {t('plans.headerText')}
         </p>
       </div>
+      )}
 
       {/* Plans Grid */}
-      <div className={plans.length === 2
-        ? 'flex flex-col sm:flex-row justify-center gap-8'
-        : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 place-content-center'
+      <div className={
+        plans.length === 1
+          ? 'flex justify-center'
+          : plans.length === 2
+            ? 'flex flex-col sm:flex-row justify-center gap-8'
+            : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 place-content-center'
       }>{plans.map((plan, index) => {
         const IconComponent = plan.icon;
         const price = plan.priceYearly; // Always show yearly price
         const priceValue = plan.priceValueYearly; // Always use yearly value
-        
+
         return (
           <motion.div
             key={plan.id}
@@ -260,9 +264,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
                   {t('plans.comingSoon')}
                 </span>
               </div>
-            )}
-
-            {/* Header */}
+            )}            {/* Header */}
             <div className="flex-none">
               {/* Icon */}
               <div className="flex justify-center mb-3">
@@ -276,7 +278,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
               {showPricing && (
                 <div className="mb-2">
                   {/* Show launch pricing for Nova/Galaxy when active */}
-                  {launchActive && (plan.id === 'Nova' || plan.id === 'Galaxy') ? (
+                  {launchActive && plan.priceValueYearly > 0 && (plan.id === 'Nova' || plan.id === 'Galaxy') ? (
                     <>
                       <div className="flex items-center justify-center gap-1 mb-2">
                         <span className="text-amber-400 text-xs font-bold">{t('plans.launchSpecial')}</span>
@@ -300,9 +302,19 @@ const PlanCards: React.FC<PlanCardsProps> = ({
                     </>
                   ) : (
                     <>
-                      <p className={`text-3xl font-bold ${plan.color}`}>
-                        {price}
-                      </p>
+                      {priceValue === 0 ? (
+                        <div className="flex items-center justify-center gap-3 mb-2">
+                          <p className={`text-3xl font-bold ${plan.color}`}>{price}</p>
+                          <span className="inline-flex items-center gap-1.5 bg-blue-500/20 border border-blue-500/40 text-blue-300 px-3 py-1.5 rounded-full text-sm font-semibold">
+                            <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
+                            Beta
+                          </span>
+                        </div>
+                      ) : (
+                        <p className={`text-3xl font-bold ${plan.color}`}>
+                          {price}
+                        </p>
+                      )}
                       {priceValue > 0 && (
                         <p className="text-sm text-gray-400 mt-1">
                           {t('plans.perYear')}
@@ -326,7 +338,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
               )}
 
               {/* Description */}
-              <p className="text-gray-400 text-sm mb-6 px-2 leading-relaxed min-h-[3.5rem]">
+              <p className={`text-sm mb-6 px-2 leading-relaxed min-h-[3.5rem] ${plan.priceValueYearly === 0 ? 'text-blue-300 font-medium' : 'text-gray-400'}`}>
                 {plan.description}
               </p>
             </div>
@@ -365,7 +377,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
                 <button 
                   onClick={() => {
                     // During launch, Nova/Galaxy buttons use launch pricing
-                    if (launchActive && (plan.id === 'Nova' || plan.id === 'Galaxy') && onLaunchSelect) {
+                    if (launchActive && plan.priceValueYearly > 0 && (plan.id === 'Nova' || plan.id === 'Galaxy') && onLaunchSelect) {
                       onLaunchSelect(plan.id);
                     } else {
                       handlePlanClick(plan);
@@ -377,7 +389,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
                       ? 'bg-gray-500 cursor-not-allowed text-white' 
                       : !isPlanSelectable(plan.id, currentPlan, plan)
                         ? 'bg-gray-600 cursor-not-allowed text-white'
-                        : launchActive && (plan.id === 'Nova' || plan.id === 'Galaxy')
+                        : launchActive && plan.priceValueYearly > 0 && (plan.id === 'Nova' || plan.id === 'Galaxy')
                           ? 'bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-900 font-bold hover:shadow-lg hover:shadow-amber-500/30 transform hover:scale-105'
                           : `${plan.bgGradient} hover:shadow-lg transform hover:scale-105 text-white`
                   } ${
@@ -390,7 +402,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
                       ? plan.comingSoon ? t('plans.comingSoon') : t('plans.notAvailable')
                       : (loading[plan.id] || loading[`${plan.id}-launch`])
                         ? t('plans.loading') 
-                        : launchActive && (plan.id === 'Nova' || plan.id === 'Galaxy')
+                        : launchActive && plan.priceValueYearly > 0 && (plan.id === 'Nova' || plan.id === 'Galaxy')
                           ? `${plan.buttonText} ${t('plans.launchPrice')}`
                           : plan.buttonText
                   }
@@ -403,6 +415,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
       </div>
 
       {/* Genesis Member Card - Full Width */}
+      {false && (
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -465,6 +478,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
           </div>
         </div>
       </motion.div>
+      )}
     </div>
   );
 };

@@ -15,6 +15,28 @@ const emailService = new EmailService();
 // Rate limiting for auth endpoints (environment-based)
 const isDevelopment = process.env.NODE_ENV === 'development';
 
+// ── Cloudflare Turnstile verification ────────────────────────────────────────
+async function verifyTurnstileToken(token: string, ip?: string): Promise<boolean> {
+  const secret = process.env.TURNSTILE_SECRET_KEY;
+  if (!secret) {
+    // No secret configured → skip in development
+    console.warn('⚠️  TURNSTILE_SECRET_KEY not set – skipping Turnstile verification');
+    return true;
+  }
+  try {
+    const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ secret, response: token, remoteip: ip }),
+    });
+    const data = await res.json() as { success: boolean };
+    return data.success === true;
+  } catch (err) {
+    console.error('Turnstile verification error:', err);
+    return false;
+  }
+}
+
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: isDevelopment ? 1000 : 200, // Increased for testing: 1000 in dev, 200 in production
@@ -102,6 +124,12 @@ router.post('/register', registerLimiter, registerValidation, async (req: Reques
         error: 'Validation failed',
         details: errors.array()
       });
+    }
+
+    // Verify Cloudflare Turnstile token
+    const turnstileToken = req.body['cf-turnstile-response'];
+    if (!await verifyTurnstileToken(turnstileToken, req.ip)) {
+      return res.status(400).json({ error: 'Bot-Verifizierung fehlgeschlagen. Bitte versuche es erneut.' });
     }
 
     const { email, password, alias = '', termsAccepted, languageCode, dek, wrapped_dek, dek_salt } = req.body;

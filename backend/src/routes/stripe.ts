@@ -127,7 +127,27 @@ router.post('/select-plan', authMiddleware, async (req, res): Promise<any> => {
       });
     }
 
-    // Paid plans (Spark, Nova, Galaxy, Apex) - Stripe workflow
+    // BETA PHASE: Nova is free – activate directly without Stripe.
+    // Remove this block (and restore priceValueYearly in PlanCards.tsx) when Nova becomes paid again.
+    if (planId === 'Nova') {
+      await pool.query(
+        `UPDATE users SET
+         subscription_plan = 'Nova',
+         subscription_status = 'active',
+         onboarding_step = CASE WHEN onboarding_step = 'completed' THEN 'completed' ELSE 'auth_method_selection' END,
+         updated_at = CURRENT_TIMESTAMP
+         WHERE id = $1`,
+        [userId]
+      );
+      return res.json({
+        success: true,
+        plan: 'Nova',
+        status: 'active',
+        workflow: 'direct'
+      });
+    }
+
+    // Paid plans (Spark, Galaxy, Apex) - Stripe workflow
     if (['Spark', 'Nova', 'Galaxy', 'Apex'].includes(planId)) {
       // Get or create Stripe customer
       let stripeCustomerId: string;

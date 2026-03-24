@@ -156,6 +156,11 @@ const HeroSectionV2: React.FC = () => {
 
           {/* ── Left column: Title ─────────────────────────────────────── */}
           <div className="flex-1 flex flex-col justify-center text-center lg:text-left">
+            {/* Beta badge */}
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-500/10 border border-blue-500/30 rounded-full mb-5 self-center lg:self-start">
+              <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
+              <span className="text-sm font-semibold text-blue-400 uppercase tracking-wider">Beta</span>
+            </div>
             <h1 className="text-5xl sm:text-6xl lg:text-6xl xl:text-7xl font-bold leading-tight tracking-tight pb-2">
               <span className="text-white">{t('hero2.titleLine1')}</span>
               <br />

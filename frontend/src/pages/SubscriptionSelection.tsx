@@ -147,9 +147,35 @@ const SubscriptionSelection: React.FC = () => {
 
   const handlePlanSelection = async (planId: string, _priceValue: number, interval: 'month' | 'year' = 'month') => {
     console.log('handlePlanSelection called with planId:', planId, 'interval:', interval);
-    
+
     if (!user) {
       alert('Sie müssen eingeloggt sein, um einen Plan auszuwählen.');
+      return;
+    }
+
+    // Free Beta – bypass Stripe entirely
+    if (_priceValue === 0) {
+      setLoading(prev => ({ ...prev, [planId]: true }));
+      try {
+        const result = await StripeAPIService.selectPlan(planId, interval);
+        if (result.success) {
+          const storedUser = localStorage.getItem('user');
+          if (storedUser) {
+            const userData = JSON.parse(storedUser);
+            userData.onboardingStep = 'auth_method_selection';
+            userData.subscriptionPlan = planId;
+            localStorage.setItem('user', JSON.stringify(userData));
+          }
+          sessionStorage.setItem('selectedPlan', planId);
+          navigate('/auth-method-selection');
+        }
+      } catch (error) {
+        console.error('Free plan activation error:', error);
+        const errorMessage = error instanceof Error ? error.message : t('subscriptionSelection.planSelectionError');
+        alert(errorMessage);
+      } finally {
+        setLoading(prev => ({ ...prev, [planId]: false }));
+      }
       return;
     }
 
@@ -208,11 +234,11 @@ const SubscriptionSelection: React.FC = () => {
             if (storedUser) {
               const userData = JSON.parse(storedUser);
               userData.onboardingStep = 'auth_method_selection';
-              userData.subscriptionPlan = 'Free';
+              userData.subscriptionPlan = result.plan || 'Free';
               localStorage.setItem('user', JSON.stringify(userData));
             }
-            
-            sessionStorage.setItem('selectedPlan', 'Free');
+
+            sessionStorage.setItem('selectedPlan', result.plan || 'Free');
             navigate('/auth-method-selection');
           }
           
@@ -344,9 +370,11 @@ const SubscriptionSelection: React.FC = () => {
           <h2 className="text-4xl font-bold text-white mb-4">
             {t('subscriptionSelection.choosePlan')}
           </h2>
+          {false && (
           <p className="text-slate-400 text-lg">
             {t('subscriptionSelection.choosePlanSubtitle')}
           </p>
+          )}
         </motion.div>
 
         {/* Plans Grid */}

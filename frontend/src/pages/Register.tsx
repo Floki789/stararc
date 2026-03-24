@@ -1,4 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+
+// Cloudflare Turnstile global type
+declare global {
+  interface Window {
+    turnstile?: {
+      render: (container: string | HTMLElement, options: Record<string, unknown>) => string;
+      reset: (widgetId: string) => void;
+    };
+  }
+}
 import { motion } from 'framer-motion';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
@@ -43,6 +53,40 @@ const Register: React.FC = () => {
 
   // Registrierung vorübergehend deaktiviert
   const isRegistrationEnabled = true;
+
+  // Cloudflare Turnstile
+  const siteKey = (import.meta as any).env.VITE_TURNSTILE_SITE_KEY as string | undefined;
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const turnstileContainerRef = useRef<HTMLDivElement>(null);
+  const turnstileWidgetId = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (!siteKey) return; // No site key → skip (dev without Turnstile)
+
+    const scriptId = 'cf-turnstile-script';
+    const initWidget = () => {
+      if (!turnstileContainerRef.current || !window.turnstile) return;
+      turnstileWidgetId.current = window.turnstile.render(turnstileContainerRef.current, {
+        sitekey: siteKey,
+        theme: 'dark',
+        callback: (token: string) => setTurnstileToken(token),
+        'expired-callback': () => setTurnstileToken(null),
+        'error-callback': () => setTurnstileToken(null),
+      });
+    };
+
+    if (!document.getElementById(scriptId)) {
+      const script = document.createElement('script');
+      script.id = scriptId;
+      script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+      script.async = true;
+      script.defer = true;
+      script.onload = initWidget;
+      document.head.appendChild(script);
+    } else if (window.turnstile) {
+      initWidget();
+    }
+  }, [siteKey]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -122,7 +166,9 @@ const Register: React.FC = () => {
           // DEK data for client-side encryption
           dek: dekSetup.dekBase64,           // Raw DEK (sent once, for server to create wrapped_dek_server)
           wrapped_dek: dekSetup.wrappedDek,  // DEK wrapped with user's password-derived KEK
-          dek_salt: dekSetup.dekSalt         // Salt for password key derivation
+          dek_salt: dekSetup.dekSalt,        // Salt for password key derivation
+          // Cloudflare Turnstile bot protection
+          'cf-turnstile-response': turnstileToken ?? '',
         }),
       });
 
@@ -299,6 +345,12 @@ const Register: React.FC = () => {
           className="max-w-md w-full space-y-8 relative z-10"
         >
         <div className="-mt-4">
+          <div className="flex justify-center mb-3">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-500/10 border border-blue-500/30 rounded-full">
+              <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
+              <span className="text-sm font-semibold text-blue-400 uppercase tracking-wider">Beta</span>
+            </div>
+          </div>
           <h2 className="text-center text-3xl font-extrabold text-white">
             {t('auth.registerTitle')}
           </h2>
@@ -478,11 +530,15 @@ const Register: React.FC = () => {
           </div>
 
           <div>
+            {/* Cloudflare Turnstile widget */}
+            {siteKey && (
+              <div ref={turnstileContainerRef} className="flex justify-center mb-4" />
+            )}
             <motion.button
               whileHover={{ scale: isRegistrationEnabled && formData.termsAccepted ? 1.02 : 1 }}
               whileTap={{ scale: isRegistrationEnabled && formData.termsAccepted ? 0.98 : 1 }}
               type={isRegistrationEnabled ? 'submit' : 'button'}
-              disabled={!isRegistrationEnabled || !formData.termsAccepted}
+              disabled={!isRegistrationEnabled || !formData.termsAccepted || (!!siteKey && !turnstileToken)}
               className={`group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 ${
                 isRegistrationEnabled
                   ? formData.termsAccepted

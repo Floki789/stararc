@@ -818,8 +818,8 @@
     },
     "nova": {
       "name": "Nova",
-      "description": "Complete suite for growing family wealth",
-      "button": "Choose Nova",
+      "description": "Free access during the Beta phase",
+      "button": "Register for free",
       "features": {
         "familyMembers": "{{count}} Family members",
         "securities": "{{count}} Securities",

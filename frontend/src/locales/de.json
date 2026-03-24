@@ -977,8 +977,8 @@
     },
     "nova": {
       "name": "Nova",
-      "description": "Komplette Suite für wachsendes Familienvermögen",
-      "button": "Nova wählen",
+      "description": "Kostenloser Zugang während der Beta-Phase",
+      "button": "Kostenlos registrieren",
       "features": {
         "familyMembers": "{{count}} Familienmitglieder",
         "securities": "{{count}} Wertpapiere",
