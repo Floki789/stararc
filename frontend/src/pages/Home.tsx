@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import HeroSection from '../components/HeroSectionV2';
+import HeroSectionV3 from '../components/HeroSectionV3';
 import OverviewShowcase from '../components/OverviewShowcase';
 import PortfolioShowcase from '../components/PortfolioShowcase';
 import PlanningShowcase from '../components/PlanningShowcase';
@@ -21,6 +22,26 @@ import PlanCards from '../components/PlanCards';
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [heroIndex, setHeroIndex] = useState(0);
+  const [fading, setFading] = useState(false);
+  const HERO_COUNT = 2;
+
+  const goTo = (i: number) => {
+    if (i === heroIndex || fading) return;
+    setFading(true);
+    setTimeout(() => {
+      setHeroIndex(i);
+      setFading(false);
+    }, 800);
+  };
+
+  // Cycle heroes every 10 s
+  useEffect(() => {
+    const timer = setInterval(() => {
+      goTo((heroIndex + 1) % HERO_COUNT);
+    }, 12000);
+    return () => clearInterval(timer);
+  }, [heroIndex, fading]);
 
   const handleNavigateToRegister = () => {
     navigate('/register');
@@ -50,8 +71,32 @@ const Home: React.FC = () => {
 
   return (
     <div className="min-h-screen">      
-      {/* Hero Section V2 */}
-      <HeroSection />
+      {/* Hero Section — crossfade on change */}
+      <div className="relative" style={{ minHeight: '100vh' }}>
+        <div
+          style={{
+            opacity: fading ? 0 : 1,
+            transition: 'opacity 800ms ease-in-out',
+          }}
+        >
+          {heroIndex === 0 ? <HeroSection /> : <HeroSectionV3 />}
+        </div>
+        {/* Slide indicator dots */}
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2.5 z-20">
+          {Array.from({ length: HERO_COUNT }).map((_, i) => (
+            <button
+              key={i}
+              onClick={() => goTo(i)}
+              aria-label={`Hero slide ${i + 1}`}
+              className={`rounded-full transition-all duration-300 ${
+                heroIndex === i
+                  ? 'w-6 h-2.5 bg-white'
+                  : 'w-2.5 h-2.5 bg-white/30 hover:bg-white/60'
+              }`}
+            />
+          ))}
+        </div>
+      </div>
 
       {/* Subscription Plans */}
       <div id="plans" className="py-20 bg-gray-900">
