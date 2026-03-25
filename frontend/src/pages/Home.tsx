@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import HeroSection from '../components/HeroSectionV2';
 import HeroSectionV3 from '../components/HeroSectionV3';
+import HeroSectionV4 from '../components/HeroSectionV4';
 import OverviewShowcase from '../components/OverviewShowcase';
 import PortfolioShowcase from '../components/PortfolioShowcase';
 import PlanningShowcase from '../components/PlanningShowcase';
@@ -24,10 +25,12 @@ const Home: React.FC = () => {
   const location = useLocation();
   const [heroIndex, setHeroIndex] = useState(0);
   const [fading, setFading] = useState(false);
-  const HERO_COUNT = 2;
+  const [pinned, setPinned] = useState(false);
+  const HERO_COUNT = 3;
 
-  const goTo = (i: number) => {
+  const goTo = (i: number, userClick = false) => {
     if (i === heroIndex || fading) return;
+    if (userClick) setPinned(true);
     setFading(true);
     setTimeout(() => {
       setHeroIndex(i);
@@ -35,13 +38,14 @@ const Home: React.FC = () => {
     }, 800);
   };
 
-  // Cycle heroes every 10 s
+  // Cycle heroes every 12 s — stop if user has pinned a slide
   useEffect(() => {
+    if (pinned) return;
     const timer = setInterval(() => {
       goTo((heroIndex + 1) % HERO_COUNT);
     }, 12000);
     return () => clearInterval(timer);
-  }, [heroIndex, fading]);
+  }, [heroIndex, fading, pinned]);
 
   const handleNavigateToRegister = () => {
     navigate('/register');
@@ -79,22 +83,37 @@ const Home: React.FC = () => {
             transition: 'opacity 800ms ease-in-out',
           }}
         >
-          {heroIndex === 0 ? <HeroSection /> : <HeroSectionV3 />}
+          {heroIndex === 0 ? <HeroSection /> : heroIndex === 1 ? <HeroSectionV3 /> : <HeroSectionV4 />}
         </div>
-        {/* Slide indicator dots */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2.5 z-20">
+        {/* Slide indicator dots — numbered, click pins the slide */}
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 z-20">
           {Array.from({ length: HERO_COUNT }).map((_, i) => (
             <button
               key={i}
-              onClick={() => goTo(i)}
+              onClick={() => goTo(i, true)}
               aria-label={`Hero slide ${i + 1}`}
-              className={`rounded-full transition-all duration-300 ${
+              className={`flex items-center justify-center rounded-full text-[10px] font-bold transition-all duration-300 ${
                 heroIndex === i
-                  ? 'w-6 h-2.5 bg-white'
-                  : 'w-2.5 h-2.5 bg-white/30 hover:bg-white/60'
+                  ? 'w-7 h-7 bg-white text-slate-900 shadow-lg'
+                  : 'w-6 h-6 bg-white/20 text-white/60 hover:bg-white/40 hover:text-white'
               }`}
-            />
+            >
+              {i + 1}
+            </button>
           ))}
+          {/* Unpin button — only visible when pinned */}
+          {pinned && (
+            <button
+              onClick={() => setPinned(false)}
+              aria-label="Resume auto-play"
+              title="Auto-play fortsetzen"
+              className="ml-1 w-6 h-6 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/25 text-white/50 hover:text-white transition-all duration-200"
+            >
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor" aria-hidden="true">
+                <polygon points="2,1 9,5 2,9" />
+              </svg>
+            </button>
+          )}
         </div>
       </div>
 

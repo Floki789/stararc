@@ -2261,5 +2261,31 @@
       "preciousMetals": "Edelmetalle",
       "preciousMetalsDesc": "Gold · Silber · Platin"
     }
+  },
+  "hero4": {
+    "badge": "Intelligente Planung",
+    "titleLine1": "Eine Planung die",
+    "titleLine2": "Klarheit schafft.",
+    "subtitle": "Von der Pensionierung bis zur Vermögensweitergabe — alles in einem Blick.",
+    "features": {
+      "retirement": "Pensionierung",
+      "retirementDesc": "AHV, Pensionskasse und 3. Säule im Zeitverlauf",
+      "income": "Regelmässige Bezüge",
+      "incomeDesc": "Gehalt, Rente, Mieterträge und mehr",
+      "events": "Geplante Events",
+      "eventsDesc": "Hauskaüfe, Reisen, grössere Ausgaben",
+      "lifePhases": "Lebensphasen",
+      "lifePhasesDesc": "Beruf, Teilzeit, Frühpension, Rente",
+      "assetOrder": "Bezugsreihenfolge",
+      "assetOrderDesc": "Welches Kapital zuerst einsetzen?",
+      "growth": "Kapitalwachstum",
+      "growthDesc": "Rendite und Zinseszins im Zeitverlauf",
+      "inflation": "Teuerung",
+      "inflationDesc": "Kaufkrafterhalt über Jahrzehnte",
+      "charts": "Grafische Übersicht",
+      "chartsDesc": "Interaktive Charts deiner Finanzentwicklung"
+    },
+    "cta": "Jetzt planen",
+    "ctaHint": "Kostenlos testen · Keine Kreditkarte notwendig"
   }
 }

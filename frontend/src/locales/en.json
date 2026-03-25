@@ -2246,5 +2246,31 @@
       "preciousMetals": "Precious Metals",
       "preciousMetalsDesc": "Gold · Silver · Platinum"
     }
+  },
+  "hero4": {
+    "badge": "Intelligent Planning",
+    "titleLine1": "Planning that creates",
+    "titleLine2": "real clarity.",
+    "subtitle": "From retirement to wealth transfer — everything at a glance.",
+    "features": {
+      "retirement": "Retirement",
+      "retirementDesc": "AHV, pension fund and pillar 3 over time",
+      "income": "Regular Income",
+      "incomeDesc": "Salary, pension, rental income and more",
+      "events": "Planned Events",
+      "eventsDesc": "Property purchases, travel, major expenses",
+      "lifePhases": "Life Phases",
+      "lifePhasesDesc": "Career, part-time, early retirement, pension",
+      "assetOrder": "Withdrawal Order",
+      "assetOrderDesc": "Which capital to draw first?",
+      "growth": "Capital Growth",
+      "growthDesc": "Returns and compound interest over time",
+      "inflation": "Inflation",
+      "inflationDesc": "Purchasing power over decades",
+      "charts": "Visual Overview",
+      "chartsDesc": "Interactive charts of your financial development"
+    },
+    "cta": "Start Planning",
+    "ctaHint": "Free trial · No credit card required"
   }
 }

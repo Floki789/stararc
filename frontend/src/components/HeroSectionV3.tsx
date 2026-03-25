@@ -174,10 +174,10 @@ const HeroSectionV3: React.FC = () => {
             </div>
 
             {/* Title */}
-            <h1 className="text-5xl sm:text-6xl lg:text-6xl xl:text-7xl font-bold leading-tight tracking-tight pb-2">
-              <span className="block text-white">{isDE ? 'Deine Daten' : 'Your Data'}</span>
-              <span className="block pb-2 text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-400 to-orange-500">
-                {isDE ? 'gehören nur dir.' : 'belongs to you alone.'}
+            <h1 className="text-5xl sm:text-6xl lg:text-6xl xl:text-7xl font-bold leading-tight tracking-tight">
+              <span className="block text-white">{isDE ? 'Deine Daten geh\u00f6ren' : 'Your Data Belongs'}</span>
+              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-400 to-orange-500">
+                {isDE ? 'dir allein.' : 'to you alone.'}
               </span>
             </h1>
 
