@@ -461,7 +461,7 @@ router.post('/update-onboarding-step', authMiddleware, async (req: Request, res:
     }
     
     // Validate login method (if provided)
-    if (loginMethod && !['standard', 'privacy'].includes(loginMethod)) {
+    if (loginMethod && !['standard', 'privacy', 'password_zk'].includes(loginMethod)) {
       return res.status(400).json({ error: 'Invalid login method' });
     }
     

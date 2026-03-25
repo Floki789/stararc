@@ -1,243 +1,96 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Shield, Lock, Key, CheckCircle, Info, AlertTriangle, Copy, Eye, EyeOff, X } from 'lucide-react';
+import { Lock, Key, CheckCircle, AlertTriangle, Info, Copy, Eye, EyeOff, X } from 'lucide-react';
 import { BIP39_WORDLIST, RECOVERY_WORD_COUNT } from '../utils/bip39Wordlist';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../hooks/useAuth';
 
-type AuthMethodType = 'standard' | 'sovereignty';
-
-interface AuthMethod {
-  id: AuthMethodType;
-  name: string;
-  tagline: string;
-  icon: React.ElementType;
-  iconColor: string;
-  bgGradient: string;
-  borderColor: string;
-  pros: string[];
-  cons: string[];
-  bestFor: string;
-  warningLevel: 'low' | 'high';
-}
-
 const AuthMethodSelection: React.FC = () => {
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { updateUser } = useAuth();
-  const [selectedMethod, setSelectedMethod] = useState<AuthMethodType | null>('standard');
   const [showZKSetup, setShowZKSetup] = useState(false);
 
-  const authMethods: AuthMethod[] = [
-    {
-      id: 'standard',
-      name: t('authMethod.standard.name'),
-      tagline: t('authMethod.standard.tagline'),
-      icon: Shield,
-      iconColor: 'text-blue-400',
-      bgGradient: 'from-blue-500/10 to-purple-500/10',
-      borderColor: 'border-blue-500/50',
-      pros: [
-        t('authMethod.standard.pros.recovery'),
-        t('authMethod.standard.pros.encrypted')
-      ],
-      cons: [
-        t('authMethod.standard.cons.adminAccess')
-      ],
-      bestFor: t('authMethod.standard.bestFor'),
-      warningLevel: 'low'
-    },
-    {
-      id: 'sovereignty',
-      name: t('authMethod.sovereignty.name'),
-      tagline: t('authMethod.sovereignty.tagline'),
-      icon: Key,
-      iconColor: 'text-orange-400',
-      bgGradient: 'from-orange-500/10 to-red-500/10',
-      borderColor: 'border-orange-500/50',
-      pros: [
-        t('authMethod.sovereignty.pros.zeroKnowledge'),
-        t('authMethod.sovereignty.pros.maxPrivacy')
-      ],
-      cons: [
-        t('authMethod.sovereignty.cons.dualPassword'),
-        t('authMethod.sovereignty.cons.passphraseRecovery')
-      ],
-      bestFor: t('authMethod.sovereignty.bestFor'),
-      warningLevel: 'high'
-    }
+  const isDE = language === 'de';
+
+  const facts = isDE ? [
+    'Deine Daten werden im Browser verschlüsselt, bevor sie den Server erreichen (AES-256-GCM).',
+    'Der Server speichert ausschliesslich verschlüsselte Daten — ohne Entschlüsselungsmöglichkeit.',
+    'Nur du hast Zugriff auf deine Inhalte — wir nicht.',
+    'Ein separates Sovereignty-Passwort schützt den Zugang zu deinen Daten.',
+    'Wiederherstellung erfolgt über eine 6-Wort-Phrase, die du selbst aufbewahrst.',
+    'Das Sovereignty-Passwort und die 6-Wort-Phrase kann durch uns nicht wiederhergestellt werden. Du trägst die volle Verantwortung.',
+  ] : [
+    'Your data is encrypted in the browser before reaching the server (AES-256-GCM).',
+    'The server stores only encrypted data — with no ability to decrypt it.',
+    'Only you have access to your content — not us.',
+    'A separate Sovereignty password protects access to your data.',
+    'Recovery is possible via a 6-word phrase that only you keep.',
+    'The Sovereignty password and 6-word phrase cannot be recovered by us. You bear full responsibility.',
   ];
-
-  const handleContinue = async () => {
-    if (!selectedMethod) return;
-    if (selectedMethod === 'sovereignty') {
-      setShowZKSetup(true);
-      return;
-    }
-
-    try {
-      // Update onboarding step and selected login method
-      const apiUrl = (import.meta as any).env.VITE_API_URL || 'http://localhost:3004';
-      const response = await fetch(`${apiUrl}/api/auth/update-onboarding-step`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify({
-          onboardingStep: 'completed',
-          loginMethod: 'standard'
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to update onboarding step');
-      }
-
-      // Update user data in Auth Context and localStorage
-      const updatedUserData = {
-        onboardingStep: 'completed',
-        loginMethodSelected: 'standard'
-      };
-      
-      // Update Auth Context (this will also update localStorage)
-      updateUser(updatedUserData);
-
-      // Redirect to dashboard
-      navigate('/dashboard');
-    } catch (error) {
-      console.error('Error updating onboarding step:', error);
-      alert('Fehler beim Speichern der Einstellungen. Bitte versuchen Sie es erneut.');
-    }
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 pt-32 pb-12 px-4">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-2xl mx-auto">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-12"
+          className="text-center mb-10"
         >
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <Lock className="w-10 h-10 text-primary-400" />
-            <h1 className="text-4xl font-bold text-white">
-              {t('authMethod.title')}
-            </h1>
+          <div className="flex items-center justify-center mb-5">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-500/20 to-red-500/20 border border-orange-500/40 flex items-center justify-center">
+              <Key className="w-8 h-8 text-orange-400" />
+            </div>
           </div>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            {t('authMethod.subtitle')}
+          <h1 className="text-4xl font-bold text-white mb-3">
+            {isDE ? 'Deine Daten gehören dir allein.' : 'Your data belongs to you alone.'}
+          </h1>
+          <p className="text-lg text-orange-300 font-medium">
+            {isDE ? 'Maximale Privatsphäre. Maximale Verantwortung.' : 'Maximum Privacy. Maximum Responsibility.'}
           </p>
         </motion.div>
 
-        {/* Method Selection Cards */}
-        <div className="grid md:grid-cols-2 gap-6 mb-8">
-          {authMethods.map((method, index) => (
-            <motion.div
-              key={method.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              onClick={() => setSelectedMethod(method.id)}
-              className={`relative card p-6 transition-all duration-300 cursor-pointer hover:scale-[1.02] ${
-                selectedMethod === method.id
-                  ? `ring-4 ${method.id === 'standard' ? 'ring-blue-500' : 'ring-orange-500'} bg-gradient-to-br ${method.bgGradient}`
-                  : 'hover:bg-gray-700/50'
-              }`}
-            >
-              {/* Badge for sovereignty */}
-              {method.id === 'sovereignty' && (
-                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                  <span className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-4 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
-                    <Key className="w-4 h-4" />
-                    Zero-Knowledge
-                  </span>
-                </div>
-              )}
-
-              {/* Header */}
-              <div className="flex items-center gap-4 mb-4">
-                <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${method.bgGradient} border ${method.borderColor} flex items-center justify-center`}>
-                  <method.icon className={`w-8 h-8 ${method.iconColor}`} />
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-2xl font-bold text-white mb-1">{method.name}</h3>
-                  <p className="text-gray-400 text-sm">{method.tagline}</p>
-                </div>
-                {selectedMethod === method.id && (
-                  <CheckCircle className={`w-6 h-6 ${method.id === 'standard' ? 'text-blue-400' : 'text-orange-400'}`} />
-                )}
-              </div>
-
-              {/* Pros */}
-              <div className="mb-3">
-                <span className="text-sm font-semibold text-green-400 mb-2 block">
-                  {t('authMethod.advantages')}
-                </span>
-                <ul className="space-y-1">
-                  {method.pros.map((pro, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-gray-300">
-                      <CheckCircle className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />
-                      {pro}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Cons */}
-              <div className="mb-4">
-                <span className="text-sm font-semibold text-red-400 mb-2 block">
-                  {t('authMethod.disadvantages')}
-                </span>
-                <ul className="space-y-1">
-                  {method.cons.map((con, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-gray-400">
-                      <AlertTriangle className="w-4 h-4 text-red-400 mt-0.5 flex-shrink-0" />
-                      {con}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Best For */}
-              <div className="p-3 bg-gray-800/50 rounded-lg border border-gray-700">
-                <div className="flex items-center gap-2 mb-1">
-                  <Info className="w-4 h-4 text-gray-400" />
-                  <span className="text-sm font-semibold text-gray-300">
-                    {t('authMethod.bestFor')}:
-                  </span>
-                </div>
-                <p className="text-gray-400 text-sm ml-6">{method.bestFor}</p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-
-
-
-
-
-        {/* Action Button */}
+        {/* Info box */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
+          transition={{ duration: 0.5, delay: 0.15 }}
+          className="relative card p-6 pt-8 mb-8 border border-orange-500/30 bg-gradient-to-br from-orange-500/5 to-red-500/5"
+        >
+          <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
+            <span className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1.5 whitespace-nowrap">
+              <Key className="w-3.5 h-3.5" />
+              Zero-Knowledge · Sovereignty
+            </span>
+          </div>
+          <ul className="space-y-3.5">
+            {facts.map((fact, i) => (
+              <li key={i} className="flex items-start gap-3">
+                <CheckCircle className={`w-4 h-4 mt-0.5 flex-shrink-0 ${i >= 3 ? 'text-orange-400' : 'text-orange-400/60'}`} />
+                <span className={`text-base leading-relaxed ${i >= 3 ? 'text-white font-medium' : 'text-gray-400'}`}>{fact}</span>
+              </li>
+            ))}
+          </ul>
+        </motion.div>
+
+        {/* Action button */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
           className="flex justify-center"
         >
           <button
-            onClick={handleContinue}
-            disabled={!selectedMethod}
-            className={`px-8 py-3 font-semibold rounded-lg transition-all duration-200 flex items-center justify-center gap-2 ${selectedMethod ? 'btn-primary hover:shadow-lg hover:scale-105' : 'bg-gray-600 text-gray-400 cursor-not-allowed'}`}
+            onClick={() => setShowZKSetup(true)}
+            className="px-8 py-3 font-semibold rounded-lg btn-primary hover:shadow-lg hover:scale-105 transition-all duration-200 flex items-center gap-2"
           >
             {t('authMethod.continue')}
             <span>→</span>
           </button>
         </motion.div>
-
-        {/* Info Footer */}
       </div>
 
       {/* ZK Setup Modal */}
@@ -246,20 +99,23 @@ const AuthMethodSelection: React.FC = () => {
           <ZKSetupModal
             onClose={() => setShowZKSetup(false)}
             onComplete={async () => {
-              // Update onboarding and redirect to spaceship
-              const apiUrl = (import.meta as any).env.VITE_API_URL || 'http://localhost:3004';
-              await fetch(`${apiUrl}/api/auth/update-onboarding-step`, {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                  'Authorization': `Bearer ${localStorage.getItem('token')}`
-                },
-                body: JSON.stringify({
-                  onboardingStep: 'completed',
-                  loginMethod: 'password_zk'
-                })
-              });
-              updateUser({ onboardingStep: 'completed', loginMethodSelected: 'password_zk' });
+              try {
+                const apiUrl = (import.meta as any).env.VITE_API_URL || 'http://localhost:3004';
+                await fetch(`${apiUrl}/api/auth/update-onboarding-step`, {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                  },
+                  body: JSON.stringify({
+                    onboardingStep: 'completed',
+                    loginMethod: 'password_zk'
+                  })
+                });
+                updateUser({ onboardingStep: 'completed', loginMethodSelected: 'password_zk' });
+              } catch (e) {
+                console.error('onboarding step update failed:', e);
+              }
               navigate('/dashboard');
             }}
           />
