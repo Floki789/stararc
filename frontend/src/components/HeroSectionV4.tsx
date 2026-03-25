@@ -9,6 +9,10 @@ import {
   TrendingUp,
   Activity,
   LayoutDashboard,
+  Building2,
+  Package,
+  Bitcoin,
+  Gem,
 } from 'lucide-react';
 
 // ─── Feature items displayed on the timeline ─────────────────────────────────
@@ -90,24 +94,26 @@ const features: Feature[] = [
 
 // ─── Capital curve ─────────────────────────────────────────────────────────────
 // x: 0–1 fraction of timeline; y: 0=no capital, 1=max capital
-// step: true → vertical drop (single event, no interpolation from prev)
+// step: true → vertical jump (up or down) at same x — no interpolation from prev
 interface WP { x: number; y: number; step?: boolean }
 
 const CAPITAL_WPS: WP[] = [
-  { x: 0.00, y: 0.22 },           // Start: career beginning
-  { x: 0.15, y: 0.31 },
-  { x: 0.30, y: 0.44 },           // Immobilienkauf ~0.18: Kapitalumwandlung, kein Drop
-  { x: 0.45, y: 0.55 },
-  { x: 0.55, y: 0.63 },
-  { x: 0.58, y: 0.67 },           // Peak: last year before pension
-  { x: 0.595, y: 0.67 },          // Top of drop
-  { x: 0.60, y: 0.54, step: true },   // ↓ Hypothekenrückzahlung (cash outflow)
-  { x: 0.65, y: 0.50 },           // Early retirement: moderate consumption
-  { x: 0.70, y: 0.46 },
-  { x: 0.72, y: 0.44 },           // Phase transition: consumption rate increases
-  { x: 0.80, y: 0.31 },           // Late retirement: steeper draw-down
-  { x: 0.90, y: 0.18 },
-  { x: 1.00, y: 0.07 },
+  { x: 0.00, y: 0.18 },           // Start: career beginning
+  { x: 0.08, y: 0.23 },           // Slope change: first small event
+  { x: 0.18, y: 0.29 },           // Immobilienkauf: slope flattens (capital in property)
+  { x: 0.25, y: 0.37 },           // Slope change: growth resumes
+  { x: 0.35, y: 0.45 },           // Slope change: accumulation accelerates
+  { x: 0.379, y: 0.47 },          // Just before Erbschaft
+  { x: 0.38, y: 0.64, step: true }, // ↑ Erbschaft: sudden capital jump
+  { x: 0.48, y: 0.65 },           // Slope change: flatter after windfall
+  { x: 0.55, y: 0.68 },           // Slope change: moderate growth
+  { x: 0.595, y: 0.71 },          // Peak just before Hypothek
+  { x: 0.60, y: 0.57, step: true }, // ↓ Hypothek abbezahlt (cash outflow)
+  { x: 0.65, y: 0.54 },           // Pensionierung: draw-down begins
+  { x: 0.72, y: 0.49 },           // Immobilienverkauf: kink, slight flattening
+  { x: 0.78, y: 0.41 },           // Slope change: steeper consumption
+  { x: 0.88, y: 0.25 },           // Slope change: late retirement
+  { x: 1.00, y: 0.09 },
 ];
 
 const SVG_W = 900;
@@ -160,23 +166,28 @@ const HeroSectionV4: React.FC = () => {
   const { t, language } = useLanguage();
   const isDE = language === 'de';
 
-  // Life phase segments on the timeline (as % of total width)
-  const phases = [
-    { label: isDE ? 'Berufsleben' : 'Career', from: 0, to: 42, color: 'rgba(59,130,246,0.15)', border: 'rgba(59,130,246,0.4)' },
-    { label: isDE ? 'Teilzeit / Übergang' : 'Part-time', from: 42, to: 58, color: 'rgba(139,92,246,0.15)', border: 'rgba(139,92,246,0.4)' },
-    { label: isDE ? 'Pensionierung' : 'Retirement', from: 58, to: 100, color: 'rgba(16,185,129,0.15)', border: 'rgba(16,185,129,0.4)' },
+  // Named event dots on the capital curve
+  const chartDots: { pos: number; color: string; label?: string }[] = [
+    { pos: 18, color: '#f59e0b' },              // Immobilienkauf
+    { pos: 38, color: '#34d399' },              // Erbschaft ↑ step up
+    { pos: 60, color: '#ec4899' },              // Hypothek abbezahlt
+    { pos: 65, color: '#10b981' },              // Pensionierung
+    { pos: 72, color: '#a78bfa' },              // Immobilienverkauf
   ];
 
-  // Timeline events — row 0 = label above bar, row 1 = label below bar
-  interface TimelineEvent { pos: number; label_de: string; label_en: string; color: string; row: 0 | 1 }
-  const events: TimelineEvent[] = [
-    { pos: 18, label_de: 'Immobilienkauf',     label_en: 'Property Purchase', color: '#f59e0b', row: 1 },
-    { pos: 60, label_de: 'Hypothek abbezahlt', label_en: 'Mortgage Repaid',   color: '#ec4899', row: 0 },
-    { pos: 65, label_de: 'Pensionierung',       label_en: 'Retirement',        color: '#10b981', row: 1 },
-    { pos: 72, label_de: 'Immobilienverkauf',  label_en: 'Property Sale',     color: '#a78bfa', row: 0 },
+  // Additional unnamed event dots — spread along the curve
+  const unnamedDots = [8, 25, 35, 48, 55, 78, 88];
+
+  // Asset class icons floating in the area below the capital curve
+  // Clustered in center band x≈300–600 (SVG 900 wide), same vertical
+  const svgAssets = [
+    { Icon: TrendingUp, svgX: 310, svgY: 155, color: '#3b82f6', bg: 'rgba(59,130,246,0.18)'  },
+    { Icon: Building2,  svgX: 360, svgY: 155, color: '#8b5cf6', bg: 'rgba(139,92,246,0.18)'  },
+    { Icon: Package,    svgX: 410, svgY: 155, color: '#f59e0b', bg: 'rgba(245,158,11,0.18)'  },
+    { Icon: PiggyBank,  svgX: 460, svgY: 155, color: '#10b981', bg: 'rgba(16,185,129,0.18)'  },
+    { Icon: Bitcoin,    svgX: 510, svgY: 155, color: '#fb923c', bg: 'rgba(251,146,60,0.18)'  },
+    { Icon: Gem,        svgX: 560, svgY: 155, color: '#eab308', bg: 'rgba(234,179,8,0.18)'   },
   ];
-  const aboveEvents = events.filter((e) => e.row === 0);
-  const belowEvents = events.filter((e) => e.row === 1);
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex flex-col overflow-hidden pt-20">
@@ -288,86 +299,6 @@ const HeroSectionV4: React.FC = () => {
             })}
           </div>
 
-          {/* ── Life-phase timeline ─────────────────────────────────────── */}
-          <div className="w-full">
-
-            {/* ─ Row 0: above-bar labels ─ */}
-            <div className="relative" style={{ height: 46 }}>
-              {aboveEvents.map((ev) => (
-                <div
-                  key={ev.label_de}
-                  className="absolute bottom-0 flex flex-col items-center"
-                  style={{ left: `${ev.pos}%`, transform: 'translateX(-50%)' }}
-                >
-                  <span className="text-[11px] font-semibold whitespace-nowrap mb-1" style={{ color: ev.color }}>
-                    {isDE ? ev.label_de : ev.label_en}
-                  </span>
-                  <div className="w-px" style={{ height: 22, background: `linear-gradient(to bottom, transparent, ${ev.color})`, opacity: 0.75 }} />
-                </div>
-              ))}
-            </div>
-
-            {/* ─ Phase bar + dot pins ─ */}
-            <div className="relative">
-              <div className="h-14 rounded-xl overflow-hidden flex border border-slate-700/50 shadow-inner">
-                {phases.map((phase) => (
-                  <div
-                    key={phase.label}
-                    className="relative flex items-center justify-center text-center"
-                    style={{ width: `${phase.to - phase.from}%`, background: phase.color, borderRight: `1px solid ${phase.border}` }}
-                  >
-                    <span className="text-xs font-semibold text-slate-300 tracking-wide px-2 truncate">
-                      {phase.label}
-                    </span>
-                  </div>
-                ))}
-              </div>
-              {/* Dots for above-row events — top edge of bar */}
-              {aboveEvents.map((ev) => (
-                <div
-                  key={ev.label_de}
-                  className="absolute flex justify-center"
-                  style={{ left: `${ev.pos}%`, top: -5, transform: 'translateX(-50%)' }}
-                >
-                  <div className="w-3 h-3 rounded-full border-2 border-slate-950 shadow-lg" style={{ background: ev.color }} />
-                </div>
-              ))}
-              {/* Dots for below-row events — bottom edge of bar */}
-              {belowEvents.map((ev) => (
-                <div
-                  key={ev.label_de}
-                  className="absolute flex justify-center"
-                  style={{ left: `${ev.pos}%`, bottom: -5, transform: 'translateX(-50%)' }}
-                >
-                  <div className="w-3 h-3 rounded-full border-2 border-slate-950 shadow-lg" style={{ background: ev.color }} />
-                </div>
-              ))}
-            </div>
-
-            {/* ─ Row 1: below-bar labels ─ */}
-            <div className="relative" style={{ height: 46 }}>
-              {belowEvents.map((ev) => (
-                <div
-                  key={ev.label_de}
-                  className="absolute top-0 flex flex-col items-center"
-                  style={{ left: `${ev.pos}%`, transform: 'translateX(-50%)' }}
-                >
-                  <div className="w-px" style={{ height: 22, background: `linear-gradient(to bottom, ${ev.color}, transparent)`, opacity: 0.75 }} />
-                  <span className="text-[11px] font-semibold whitespace-nowrap mt-1" style={{ color: ev.color }}>
-                    {isDE ? ev.label_de : ev.label_en}
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            {/* ─ Age labels ─ */}
-            <div className="flex justify-between px-0.5 mt-1">
-              {['30', '40', '50', '60', '65', '75', '85+'].map((age) => (
-                <span key={age} className="text-[11px] text-slate-500 font-mono">{age}</span>
-              ))}
-            </div>
-          </div>
-
           {/* ── Capital development chart (SVG) ─────────────────────────── */}
           <div className="relative w-full rounded-2xl border border-slate-700/50 bg-slate-900/50 overflow-hidden p-4 shadow-xl">
             {/* Chart header */}
@@ -381,11 +312,12 @@ const HeroSectionV4: React.FC = () => {
             </div>
 
             {/* SVG area chart */}
-            <svg
-              viewBox={`0 0 ${SVG_W} ${SVG_H}`}
-              className="w-full"
-              aria-hidden="true"
-            >
+            <div className="relative">
+              <svg
+                viewBox={`0 0 ${SVG_W} ${SVG_H}`}
+                className="w-full block"
+                aria-hidden="true"
+              >
               <defs>
                 <linearGradient id="v4GradGreen" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stopColor="rgba(16,185,129,0.35)" />
@@ -434,14 +366,37 @@ const HeroSectionV4: React.FC = () => {
                 strokeLinejoin="round"
               />
 
-              {/* Event dots — x aligned with timeline above, y on the capital curve */}
-              {events.map((ev) => {
+              {/* Unnamed background dots — subtle markers along the curve */}
+              {unnamedDots.map((pos) => {
+                const cx = (pos / 100) * SVG_W;
+                const cy = SVG_H * (1 - interpolateCapitalY(pos / 100));
+                return (
+                  <g key={`unnamed-${pos}`}>
+                    <circle cx={cx} cy={cy} r={3.5} fill="rgba(255,255,255,0.25)" />
+                    <circle cx={cx} cy={cy} r={7} fill="rgba(255,255,255,0.05)" />
+                  </g>
+                );
+              })}
+
+              {/* Named event dots — highlighted, colored */}
+              {chartDots.map((ev) => {
                 const cx = (ev.pos / 100) * SVG_W;
                 const cy = SVG_H * (1 - interpolateCapitalY(ev.pos / 100));
                 return (
-                  <g key={ev.label_de}>
+                  <g key={`dot-${ev.pos}`}>
                     <circle cx={cx} cy={cy} r={5} fill={ev.color} opacity={0.95} />
-                    <circle cx={cx} cy={cy} r={9} fill={ev.color} opacity={0.15} />
+                    <circle cx={cx} cy={cy} r={10} fill={ev.color} opacity={0.15} />
+                    {ev.label && (
+                      <>
+                        <line x1={cx} y1={cy - 7} x2={cx} y2={cy - 18}
+                          stroke={ev.color} strokeWidth={1} strokeOpacity={0.6} />
+                        <text x={cx} y={cy - 21} fontSize={8} fill={ev.color}
+                          fontFamily="system-ui, sans-serif" textAnchor="middle" fontWeight="700"
+                          opacity={0.9}>
+                          {ev.label}
+                        </text>
+                      </>
+                    )}
                   </g>
                 );
               })}
@@ -456,7 +411,30 @@ const HeroSectionV4: React.FC = () => {
               <text x={0.79 * SVG_W} y={13} fontSize={9} fill="rgba(110,231,183,0.55)" fontFamily="system-ui, sans-serif" textAnchor="middle" fontWeight="600">
                 {isDE ? 'PENSIONIERUNG' : 'RETIREMENT'}
               </text>
-            </svg>
+              </svg>
+
+              {/* Asset class icons — absolutely positioned over SVG, in the area below the curve */}
+              <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+                {svgAssets.map(({ Icon, svgX, svgY, color, bg }, i) => (
+                  <div
+                    key={i}
+                    className="absolute flex items-center justify-center rounded-full"
+                    style={{
+                      left: `${(svgX / SVG_W) * 100}%`,
+                      top:  `${(svgY / SVG_H) * 100}%`,
+                      transform: 'translate(-50%, -50%)',
+                      width: 38,
+                      height: 38,
+                      background: bg,
+                      border: `1px solid ${color}40`,
+                      opacity: 0.60,
+                    }}
+                  >
+                    <Icon size={18} color={color} />
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
 
 

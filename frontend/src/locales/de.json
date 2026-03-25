@@ -915,7 +915,7 @@
       "retirement": {
         "title": "Vorsorgekapital",
         "pensionFunds": "Pensionskassen",
-        "retirement401k": "Säule 3a & Pensionskasse",
+        "retirement401k": "Private Vorsorge & Pensionsfonds",
         "investments": "Langfristige Anlagen"
       },
       "realEstate": {
@@ -1294,8 +1294,8 @@
           "liquidity": "Liquidität (Bank, Kasse)",
           "securities": "Wertschriften",
           "securities2": "Wertschriften 2",
-          "pillar3": "3. Säule",
-          "pillar2": "2. Säule",
+          "pillar3": "Private Vorsorge",
+          "pillar2": "Betriebliche Vorsorge",
           "bitcoin": "Bitcoin & Krypto",
           "realEstate": "Immobilien"
         },
@@ -1324,7 +1324,7 @@
         },
         "capitalWithdrawals": {
           "title": "Kapitalbezugs-Planung",
-          "description": "Plane Bezüge aus Säule 2, Säule 3 und anderen Vermögenswerten und visualisiere deren Auswirkungen."
+          "description": "Plane Bezüge aus betrieblicher und privater Vorsorge sowie anderen Vermögenswerten und visualisiere deren Auswirkungen."
         },
         "inflationAdjustment": {
           "title": "Inflationsanpassung",
@@ -1356,8 +1356,8 @@
           "retirement": "Pensionierung"
         },
         "descriptions": {
-          "accumulation": "Aufbau von Vermögen in Säule 2, Säule 3 und privaten Anlagen während der Erwerbsphase.",
-          "transition": "Kritische Phase zwischen 58-65 Jahren mit strategischen Kapitalbezugsentscheidungen aus Säule 3 und 2.",
+          "accumulation": "Aufbau von Vermögen in betrieblicher Vorsorge, privater Vorsorge und privaten Anlagen während der Erwerbsphase.",
+          "transition": "Kritische Phase zwischen 58-65 Jahren mit strategischen Kapitalbezugsentscheidungen aus privater und betrieblicher Vorsorge.",
           "retirement": "Ruhestandsphase mit geplanten Bezügen, optimaler Asset-Allokation und Vermögenserhalt."
         }
       },
@@ -1366,10 +1366,10 @@
         "subtitle": "Plane alle Bezüge strategisch",
         "atAge": "Mit {{age}}",
         "events": {
-          "pillar3": "3. Säule Bezug",
-          "pillar2_partial": "2. Säule Teilbezug",
-          "pillar2_full": "2. Säule Vollbezug",
-          "ahv_start": "AHV-Rente"
+          "pillar3": "Privatvorsorge-Bezug",
+          "pillar2_partial": "Betriebsrente Teilbezug",
+          "pillar2_full": "Betriebsrente Vollbezug",
+          "ahv_start": "Staatliche Rente"
         }
       },
       "allocation": {
@@ -1394,7 +1394,7 @@
         },
         "capitalWithdrawals": {
           "title": "Kapitalbezugs-Strategien",
-          "description": "Optimiere den Zeitpunkt und die Höhe deiner Säule 2 und Säule 3 Bezüge steuerlich und finanziell."
+          "description": "Optimiere den Zeitpunkt und die Höhe deiner Bezüge aus betrieblicher und privater Vorsorge steuerlich und finanziell."
         },
         "allocationSimulation": {
           "title": "Allokations-Simulation",
@@ -1484,7 +1484,7 @@
         },
         "pension": {
           "title": "Vorsorge",
-          "description": "Säule 3a & Pensionskasse"
+          "description": "Private Vorsorge & Pensionsfonds"
         },
         "insurance": {
           "title": "Versicherungen",
@@ -2269,7 +2269,7 @@
     "subtitle": "Von der Pensionierung bis zur Vermögensweitergabe — alles in einem Blick.",
     "features": {
       "retirement": "Pensionierung",
-      "retirementDesc": "AHV, Pensionskasse und 3. Säule im Zeitverlauf",
+      "retirementDesc": "Staatliche Rente, Betriebsrente und private Vorsorge im Zeitverlauf",
       "income": "Regelmässige Bezüge",
       "incomeDesc": "Gehalt, Rente, Mieterträge und mehr",
       "events": "Geplante Events",

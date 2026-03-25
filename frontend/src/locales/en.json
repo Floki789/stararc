@@ -1135,8 +1135,8 @@
           "liquidity": "Liquidity (Bank, Cash)",
           "securities": "Securities",
           "securities2": "Securities 2",
-          "pillar3": "Pillar 3",
-          "pillar2": "Pillar 2",
+          "pillar3": "Private Pension",
+          "pillar2": "Occupational Pension",
           "bitcoin": "Bitcoin & Crypto",
           "realEstate": "Real Estate"
         },
@@ -1165,7 +1165,7 @@
         },
         "capitalWithdrawals": {
           "title": "Capital Withdrawal Planning",
-          "description": "Plan withdrawals from Pillar 2, Pillar 3, and other assets and visualize their impact."
+          "description": "Plan withdrawals from occupational and private pension accounts and other assets and visualize their impact."
         },
         "inflationAdjustment": {
           "title": "Inflation Adjustment",
@@ -1197,8 +1197,8 @@
           "retirement": "Retirement"
         },
         "descriptions": {
-          "accumulation": "Building wealth in Pillar 2, Pillar 3, and private investments during working years.",
-          "transition": "Critical phase between ages 58-65 with strategic capital withdrawal decisions from Pillar 3 and 2.",
+          "accumulation": "Building wealth in occupational pension, private pension, and private investments during working years.",
+          "transition": "Critical phase between ages 58-65 with strategic capital withdrawal decisions from private and occupational pension accounts.",
           "retirement": "Retirement phase with planned withdrawals, optimal asset allocation, and wealth preservation."
         }
       },
@@ -1207,10 +1207,10 @@
         "subtitle": "Plan all withdrawals strategically",
         "atAge": "At {{age}}",
         "events": {
-          "pillar3": "Pillar 3 Withdrawal",
-          "pillar2_partial": "Pillar 2 Partial Withdrawal",
-          "pillar2_full": "Pillar 2 Full Withdrawal",
-          "ahv_start": "AHV Pension"
+          "pillar3": "Private Pension Withdrawal",
+          "pillar2_partial": "Occupational Pension Partial Withdrawal",
+          "pillar2_full": "Occupational Pension Full Withdrawal",
+          "ahv_start": "State Pension"
         }
       },
       "allocation": {
@@ -1235,7 +1235,7 @@
         },
         "capitalWithdrawals": {
           "title": "Capital Withdrawal Strategies",
-          "description": "Optimize the timing and amount of your Pillar 2 and Pillar 3 withdrawals for tax and financial efficiency."
+          "description": "Optimize the timing and amount of your occupational and private pension withdrawals for tax and financial efficiency."
         },
         "allocationSimulation": {
           "title": "Allocation Simulation",
@@ -1325,7 +1325,7 @@
         },
         "pension": {
           "title": "Retirement",
-          "description": "Pillar 3a & Pension Fund"
+          "description": "Private Pension & Pension Fund"
         },
         "insurance": {
           "title": "Insurance",
@@ -1786,7 +1786,7 @@
     },
     "addAccount": "Add Account",
     "highlights": {
-      "saeulenSystem": "3-Pillar System",
+      "saeulenSystem": "Pension System",
       "mehrereKonten": "Multiple Accounts",
       "familiePartner": "Family & Partner"
     }
@@ -2254,7 +2254,7 @@
     "subtitle": "From retirement to wealth transfer — everything at a glance.",
     "features": {
       "retirement": "Retirement",
-      "retirementDesc": "AHV, pension fund and pillar 3 over time",
+      "retirementDesc": "State pension, occupational pension and private savings over time",
       "income": "Regular Income",
       "incomeDesc": "Salary, pension, rental income and more",
       "events": "Planned Events",
