@@ -375,7 +375,7 @@ const ZKRecoveryModal: React.FC<ZKRecoveryModalProps> = ({ isOpen, onClose, onSu
           {step === 'phrase' && (
             <div>
               <p className="text-slate-300 mb-4">
-                Gib deine 6-Wort Wiederherstellungsphrase ein, um dein Sovereignty-Passwort zurückzusetzen.
+                Gib deine 6-Wort Wiederherstellungsphrase ein, um dein Privacy-Login-Passwort zurückzusetzen.
               </p>
               
               <div className="grid grid-cols-3 gap-2 mb-6">
@@ -485,7 +485,7 @@ const ZKRecoveryModal: React.FC<ZKRecoveryModalProps> = ({ isOpen, onClose, onSu
               </div>
               
               <p className="text-slate-300 mb-4">
-                Setze jetzt dein neues Sovereignty-Passwort.
+                Setze jetzt dein neues Privacy-Login-Passwort.
               </p>
               
               <div className="space-y-4 mb-6">

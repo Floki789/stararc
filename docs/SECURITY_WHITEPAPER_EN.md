@@ -12,7 +12,7 @@
 3. [System Architecture](#3-system-architecture)
 4. [Encryption Standards](#4-encryption-standards)
 5. [Envelope Encryption (KEK/DEK)](#5-envelope-encryption-kekdek)
-6. [Authentication Modes](#6-authentication-modes)
+6. [Authentication Mode](#6-authentication-mode)
 7. [Field-Level Encryption](#7-field-level-encryption)
 8. [Key Management](#8-key-management)
 9. [Two-Factor Authentication](#9-two-factor-authentication)
@@ -34,7 +34,7 @@ StarArc is a personal finance platform consisting of two tightly integrated appl
 - **All personal and financial data is encrypted client-side** before it reaches the server
 - **Every data field is individually encrypted** — with fresh random IV and salt per encryption
 - **No external crypto code** — exclusively the browser-native Web Crypto API (`crypto.subtle`)
-- **Sovereignty Mode (Zero-Knowledge):** The server cannot decrypt user data under any circumstances
+- **Privacy Login (Zero-Knowledge):** The server cannot decrypt user data under any circumstances
 - **Modern key derivation:** PBKDF2-SHA-256 with 600,000 iterations
 
 ---
@@ -47,14 +47,11 @@ The security architecture was not bolted on retroactively but is an integral par
 
 ### Principle of Minimal Trust
 
-StarArc aims to minimize the required trust in the server operator:
+StarArc consistently minimizes the required trust in the server operator:
 
 | Mode | Trust Required in Server |
 |---|---|
-| **Standard Login** | Moderate — Server can decrypt when needed (for convenience features like password reset) |
-| **Sovereignty (Zero-Knowledge)** | Minimal — Server stores only encrypted blobs with no ability to decrypt |
-
-Users choose which model suits their requirements.
+| **Privacy Login (Zero-Knowledge)** | Minimal — Server stores only encrypted blobs with no ability to decrypt |
 
 ### Encryption as Default State
 
@@ -162,9 +159,8 @@ salt ‖ IV ‖ ciphertext ‖ authentication tag (Base64-encoded)
 1. **Generation:** Created once during registration via `crypto.subtle.generateKey('AES-GCM', 256)`
 2. **Storage:** The DEK is **never stored in plaintext** — only wrapped copies exist
 3. **Wrapped copies:**
-   - User copy — wrapped with the user KEK (both modes)
-   - Server copy — wrapped with the server KEK (Standard mode only; absent in Sovereignty mode)
-   - Recovery copy — wrapped with the recovery KEK (Sovereignty mode only)
+   - User copy — wrapped with the user KEK
+   - Recovery copy — wrapped with the recovery KEK
 4. **In browser:** Temporarily in `sessionStorage` (cleared when tab closes)
 5. **Time limit:** 4-hour hard expiry with activity monitoring
 
@@ -176,33 +172,13 @@ salt ‖ IV ‖ ciphertext ‖ authentication tag (Base64-encoded)
 
 ---
 
-## 6. Authentication Modes
+## 6. Authentication Mode
 
-### 6a. Standard Login
-
-```
-Registration:
-  Browser: Generate DEK → derive KEK from password → wrap DEK
-  Browser: Send raw DEK + user-key-copy + salt to server (one-time)
-  Server:  Derive server KEK → create server-key-copy → discard raw DEK
-
-Login to Spaceship:
-  Server:  Unwrap DEK via server-key-copy → encrypt for transport → JWT
-  Browser: Decrypt DEK from JWT → sessionStorage → seamless access
-```
-
-**Advantages:**
-- Seamless login experience — no second password needed
-- Administrator password reset possible
-- Convenient for users who trust the server operator
-
-**Trade-off:** The server holds an encrypted copy of the DEK and can derive the DEK when needed. This is intentional to enable convenience features.
-
-### 6b. Sovereignty (Zero-Knowledge) Mode
+### Privacy Login (Zero-Knowledge)
 
 ```
 Setup:
-  Browser: Create Sovereignty password (min. 12 characters)
+  Browser: Create Privacy Login password (min. 12 characters)
   Browser: Generate 6 BIP39 recovery words
   Browser: Generate DEK
   Browser: Derive password KEK → user-key-copy
@@ -213,7 +189,7 @@ Setup:
 
 Login to Spaceship:
   Server:  Send user-key-copy + salt in JWT (no raw DEK)
-  Browser: Prompt for Sovereignty password → derive KEK → unwrap DEK
+  Browser: Prompt for Privacy Login password → derive KEK → unwrap DEK
 ```
 
 **Guarantees:**
@@ -256,10 +232,9 @@ The DEK is unwrapped once at login and held for the duration of the session. Ind
 | Key | Generation | Storage | Access |
 |---|---|---|---|
 | User password | User-chosen | BCrypt hash in DB | User only |
-| Sovereignty password | User-chosen (min. 12 chars) | BCrypt hash in DB | User only |
-| DEK | `crypto.subtle.generateKey()` | Only as wrapped copies | Standard: user + server; ZK: user only |
+| Privacy Login password | User-chosen (min. 12 chars) | BCrypt hash in DB | User only |
+| DEK | `crypto.subtle.generateKey()` | Only as wrapped copies | User only |
 | User KEK | PBKDF2(password, salt, 600k) | Not stored; derived on demand | User only |
-| Server KEK | PBKDF2(server secret, user salt) | Not stored; derived on demand | Server only |
 | Recovery KEK | PBKDF2(6 words, salt, 600k) | Not stored; derived on demand | User only |
 | Recovery phrase | 6 random BIP39 words | Encrypted with DEK in DB | User only |
 | Admin master key | Environment variable | Server environment | Server admin only |
@@ -272,7 +247,7 @@ No single key grants access to all data. The system relies on **key separation**
 - The **admin master key** encrypts only administrative copies (email, name) — not financial data
 - The **DEK** encrypts user data — but is inaccessible without the KEK
 - The **KEK** exists only transiently in memory — never stored on disk
-- **Sovereignty mode:** Even a complete server compromise provides no access to user data
+- **Privacy Login:** Even a complete server compromise provides no access to user data
 
 ---
 
@@ -299,17 +274,10 @@ Communication between StarArc and Spaceship uses signed, short-lived JWT tokens:
 | Shared secret | Environment variable (server-side only) |
 | Payload | User ID, auth method, encrypted DEK data |
 
-### Standard Mode Transport
-
-1. StarArc unwraps the DEK server-side
-2. Encrypts the DEK with a random one-time key for transport
-3. Signs the JWT with: auth key, auth method, encrypted DEK data
-4. Spaceship decrypts the DEK → seamless access
-
-### Sovereignty Mode Transport
+### Privacy Login Transport
 
 1. StarArc sends the user key copy + salt in the JWT (no raw DEK)
-2. Spaceship prompts the user for the Sovereignty password
+2. Spaceship prompts the user for the Privacy Login password
 3. Client derives KEK → unwraps DEK
 4. No seamless login — by design
 
@@ -430,16 +398,16 @@ Expired verification and reset tokens are automatically cleaned up by scheduled 
 |---|---|---|---|
 | Client-side encryption | AES-256-GCM | AES-256-CBC + HMAC | OpenPGP |
 | Key derivation | PBKDF2-SHA256, 600k | PBKDF2/Argon2id, 600k | Bcrypt + SRP |
-| Zero-knowledge option | Yes (Sovereignty mode) | Yes (default) | Yes (default) |
+| Zero-knowledge option | Yes (Privacy Login) | Yes (default) | Yes (default) |
 | Field-level encryption | Yes (per field with fresh IV) | Vault-based | Message-based |
 | Recovery | 6 BIP39 words | Master password | Recovery phrase |
 | Web Crypto API (native) | Yes | Yes | Partial |
 | Open source | Planned (crypto layer) | Yes (client + server) | Client only |
-| Server access to data | Standard: yes; ZK: no | No | No |
+| Server access to data | No | No | No |
 
 ### Assessment
 
-StarArc implements the same cryptographic primitives as leading security products (Bitwarden, Proton Mail). The **Sovereignty mode** provides a protection level comparable to pure zero-knowledge services, while the **Standard mode** makes a deliberate trade-off in favor of usability.
+StarArc implements the same cryptographic primitives as leading security products (Bitwarden, Proton Mail). **Privacy Login** provides a protection level comparable to pure zero-knowledge services.
 
 ---
 
@@ -453,17 +421,13 @@ As a web application, the server delivers the JavaScript code that performs the 
 
 **Planned mitigation:** Open-source release of the crypto layer for independent verification.
 
-### 2. Standard Mode: Server Access Possible
-
-In Standard mode, the server holds an encrypted copy of the DEK and can theoretically derive the DEK. This is intentionally designed to enable convenience features like password reset. Users seeking maximum privacy should use **Sovereignty mode**.
-
-### 3. PBKDF2 vs. Argon2id
+### 2. PBKDF2 vs. Argon2id
 
 PBKDF2 is the currently used KDF. Argon2id (memory-hard algorithm) would provide stronger protection against GPU/ASIC-based brute force attacks. A migration is planned for when the Web Crypto API natively supports Argon2id.
 
-### 4. 6-Word Recovery Phrase
+### 3. 6-Word Recovery Phrase
 
-The Sovereignty mode recovery phrase comprises 6 BIP39 words (~66 bits entropy). This is less than the 12-word standard in the Bitcoin world (128 bits), but sufficient for key recovery purposes since each brute force attempt requires 600,000 PBKDF2 iterations.
+The Privacy Login recovery phrase comprises 6 BIP39 words (~66 bits entropy). This is less than the 12-word standard in the Bitcoin world (128 bits), but sufficient for key recovery purposes since each brute force attempt requires 600,000 PBKDF2 iterations.
 
 ---
 

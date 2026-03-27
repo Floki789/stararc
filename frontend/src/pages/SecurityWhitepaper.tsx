@@ -91,13 +91,13 @@ const SecurityWhitepaper: React.FC = () => {
               'Alle persönlichen und finanziellen Daten werden clientseitig verschlüsselt, bevor sie den Server erreichen',
               'Jedes Datenfeld wird einzeln verschlüsselt — mit frischem Zufalls-IV und -Salt pro Verschlüsselung',
               'Kein externer Krypto-Code — ausschließlich die browsernative Web Crypto API (crypto.subtle)',
-              'Sovereignty-Modus (Zero-Knowledge): Der Server kann die Nutzerdaten unter keinen Umständen entschlüsseln',
+              'Privacy Login (Zero-Knowledge): Der Server kann die Nutzerdaten unter keinen Umständen entschlüsseln',
               'Moderne Schlüsselableitung: PBKDF2-SHA-256 mit 600.000 Iterationen',
             ] : [
               'All personal and financial data is encrypted client-side before it reaches the server',
               'Every data field is individually encrypted — with fresh random IV and salt per encryption',
               'No external crypto code — exclusively the browser-native Web Crypto API (crypto.subtle)',
-              'Sovereignty Mode (Zero-Knowledge): The server cannot decrypt user data under any circumstances',
+              'Privacy Login (Zero-Knowledge): The server cannot decrypt user data under any circumstances',
               'Modern key derivation: PBKDF2-SHA-256 with 600,000 iterations',
             ]} />
           </section>
@@ -123,13 +123,7 @@ const SecurityWhitepaper: React.FC = () => {
               ]}
               rows={[
                 [
-                  'Standard Login',
-                  isDE
-                    ? 'Moderat — Server kann bei Bedarf entschlüsseln (für Komfortfunktionen wie Passwort-Reset)'
-                    : 'Moderate — Server can decrypt when needed (for convenience features like password reset)',
-                ],
-                [
-                  'Sovereignty (Zero-Knowledge)',
+                  'Privacy Login (Zero-Knowledge)',
                   isDE
                     ? 'Minimal — Server speichert nur verschlüsselte Blobs, ohne die Möglichkeit der Entschlüsselung'
                     : 'Minimal — Server stores only encrypted blobs with no ability to decrypt',
@@ -295,17 +289,15 @@ salt ‖ IV ‖ ciphertext ‖ auth-tag (Base64)`}</CodeBlock>
             <BulletList items={isDE ? [
               'Erzeugung: Einmalig bei der Registrierung mittels crypto.subtle.generateKey()',
               'Speicherung: Der DEK wird nie im Klartext gespeichert — es existieren nur verpackte Kopien',
-              'Nutzer-Kopie — verpackt mit dem Nutzer-KEK (beide Modi)',
-              'Server-Kopie — verpackt mit dem Server-KEK (nur Standard-Modus; nicht vorhanden im Sovereignty-Modus)',
-              'Wiederherstellungs-Kopie — verpackt mit dem Wiederherstellungs-KEK (nur Sovereignty-Modus)',
+              'Nutzer-Kopie — verpackt mit dem Nutzer-KEK',
+              'Wiederherstellungs-Kopie — verpackt mit dem Wiederherstellungs-KEK',
               'Im Browser: Temporär in sessionStorage (wird beim Schließen des Tabs gelöscht)',
               'Zeitlimit: 4 Stunden harte Ablaufzeit mit Aktivitätsüberwachung',
             ] : [
               'Generation: Created once during registration via crypto.subtle.generateKey()',
               'Storage: The DEK is never stored in plaintext — only wrapped copies exist',
-              'User copy — wrapped with the user KEK (both modes)',
-              'Server copy — wrapped with the server KEK (Standard mode only; absent in Sovereignty mode)',
-              'Recovery copy — wrapped with the recovery KEK (Sovereignty mode only)',
+              'User copy — wrapped with the user KEK',
+              'Recovery copy — wrapped with the recovery KEK',
               'In browser: Temporarily in sessionStorage (cleared when tab closes)',
               'Time limit: 4-hour hard expiry with activity monitoring',
             ]} />
@@ -321,44 +313,15 @@ salt ‖ IV ‖ ciphertext ‖ auth-tag (Base64)`}</CodeBlock>
             ]} />
           </section>
 
-          {/* Section 6 — Authentication Modes */}
+          {/* Section 6 — Authentication Mode */}
           <section className="mb-12">
             <SectionTitle number={6}>
-              {isDE ? 'Authentifizierungsmodi' : 'Authentication Modes'}
+              {isDE ? 'Authentifizierungsmodus' : 'Authentication Mode'}
             </SectionTitle>
-            <SubTitle>6a. Standard Login</SubTitle>
-            <CodeBlock>{isDE
-              ? `Registrierung:
-  Browser: DEK erzeugen → KEK aus Passwort ableiten → DEK verpacken
-  Browser: Rohen DEK + Nutzer-Schlüssel-Kopie + Salt an Server senden (einmalig)
-  Server:  Server-KEK ableiten → Server-Schlüssel-Kopie erstellen → rohen DEK verwerfen
-
-Anmeldung bei Spaceship:
-  Server:  DEK via Server-Schlüssel-Kopie entpacken → für Transport verschlüsseln → JWT
-  Browser: DEK aus JWT entschlüsseln → sessionStorage → nahtloser Zugriff`
-              : `Registration:
-  Browser: Generate DEK → derive KEK from password → wrap DEK
-  Browser: Send raw DEK + user-key-copy + salt to server (one-time)
-  Server:  Derive server KEK → create server-key-copy → discard raw DEK
-
-Login to Spaceship:
-  Server:  Unwrap DEK via server-key-copy → encrypt for transport → JWT
-  Browser: Decrypt DEK from JWT → sessionStorage → seamless access`}</CodeBlock>
-            <P><strong>{isDE ? 'Vorteile:' : 'Advantages:'}</strong></P>
-            <BulletList items={isDE ? [
-              'Nahtloses Anmeldeerlebnis — kein zweites Passwort nötig',
-              'Administrator-Passwort-Reset möglich',
-              'Komfortabel für Nutzer, die dem Serverbetreiber vertrauen',
-            ] : [
-              'Seamless login experience — no second password needed',
-              'Administrator password reset possible',
-              'Convenient for users who trust the server operator',
-            ]} />
-
-            <SubTitle>6b. Sovereignty (Zero-Knowledge)</SubTitle>
+            <SubTitle>Privacy Login (Zero-Knowledge)</SubTitle>
             <CodeBlock>{isDE
               ? `Einrichtung:
-  Browser: Sovereignty-Passwort erstellen (min. 12 Zeichen)
+  Browser: Privacy-Login-Passwort erstellen (min. 12 Zeichen)
   Browser: 6 BIP39-Wiederherstellungswörter generieren
   Browser: DEK erzeugen
   Browser: Passwort-KEK ableiten → Nutzer-Schlüssel-Kopie
@@ -369,9 +332,9 @@ Login to Spaceship:
 
 Anmeldung bei Spaceship:
   Server:  Nutzer-Schlüssel-Kopie + Salt im JWT senden (kein roher DEK)
-  Browser: Sovereignty-Passwort abfragen → KEK ableiten → DEK entpacken`
+  Browser: Privacy-Login-Passwort abfragen → KEK ableiten → DEK entpacken`
               : `Setup:
-  Browser: Create Sovereignty password (min. 12 characters)
+  Browser: Create Privacy Login password (min. 12 characters)
   Browser: Generate 6 BIP39 recovery words
   Browser: Generate DEK
   Browser: Derive password KEK → user-key-copy
@@ -382,7 +345,7 @@ Anmeldung bei Spaceship:
 
 Login to Spaceship:
   Server:  Send user-key-copy + salt in JWT (no raw DEK)
-  Browser: Prompt for Sovereignty password → derive KEK → unwrap DEK`}</CodeBlock>
+  Browser: Prompt for Privacy Login password → derive KEK → unwrap DEK`}</CodeBlock>
             <P><strong>{isDE ? 'Garantien:' : 'Guarantees:'}</strong></P>
             <BulletList items={isDE ? [
               'Server-Schlüssel-Kopie = nicht vorhanden — der Server hat physisch keinen Zugang zu den Daten',
@@ -460,10 +423,9 @@ Login to Spaceship:
               ]}
               rows={[
                 [isDE ? 'Nutzer-Passwort' : 'User password', isDE ? 'Nutzerwahl' : 'User-chosen', isDE ? 'BCrypt-Hash in DB' : 'BCrypt hash in DB', isDE ? 'Nur Nutzer' : 'User only'],
-                ['Sovereignty-' + (isDE ? 'Passwort' : 'password'), isDE ? 'Nutzerwahl (min. 12 Zeichen)' : 'User-chosen (min. 12 chars)', isDE ? 'BCrypt-Hash in DB' : 'BCrypt hash in DB', isDE ? 'Nur Nutzer' : 'User only'],
-                ['DEK', 'crypto.subtle.generateKey()', isDE ? 'Nur verpackte Kopien' : 'Only wrapped copies', isDE ? 'Standard: Nutzer + Server; ZK: nur Nutzer' : 'Standard: user + server; ZK: user only'],
+                [isDE ? 'Privacy-Login-Passwort' : 'Privacy Login password', isDE ? 'Nutzerwahl (min. 12 Zeichen)' : 'User-chosen (min. 12 chars)', isDE ? 'BCrypt-Hash in DB' : 'BCrypt hash in DB', isDE ? 'Nur Nutzer' : 'User only'],
+                ['DEK', 'crypto.subtle.generateKey()', isDE ? 'Nur verpackte Kopien' : 'Only wrapped copies', isDE ? 'Nur Nutzer' : 'User only'],
                 [isDE ? 'Nutzer-KEK' : 'User KEK', 'PBKDF2(password, salt, 600k)', isDE ? 'Nicht gespeichert' : 'Not stored', isDE ? 'Nur Nutzer' : 'User only'],
-                ['Server-KEK', 'PBKDF2(secret, user-salt)', isDE ? 'Nicht gespeichert' : 'Not stored', isDE ? 'Nur Server' : 'Server only'],
                 [isDE ? 'Wiederherstellungs-KEK' : 'Recovery KEK', 'PBKDF2(6 words, salt, 600k)', isDE ? 'Nicht gespeichert' : 'Not stored', isDE ? 'Nur Nutzer' : 'User only'],
                 [isDE ? 'Wiederherstellungsphrase' : 'Recovery phrase', isDE ? '6 BIP39-Wörter' : '6 BIP39 words', isDE ? 'Mit DEK verschlüsselt in DB' : 'Encrypted with DEK in DB', isDE ? 'Nur Nutzer' : 'User only'],
                 ['Admin-Masterkey', isDE ? 'Umgebungsvariable' : 'Environment variable', isDE ? 'Serverumgebung' : 'Server environment', isDE ? 'Nur Serveradministrator' : 'Server admin only'],
@@ -480,12 +442,12 @@ Login to Spaceship:
               'Der Admin-Masterkey verschlüsselt nur administrative Kopien (E-Mail, Name) — nicht die Finanzdaten',
               'Der DEK verschlüsselt die Nutzerdaten — ist aber ohne den KEK nicht zugänglich',
               'Der KEK existiert nur transient im Speicher — wird nie auf der Festplatte gespeichert',
-              'Sovereignty-Modus: Selbst eine vollständige Kompromittierung des Servers gibt keinen Zugang zu Nutzerdaten',
+              'Privacy Login: Selbst eine vollständige Kompromittierung des Servers gibt keinen Zugang zu Nutzerdaten',
             ] : [
               'The admin master key encrypts only administrative copies (email, name) — not financial data',
               'The DEK encrypts user data — but is inaccessible without the KEK',
               'The KEK exists only transiently in memory — never stored on disk',
-              'Sovereignty mode: Even a complete server compromise provides no access to user data',
+              'Privacy Login: Even a complete server compromise provides no access to user data',
             ]} />
           </section>
 
@@ -532,27 +494,15 @@ Login to Spaceship:
                 [isDE ? 'Dateninhalt' : 'Payload', isDE ? 'User-ID, Auth-Methode, verschlüsselte DEK-Daten' : 'User ID, auth method, encrypted DEK data'],
               ]}
             />
-            <SubTitle>{isDE ? 'Standard-Modus-Transport' : 'Standard Mode Transport'}</SubTitle>
-            <BulletList items={isDE ? [
-              'StarArc entpackt den DEK serverseitig',
-              'Verschlüsselt den DEK mit einem zufälligen Einmal-Schlüssel für den Transport',
-              'Signiert das JWT mit Auth-Key, Auth-Methode und verschlüsselten DEK-Daten',
-              'Spaceship entschlüsselt den DEK → nahtloser Zugriff',
-            ] : [
-              'StarArc unwraps the DEK server-side',
-              'Encrypts the DEK with a random one-time key for transport',
-              'Signs the JWT with auth key, auth method, and encrypted DEK data',
-              'Spaceship decrypts the DEK → seamless access',
-            ]} />
-            <SubTitle>{isDE ? 'Sovereignty-Modus-Transport' : 'Sovereignty Mode Transport'}</SubTitle>
+            <SubTitle>{isDE ? 'Privacy-Login-Transport' : 'Privacy Login Transport'}</SubTitle>
             <BulletList items={isDE ? [
               'StarArc sendet Nutzer-Schlüssel-Kopie + Salt im JWT (kein roher DEK)',
-              'Spaceship fordert das Sovereignty-Passwort vom Nutzer',
+              'Spaceship fordert das Privacy-Login-Passwort vom Nutzer',
               'Client leitet KEK ab → entpackt DEK',
               'Kein nahtloser Login — by Design',
             ] : [
               'StarArc sends user-key-copy + salt in the JWT (no raw DEK)',
-              'Spaceship prompts the user for the Sovereignty password',
+              'Spaceship prompts the user for the Privacy Login password',
               'Client derives KEK → unwraps DEK',
               'No seamless login — by design',
             ]} />
@@ -698,18 +648,18 @@ Tab close → sessionStorage automatically cleared`}</CodeBlock>
               rows={[
                 [isDE ? 'Clientseitige Verschlüsselung' : 'Client-side encryption', 'AES-256-GCM', 'AES-256-CBC + HMAC', 'OpenPGP'],
                 [isDE ? 'Schlüsselableitung' : 'Key derivation', 'PBKDF2-SHA256, 600k', 'PBKDF2/Argon2id, 600k', 'Bcrypt + SRP'],
-                ['Zero-Knowledge', isDE ? 'Ja (Sovereignty)' : 'Yes (Sovereignty)', isDE ? 'Ja (Standard)' : 'Yes (default)', isDE ? 'Ja (Standard)' : 'Yes (default)'],
+                ['Zero-Knowledge', isDE ? 'Ja (Privacy Login)' : 'Yes (Privacy Login)', isDE ? 'Ja (Standard)' : 'Yes (default)', isDE ? 'Ja (Standard)' : 'Yes (default)'],
                 [isDE ? 'Feldbasierte Verschlüsselung' : 'Field-level encryption', isDE ? 'Ja (pro Feld, frischer IV)' : 'Yes (per field, fresh IV)', 'Vault-' + (isDE ? 'basiert' : 'based'), isDE ? 'Nachrichten-basiert' : 'Message-based'],
                 [isDE ? 'Wiederherstellung' : 'Recovery', isDE ? '6 BIP39-Wörter' : '6 BIP39 words', 'Master-' + (isDE ? 'Passwort' : 'password'), isDE ? 'Wiederherstellungsphrase' : 'Recovery phrase'],
                 ['Web Crypto API', isDE ? 'Ja' : 'Yes', isDE ? 'Ja' : 'Yes', isDE ? 'Teilweise' : 'Partial'],
                 ['Open Source', isDE ? 'Geplant (Krypto-Schicht)' : 'Planned (crypto layer)', isDE ? 'Ja (Client + Server)' : 'Yes (client + server)', 'Client only'],
-                [isDE ? 'Serverzugriff' : 'Server access', isDE ? 'Standard: ja; ZK: nein' : 'Standard: yes; ZK: no', isDE ? 'Nein' : 'No', isDE ? 'Nein' : 'No'],
+                [isDE ? 'Serverzugriff' : 'Server access', isDE ? 'Nein' : 'No', isDE ? 'Nein' : 'No', isDE ? 'Nein' : 'No'],
               ]}
             />
             <P>
               {isDE
-                ? 'StarArc implementiert dieselben kryptografischen Primitiven wie führende Security-Produkte. Der Sovereignty-Modus bietet ein Schutzniveau, das mit reinen Zero-Knowledge-Diensten vergleichbar ist, während der Standard-Modus einen bewussten Kompromiss zugunsten der Benutzerfreundlichkeit eingeht.'
-                : 'StarArc implements the same cryptographic primitives as leading security products. The Sovereignty mode provides a protection level comparable to pure zero-knowledge services, while the Standard mode makes a deliberate trade-off in favor of usability.'}
+                ? 'StarArc implementiert dieselben kryptografischen Primitiven wie führende Security-Produkte. Das Privacy Login bietet ein Schutzniveau, das mit reinen Zero-Knowledge-Diensten vergleichbar ist.'
+                : 'StarArc implements the same cryptographic primitives as leading security products. Privacy Login provides a protection level comparable to pure zero-knowledge services.'}
             </P>
           </section>
 
@@ -734,16 +684,7 @@ Tab close → sessionStorage automatically cleared`}</CodeBlock>
             </P>
 
             <SubTitle>
-              {isDE ? '2. Standard-Modus: Serverzugriff möglich' : '2. Standard Mode: Server Access Possible'}
-            </SubTitle>
-            <P>
-              {isDE
-                ? 'Im Standard-Modus hält der Server eine verschlüsselte Kopie des DEK und kann den DEK theoretisch ableiten. Dies ist bewusst so gestaltet, um Komfortfunktionen wie Passwort-Reset zu ermöglichen. Nutzer, die maximale Privatsphäre anstreben, sollten den Sovereignty-Modus verwenden.'
-                : 'In Standard mode, the server holds an encrypted copy of the DEK and can theoretically derive the DEK. This is intentionally designed to enable convenience features like password reset. Users seeking maximum privacy should use Sovereignty mode.'}
-            </P>
-
-            <SubTitle>
-              {isDE ? '3. PBKDF2 vs. Argon2id' : '3. PBKDF2 vs. Argon2id'}
+              {isDE ? '2. PBKDF2 vs. Argon2id' : '2. PBKDF2 vs. Argon2id'}
             </SubTitle>
             <P>
               {isDE
@@ -752,12 +693,12 @@ Tab close → sessionStorage automatically cleared`}</CodeBlock>
             </P>
 
             <SubTitle>
-              {isDE ? '4. 6-Wort-Wiederherstellungsphrase' : '4. 6-Word Recovery Phrase'}
+              {isDE ? '3. 6-Wort-Wiederherstellungsphrase' : '3. 6-Word Recovery Phrase'}
             </SubTitle>
             <P>
               {isDE
-                ? 'Die Wiederherstellungsphrase im Sovereignty-Modus umfasst 6 BIP39-Wörter (~66 Bit Entropie). Dies ist weniger als der 12-Wort-Standard in der Bitcoin-Welt (128 Bit), aber ausreichend für den Zweck der Schlüsselwiederherstellung, da jeder Brute-Force-Versuch 600.000 PBKDF2-Iterationen erfordert.'
-                : 'The Sovereignty mode recovery phrase comprises 6 BIP39 words (~66 bits entropy). This is less than the 12-word standard in the Bitcoin world (128 bits), but sufficient for key recovery purposes since each brute force attempt requires 600,000 PBKDF2 iterations.'}
+                ? 'Die Wiederherstellungsphrase im Privacy Login umfasst 6 BIP39-Wörter (~66 Bit Entropie). Dies ist weniger als der 12-Wort-Standard in der Bitcoin-Welt (128 Bit), aber ausreichend für den Zweck der Schlüsselwiederherstellung, da jeder Brute-Force-Versuch 600.000 PBKDF2-Iterationen erfordert.'
+                : 'The Privacy Login recovery phrase comprises 6 BIP39 words (~66 bits entropy). This is less than the 12-word standard in the Bitcoin world (128 bits), but sufficient for key recovery purposes since each brute force attempt requires 600,000 PBKDF2 iterations.'}
             </P>
           </section>
 

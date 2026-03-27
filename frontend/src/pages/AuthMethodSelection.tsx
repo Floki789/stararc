@@ -18,16 +18,16 @@ const AuthMethodSelection: React.FC = () => {
     'Deine Daten werden im Browser verschlüsselt, bevor sie den Server erreichen (AES-256-GCM).',
     'Der Server speichert ausschliesslich verschlüsselte Daten — ohne Entschlüsselungsmöglichkeit.',
     'Nur du hast Zugriff auf deine Inhalte — wir nicht.',
-    'Ein separates Sovereignty-Passwort schützt den Zugang zu deinen Daten.',
+    'Ein separates Privacy-Login-Passwort schützt den Zugang zu deinen Daten.',
     'Wiederherstellung erfolgt über eine 6-Wort-Phrase, die du selbst aufbewahrst.',
-    'Das Sovereignty-Passwort und die 6-Wort-Phrase kann durch uns nicht wiederhergestellt werden. Du trägst die volle Verantwortung.',
+    'Das Privacy-Login-Passwort und die 6-Wort-Phrase kann durch uns nicht wiederhergestellt werden. Du trägst die volle Verantwortung.',
   ] : [
     'Your data is encrypted in the browser before reaching the server (AES-256-GCM).',
     'The server stores only encrypted data — with no ability to decrypt it.',
     'Only you have access to your content — not us.',
-    'A separate Sovereignty password protects access to your data.',
+    'A separate Privacy Login password protects access to your data.',
     'Recovery is possible via a 6-word phrase that only you keep.',
-    'The Sovereignty password and 6-word phrase cannot be recovered by us. You bear full responsibility.',
+    'The Privacy Login password and 6-word phrase cannot be recovered by us. You bear full responsibility.',
   ];
 
   return (
@@ -63,7 +63,7 @@ const AuthMethodSelection: React.FC = () => {
           <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
             <span className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1.5 whitespace-nowrap">
               <Key className="w-3.5 h-3.5" />
-              Zero-Knowledge · Sovereignty
+              Zero-Knowledge · Privacy Login
             </span>
           </div>
           <ul className="space-y-3.5">

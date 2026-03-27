@@ -353,7 +353,7 @@
     },
     "section6": {
       "title": "§ 6 Authentifizierung und Nutzersicherheit",
-      "p1": "Zwei Authentifizierungsmethoden: Stararc.one bietet zwei Login-Methoden, die sich grundlegend in ihrer Datenschutzarchitektur unterscheiden: den Standard-Login und den Zero-Knowledge-Login (Sovereignty Mode). Du wählst die Methode einmalig bei der Registrierung.",
+      "p1": "Zwei Authentifizierungsmethoden: Stararc.one bietet zwei Login-Methoden, die sich grundlegend in ihrer Datenschutzarchitektur unterscheiden: den Standard-Login und den Zero-Knowledge-Login (Privacy Login). Du wählst die Methode einmalig bei der Registrierung.",
       "p1b": "Sichere Passwörter und Login-Codes: Beide Methoden verwenden kryptographisch sichere Verfahren mit verschlüsselter Speicherung nach industriellen Sicherheitsstandards. Passwörter werden niemals gespeichert – ausschliesslich ein BCrypt-Hash.",
       "p2": "Verschlüsselte Datenspeicherung: Nutzerdaten werden client-seitig verschlüsselt, bevor sie an den Server übertragen und gespeichert werden. Die Plattform speichert grundsätzlich keine privacy-relevanten Daten im Klartext. Explizit verschlüsselt gespeichert werden beispielsweise:",
       "encryptedDataCategories": {
@@ -383,7 +383,7 @@
       },
       "p3": "Beträge, Mengen, Beschreibungen und Kommentare werden verschlüsselt gespeichert.",
       "p4": "Nutzerverantwortung: Der Nutzer trägt die vollständige Verantwortung für die Sicherung seiner Anmeldedaten und – beim Zero-Knowledge-Login – seiner 6 Wiederherstellungsphrasen.",
-      "p5": "Wiederherstellungsmöglichkeiten je nach Login-Methode: Beim Standard-Login kann der Betreiber auf ausdrückliche Anfrage des Nutzers einen administrativen Passwort-Reset durchführen; deine Inhaltsdaten bleiben dabei unverändert erhalten. Beim Zero-Knowledge-Login (Sovereignty Mode) besitzt der Server zu keinem Zeitpunkt den Datenverschlüsselungsschlüssel – ein administrativer Reset ist technisch unmöglich. Nur du kannst deine Daten mit deinen 6 Wiederherstellungsphrasen entschlüsseln. Bei Verlust von Passwort und Wiederherstellungsphrasen sind deine Daten unwiederbringlich verloren."
+      "p5": "Wiederherstellungsmöglichkeiten je nach Login-Methode: Beim Standard-Login kann der Betreiber auf ausdrückliche Anfrage des Nutzers einen administrativen Passwort-Reset durchführen; deine Inhaltsdaten bleiben dabei unverändert erhalten. Beim Zero-Knowledge-Login (Privacy Login) besitzt der Server zu keinem Zeitpunkt den Datenverschlüsselungsschlüssel – ein administrativer Reset ist technisch unmöglich. Nur du kannst deine Daten mit deinen 6 Wiederherstellungsphrasen entschlüsseln. Bei Verlust von Passwort und Wiederherstellungsphrasen sind deine Daten unwiederbringlich verloren."
     },
     "section7": {
       "title": "§ 7 Abonnement-Modell und Preisgestaltung",
@@ -522,8 +522,8 @@
     "manageSubscription": "Zahlung & Kündigung verwalten",
     "zkEncryption": "Zero-Knowledge Verschlüsselung",
     "zkSubtitle": "Deine Spaceship-Daten sind client-seitig verschlüsselt",
-    "zkRecoveryHint": "Falls du dein Sovereignty-Passwort vergessen hast, kannst du es mit deiner 6-Wort Wiederherstellungsphrase zurücksetzen.",
-    "zkRecoverButton": "Sovereignty-Passwort wiederherstellen",
+    "zkRecoveryHint": "Falls du dein Privacy-Login-Passwort vergessen hast, kannst du es mit deiner 6-Wort Wiederherstellungsphrase zurücksetzen.",
+    "zkRecoverButton": "Privacy-Login-Passwort wiederherstellen",
     "revealRecoveryPhraseButton": "Recovery Phrase anzeigen",
     "genesisMember": "Genesis Member",
     "genesisLifetime": "Lifetime",
@@ -531,9 +531,9 @@
   },
   "revealRecoveryPhrase": {
     "title": "Recovery Phrase anzeigen",
-    "hint": "Gib dein Sovereignty-Passwort ein, um deine 6 Wiederherstellungswörter zu entschlüsseln und anzuzeigen.",
-    "passwordLabel": "Sovereignty-Passwort",
-    "passwordPlaceholder": "Dein Sovereignty-Passwort",
+    "hint": "Gib dein Privacy-Login-Passwort ein, um deine 6 Wiederherstellungswörter zu entschlüsseln und anzuzeigen.",
+    "passwordLabel": "Privacy-Login-Passwort",
+    "passwordPlaceholder": "Dein Privacy-Login-Passwort",
     "reveal": "Phrase anzeigen",
     "loading": "Entschlüssle…",
     "wordsTitle": "Deine 6 Wiederherstellungswörter",
@@ -545,7 +545,7 @@
     "errorDecrypt": "Entschlüsselung fehlgeschlagen. Bitte neu einloggen."
   },
   "serverOverview": {
-    "title": "Login-Methode: Sovereignty-Modus",
+    "title": "Login-Methode: Privacy Login",
     "subtitle": "Deine Daten sind auf zwei unabhängige Server verteilt",
     "stararc": {
       "subtitle": "Authentifizierung & Kontoverwaltung",
@@ -557,7 +557,7 @@
     },
     "spaceship": {
       "subtitle": "Zero-Knowledge Datenverschlüsselung",
-      "passwordLogin": "Sovereignty-Passwort",
+      "passwordLogin": "Privacy-Login-Passwort",
       "passwordLoginDesc": "Separates Passwort – nur du kennst es, der Server nie",
       "recoveryWords": "6 Wiederherstellungswörter",
       "recoveryWordsDesc": "BIP39-Passphrase zur Wiederherstellung deines Spaceship-Zugangs",
@@ -1037,7 +1037,7 @@
       "bestFor": "Die meisten Nutzer, die Sicherheit mit Seelenfrieden wünschen"
     },
     "sovereignty": {
-      "name": "Souveränitäts-Modus",
+      "name": "Privacy Login",
       "tagline": "Maximale Privatsphäre, Maximale Verantwortung",
       "pros": {
         "zeroKnowledge": "Nur du kannst deine Daten lesen, niemand sonst (Zero-Knowledge)",
@@ -1970,7 +1970,7 @@
         "bestFor": "Nutzer, die Sicherheit mit Komfort verbinden möchten"
       },
       "sovereignty": {
-        "name": "Souveränitäts-Modus",
+        "name": "Privacy Login",
         "tagline": "Maximale Privatsphäre, Maximale Verantwortung",
         "features": {
           "zeroKnowledge": "Echtes Zero-Knowledge – Server weiss nichts",
@@ -2019,7 +2019,7 @@
       },
       "zk": {
         "name": "Zero-Knowledge-Architektur",
-        "desc": "Im Souveränitäts-Modus verlassen deine unverschlüsselten Daten niemals dein Gerät. Der Server speichert nichts – echte Zero-Knowledge."
+        "desc": "Im Privacy-Login-Modus verlassen deine unverschlüsselten Daten niemals dein Gerät. Der Server speichert nichts – echte Zero-Knowledge."
       }
     }
   },
@@ -2238,7 +2238,7 @@
     "version": "Version 1.0 — März 2026 • Archimedes Apps"
   },
   "hero2": {
-    "titleLine1": "Überblicke deine Assets",
+    "titleLine1": "Überblicke deine Vermögenswerte",
     "titleLine2": "Plane deine Zukunft",
     "subtitleLine1": "Deine Assets bleiben, wo sie sind.",
     "subtitleLine2": "Stararc bietet Übersicht, Analysen und Planung.",

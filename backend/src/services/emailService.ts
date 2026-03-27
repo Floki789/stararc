@@ -805,12 +805,12 @@ export class EmailService {
     const lang = language === 'en' ? 'en' : 'de';
     
     const isSovereignty = authMethod === 'password_zk';
-    const methodLabel = isSovereignty ? 'Sovereignty' : 'Standard';
+    const methodLabel = isSovereignty ? 'Privacy Login' : 'Standard';
 
     const texts = {
       de: {
         subjectStandard: 'StarArc – Login-Methode eingerichtet',
-        subjectSovereignty: 'StarArc – Sovereignty Login eingerichtet',
+        subjectSovereignty: 'StarArc – Privacy Login eingerichtet',
         heading: `Login-Methode: ${methodLabel}`,
         standardBody: `
           <p style="color: #4b5563; line-height: 1.6; margin-bottom: 24px;">
@@ -820,7 +820,7 @@ export class EmailService {
         `,
         sovereigntyBody: `
           <p style="color: #4b5563; line-height: 1.6; margin-bottom: 16px;">
-            Deine Login-Methode <strong>Sovereignty</strong> wurde erfolgreich eingerichtet.
+            Deine Login-Methode <strong>Privacy Login</strong> wurde erfolgreich eingerichtet.
             Du benötigst <strong>zwei Passwörter</strong> zum Einloggen:
           </p>
           <table style="width: 100%; border-collapse: collapse; margin-bottom: 16px;">
@@ -830,12 +830,12 @@ export class EmailService {
             </tr>
             <tr>
               <td style="padding: 12px 16px; border: 1px solid #e5e7eb; background: #f9fafb; font-weight: 600; color: #1f2937;">Finanzdaten</td>
-              <td style="padding: 12px 16px; border: 1px solid #e5e7eb; color: #4b5563;">Sovereignty-Passwort (12 Zeichen), das du nach der Methodenwahl gesetzt hast</td>
+              <td style="padding: 12px 16px; border: 1px solid #e5e7eb; color: #4b5563;">Privacy-Login-Passwort (12 Zeichen), das du nach der Methodenwahl gesetzt hast</td>
             </tr>
           </table>
           <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 12px 16px; margin-bottom: 24px; border-radius: 4px;">
             <p style="color: #92400e; margin: 0; font-size: 14px; line-height: 1.5;">
-              <strong>⚠️ Wichtig:</strong> Das Sovereignty-Passwort kann nur mit deiner <strong>6-Worte-Passphrase</strong> wiederhergestellt werden.
+              <strong>⚠️ Wichtig:</strong> Das Privacy-Login-Passwort kann nur mit deiner <strong>6-Worte-Passphrase</strong> wiederhergestellt werden.
               Verwahre diese sicher – wir empfehlen mindestens <strong>zwei geografisch getrennte Backups</strong>.
             </p>
           </div>
@@ -844,7 +844,7 @@ export class EmailService {
       },
       en: {
         subjectStandard: 'StarArc – Login Method Configured',
-        subjectSovereignty: 'StarArc – Sovereignty Login Configured',
+        subjectSovereignty: 'StarArc – Privacy Login Configured',
         heading: `Login Method: ${methodLabel}`,
         standardBody: `
           <p style="color: #4b5563; line-height: 1.6; margin-bottom: 24px;">
@@ -854,7 +854,7 @@ export class EmailService {
         `,
         sovereigntyBody: `
           <p style="color: #4b5563; line-height: 1.6; margin-bottom: 16px;">
-            Your login method <strong>Sovereignty</strong> has been successfully configured.
+            Your login method <strong>Privacy Login</strong> has been successfully configured.
             You need <strong>two passwords</strong> to sign in:
           </p>
           <table style="width: 100%; border-collapse: collapse; margin-bottom: 16px;">
@@ -864,12 +864,12 @@ export class EmailService {
             </tr>
             <tr>
               <td style="padding: 12px 16px; border: 1px solid #e5e7eb; background: #f9fafb; font-weight: 600; color: #1f2937;">Financial Data</td>
-              <td style="padding: 12px 16px; border: 1px solid #e5e7eb; color: #4b5563;">Sovereignty password (12 characters) set after choosing this method</td>
+              <td style="padding: 12px 16px; border: 1px solid #e5e7eb; color: #4b5563;">Privacy Login password (12 characters) set after choosing this method</td>
             </tr>
           </table>
           <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 12px 16px; margin-bottom: 24px; border-radius: 4px;">
             <p style="color: #92400e; margin: 0; font-size: 14px; line-height: 1.5;">
-              <strong>⚠️ Important:</strong> The Sovereignty password can only be recovered with your <strong>6-word passphrase</strong>.
+              <strong>⚠️ Important:</strong> The Privacy Login password can only be recovered with your <strong>6-word passphrase</strong>.
               Store it securely – we recommend at least <strong>two geographically separate backups</strong>.
             </p>
           </div>
@@ -930,7 +930,7 @@ export class EmailService {
         subject: 'Willkommen bei StarArc',
         heading: 'Willkommen bei StarArc',
         body: 'Dein Konto ist vollständig eingerichtet. Du kannst StarArc ab sofort in vollem Umfang nutzen.',
-        loginMethodHeading: `Login-Methode: ${isSovereignty ? 'Sovereignty' : 'Standard'}`,
+        loginMethodHeading: `Login-Methode: ${isSovereignty ? 'Privacy Login' : 'Standard'}`,
         standardBody: `
           <p style="color: #4b5563; line-height: 1.6; margin-bottom: 24px;">
             Du kannst dich mit deiner <strong>E-Mail und deinem Passwort</strong> anmelden.
@@ -947,12 +947,12 @@ export class EmailService {
             </tr>
             <tr>
               <td style="padding: 12px 16px; border: 1px solid #e5e7eb; background: #f9fafb; font-weight: 600; color: #1f2937;">Finanzdaten</td>
-              <td style="padding: 12px 16px; border: 1px solid #e5e7eb; color: #4b5563;">Sovereignty-Passwort (12 Zeichen), das du nach der Methodenwahl gesetzt hast</td>
+              <td style="padding: 12px 16px; border: 1px solid #e5e7eb; color: #4b5563;">Privacy-Login-Passwort (12 Zeichen), das du nach der Methodenwahl gesetzt hast</td>
             </tr>
           </table>
           <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 12px 16px; margin-bottom: 24px; border-radius: 4px;">
             <p style="color: #92400e; margin: 0; font-size: 14px; line-height: 1.5;">
-              <strong>⚠️ Wichtig:</strong> Das Sovereignty-Passwort kann nur mit deiner <strong>6-Worte-Passphrase</strong> wiederhergestellt werden.
+              <strong>⚠️ Wichtig:</strong> Das Privacy-Login-Passwort kann nur mit deiner <strong>6-Worte-Passphrase</strong> wiederhergestellt werden.
               Verwahre diese sicher – wir empfehlen mindestens <strong>zwei geografisch getrennte Backups</strong>.
             </p>
           </div>
@@ -963,7 +963,7 @@ export class EmailService {
         subject: 'Welcome to StarArc',
         heading: 'Welcome to StarArc',
         body: 'Your account is fully set up. You can now use StarArc to its full extent.',
-        loginMethodHeading: `Login Method: ${isSovereignty ? 'Sovereignty' : 'Standard'}`,
+        loginMethodHeading: `Login Method: ${isSovereignty ? 'Privacy Login' : 'Standard'}`,
         standardBody: `
           <p style="color: #4b5563; line-height: 1.6; margin-bottom: 24px;">
             You can sign in with your <strong>email and password</strong>.
@@ -980,12 +980,12 @@ export class EmailService {
             </tr>
             <tr>
               <td style="padding: 12px 16px; border: 1px solid #e5e7eb; background: #f9fafb; font-weight: 600; color: #1f2937;">Financial Data</td>
-              <td style="padding: 12px 16px; border: 1px solid #e5e7eb; color: #4b5563;">Sovereignty password (12 characters) set after choosing this method</td>
+              <td style="padding: 12px 16px; border: 1px solid #e5e7eb; color: #4b5563;">Privacy Login password (12 characters) set after choosing this method</td>
             </tr>
           </table>
           <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 12px 16px; margin-bottom: 24px; border-radius: 4px;">
             <p style="color: #92400e; margin: 0; font-size: 14px; line-height: 1.5;">
-              <strong>⚠️ Important:</strong> The Sovereignty password can only be recovered with your <strong>6-word passphrase</strong>.
+              <strong>⚠️ Important:</strong> The Privacy Login password can only be recovered with your <strong>6-word passphrase</strong>.
               Store it securely – we recommend at least <strong>two geographically separate backups</strong>.
             </p>
           </div>

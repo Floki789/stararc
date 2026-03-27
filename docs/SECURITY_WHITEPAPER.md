@@ -12,7 +12,7 @@
 3. [Systemarchitektur](#3-systemarchitektur)
 4. [Verschlüsselungsstandards](#4-verschlüsselungsstandards)
 5. [Envelope-Verschlüsselung (KEK/DEK)](#5-envelope-verschlüsselung-kekdek)
-6. [Authentifizierungsmodi](#6-authentifizierungsmodi)
+6. [Authentifizierungsmodus](#6-authentifizierungsmodus)
 7. [Feldbasierte Verschlüsselung](#7-feldbasierte-verschlüsselung)
 8. [Schlüsselverwaltung](#8-schlüsselverwaltung)
 9. [Zwei-Faktor-Authentifizierung](#9-zwei-faktor-authentifizierung)
@@ -34,7 +34,7 @@ StarArc ist eine Personal-Finance-Plattform, die aus zwei eng integrierten Anwen
 - **Alle persönlichen und finanziellen Daten werden clientseitig verschlüsselt**, bevor sie den Server erreichen
 - **Jedes Datenfeld wird einzeln verschlüsselt** — mit frischem Zufalls-IV und -Salt pro Verschlüsselung
 - **Kein externer Krypto-Code** — ausschließlich die browsernative Web Crypto API (`crypto.subtle`)
-- **Sovereignty-Modus (Zero-Knowledge):** Der Server kann die Nutzerdaten unter keinen Umständen entschlüsseln
+- **Privacy Login (Zero-Knowledge):** Der Server kann die Nutzerdaten unter keinen Umständen entschlüsseln
 - **Moderne Schlüsselableitung:** PBKDF2-SHA-256 mit 600.000 Iterationen
 
 ---
@@ -47,14 +47,11 @@ Die Sicherheitsarchitektur wurde nicht nachträglich aufgesetzt, sondern ist int
 
 ### Prinzip der minimalen Vertrauensanforderung
 
-StarArc verfolgt das Ziel, die erforderliche Vertrauensbasis gegenüber dem Serverbetreiber zu minimieren:
+StarArc minimiert die erforderliche Vertrauensbasis gegenüber dem Serverbetreiber konsequent:
 
 | Modus | Vertrauensbedarf gegenüber Server |
 |---|---|
-| **Standard Login** | Moderat — Server kann bei Bedarf entschlüsseln (für Komfortfunktionen wie Passwort-Reset) |
-| **Sovereignty (Zero-Knowledge)** | Minimal — Server speichert nur verschlüsselte Blobs, ohne die Möglichkeit der Entschlüsselung |
-
-Nutzer wählen selbst, welches Modell ihren Anforderungen entspricht.
+| **Privacy Login (Zero-Knowledge)** | Minimal — Server speichert nur verschlüsselte Blobs, ohne die Möglichkeit der Entschlüsselung |
 
 ### Verschlüsselung als Grundzustand
 
@@ -162,9 +159,8 @@ Salt ‖ IV ‖ Ciphertext ‖ Authentifizierungs-Tag (Base64-kodiert)
 1. **Erzeugung:** Einmalig bei der Registrierung mittels `crypto.subtle.generateKey('AES-GCM', 256)`
 2. **Speicherung:** Der DEK wird **nie im Klartext** gespeichert — es existieren nur verpackte (wrapped) Kopien
 3. **Verpackungen:**
-   - Nutzer-Kopie — verpackt mit dem Nutzer-KEK (beide Modi)
-   - Server-Kopie — verpackt mit dem Server-KEK (nur Standard-Modus; nicht vorhanden im Sovereignty-Modus)
-   - Wiederherstellungs-Kopie — verpackt mit dem Wiederherstellungs-KEK (nur Sovereignty-Modus)
+   - Nutzer-Kopie — verpackt mit dem Nutzer-KEK
+   - Wiederherstellungs-Kopie — verpackt mit dem Wiederherstellungs-KEK
 4. **Im Browser:** Temporär in `sessionStorage` (wird beim Schließen des Tabs gelöscht)
 5. **Zeitlimit:** 4 Stunden harte Ablaufzeit mit Aktivitätsüberwachung
 
@@ -176,33 +172,13 @@ Salt ‖ IV ‖ Ciphertext ‖ Authentifizierungs-Tag (Base64-kodiert)
 
 ---
 
-## 6. Authentifizierungsmodi
+## 6. Authentifizierungsmodus
 
-### 6a. Standard Login
-
-```
-Registrierung:
-  Browser: DEK erzeugen → KEK aus Passwort ableiten → DEK verpacken
-  Browser: Rohen DEK + Nutzer-Schlüssel-Kopie + Salt an Server senden (einmalig)
-  Server:  Server-KEK ableiten → Server-Schlüssel-Kopie erstellen → rohen DEK verwerfen
-
-Anmeldung bei Spaceship:
-  Server:  DEK via Server-Schlüssel-Kopie entpacken → für Transport verschlüsseln → JWT
-  Browser: DEK aus JWT entschlüsseln → sessionStorage → nahtloser Zugriff
-```
-
-**Vorteile:**
-- Nahtloses Anmeldeerlebnis — kein zweites Passwort nötig
-- Administrator-Passwort-Reset möglich
-- Komfortabel für Nutzer, die dem Serverbetreiber vertrauen
-
-**Kompromiss:** Der Server hält eine verschlüsselte Kopie des DEK und kann den DEK bei Bedarf ableiten. Dies ist bewusst so gestaltet, um Komfortfunktionen zu ermöglichen.
-
-### 6b. Sovereignty (Zero-Knowledge) Modus
+### Privacy Login (Zero-Knowledge)
 
 ```
 Einrichtung:
-  Browser: Sovereignty-Passwort erstellen (min. 12 Zeichen)
+  Browser: Privacy-Login-Passwort erstellen (min. 12 Zeichen)
   Browser: 6 BIP39-Wiederherstellungswörter generieren
   Browser: DEK erzeugen
   Browser: Passwort-KEK ableiten → Nutzer-Schlüssel-Kopie
@@ -213,7 +189,7 @@ Einrichtung:
 
 Anmeldung bei Spaceship:
   Server:  Nutzer-Schlüssel-Kopie + Salt im JWT senden (kein roher DEK)
-  Browser: Sovereignty-Passwort abfragen → KEK ableiten → DEK entpacken
+  Browser: Privacy-Login-Passwort abfragen → KEK ableiten → DEK entpacken
 ```
 
 **Garantien:**
@@ -256,10 +232,9 @@ Der DEK wird beim Login einmalig entpackt und für die Dauer der Sitzung vorgeha
 | Schlüssel | Erzeugung | Speicherort | Zugriff |
 |---|---|---|---|
 | Nutzer-Passwort | Nutzerwahl | BCrypt-Hash in DB | Nur Nutzer |
-| Sovereignty-Passwort | Nutzerwahl (min. 12 Zeichen) | BCrypt-Hash in DB | Nur Nutzer |
-| DEK | `crypto.subtle.generateKey()` | Nur als verpackte Kopien | Standard: Nutzer + Server; ZK: nur Nutzer |
+| Privacy-Login-Passwort | Nutzerwahl (min. 12 Zeichen) | BCrypt-Hash in DB | Nur Nutzer |
+| DEK | `crypto.subtle.generateKey()` | Nur als verpackte Kopien | Nur Nutzer |
 | Nutzer-KEK | PBKDF2(Passwort, Salt, 600k) | Nicht gespeichert; bei Bedarf abgeleitet | Nur Nutzer |
-| Server-KEK | PBKDF2(Servergeheimnis, User-Salt) | Nicht gespeichert; bei Bedarf abgeleitet | Nur Server |
 | Wiederherstellungs-KEK | PBKDF2(6 Wörter, Salt, 600k) | Nicht gespeichert; bei Bedarf abgeleitet | Nur Nutzer |
 | Wiederherstellungsphrase | 6 zufällige BIP39-Wörter | Mit DEK verschlüsselt in DB | Nur Nutzer |
 | Admin-Masterkey | Umgebungsvariable | Serverumgebung | Nur Serveradministrator |
@@ -272,7 +247,7 @@ Kein einzelner Schlüssel gewährt Zugriff auf alle Daten. Das System setzt auf 
 - Der **Admin-Masterkey** verschlüsselt nur administrative Kopien (E-Mail, Name) — nicht die Finanzdaten
 - Der **DEK** verschlüsselt die Nutzerdaten — ist aber ohne den KEK nicht zugänglich
 - Der **KEK** existiert nur transient im Speicher — wird nie auf der Festplatte gespeichert
-- **Sovereignty-Modus:** Selbst eine vollständige Kompromittierung des Servers gibt keinen Zugang zu Nutzerdaten
+- **Privacy Login:** Selbst eine vollständige Kompromittierung des Servers gibt keinen Zugang zu Nutzerdaten
 
 ---
 
@@ -299,17 +274,10 @@ Die Kommunikation zwischen StarArc und Spaceship erfolgt über signierte, kurzle
 | Geteiltes Geheimnis | Umgebungsvariable (nur serverseitig) |
 | Dateninhalt | User-ID, Auth-Methode, verschlüsselte DEK-Daten |
 
-### Standard-Modus-Transport
-
-1. StarArc entpackt den DEK serverseitig
-2. Verschlüsselt den DEK mit einem zufälligen Einmal-Schlüssel für den Transport
-3. Signiert das JWT mit: Auth-Key, Auth-Methode, verschlüsselten DEK-Daten
-4. Spaceship entschlüsselt den DEK → nahtloser Zugriff
-
-### Sovereignty-Modus-Transport
+### Privacy Login Transport
 
 1. StarArc sendet die Nutzer-Schlüssel-Kopie + Salt im JWT (kein roher DEK)
-2. Spaceship fordert das Sovereignty-Passwort vom Nutzer
+2. Spaceship fordert das Privacy-Login-Passwort vom Nutzer
 3. Client leitet KEK ab → entpackt DEK
 4. Kein nahtloser Login — by Design
 
@@ -430,16 +398,16 @@ Abgelaufene Verifikations- und Reset-Token werden automatisch durch geplante Dat
 |---|---|---|---|
 | Clientseitige Verschlüsselung | AES-256-GCM | AES-256-CBC + HMAC | OpenPGP |
 | Schlüsselableitung | PBKDF2-SHA256, 600k | PBKDF2/Argon2id, 600k | Bcrypt + SRP |
-| Zero-Knowledge-Option | Ja (Sovereignty-Modus) | Ja (Standard) | Ja (Standard) |
+| Zero-Knowledge-Option | Ja (Privacy Login) | Ja (Standard) | Ja (Standard) |
 | Feldbasierte Verschlüsselung | Ja (pro Feld mit frischem IV) | Vault-basiert | Nachrichten-basiert |
 | Wiederherstellung | 6 BIP39-Wörter | Master-Passwort | Wiederherstellungsphrase |
 | Web Crypto API (nativ) | Ja | Ja | Teilweise |
 | Open Source | Geplant (Krypto-Schicht) | Ja (Client + Server) | Client only |
-| Serverzugriff auf Daten | Standard: ja; ZK: nein | Nein | Nein |
+| Serverzugriff auf Daten | Nein | Nein | Nein |
 
 ### Einordnung
 
-StarArc implementiert dieselben kryptografischen Primitiven wie führende Security-Produkte (Bitwarden, Proton Mail). Der **Sovereignty-Modus** bietet ein Schutzniveau, das mit reinen Zero-Knowledge-Diensten vergleichbar ist, während der **Standard-Modus** einen bewussten Kompromiss zugunsten der Benutzerfreundlichkeit eingeht.
+StarArc implementiert dieselben kryptografischen Primitiven wie führende Security-Produkte (Bitwarden, Proton Mail). Das **Privacy Login** bietet ein Schutzniveau, das mit reinen Zero-Knowledge-Diensten vergleichbar ist.
 
 ---
 
@@ -453,17 +421,13 @@ Als Webanwendung liefert der Server den JavaScript-Code aus, der die Verschlüss
 
 **Geplante Mitigation:** Open-Source-Veröffentlichung der Krypto-Schicht zur unabhängigen Überprüfung.
 
-### 2. Standard-Modus: Serverzugriff möglich
-
-Im Standard-Modus hält der Server eine verschlüsselte Kopie des DEK und kann den DEK theoretisch ableiten. Dies ist bewusst so gestaltet, um Komfortfunktionen wie Passwort-Reset zu ermöglichen. Nutzer, die maximale Privatsphäre anstreben, sollten den **Sovereignty-Modus** verwenden.
-
-### 3. PBKDF2 vs. Argon2id
+### 2. PBKDF2 vs. Argon2id
 
 PBKDF2 ist der aktuell verwendete KDF. Argon2id (speicherharter Algorithmus) würde stärkeren Schutz gegen GPU/ASIC-basierte Brute-Force-Angriffe bieten. Eine Migration ist für den Zeitpunkt geplant, zu dem die Web Crypto API Argon2id nativ unterstützt.
 
-### 4. 6-Wort-Wiederherstellungsphrase
+### 3. 6-Wort-Wiederherstellungsphrase
 
-Die Wiederherstellungsphrase im Sovereignty-Modus umfasst 6 BIP39-Wörter (~66 Bit Entropie). Dies ist weniger als der 12-Wort-Standard in der Bitcoin-Welt (128 Bit), aber ausreichend für den Zweck der Schlüsselwiederherstellung, da jeder Brute-Force-Versuch 600.000 PBKDF2-Iterationen erfordert.
+Die Wiederherstellungsphrase im Privacy Login umfasst 6 BIP39-Wörter (~66 Bit Entropie). Dies ist weniger als der 12-Wort-Standard in der Bitcoin-Welt (128 Bit), aber ausreichend für den Zweck der Schlüsselwiederherstellung, da jeder Brute-Force-Versuch 600.000 PBKDF2-Iterationen erfordert.
 
 ---
 

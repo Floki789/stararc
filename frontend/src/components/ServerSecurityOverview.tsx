@@ -95,7 +95,7 @@ const ServerSecurityOverview: React.FC<ServerSecurityOverviewProps> = ({ onOpenZ
               </div>
             </div>
 
-            {/* Sovereignty Login Info */}
+            {/* Privacy Login Info */}
             <div className="space-y-3 mb-4">
               <div className="flex items-center gap-3 bg-amber-900/20 border border-amber-500/20 rounded-lg p-3">
                 <Lock className="w-4 h-4 text-amber-400 flex-shrink-0" />

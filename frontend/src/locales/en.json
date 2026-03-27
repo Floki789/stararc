@@ -244,7 +244,7 @@
     },
     "section6": {
       "title": "§ 6 Authentication and User Security",
-      "p1": "Two Authentication Methods: Stararc.one offers two login methods that differ fundamentally in their privacy architecture: Standard Login and Zero-Knowledge Login (Sovereignty Mode). You choose your method once during registration.",
+      "p1": "Two Authentication Methods: Stararc.one offers two login methods that differ fundamentally in their privacy architecture: Standard Login and Zero-Knowledge Login (Privacy Login). You choose your method once during registration.",
       "p1b": "Secure Passwords and Login Codes: Both methods use cryptographically secure procedures with encrypted storage according to industry security standards. Passwords are never stored – only a BCrypt hash.",
       "p2": "Encrypted Data Storage: User data is encrypted client-side before being transmitted to and stored on the server. The platform fundamentally stores no privacy-relevant data in plain text. Examples of explicitly encrypted stored data include:",
       "encryptedDataCategories": {
@@ -274,7 +274,7 @@
       },
       "p3": "Amounts, quantities, descriptions and comments are stored encrypted.",
       "p4": "User Responsibility: The user bears full responsibility for securing their login credentials and – when using Zero-Knowledge Login – their 6 recovery phrases.",
-      "p5": "Recovery Options by Login Method: With Standard Login, the operator can perform an administrative password reset upon your explicit request; your content data remains unchanged. With Zero-Knowledge Login (Sovereignty Mode), the server never holds your data encryption key – an administrative reset is technically impossible. Only you can decrypt your data using your 6 recovery phrases. If both your password and recovery phrases are lost, your data is irrecoverably lost."
+      "p5": "Recovery Options by Login Method: With Standard Login, the operator can perform an administrative password reset upon your explicit request; your content data remains unchanged. With Zero-Knowledge Login (Privacy Login), the server never holds your data encryption key – an administrative reset is technically impossible. Only you can decrypt your data using your 6 recovery phrases. If both your password and recovery phrases are lost, your data is irrecoverably lost."
     },
     "section7": {
       "title": "§ 7 Subscription Model and Pricing",
@@ -363,8 +363,8 @@
     "manageSubscription": "Manage Payment & Cancellation",
     "zkEncryption": "Zero-Knowledge Encryption",
     "zkSubtitle": "Your Spaceship data is encrypted client-side",
-    "zkRecoveryHint": "If you forgot your Sovereignty password, you can reset it using your 6-word recovery phrase.",
-    "zkRecoverButton": "Recover Sovereignty Password",
+    "zkRecoveryHint": "If you forgot your Privacy Login password, you can reset it using your 6-word recovery phrase.",
+    "zkRecoverButton": "Recover Privacy Login Password",
     "revealRecoveryPhraseButton": "Show Recovery Phrase",
     "genesisMember": "Genesis Member",
     "genesisLifetime": "Lifetime",
@@ -372,9 +372,9 @@
   },
   "revealRecoveryPhrase": {
     "title": "Show Recovery Phrase",
-    "hint": "Enter your Sovereignty password to decrypt and display your 6 recovery words.",
-    "passwordLabel": "Sovereignty Password",
-    "passwordPlaceholder": "Your Sovereignty password",
+    "hint": "Enter your Privacy Login password to decrypt and display your 6 recovery words.",
+    "passwordLabel": "Privacy Login Password",
+    "passwordPlaceholder": "Your Privacy Login password",
     "reveal": "Show Phrase",
     "loading": "Decrypting…",
     "wordsTitle": "Your 6 Recovery Words",
@@ -386,7 +386,7 @@
     "errorDecrypt": "Decryption failed. Please log in again."
   },
   "serverOverview": {
-    "title": "Login Method: Sovereignty Mode",
+    "title": "Login Method: Privacy Login",
     "subtitle": "Your data is distributed across two independent servers",
     "stararc": {
       "subtitle": "Authentication & Account Management",
@@ -398,7 +398,7 @@
     },
     "spaceship": {
       "subtitle": "Zero-Knowledge Data Encryption",
-      "passwordLogin": "Sovereignty Password",
+      "passwordLogin": "Privacy Login Password",
       "passwordLoginDesc": "Separate password – only you know it, the server never does",
       "recoveryWords": "6 Recovery Words",
       "recoveryWordsDesc": "BIP39 passphrase for recovering your Spaceship access",
@@ -878,7 +878,7 @@
       "bestFor": "Most users who want security with peace of mind"
     },
     "sovereignty": {
-      "name": "Sovereignty Mode",
+      "name": "Privacy Login",
       "tagline": "Maximum Privacy, Maximum Responsibility",
       "pros": {
         "zeroKnowledge": "Only you can read your data, no one else (Zero-Knowledge)",
@@ -1626,7 +1626,7 @@
           "IP address at registration (encrypted)"
         ],
         "standardNote": "With Standard Login, the server stores a server-side encrypted data encryption key. This enables an administrative password reset if you forget your password. Your password itself is never stored. All user data remains client-side encrypted via the DEK; the server decrypts your content only in the context of an explicitly requested password reset.",
-        "zkTitle": "3.1b Zero-Knowledge Login (Sovereignty Mode)",
+        "zkTitle": "3.1b Zero-Knowledge Login (Privacy Login)",
         "zkIntro": "Additionally processed data:",
         "zkList": [
           "BCrypt hash of the login code",
@@ -1695,7 +1695,7 @@
       "title": "5. Encryption and Technical Security",
       "p1": "Client-side Encryption: Sensitive user data is encrypted on your device before transmission. The scope depends on the chosen authentication method (see Section 3.1).",
       "p2": "No Plain Text Storage: We do not store any privacy-relevant data in plain text on our servers.",
-      "p3": "Access depending on login method: With Zero-Knowledge Login (Sovereignty Mode), it is technically impossible for the operator to decrypt your content data. With Standard Login, the server holds protected key material that is used exclusively to perform an explicitly requested password reset."
+      "p3": "Access depending on login method: With Zero-Knowledge Login (Privacy Login), it is technically impossible for the operator to decrypt your content data. With Standard Login, the server holds protected key material that is used exclusively to perform an explicitly requested password reset."
     },
     "section6": {
       "title": "6. Recipients and Third Parties",
@@ -1739,7 +1739,7 @@
     "section11": {
       "title": "11. Data Protection Impact Assessment",
       "p1": "Due to our Privacy-by-Design architecture and exclusive processing of metadata, the risk to your privacy is minimized.",
-      "p2": "With Zero-Knowledge Login (Sovereignty Mode), the architecture is designed so that content data cannot be decrypted even with full access to the server infrastructure. With Standard Login, the confidentiality of user data depends on the security of server-side secrets, which are appropriately protected and regularly reviewed."
+      "p2": "With Zero-Knowledge Login (Privacy Login), the architecture is designed so that content data cannot be decrypted even with full access to the server infrastructure. With Standard Login, the confidentiality of user data depends on the security of server-side secrets, which are appropriately protected and regularly reviewed."
     },
     "section12": {
       "title": "12. Changes to this Privacy Policy",
@@ -1811,7 +1811,7 @@
         "bestFor": "Users who want security with peace of mind"
       },
       "sovereignty": {
-        "name": "Sovereignty Mode",
+        "name": "Privacy Login",
         "tagline": "Maximum Privacy, Maximum Responsibility",
         "features": {
           "zeroKnowledge": "True Zero-Knowledge – server knows nothing",
@@ -1860,7 +1860,7 @@
       },
       "zk": {
         "name": "Zero-Knowledge Architecture",
-        "desc": "In Sovereignty Mode, your unencrypted data never leaves your device. The server stores nothing – true Zero-Knowledge."
+        "desc": "In Privacy Login mode, your unencrypted data never leaves your device. The server stores nothing – true Zero-Knowledge."
       }
     }
   },
