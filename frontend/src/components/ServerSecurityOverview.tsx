@@ -36,16 +36,16 @@ const ServerSecurityOverview: React.FC<ServerSecurityOverviewProps> = ({ onOpenZ
       >
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         
-        {/* LEFT COLUMN: StarArc Server */}
+        {/* LEFT COLUMN: Authentication Server */}
         <div className="flex flex-col gap-4">
-          {/* StarArc Server Header */}
+          {/* Authentication Server Header */}
           <div className="bg-gradient-to-br from-blue-900/40 to-indigo-900/30 backdrop-blur-sm border border-blue-500/30 rounded-2xl p-5">
             <div className="flex items-center gap-3 mb-4">
               <div className="p-2.5 rounded-full bg-blue-500/20">
                 <Server className="w-5 h-5 text-blue-400" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-white">StarArc Server</h3>
+                <h3 className="text-lg font-bold text-white">Authentication Server</h3>
                 <p className="text-blue-300 text-xs">{t('serverOverview.stararc.subtitle')}</p>
               </div>
             </div>
@@ -81,16 +81,16 @@ const ServerSecurityOverview: React.FC<ServerSecurityOverviewProps> = ({ onOpenZ
           <TwoFactorManagement />
         </div>
 
-        {/* RIGHT COLUMN: Spaceship Server */}
+        {/* RIGHT COLUMN: Data Server */}
         <div className="flex flex-col gap-4">
-          {/* Spaceship Server Header */}
+          {/* Data Server Header */}
           <div className="bg-gradient-to-br from-amber-900/40 to-orange-900/30 backdrop-blur-sm border border-amber-500/30 rounded-2xl p-5">
             <div className="flex items-center gap-3 mb-4">
               <div className="p-2.5 rounded-full bg-amber-500/20">
                 <Server className="w-5 h-5 text-amber-400" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-white">Spaceship Server</h3>
+                <h3 className="text-lg font-bold text-white">Data Server</h3>
                 <p className="text-amber-300 text-xs">{t('serverOverview.spaceship.subtitle')}</p>
               </div>
             </div>

@@ -362,7 +362,7 @@
     "upgrade": "Upgrade",
     "manageSubscription": "Manage Payment & Cancellation",
     "zkEncryption": "Zero-Knowledge Encryption",
-    "zkSubtitle": "Your Spaceship data is encrypted client-side",
+    "zkSubtitle": "Your data is encrypted client-side",
     "zkRecoveryHint": "If you forgot your Privacy Login password, you can reset it using your 6-word recovery phrase.",
     "zkRecoverButton": "Recover Privacy Login Password",
     "revealRecoveryPhraseButton": "Show Recovery Phrase",
@@ -392,9 +392,9 @@
       "subtitle": "Authentication & Account Management",
       "emailLogin": "Email Address",
       "emailLoginDesc": "Your registered email for identification",
-      "passwordLogin": "StarArc Password",
+      "passwordLogin": "Stararc Password",
       "passwordLoginDesc": "Your account password for login",
-      "twoFactorInfo": "Optional 2FA with authenticator app and backup codes for additional protection of your StarArc account"
+      "twoFactorInfo": "Optional 2FA with authenticator app and backup codes for additional protection of your Stararc account"
     },
     "spaceship": {
       "subtitle": "Zero-Knowledge Data Encryption",
@@ -521,8 +521,8 @@
   },
   "spaceshipAccess": {
     "unlockApp": "Unlock App",
-    "goToPortfolio": "Login to Spaceship Portfolio",
-    "goToPortfolioZK": "Login to Spaceship Portfolio",
+    "goToPortfolio": "Login to your Portfolio",
+    "goToPortfolioZK": "Login to your Portfolio",
     "loading": "Loading...",
     "error": "Error accessing Spaceship App"
   },
@@ -920,14 +920,14 @@
     }
   },
   "zkSetup": {
-    "step1Title": "Zero-Knowledge Password",
+    "step1Title": "Privacy Login Password",
     "step2Title": "Recovery Phrase",
     "step3Title": "Verification",
     "step4Title": "Confirmation",
     "stepOf": "Step {{step}} of 4",
     "step1Warning": "Important:",
     "step1WarningText": "This password encrypts your data locally. It is not stored anywhere. If lost, your data is irretrievably gone (unless you have the Recovery Phrase).",
-    "passwordLabel": "ZK Password (min. 12 characters)",
+    "passwordLabel": "Privacy Login Password (min. 12 characters)",
     "passwordPlaceholder": "Choose a strong password...",
     "passwordMinLength": "At least 12 characters required",
     "confirmPasswordLabel": "Confirm Password",

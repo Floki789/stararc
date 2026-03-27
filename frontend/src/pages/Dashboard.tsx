@@ -508,7 +508,7 @@ const Dashboard: React.FC = () => {
               const nextUpgrade = getNextUpgrade(subscription.plan);
               if (nextUpgrade) {
                 return (
-                  <div className="flex items-center gap-3">
+                  <div className="hidden flex items-center gap-3">
                     <div className="text-right">
                       <p className="text-slate-200 text-sm">{t('dashboard.nextUpgrade')}</p>
                       <p className={`font-semibold ${
@@ -521,7 +521,7 @@ const Dashboard: React.FC = () => {
                     </div>
                     <button
                       onClick={handleUpgrade}
-                      className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                      className={`hidden px-4 py-2 rounded-lg font-medium transition-colors ${
                         nextUpgrade.color === 'blue' ? 'bg-blue-500 text-white hover:bg-blue-600' :
                         nextUpgrade.color === 'purple' ? 'bg-purple-500 text-white hover:bg-purple-600' :
                         nextUpgrade.color === 'yellow' ? 'bg-yellow-500 text-white hover:bg-yellow-600' : 'bg-gray-500 text-white hover:bg-gray-600'
@@ -541,7 +541,7 @@ const Dashboard: React.FC = () => {
             <div className="mt-4 pt-4 border-t border-slate-600/50">
               <button
                 onClick={handleManageSubscription}
-                className="px-4 py-2 bg-slate-600 hover:bg-slate-700 text-white rounded-lg font-medium transition-colors"
+                className="hidden px-4 py-2 bg-slate-600 hover:bg-slate-700 text-white rounded-lg font-medium transition-colors"
               >
                 {t('dashboard.manageSubscription')}
               </button>

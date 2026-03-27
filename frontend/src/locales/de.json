@@ -521,7 +521,7 @@
     "upgrade": "Upgrade",
     "manageSubscription": "Zahlung & Kündigung verwalten",
     "zkEncryption": "Zero-Knowledge Verschlüsselung",
-    "zkSubtitle": "Deine Spaceship-Daten sind client-seitig verschlüsselt",
+    "zkSubtitle": "Deine Daten sind client-seitig verschlüsselt",
     "zkRecoveryHint": "Falls du dein Privacy-Login-Passwort vergessen hast, kannst du es mit deiner 6-Wort Wiederherstellungsphrase zurücksetzen.",
     "zkRecoverButton": "Privacy-Login-Passwort wiederherstellen",
     "revealRecoveryPhraseButton": "Recovery Phrase anzeigen",
@@ -551,9 +551,9 @@
       "subtitle": "Authentifizierung & Kontoverwaltung",
       "emailLogin": "E-Mail-Adresse",
       "emailLoginDesc": "Deine registrierte E-Mail zur Identifikation",
-      "passwordLogin": "StarArc-Passwort",
+      "passwordLogin": "Stararc-Passwort",
       "passwordLoginDesc": "Dein Kontopasswort für die Anmeldung",
-      "twoFactorInfo": "Optionale 2FA mit Authenticator-App und Backup-Codes für zusätzlichen Schutz deines StarArc-Kontos"
+      "twoFactorInfo": "Optionale 2FA mit Authenticator-App und Backup-Codes für zusätzlichen Schutz deines Stararc-Kontos"
     },
     "spaceship": {
       "subtitle": "Zero-Knowledge Datenverschlüsselung",
@@ -656,8 +656,8 @@
   },
   "spaceshipAccess": {
     "unlockApp": "App freischalten",
-    "goToPortfolio": "Login to Spaceship Portfolio",
-    "goToPortfolioZK": "Login to Spaceship Portfolio",
+    "goToPortfolio": "Login to your Portfolio",
+    "goToPortfolioZK": "Login to your Portfolio",
     "loading": "Wird geladen...",
     "error": "Fehler beim Zugriff auf die Spaceship App"
   },
@@ -1079,14 +1079,14 @@
     }
   },
   "zkSetup": {
-    "step1Title": "Zero-Knowledge Passwort",
+    "step1Title": "Privacy-Login-Passwort",
     "step2Title": "Recovery Phrase",
     "step3Title": "Verifikation",
     "step4Title": "Bestätigung",
     "stepOf": "Schritt {{step}} von 4",
     "step1Warning": "Wichtig:",
     "step1WarningText": "Dieses Passwort verschlüsselt deine Daten lokal. Es wird nirgendwo gespeichert. Bei Verlust sind deine Daten unwiederbringlich verloren (außer du hast die Recovery Phrase).",
-    "passwordLabel": "ZK Passwort (mind. 12 Zeichen)",
+    "passwordLabel": "Privacy-Login-Passwort (mind. 12 Zeichen)",
     "passwordPlaceholder": "Starkes Passwort wählen...",
     "passwordMinLength": "Mindestens 12 Zeichen erforderlich",
     "confirmPasswordLabel": "Passwort bestätigen",
