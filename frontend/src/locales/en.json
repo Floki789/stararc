@@ -238,14 +238,14 @@
       "title": "§ 5 Privacy and Data Minimization",
       "p1": "Core Principle: Privacy-focused metadata management with strict separation between organizational data and security-relevant access information.",
       "p2": "Data Focus: The platform is limited to storing metadata and organizational structures without processing document contents or security-relevant information.",
-      "p3": "Encryption (Privacy by Design): All personal content data is encrypted on your device before transmission using AES-256-GCM. The scope of encryption depends on your chosen authentication method (Standard Login vs. Zero-Knowledge Login).",
+      "p3": "Encryption (Privacy by Design): All personal content data is encrypted on your device before transmission using AES-256-GCM. The platform exclusively uses the Privacy Login method (Zero-Knowledge architecture).",
       "p4": "Data Protection Standards: Compliance with the highest Swiss and European data protection laws (DSG, EU-GDPR) as well as comparable international standards.",
       "p5": "Operational Plain-Text Data: For technical reasons (performance, database queries), non-personal structural data is stored unencrypted – e.g. subscription status, asset categories (not names), currency codes, timestamps, and app-internal status flags. This data contains no information about your specific financial situation."
     },
     "section6": {
       "title": "§ 6 Authentication and User Security",
-      "p1": "Two Authentication Methods: Stararc.one offers two login methods that differ fundamentally in their privacy architecture: Standard Login and Zero-Knowledge Login (Privacy Login). You choose your method once during registration.",
-      "p1b": "Secure Passwords and Login Codes: Both methods use cryptographically secure procedures with encrypted storage according to industry security standards. Passwords are never stored – only a BCrypt hash.",
+      "p1": "Authentication Method: Stararc.one exclusively uses Privacy Login (Zero-Knowledge Login). This method ensures the highest privacy standards: your data encryption key never leaves your device, and the server has no access to it at any time.",
+      "p1b": "Secure Passwords: Privacy Login uses cryptographically secure procedures with encrypted storage according to industry security standards. Passwords are never stored – only a BCrypt hash.",
       "p2": "Encrypted Data Storage: User data is encrypted client-side before being transmitted to and stored on the server. The platform fundamentally stores no privacy-relevant data in plain text. Examples of explicitly encrypted stored data include:",
       "encryptedDataCategories": {
         "assets": "Assets and Portfolios:",
@@ -273,8 +273,8 @@
         ]
       },
       "p3": "Amounts, quantities, descriptions and comments are stored encrypted.",
-      "p4": "User Responsibility: The user bears full responsibility for securing their login credentials and – when using Zero-Knowledge Login – their 6 recovery phrases.",
-      "p5": "Recovery Options by Login Method: With Standard Login, the operator can perform an administrative password reset upon your explicit request; your content data remains unchanged. With Zero-Knowledge Login (Privacy Login), the server never holds your data encryption key – an administrative reset is technically impossible. Only you can decrypt your data using your 6 recovery phrases. If both your password and recovery phrases are lost, your data is irrecoverably lost."
+      "p4": "User Responsibility: The user bears full responsibility for securing their login credentials as well as their 6 recovery phrases.",
+      "p5": "Recovery: Since Stararc.one exclusively uses Privacy Login (Zero-Knowledge architecture), the server never holds your data encryption key – an administrative reset is technically impossible. Only you can decrypt your data using your 6 recovery phrases. If both your password and recovery phrases are lost, your data is irrecoverably lost."
     },
     "section7": {
       "title": "§ 7 Subscription Model and Pricing",

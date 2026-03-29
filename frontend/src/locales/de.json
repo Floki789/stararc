@@ -347,14 +347,14 @@
       "title": "§ 5 Privacy und Datenminimierung",
       "p1": "Grundprinzip: Privacy-fokussierte Metadatenverwaltung mit strikter Trennung zwischen Organisationsdaten und sicherheitsrelevanten Zugangsinformationen.",
       "p2": "Datenfokus: Die Plattform beschränkt sich auf die Speicherung von Metadaten und Organisationsstrukturen ohne Verarbeitung von Dokumenteninhalten oder sicherheitsrelevanten Informationen.",
-      "p3": "Verschlüsselung (Privacy by Design): Alle persönlichen Inhaltsdaten werden vor der Übertragung auf deinem Gerät verschlüsselt (AES-256-GCM). Der Umfang der Verschlüsselung hängt von der gewählten Authentifizierungsmethode ab (Standard-Login vs. Zero-Knowledge-Login).",
+      "p3": "Verschlüsselung (Privacy by Design): Alle persönlichen Inhaltsdaten werden vor der Übertragung auf deinem Gerät verschlüsselt (AES-256-GCM). Die Plattform verwendet ausschliesslich das Privacy-Login-Verfahren (Zero-Knowledge-Architektur).",
       "p4": "Datenschutzstandards: Einhaltung höchster Schweizer und europäischer Datenschutzgesetze (DSG, EU-DSGVO) sowie vergleichbarer internationaler Standards.",
       "p5": "Betriebliche Klartextdaten: Aus technischen Gründen (Performanz, Datenbankabfragen) werden nicht-persönliche Strukturdaten unverschlüsselt gespeichert – z.B. Abonnement-Status, Asset-Kategorien (nicht Bezeichnungen), Währungscodes, Zeitstempel und App-interne Status-Flags. Diese Daten enthalten keinerlei Rückschlüsse auf deine konkrete Vermögenssituation."
     },
     "section6": {
       "title": "§ 6 Authentifizierung und Nutzersicherheit",
-      "p1": "Zwei Authentifizierungsmethoden: Stararc.one bietet zwei Login-Methoden, die sich grundlegend in ihrer Datenschutzarchitektur unterscheiden: den Standard-Login und den Zero-Knowledge-Login (Privacy Login). Du wählst die Methode einmalig bei der Registrierung.",
-      "p1b": "Sichere Passwörter und Login-Codes: Beide Methoden verwenden kryptographisch sichere Verfahren mit verschlüsselter Speicherung nach industriellen Sicherheitsstandards. Passwörter werden niemals gespeichert – ausschliesslich ein BCrypt-Hash.",
+      "p1": "Authentifizierungsmethode: Stararc.one verwendet ausschliesslich das Privacy Login (Zero-Knowledge-Login). Diese Methode stellt höchste Datenschutzstandards sicher: Dein Datenverschlüsselungsschlüssel verlässt nie dein Gerät, und der Server hat zu keinem Zeitpunkt Zugriff darauf.",
+      "p1b": "Sichere Passwörter: Das Privacy Login verwendet kryptographisch sichere Verfahren mit verschlüsselter Speicherung nach industriellen Sicherheitsstandards. Passwörter werden niemals gespeichert – ausschliesslich ein BCrypt-Hash.",
       "p2": "Verschlüsselte Datenspeicherung: Nutzerdaten werden client-seitig verschlüsselt, bevor sie an den Server übertragen und gespeichert werden. Die Plattform speichert grundsätzlich keine privacy-relevanten Daten im Klartext. Explizit verschlüsselt gespeichert werden beispielsweise:",
       "encryptedDataCategories": {
         "assets": "Vermögenswerte und Portfolios:",
@@ -382,8 +382,8 @@
         ]
       },
       "p3": "Beträge, Mengen, Beschreibungen und Kommentare werden verschlüsselt gespeichert.",
-      "p4": "Nutzerverantwortung: Der Nutzer trägt die vollständige Verantwortung für die Sicherung seiner Anmeldedaten und – beim Zero-Knowledge-Login – seiner 6 Wiederherstellungsphrasen.",
-      "p5": "Wiederherstellungsmöglichkeiten je nach Login-Methode: Beim Standard-Login kann der Betreiber auf ausdrückliche Anfrage des Nutzers einen administrativen Passwort-Reset durchführen; deine Inhaltsdaten bleiben dabei unverändert erhalten. Beim Zero-Knowledge-Login (Privacy Login) besitzt der Server zu keinem Zeitpunkt den Datenverschlüsselungsschlüssel – ein administrativer Reset ist technisch unmöglich. Nur du kannst deine Daten mit deinen 6 Wiederherstellungsphrasen entschlüsseln. Bei Verlust von Passwort und Wiederherstellungsphrasen sind deine Daten unwiederbringlich verloren."
+      "p4": "Nutzerverantwortung: Der Nutzer trägt die vollständige Verantwortung für die Sicherung seiner Anmeldedaten sowie seiner 6 Wiederherstellungsphrasen.",
+      "p5": "Wiederherstellung: Da Stararc.one ausschliesslich Privacy Login (Zero-Knowledge-Architektur) einsetzt, besitzt der Server zu keinem Zeitpunkt den Datenverschlüsselungsschlüssel – ein administrativer Reset ist technisch unmöglich. Nur du kannst deine Daten mit deinen 6 Wiederherstellungsphrasen entschlüsseln. Bei Verlust von Passwort und Wiederherstellungsphrasen sind deine Daten unwiederbringlich verloren."
     },
     "section7": {
       "title": "§ 7 Abonnement-Modell und Preisgestaltung",
