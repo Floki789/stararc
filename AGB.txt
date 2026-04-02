@@ -35,7 +35,6 @@ Kontakt: info@stararc.one
 * Finanzinstituten
 * Aufbewahrungsorten (Vaults)
 * Dokumenten-Referenzen (nicht Dokumenteninhalte)
-* xPub-Schlüssel und Derivationspfade
 
 § 5 Privacy und Datenminimierung
 
@@ -43,7 +42,7 @@ Kontakt: info@stararc.one
 
 5.2 Datenfokus: Die Plattform beschränkt sich auf die Speicherung von Metadaten und Organisationsstrukturen ohne Verarbeitung von Dokumenteninhalten oder sicherheitsrelevanten Informationen.
 
-5.3 Verschlüsselung (Privacy by Design): Alle persönlichen Inhaltsdaten werden vor der Übertragung auf dem Gerät des Nutzers verschlüsselt (AES-256-GCM). Der Umfang der Verschlüsselung hängt von der gewählten Authentifizierungsmethode ab (Standard-Login vs. Zero-Knowledge-Login, siehe § 6).
+5.3 Verschlüsselung (Privacy by Design): Alle persönlichen Inhaltsdaten werden vor der Übertragung auf dem Gerät des Nutzers verschlüsselt (AES-256-GCM). Stararc.one verwendet ausschliesslich Privacy Login (Zero-Knowledge): Der Verschlüsselungsschlüssel verbleibt ausschliesslich beim Nutzer — der Server hat zu keinem Zeitpunkt Zugriff auf unverschlüsselte Inhaltsdaten.
 
 5.4 Datenschutzstandards: Einhaltung höchster Schweizer und europäischer Datenschutzgesetze (DSG, EU-DSGVO) sowie vergleichbarer internationaler Standards.
 
@@ -51,9 +50,9 @@ Kontakt: info@stararc.one
 
 § 6 Authentifizierung und Nutzersicherheit
 
-6.1 Zwei Authentifizierungsmethoden: Stararc.one bietet zwei Login-Methoden, die sich grundlegend in ihrer Datenschutzarchitektur unterscheiden: den Standard-Login und den Zero-Knowledge-Login (Sovereignty Mode). Der Nutzer wählt die Methode einmalig bei der Registrierung.
+6.1 Privacy Login (Zero-Knowledge): Stararc.one verwendet ausschliesslich Privacy Login. Der Server besitzt zu keinem Zeitpunkt den Datenverschlüsselungsschlüssel — ein administrativer Passwort-Reset ist technisch unmöglich. Die Architektur garantiert, dass selbst bei vollständigem Serverzugriff keine Nutzerdaten entschlüsselt werden können.
 
-6.2 Sichere Passwörter und Login-Codes: Beide Methoden verwenden kryptographisch sichere Verfahren mit verschlüsselter Speicherung nach industriellen Sicherheitsstandards. Passwörter werden niemals gespeichert – ausschliesslich ein BCrypt-Hash.
+6.2 Sichere Passwörter: Kryptographisch sichere Verfahren mit verschlüsselter Speicherung nach industriellen Sicherheitsstandards. Passwörter werden niemals gespeichert – ausschliesslich ein BCrypt-Hash.
 
 6.3 Verschlüsselte Datenspeicherung: Nutzerdaten werden client-seitig verschlüsselt, bevor sie an den Server übertragen und gespeichert werden. Die Plattform speichert grundsätzlich keine privacy-relevanten Daten im Klartext. Explizit verschlüsselt gespeichert werden beispielsweise:
 
@@ -79,11 +78,9 @@ Kontakt: info@stararc.one
 
    Beträge, Mengen, Beschreibungen und Kommentare werden ebenfalls verschlüsselt gespeichert.
 
-6.4 Nutzerverantwortung: Der Nutzer trägt die vollständige Verantwortung für die Sicherung seiner Anmeldedaten und – beim Zero-Knowledge-Login – seiner 12 Wiederherstellungsphrasen.
+6.4 Nutzerverantwortung: Der Nutzer trägt die vollständige Verantwortung für die Sicherung seiner Anmeldedaten und seiner 6 BIP39-Wiederherstellungswörter.
 
-6.5 Wiederherstellungsmöglichkeiten je nach Login-Methode:
-   Standard-Login: Der Betreiber kann auf ausdrückliche Anfrage des Nutzers einen administrativen Passwort-Reset durchführen; Inhaltsdaten bleiben dabei unverändert erhalten.
-   Zero-Knowledge-Login (Sovereignty Mode): Der Server besitzt zu keinem Zeitpunkt den Datenverschlüsselungsschlüssel – ein administrativer Reset ist technisch unmöglich. Nur der Nutzer kann seine Daten mit seinen 12 Wiederherstellungsphrasen entschlüsseln. Bei Verlust von Passwort und Wiederherstellungsphrasen sind die Daten unwiederbringlich verloren.
+6.5 Wiederherstellung: Da Stararc.one ausschliesslich Privacy Login verwendet, ist ein administrativer Passwort-Reset technisch unmöglich. Nur der Nutzer kann seine Daten mit seinem Passwort oder seinen 6 BIP39-Wiederherstellungswörtern entschlüsseln. Bei Verlust beider sind die Daten unwiederbringlich verloren.
 
 § 7 Abonnement-Modell und Preisgestaltung
 
@@ -156,7 +153,6 @@ Contact: info@stararc.one
 * Financial institutions
 * Storage locations (vaults)
 * Document references (not document contents)
-* xPub keys and derivation paths
 
 § 5 Privacy and Data Minimization
 
@@ -164,7 +160,7 @@ Contact: info@stararc.one
 
 5.2 Data Focus: The platform is limited to storing metadata and organizational structures without processing document contents or security-relevant information.
 
-5.3 Encryption (Privacy by Design): All personal content data is encrypted on the user's device before transmission using AES-256-GCM. The scope of encryption depends on the chosen authentication method (Standard Login vs. Zero-Knowledge Login, see § 6).
+5.3 Encryption (Privacy by Design): All personal content data is encrypted on the user's device before transmission using AES-256-GCM. Stararc.one exclusively uses Privacy Login (Zero-Knowledge): the encryption key remains solely with the user — the server has no access to unencrypted content data at any time.
 
 5.4 Data Protection Standards: Compliance with the highest Swiss and European data protection laws (DSG, EU-GDPR) as well as comparable international standards.
 
@@ -172,9 +168,9 @@ Contact: info@stararc.one
 
 § 6 Authentication and User Security
 
-6.1 Two Authentication Methods: Stararc.one offers two login methods that differ fundamentally in their privacy architecture: Standard Login and Zero-Knowledge Login (Sovereignty Mode). The user chooses their method once during registration.
+6.1 Privacy Login (Zero-Knowledge): Stararc.one exclusively uses Privacy Login. The server never holds the data encryption key — an administrative password reset is technically impossible. The architecture guarantees that even with full server access, no user data can be decrypted.
 
-6.2 Secure Passwords and Login Codes: Both methods use cryptographically secure procedures with encrypted storage according to industry security standards. Passwords are never stored – only a BCrypt hash.
+6.2 Secure Passwords: Cryptographically secure procedures with encrypted storage according to industry security standards. Passwords are never stored – only a BCrypt hash.
 
 6.3 Encrypted Data Storage: User data is encrypted client-side before being transmitted to and stored on the server. The platform fundamentally stores no privacy-relevant data in plain text. Examples of explicitly encrypted data include:
 
@@ -200,11 +196,9 @@ Contact: info@stararc.one
 
    Amounts, quantities, descriptions and comments are also stored encrypted.
 
-6.4 User Responsibility: The user bears full responsibility for securing their login credentials and – when using Zero-Knowledge Login – their 12 recovery phrases.
+6.4 User Responsibility: The user bears full responsibility for securing their login credentials and their 6 BIP39 recovery words.
 
-6.5 Recovery Options by Login Method:
-   Standard Login: The operator can perform an administrative password reset upon the user's explicit request; content data remains unchanged.
-   Zero-Knowledge Login (Sovereignty Mode): The server never holds the data encryption key – an administrative reset is technically impossible. Only the user can decrypt their data using their 12 recovery phrases. If both password and recovery phrases are lost, the data is irrecoverably lost.
+6.5 Recovery: Since Stararc.one exclusively uses Privacy Login, an administrative password reset is technically impossible. Only the user can decrypt their data using their password or their 6 BIP39 recovery words. If both are lost, the data is irrecoverably lost.
 
 § 7 Subscription Model and Pricing
 

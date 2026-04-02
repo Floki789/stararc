@@ -14,17 +14,17 @@ E-Mail: info@stararc.one
 
 2.2 Datenminimierung: Wir verarbeiten nur die Daten, die für den Betrieb der Plattform technisch erforderlich sind.
 
-2.3 Client-seitige Verschlüsselung: Alle persönlichen Inhaltsdaten (z.B. Namen von Vermögenswerten, Institutionsbezeichnungen, Dokument-Referenzen) werden auf Ihrem Gerät verschlüsselt, bevor sie an unsere Server übertragen werden. Die Art der Schlüsselverwaltung unterscheidet sich je nach gewählter Authentifizierungsmethode (siehe Abschnitt 3.1).
+2.3 Client-seitige Verschlüsselung: Alle persönlichen Inhaltsdaten (z.B. Namen von Vermögenswerten, Institutionsbezeichnungen, Dokument-Referenzen) werden auf Ihrem Gerät verschlüsselt, bevor sie an unsere Server übertragen werden. Der Verschlüsselungsschlüssel (DEK) wird clientseitig aus Ihrem Privacy-Login-Passwort mittels PBKDF2 abgeleitet und verlässt Ihren Browser nie im Klartext — der Server hat zu keinem Zeitpunkt Zugriff auf Ihre Daten.
 
 2.4 Betriebliche Klartextdaten: Ein Teil der Daten wird aus technischen Gründen (Performanz, Datenbankabfragen, App-Logik) unverschlüsselt gespeichert. Dabei handelt es sich ausschließlich um nicht-persönliche, nicht-sensible Strukturdaten ohne Persönlichkeitsbezug, zum Beispiel:
 
-Abonnement-Plan und -Status (z.B. „Core“, „Aktiv“)
-Asset-Kategorie und -Subkategorie (z.B. „Wertschriften“, „Aktien“)
-Währungscode (z.B. „CHF“, „USD“)
+Abonnement-Plan und -Status (z.B. „Core", „Aktiv")
+Asset-Kategorie und -Subkategorie (z.B. „Wertschriften", „Aktien")
+Währungscode (z.B. „CHF", „USD")
 Anzeigereihenfolge von Kategorien
 Zeitstempel (Erstellungsdatum, letzter Login, letzte Aktualisierung)
 App-interne Status-Flags (z.B. ist aktiv, automatische Preisaktualìsierung aktiviert)
-Erinnerungsintervall für manuelle Updates (z.B. „monatlich“)
+Erinnerungsintervall für manuelle Updates (z.B. „monatlich")
 
 Diese Daten ermöglichen eine fehlerfreie und performante Darstellung der App, enthalten aber keine Rückschlüsse auf Ihre konkrete Vermögenssituation.
 
@@ -32,42 +32,24 @@ Diese Daten ermöglichen eine fehlerfreie und performante Darstellung der App, e
 
 3.1 Registrierung und Authentifizierung
 
-Stararc.one bietet zwei Authentifizierungsmethoden, die sich in ihren Datenschutzeigenschaften grundlegend unterscheiden. Bei der Registrierung wählen Sie einmalig eine Methode aus.
+Stararc.one verwendet ausschliesslich Privacy Login (Zero-Knowledge). Der Server hat zu keinem Zeitpunkt Zugriff auf Ihre Inhaltsdaten; ein administrativer Passwort-Reset ist technisch nicht möglich.
 
-Die E-Mail-Adresse wird in beiden Modi auf dieselbe Weise verarbeitet und niemals im Klartext gespeichert:
+Die E-Mail-Adresse wird niemals im Klartext gespeichert:
 E-Mail-Hash (einweg-gehasht) — nur für den Login-Lookup, nicht umkehrbar
 E-Mail-Adresse (verschlüsselt, nur durch Sie entschlüsselbar) — für die Anzeige in der App
 E-Mail-Adresse (betreiber-verschlüsselt) — ausschließlich für Support und Benachrichtigungen zugänglich; Rechtsgrundlage: berechtigtes Interesse (Art. 6 Abs. 1 lit. f DSGVO)
 
-3.1a Standard-Login
-
-Zusätzlich verarbeitete Daten:
+Verarbeitete Daten beim Privacy Login:
 BCrypt-Hash des Passworts
-Verschlüsselter Datenverschlüsselungsschlüssel (DEK) — User-seitig (wrapped_dek)
-Verschlüsselter Datenverschlüsselungsschlüssel (DEK) — Server-seitig (wrapped_dek_server)
-Verschlüsselter Recovery-Schlüssel aus 12 Wiederherstellungsphrasen (wrapped_dek_recovery)
-Kryptographisches Salt (dek_salt)
-Vor- und Nachname (user-verschlüsselt, AES-256-GCM)
-Zeitpunkt der AGB-Akzeptierung
-IP-Adresse bei Registrierung (verschlüsselt)
-
-Besonderheit: Beim Standard-Login speichert der Server einen serverseitig verschlüsselten Datenverschlüsselungsschlüssel (wrapped_dek_server). Dies ermöglicht einen administrativen Passwort-Reset, falls Sie Ihr Passwort vergessen. Ihr Passwort selbst wird niemals gespeichert. Alle Nutzerdaten bleiben durch den DEK client-seitig verschlüsselt; der Server entschlüsselt Ihre Inhalte nur im Rahmen eines explizit beauftragten Passwort-Resets.
-
-Rechtsgrundlage: Vertragserfüllung (Art. 6 Abs. 1 lit. b DSGVO)
-
-3.1b Zero-Knowledge-Login (Sovereignty Mode)
-
-Zusätzlich verarbeitete Daten:
-BCrypt-Hash des Login-Codes
-Verschlüsselter Datenverschlüsselungsschlüssel (DEK) — User-seitig (wrapped_dek)
+Verschlüsselter Datenverschlüsselungsschlüssel (DEK) — user-seitig (wrapped_dek)
 Verschlüsselter Datenverschlüsselungsschlüssel (DEK) — Recovery-seitig (wrapped_dek_recovery)
 Kryptographische Salts (dek_salt, recovery_salt)
-SHA-256-Hash des Recovery-Keys (zur Verifikation der Wiederherstellungsphrasen)
+SHA-256-Hash des Recovery-Keys (zur Verifikation der Wiederherstellungsphrase)
 Vor- und Nachname (user-verschlüsselt, AES-256-GCM)
 Zeitpunkt der AGB-Akzeptierung
 IP-Adresse bei Registrierung (verschlüsselt)
 
-Besonderheit: Beim Zero-Knowledge-Login hat der Server zu keinem Zeitpunkt Zugriff auf Ihren Datenverschlüsselungsschlüssel (kein wrapped_dek_server). Ein administrativer Passwort-Reset ist technisch unmöglich. Nur Sie selbst können Ihre Daten mittels Ihrer 12 Wiederherstellungsphrasen entschlüsseln. Bei Verlust des Passworts und der Wiederherstellungsphrasen sind Ihre Daten unwiederbringlich verloren.
+Besonderheit: Der Server speichert keinen serverseitig entschlüsselbaren DEK (kein wrapped_dek_server). Nur Sie selbst können Ihre Daten mittels Ihres Passworts oder Ihrer 6 BIP39-Wiederherstellungswörter entschlüsseln. Bei Verlust beider ist eine Wiederherstellung technisch nicht möglich.
 
 Rechtsgrundlage: Vertragserfüllung (Art. 6 Abs. 1 lit. b DSGVO)
 
@@ -79,20 +61,11 @@ Budget-Kategorien und -Positionen
 Vault-Namen und Aufbewahrungsreferenzen
 Institutionen-Bezeichnungen
 Dokumenten-Referenzen (nicht Inhalte)
-xPub-Schlüssel und Derivationspfade
-
 Diese Daten werden client-seitig verschlüsselt gespeichert und sind für den Betreiber nicht lesbar.
 
 Rechtsgrundlage: Vertragserfüllung (Art. 6 Abs. 1 lit. b DSGVO)
 
-3.3 Passwort-Reset (nur Standard-Login)
-Verarbeitete Daten: Verschlüsselte Schlüsselmaterialien des betroffenen Accounts.
-
-Ablauf: Auf ausdrückliche Anfrage des Nutzers führt der Betreiber einen kontrollierten Wiederherstellungsprozess durch. Dabei wird der Kontozugang unter dem neuen Passwort neu gesichert. Bestehende Inhaltsdaten bleiben unverändert erhalten. Dieser Vorgang ist ausschließlich für Standard-Login-Nutzer möglich; beim Zero-Knowledge-Login ist er technisch nicht durchführbar.
-
-Rechtsgrundlage: Vertragserfüllung (Art. 6 Abs. 1 lit. b DSGVO)
-
-3.4 Zahlungsabwicklung
+3.3 Zahlungsabwicklung
 Verarbeitete Daten:
 
 Zahlungsinformationen (über Stripe, Inc., San Francisco, USA)
@@ -102,7 +75,7 @@ Rechtsgrundlage: Vertragserfüllung (Art. 6 Abs. 1 lit. b DSGVO)
 
 Hinweis: Stripe verarbeitet Zahlungsdaten auf Servern in den USA. Die Übertragung erfolgt auf Basis des EU-U.S. Data Privacy Frameworks. Stripe's Datenschutzerklärung ist abrufbar unter https://stripe.com/privacy.
 
-3.5 Benachrichtigungen und Kommunikation
+3.4 Benachrichtigungen und Kommunikation
 Verarbeitete Daten: E-Mail-Adresse (betreiber-verschlüsselt, für Versand entschlüsselt).
 
 Zweck: Versand von Benachrichtigungen über wesentliche Änderungen der Datenschutzerklärung oder der Nutzungsbedingungen sowie betriebsnotwendige Mitteilungen (z.B. Sicherheitsvorfälle).
@@ -121,16 +94,16 @@ Zugangscodes zu Tresoren oder Gebäuden
 Biometrische Daten oder PINs
 
 5. Verschlüsselung und technische Sicherheit
-5.1 Client-seitige Verschlüsselung: Sensible Nutzerdaten werden auf Ihrem Gerät verschlüsselt, bevor sie übertragen werden. Der Umfang hängt von der gewählten Authentifizierungsmethode ab (siehe Abschnitt 3.1).
+5.1 Client-seitige Verschlüsselung: Sensible Nutzerdaten werden auf Ihrem Gerät mittels AES-256-GCM verschlüsselt, bevor sie übertragen werden. Der Verschlüsselungsschlüssel verbleibt ausschliesslich in Ihrem Browser und wird beim Schliessen des Tabs automatisch gelöscht.
 
 5.2 Keine Klartext-Speicherung: Wir speichern grundsätzlich keine privacy-relevanten Daten im Klartext auf unseren Servern.
 
-5.3 Zugriff je nach gewählter Login-Methode: Beim Zero-Knowledge-Login (Sovereignty Mode) ist es dem Betreiber technisch nicht möglich, Ihre Inhaltsdaten zu entschlüsseln. Beim Standard-Login hält der Server geschützte Schlüsselmaterialien vor, die ausschließlich zur Durchführung eines ausdrücklich beantragten Passwort-Resets eingesetzt werden.
+5.3 Zero-Knowledge-Architektur: Da Stararc.one ausschliesslich Privacy Login verwendet, ist es dem Betreiber technisch nicht möglich, Ihre Inhaltsdaten zu entschlüsseln. Der Server fungiert als „blinder Tresor" — er speichert ausschliesslich verschlüsselte Blobs, ohne deren Inhalt zu kennen.
 
 6. Empfänger und Drittanbieter
 6.1 Zahlungsdienstleister: Stripe, Inc., 510 Townsend Street, San Francisco, CA 94103, USA. Stripe verarbeitet Zahlungsdaten gemäß PCI-DSS-Standard.
 
-6.2 Hosting-Provider: Der Betrieb der Plattform erfolgt über einen Cloud-Hosting-Anbieter (Heroku/Salesforce). Die Daten werden auf Servern in den Vereinigten Staaten gehostet. Die Übertragung in die USA erfolgt auf Basis des EU-U.S. Data Privacy Frameworks.
+6.2 Hosting-Provider: Der Betrieb der Plattform erfolgt über Heroku (Salesforce) auf Servern in der EU (Irland). Alle Nutzerdaten verbleiben innerhalb der Europäischen Union.
 
 6.3 E-Mail-Versand: Für den Versand von Benachrichtigungen nutzen wir einen E-Mail-Dienstleister. Dabei wird Ihre E-Mail-Adresse ausschließlich für den Versand übermittelt und nicht gespeichert.
 
@@ -150,11 +123,11 @@ Biometrische Daten oder PINs
 8. Ihre Rechte (DSGVO)
 8.1 Auskunftsrecht (Art. 15 DSGVO): Information über verarbeitete Daten
 
-Hinweis für Zero-Knowledge-Login-Nutzer: Da wir als Betreiber technisch keinen Zugriff auf Ihre verschlüsselten Inhaltsdaten haben, können wir Auskunft nur in dem Umfang erteilen, in dem Daten für uns zugänglich sind (z.B. E-Mail-Hash, Abonnementstatus). Ihre Inhaltsdaten sind ausschließlich über Ihren eigenen Zugang abrufbar.
+Hinweis: Da wir als Betreiber technisch keinen Zugriff auf Ihre verschlüsselten Inhaltsdaten haben, können wir Auskunft nur in dem Umfang erteilen, in dem Daten für uns zugänglich sind (z.B. E-Mail-Hash, Abonnementstatus). Ihre Inhaltsdaten sind ausschließlich über Ihren eigenen Zugang abrufbar.
 
 8.2 Berichtigungsrecht (Art. 16 DSGVO): Korrektur falscher Daten
 
-Hinweis für Zero-Knowledge-Login-Nutzer: Eine Berichtigung von Inhaltsdaten (z.B. Name) durch den Betreiber ist technisch nicht möglich. Korrekturen können nur Sie selbst über Ihren Zugang vornehmen.
+Hinweis: Eine Berichtigung von Inhaltsdaten (z.B. Name) durch den Betreiber ist technisch nicht möglich. Korrekturen können nur Sie selbst über Ihren Zugang vornehmen.
 
 8.3 Löschungsrecht (Art. 17 DSGVO): Löschung Ihrer Daten
 
@@ -178,12 +151,12 @@ Hinweis für Zero-Knowledge-Login-Nutzer: Eine Berichtigung von Inhaltsdaten (z.
 10. Internationale Datenübertragung
 10.1 Schweizer/EU-Standard: Datenverarbeitung erfolgt nach Schweizer und EU-Standards.
 
-10.2 Angemessenheitsbeschluss: Bei Übertragungen in Drittländer nur mit Angemessenheitsbeschluss oder geeigneten Garantien.
+10.2 Angemessenheitsbeschluss: Bei Übertragungen in Drittländer (z.B. Stripe für Zahlungsabwicklung) nur mit Angemessenheitsbeschluss oder geeigneten Garantien.
 
 11. Datenschutz-Folgenabschätzung
 11.1 Aufgrund unserer Privacy-by-Design-Architektur und der ausschließlichen Verarbeitung von Metadaten ist das Risiko für Ihre Privatsphäre minimiert.
 
-11.2 Beim Zero-Knowledge-Login (Sovereignty Mode) ist die Architektur so gestaltet, dass Inhaltsdaten selbst bei einem vollständigen Zugriff auf die Serverinfrastruktur nicht entschlüsselt werden können. Beim Standard-Login hängt die Vertraulichkeit der Nutzerdaten von der Sicherheit serverseitiger Geheimnisse ab, die entsprechend geschützt und regelmäßig überprüft werden.
+11.2 Da Stararc.one ausschliesslich Privacy Login (Zero-Knowledge) verwendet, ist die Architektur so gestaltet, dass Inhaltsdaten selbst bei einem vollständigen Zugriff auf die Serverinfrastruktur nicht entschlüsselt werden können. Der Server speichert keine Schlüsselmaterialien, die einen Zugriff auf Nutzerdaten ermöglichen würden.
 
 12. Änderungen dieser Datenschutzerklärung
 12.1 Änderungen dieser Datenschutzerklärung werden Ihnen mindestens 30 Tage im Voraus per E-Mail mitgeteilt.
