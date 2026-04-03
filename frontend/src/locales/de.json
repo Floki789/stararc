@@ -417,6 +417,15 @@
       "title": "§ 12 Schweizer Recht und Gerichtsstand",
       "p1": "Es gilt ausschließlich Schweizer Recht.",
       "p2": "Gerichtsstand ist Rapperswil-Jona, Schweiz."
+    },
+    "section13": {
+      "title": "§ 13 Newsletter und SMS-Marketing",
+      "p1": "Einwilligung: Die Anmeldung zum Newsletter oder SMS-Dienst von Stararc erfolgt ausschliesslich auf freiwilliger Basis mit ausdrücklicher Einwilligung. Die Einwilligung ist keine Bedingung für den Abschluss eines Abonnements.",
+      "p2": "Inhalt: Wir senden Informationen über unsere Dienstleistungen, Neuigkeiten und relevante Themen. Werbliche Inhalte werden nur im Rahmen des abonnierten Dienstes versandt.",
+      "p3": "SMS-Marketing: Durch die Anmeldung zum SMS-Dienst stimmen Sie dem Erhalt wiederkehrender automatisierter Marketing- und Informationsnachrichten zu. Nachrichten werden an die bei der Registrierung angegebene Mobiltelefonnummer gesendet. Die Häufigkeit der Nachrichten variiert; es können Ihre üblichen Nachrichten- und Datengebühren anfallen. Mobilfunkanbieter haften nicht für verspätete oder nicht zugestellte Nachrichten.",
+      "p4": "Abmeldung: Sie können sich jederzeit abmelden – per Abmeldelink in jeder E-Mail, per SMS mit dem Befehl \"STOPP\", oder per E-Mail an info@stararc.one.",
+      "p5": "Nummernübertragung: Vor Änderung oder Übertragung Ihrer Mobiltelefonnummer sind Sie verpflichtet, das SMS-Abo zu kündigen oder uns unter info@stararc.one zu informieren.",
+      "p6": "Dienstleister: Für den Versand nutzen wir Mailchimp (Intuit Inc., USA) gemäss den geltenden Datenschutzbestimmungen und EU-Standardvertragsklauseln."
     }
   },
   "common": {

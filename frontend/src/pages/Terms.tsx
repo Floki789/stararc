@@ -186,6 +186,21 @@ const Terms: React.FC = () => {
             </div>
           </section>
 
+          {/* Section 13 */}
+          <section className="mb-12">
+            <h2 className="text-2xl font-semibold text-white mb-6">
+              {t('terms.section13.title')}
+            </h2>
+            <div className="space-y-4 text-gray-300">
+              <p><strong>13.1</strong> {t('terms.section13.p1')}</p>
+              <p><strong>13.2</strong> {t('terms.section13.p2')}</p>
+              <p><strong>13.3</strong> {t('terms.section13.p3')}</p>
+              <p><strong>13.4</strong> {t('terms.section13.p4')}</p>
+              <p><strong>13.5</strong> {t('terms.section13.p5')}</p>
+              <p><strong>13.6</strong> {t('terms.section13.p6')}</p>
+            </div>
+          </section>
+
         </div>
       </div>
     </div>
