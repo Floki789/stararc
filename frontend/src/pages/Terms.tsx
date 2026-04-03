@@ -183,6 +183,10 @@ const Terms: React.FC = () => {
             <div className="space-y-4 text-gray-300">
               <p><strong>12.1</strong> {t('terms.section12.p1')}</p>
               <p><strong>12.2</strong> {t('terms.section12.p2')}</p>
+              <p><strong>12.3</strong> {t('terms.section12.p3')}</p>
+              <p><strong>12.4</strong> {t('terms.section12.p4')}</p>
+              <p><strong>12.5</strong> {t('terms.section12.p5')}</p>
+              <p><strong>12.6</strong> {t('terms.section12.p6')}</p>
             </div>
           </section>
 
@@ -194,10 +198,6 @@ const Terms: React.FC = () => {
             <div className="space-y-4 text-gray-300">
               <p><strong>13.1</strong> {t('terms.section13.p1')}</p>
               <p><strong>13.2</strong> {t('terms.section13.p2')}</p>
-              <p><strong>13.3</strong> {t('terms.section13.p3')}</p>
-              <p><strong>13.4</strong> {t('terms.section13.p4')}</p>
-              <p><strong>13.5</strong> {t('terms.section13.p5')}</p>
-              <p><strong>13.6</strong> {t('terms.section13.p6')}</p>
             </div>
           </section>
 

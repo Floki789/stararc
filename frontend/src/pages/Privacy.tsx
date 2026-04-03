@@ -147,6 +147,19 @@ const Privacy: React.FC = () => {
                 <p className="mt-2 text-sm text-gray-400">{t('privacy.section3.notifications.note')}</p>
                 <p className="mt-3 text-sm text-yellow-300/80">{t('privacy.section3.notifications.required')}</p>
               </div>
+
+              {/* Newsletter & SMS Marketing */}
+              <div className="bg-gray-800/50 p-6 rounded-lg">
+                <h3 className="text-xl font-semibold text-white mb-4">
+                  {t('privacy.section3.newsletter.title')}
+                </h3>
+                <p className="mb-2"><strong>{t('privacy.section3.newsletter.intro')}</strong></p>
+                <p className="mb-2">{t('privacy.section3.newsletter.purpose')}</p>
+                <p className="mb-2 text-sm text-gray-400">{t('privacy.section3.newsletter.legal')}</p>
+                <p className="mb-2 text-sm text-gray-400">{t('privacy.section3.newsletter.provider')}</p>
+                <p className="mb-2 text-sm text-gray-400">{t('privacy.section3.newsletter.sms')}</p>
+                <p className="mt-3 text-sm text-blue-300">{t('privacy.section3.newsletter.optout')}</p>
+              </div>
             </div>
           </section>
 

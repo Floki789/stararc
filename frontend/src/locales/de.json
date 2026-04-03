@@ -414,18 +414,18 @@
       "p2": "Service-Level: Der Service wird \"as-is\" bereitgestellt ohne Garantie für ununterbrochene Verfügbarkeit."
     },
     "section12": {
-      "title": "§ 12 Schweizer Recht und Gerichtsstand",
-      "p1": "Es gilt ausschließlich Schweizer Recht.",
-      "p2": "Gerichtsstand ist Rapperswil-Jona, Schweiz."
-    },
-    "section13": {
-      "title": "§ 13 Newsletter und SMS-Marketing",
+      "title": "§ 12 Newsletter und SMS-Marketing",
       "p1": "Einwilligung: Die Anmeldung zum Newsletter oder SMS-Dienst von Stararc erfolgt ausschliesslich auf freiwilliger Basis mit ausdrücklicher Einwilligung. Die Einwilligung ist keine Bedingung für den Abschluss eines Abonnements.",
       "p2": "Inhalt: Wir senden Informationen über unsere Dienstleistungen, Neuigkeiten und relevante Themen. Werbliche Inhalte werden nur im Rahmen des abonnierten Dienstes versandt.",
       "p3": "SMS-Marketing: Durch die Anmeldung zum SMS-Dienst stimmen Sie dem Erhalt wiederkehrender automatisierter Marketing- und Informationsnachrichten zu. Nachrichten werden an die bei der Registrierung angegebene Mobiltelefonnummer gesendet. Die Häufigkeit der Nachrichten variiert; es können Ihre üblichen Nachrichten- und Datengebühren anfallen. Mobilfunkanbieter haften nicht für verspätete oder nicht zugestellte Nachrichten.",
       "p4": "Abmeldung: Sie können sich jederzeit abmelden – per Abmeldelink in jeder E-Mail, per SMS mit dem Befehl \"STOPP\", oder per E-Mail an info@stararc.one.",
       "p5": "Nummernübertragung: Vor Änderung oder Übertragung Ihrer Mobiltelefonnummer sind Sie verpflichtet, das SMS-Abo zu kündigen oder uns unter info@stararc.one zu informieren.",
       "p6": "Dienstleister: Für den Versand nutzen wir Mailchimp (Intuit Inc., USA) gemäss den geltenden Datenschutzbestimmungen und EU-Standardvertragsklauseln."
+    },
+    "section13": {
+      "title": "§ 13 Schweizer Recht und Gerichtsstand",
+      "p1": "Es gilt ausschließlich Schweizer Recht.",
+      "p2": "Gerichtsstand ist Rapperswil-Jona, Schweiz."
     }
   },
   "common": {
@@ -1846,6 +1846,15 @@
         "description": "Zweck: Versand von Benachrichtigungen bei wesentlichen Änderungen der Datenschutzerklärung oder der AGB sowie betriebsnotwendige Kommunikation (z. B. Sicherheitsvorfälle).",
         "note": "Rechtsgrundlage: Berechtigtes Interesse (Art. 6 Abs. 1 lit. f DSGVO). Werbliche Kommunikation erfolgt nur mit ausdrücklicher Einwilligung.",
         "required": "Die Angabe deiner E-Mail-Adresse ist für die Erstellung eines Accounts zwingend erforderlich. Ohne E-Mail-Adresse kann kein Account angelegt werden."
+      },
+      "newsletter": {
+        "title": "3.6 Newsletter, E-Mail- und SMS-Marketing",
+        "intro": "Verarbeitete Daten: E-Mail-Adresse, Mobiltelefonnummer (bei SMS-Abo), Vorname (für Personalisierung).",
+        "purpose": "Zweck: Versand von Newslettern, Produktinformationen und Marketingkommunikation per E-Mail und/oder SMS.",
+        "legal": "Rechtsgrundlage: Einwilligung (Art. 6 Abs. 1 lit. a DSGVO). Die Einwilligung ist freiwillig und keine Bedingung für den Abschluss eines Abonnements.",
+        "provider": "Dienstleister: Mailchimp (Intuit Inc., 675 Ponce de Leon Ave NE, Suite 5000, Atlanta, GA 30308, USA). Daten werden auf Basis der EU-Standardvertragsklauseln in die USA übertragen. Datenschutzerklärung: https://www.intuit.com/privacy/statement/",
+        "optout": "Abmeldung: Jederzeit per Abmeldelink in jeder Nachricht, per E-Mail an info@stararc.one oder per SMS mit dem Befehl \"STOPP\".",
+        "sms": "SMS-spezifisch: Durch die Anmeldung stimmen Sie dem Erhalt wiederkehrender automatisierter Marketing- und Informationsnachrichten zu. Es können Ihre üblichen Nachrichten- und Datengebühren anfallen."
       }
     },
     "section4": {

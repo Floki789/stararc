@@ -305,18 +305,18 @@
       "p2": "Service Level: The service is provided \"as-is\" without guarantee of uninterrupted availability."
     },
     "section12": {
-      "title": "§ 12 Swiss Law and Jurisdiction",
-      "p1": "Swiss law applies exclusively.",
-      "p2": "Place of jurisdiction is Rapperswil-Jona, Switzerland."
-    },
-    "section13": {
-      "title": "§ 13 Newsletter and SMS Marketing",
+      "title": "§ 12 Newsletter and SMS Marketing",
       "p1": "Consent: Subscription to the Stararc newsletter or SMS service is entirely voluntary and requires your explicit consent. Consent is not a condition for purchasing a subscription.",
       "p2": "Content: We send information about our services, news and relevant topics. Promotional content is only sent within the scope of the subscribed service.",
       "p3": "SMS Marketing: By subscribing to the SMS service, you agree to receive recurring automated marketing and informational text messages. Messages are sent to the mobile phone number provided at registration. Message frequency varies; standard message and data rates may apply. Carriers are not liable for delayed or undelivered messages.",
       "p4": "Opt-Out: You may unsubscribe at any time – via the unsubscribe link in any message, by replying STOP to any SMS, or by emailing info@stararc.one.",
       "p5": "Number Transfer: Before changing or transferring your mobile phone number, you are required to cancel the SMS subscription or notify us at info@stararc.one.",
       "p6": "Service Provider: We use Mailchimp (Intuit Inc., USA) for sending, in accordance with applicable data protection regulations and EU Standard Contractual Clauses."
+    },
+    "section13": {
+      "title": "§ 13 Swiss Law and Jurisdiction",
+      "p1": "Swiss law applies exclusively.",
+      "p2": "Place of jurisdiction is Rapperswil-Jona, Switzerland."
     }
   },
   "featuresDetails": {
@@ -1687,6 +1687,15 @@
         "description": "Purpose: Sending notifications about material changes to the privacy policy or terms of service, and operationally necessary communications (e.g. security incidents).",
         "note": "Legal basis: Legitimate interest (Art. 6 para. 1 lit. f GDPR). Promotional communications are only sent with explicit consent.",
         "required": "Providing your email address is mandatory for creating an account. Without an email address, no account can be created."
+      },
+      "newsletter": {
+        "title": "3.6 Newsletter, Email and SMS Marketing",
+        "intro": "Processed data: Email address, mobile phone number (for SMS subscription), first name (for personalisation).",
+        "purpose": "Purpose: Sending newsletters, product information and marketing communications by email and/or SMS.",
+        "legal": "Legal basis: Consent (Art. 6 para. 1 lit. a GDPR). Consent is voluntary and not a condition for purchasing a subscription.",
+        "provider": "Service provider: Mailchimp (Intuit Inc., 675 Ponce de Leon Ave NE, Suite 5000, Atlanta, GA 30308, USA). Data is transferred to the USA on the basis of EU Standard Contractual Clauses. Privacy policy: https://www.intuit.com/privacy/statement/",
+        "optout": "Opt-out: At any time via the unsubscribe link in any message, by emailing info@stararc.one or by replying STOP to any SMS.",
+        "sms": "SMS-specific: By subscribing, you agree to receive recurring automated marketing and informational text messages. Standard message and data rates may apply."
       }
     },
     "section4": {
