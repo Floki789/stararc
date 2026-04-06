@@ -88,8 +88,12 @@ const toXY = (angleDeg: number, r: number) => {
   return { x: r * Math.sin(rad), y: -r * Math.cos(rad) };
 };
 
+interface HeroSectionV2Props {
+  dayMode?: boolean;
+}
+
 // ─── Component ───────────────────────────────────────────────────────────────
-const HeroSectionV2: React.FC = () => {
+const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
   const { t } = useLanguage();
 
   // SVG viewport constants
@@ -99,57 +103,103 @@ const HeroSectionV2: React.FC = () => {
   const CY = SVG_H / 2; // 280
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center overflow-hidden pt-20">
+    <div className={`relative min-h-screen flex items-center overflow-hidden pt-20 transition-colors duration-700 ${
+      dayMode
+        ? 'bg-gradient-to-br from-sky-100 via-blue-50 to-indigo-100'
+        : 'bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950'
+    }`}>
 
-      {/* ── Starfield Background ────────────────────────────────────────── */}
+      {/* ── Atmospheric Background ────────────────────────────────────── */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `
-              radial-gradient(2px 2px at 20% 30%, white, transparent),
-              radial-gradient(2px 2px at 60% 70%, white, transparent),
-              radial-gradient(1px 1px at 50% 50%, white, transparent),
-              radial-gradient(1px 1px at 80% 10%, white, transparent),
-              radial-gradient(2px 2px at 90% 60%, white, transparent),
-              radial-gradient(1px 1px at 33% 85%, white, transparent),
-              radial-gradient(1px 1px at 15% 45%, white, transparent)`,
-            backgroundSize:
-              '200px 200px, 250px 250px, 150px 150px, 180px 180px, 220px 220px, 190px 190px, 160px 160px',
-            backgroundPosition:
-              '0 0, 40px 60px, 130px 270px, 70px 100px, 20px 180px, 110px 50px, 150px 220px',
-            opacity: 0.3,
-          }}
-        />
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `
-              radial-gradient(1.5px 1.5px at 10% 20%, rgba(147,197,253,0.8), transparent),
-              radial-gradient(1.5px 1.5px at 70% 80%, rgba(147,197,253,0.8), transparent),
-              radial-gradient(1.5px 1.5px at 40% 60%, rgba(147,197,253,0.8), transparent),
-              radial-gradient(1.5px 1.5px at 85% 35%, rgba(147,197,253,0.8), transparent)`,
-            backgroundSize: '300px 300px, 280px 280px, 320px 320px, 260px 260px',
-            backgroundPosition: '50px 50px, 180px 180px, 20px 200px, 240px 80px',
-            opacity: 0.4,
-          }}
-        />
-        <div
-          className="absolute inset-0 animate-pulse"
-          style={{
-            backgroundImage: `
-              radial-gradient(3px 3px at 30% 40%, rgba(96,165,250,1), transparent),
-              radial-gradient(2px 2px at 75% 25%, rgba(96,165,250,1), transparent),
-              radial-gradient(2px 2px at 45% 90%, rgba(96,165,250,1), transparent)`,
-            backgroundSize: '400px 400px, 350px 350px, 380px 380px',
-            backgroundPosition: '100px 100px, 200px 50px, 50px 250px',
-            opacity: 0.6,
-            animationDuration: '4s',
-          }}
-        />
+        {dayMode ? (
+          /* ── Day: soft cloud-like light bokeh ─── */
+          <>
+            <div
+              className="absolute inset-0"
+              style={{
+                backgroundImage: `
+                  radial-gradient(120px 80px at 20% 25%, rgba(255,255,255,0.7), transparent),
+                  radial-gradient(160px 100px at 75% 15%, rgba(255,255,255,0.5), transparent),
+                  radial-gradient(100px 70px at 55% 70%, rgba(255,255,255,0.4), transparent),
+                  radial-gradient(140px 90px at 10% 75%, rgba(255,255,255,0.35), transparent)`,
+              }}
+            />
+            {/* Sun glow — top-right */}
+            <div
+              className="absolute"
+              style={{
+                top: '-80px',
+                right: '-80px',
+                width: '400px',
+                height: '400px',
+                background: 'radial-gradient(circle, rgba(251,191,36,0.25) 0%, rgba(251,146,60,0.10) 40%, transparent 70%)',
+                filter: 'blur(30px)',
+              }}
+            />
+            {/* Soft blue atmosphere */}
+            <div
+              className="absolute inset-0"
+              style={{
+                background: 'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(186,230,253,0.5), transparent)',
+              }}
+            />
+          </>
+        ) : (
+          /* ── Night: starfield ─── */
+          <>
+            <div
+              className="absolute inset-0"
+              style={{
+                backgroundImage: `
+                  radial-gradient(2px 2px at 20% 30%, white, transparent),
+                  radial-gradient(2px 2px at 60% 70%, white, transparent),
+                  radial-gradient(1px 1px at 50% 50%, white, transparent),
+                  radial-gradient(1px 1px at 80% 10%, white, transparent),
+                  radial-gradient(2px 2px at 90% 60%, white, transparent),
+                  radial-gradient(1px 1px at 33% 85%, white, transparent),
+                  radial-gradient(1px 1px at 15% 45%, white, transparent)`,
+                backgroundSize:
+                  '200px 200px, 250px 250px, 150px 150px, 180px 180px, 220px 220px, 190px 190px, 160px 160px',
+                backgroundPosition:
+                  '0 0, 40px 60px, 130px 270px, 70px 100px, 20px 180px, 110px 50px, 150px 220px',
+                opacity: 0.3,
+              }}
+            />
+            <div
+              className="absolute inset-0"
+              style={{
+                backgroundImage: `
+                  radial-gradient(1.5px 1.5px at 10% 20%, rgba(147,197,253,0.8), transparent),
+                  radial-gradient(1.5px 1.5px at 70% 80%, rgba(147,197,253,0.8), transparent),
+                  radial-gradient(1.5px 1.5px at 40% 60%, rgba(147,197,253,0.8), transparent),
+                  radial-gradient(1.5px 1.5px at 85% 35%, rgba(147,197,253,0.8), transparent)`,
+                backgroundSize: '300px 300px, 280px 280px, 320px 320px, 260px 260px',
+                backgroundPosition: '50px 50px, 180px 180px, 20px 200px, 240px 80px',
+                opacity: 0.4,
+              }}
+            />
+            <div
+              className="absolute inset-0 animate-pulse"
+              style={{
+                backgroundImage: `
+                  radial-gradient(3px 3px at 30% 40%, rgba(96,165,250,1), transparent),
+                  radial-gradient(2px 2px at 75% 25%, rgba(96,165,250,1), transparent),
+                  radial-gradient(2px 2px at 45% 90%, rgba(96,165,250,1), transparent)`,
+                backgroundSize: '400px 400px, 350px 350px, 380px 380px',
+                backgroundPosition: '100px 100px, 200px 50px, 50px 250px',
+                opacity: 0.6,
+                animationDuration: '4s',
+              }}
+            />
+          </>
+        )}
       </div>
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/20 via-transparent to-transparent pointer-events-none" aria-hidden="true" />
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:64px_64px] pointer-events-none" aria-hidden="true" />
+      <div className={`absolute inset-0 pointer-events-none ${
+        dayMode
+          ? 'bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-200/30 via-transparent to-transparent'
+          : 'bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/20 via-transparent to-transparent'
+      }`} aria-hidden="true" />
+      <div className={`absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:64px_64px] pointer-events-none ${dayMode ? 'opacity-50' : ''}`} aria-hidden="true" />
 
       {/* ── Main Content ───────────────────────────────────────────────── */}
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -159,25 +209,37 @@ const HeroSectionV2: React.FC = () => {
           <div className="flex-1 flex flex-col justify-center text-center lg:text-left">
             {/* Badges */}
             <div className="flex items-center gap-2 mb-5 self-center lg:self-start">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-500/10 border border-blue-500/30 rounded-full">
-                <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
-                <span className="text-sm font-semibold text-blue-400 uppercase tracking-wider">Beta</span>
+              <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full border ${
+                dayMode ? 'bg-blue-100 border-blue-300' : 'bg-blue-500/10 border-blue-500/30'
+              }`}>
+                <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+                <span className={`text-sm font-semibold uppercase tracking-wider ${dayMode ? 'text-blue-600' : 'text-blue-400'}`}>Beta</span>
               </div>
-              <div className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-emerald-500/10 border border-emerald-500/30 rounded-full">
-                <span className="text-sm font-semibold text-emerald-400 tracking-wide">{t('hero2.freeAccess')}</span>
+              <div className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full border ${
+                dayMode ? 'bg-emerald-100 border-emerald-300' : 'bg-emerald-500/10 border-emerald-500/30'
+              }`}>
+                <span className={`text-sm font-semibold tracking-wide ${dayMode ? 'text-emerald-700' : 'text-emerald-400'}`}>{t('hero2.freeAccess')}</span>
               </div>
             </div>
             <h1 className="text-5xl sm:text-6xl lg:text-6xl xl:text-7xl font-bold leading-tight tracking-tight pb-2">
-              <span className="text-white">{t('hero2.titleLine1')}</span>
+              <span className={dayMode ? 'text-slate-900' : 'text-white'}>{t('hero2.titleLine1')}</span>
               <br />
-              <span className="block mt-6 pb-2 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-500">
+              <span className={`block mt-6 pb-2 text-transparent bg-clip-text ${
+                dayMode
+                  ? 'bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-700'
+                  : 'bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-500'
+              }`}>
                 {t('hero2.titleLine2')}
               </span>
             </h1>
             {/* Security badge */}
             <div className="mt-5 self-center lg:self-start">
-              <Link to="/security" className="inline-flex items-center gap-1.5 px-3 py-1 bg-slate-700/60 border border-slate-600/50 rounded-full hover:bg-slate-700 hover:border-slate-500 transition-colors">
-                <span className="text-xs font-semibold text-blue-400 uppercase tracking-wider">{t('hero2.securityLink')}</span>
+              <Link to="/security" className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full transition-colors ${
+                dayMode
+                  ? 'bg-white/70 border border-slate-300 hover:bg-white hover:border-slate-400'
+                  : 'bg-slate-700/60 border border-slate-600/50 hover:bg-slate-700 hover:border-slate-500'
+              }`}>
+                <span className={`text-xs font-semibold uppercase tracking-wider ${dayMode ? 'text-blue-600' : 'text-blue-400'}`}>{t('hero2.securityLink')}</span>
               </Link>
             </div>
           </div>
@@ -200,7 +262,7 @@ const HeroSectionV2: React.FC = () => {
               cy={CY}
               r={RADIUS}
               fill="none"
-              stroke="rgba(96,165,250,0.06)"
+              stroke={dayMode ? 'rgba(96,165,250,0.12)' : 'rgba(96,165,250,0.06)'}
               strokeWidth={40}
             />
             {/* Dashed orbit ring – slowly rotates via SVG animation */}
@@ -209,7 +271,7 @@ const HeroSectionV2: React.FC = () => {
               cy={CY}
               r={RADIUS}
               fill="none"
-              stroke="rgba(255,255,255,0.08)"
+              stroke={dayMode ? 'rgba(59,130,246,0.25)' : 'rgba(255,255,255,0.08)'}
               strokeWidth={1.5}
               strokeDasharray="8 8"
             >
@@ -247,7 +309,7 @@ const HeroSectionV2: React.FC = () => {
               cy={CY}
               r={80}
               fill="none"
-              stroke="rgba(255,255,255,0.04)"
+              stroke={dayMode ? 'rgba(59,130,246,0.10)' : 'rgba(255,255,255,0.04)'}
               strokeWidth={1}
             />
           </svg>
@@ -284,7 +346,11 @@ const HeroSectionV2: React.FC = () => {
 
             {/* Main circle */}
             <div
-              className="relative flex flex-col items-center justify-center rounded-full border border-slate-600/60 bg-gradient-to-br from-slate-800 to-slate-950 shadow-2xl"
+              className={`relative flex flex-col items-center justify-center rounded-full border shadow-2xl ${
+                dayMode
+                  ? 'border-blue-200 bg-gradient-to-br from-white to-sky-100'
+                  : 'border-slate-600/60 bg-gradient-to-br from-slate-800 to-slate-950'
+              }`}
               style={{ width: 148, height: 148 }}
             >
               {/* Gradient border shimmer */}
@@ -304,7 +370,11 @@ const HeroSectionV2: React.FC = () => {
               </div>
 
               {/* StarArc label */}
-              <span className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400 tracking-wide">
+              <span className={`text-xl font-bold text-transparent bg-clip-text tracking-wide ${
+                dayMode
+                  ? 'bg-gradient-to-r from-blue-600 to-cyan-500'
+                  : 'bg-gradient-to-r from-blue-400 to-cyan-400'
+              }`}>
                 Stararc
               </span>
 
@@ -339,7 +409,7 @@ const HeroSectionV2: React.FC = () => {
                 </span>
 
                 {/* Short description */}
-                <span className="text-xs text-slate-500 leading-tight">
+                <span className={`text-xs leading-tight ${dayMode ? 'text-slate-500' : 'text-slate-500'}`}>
                   {t(`hero2.assets.${item.id}Desc`)}
                 </span>
               </div>
@@ -354,12 +424,16 @@ const HeroSectionV2: React.FC = () => {
             return (
               <div
                 key={item.id}
-                className={`flex flex-col items-center gap-2.5 p-4 rounded-2xl bg-slate-800/60 border ${item.borderColor} text-center`}
+                className={`flex flex-col items-center gap-2.5 p-4 rounded-2xl border text-center ${
+                  dayMode
+                    ? `bg-white/70 ${item.borderColor.replace('/30', '/50')}`
+                    : `bg-slate-800/60 ${item.borderColor}`
+                }`}
               >
                 <div className={`p-3 rounded-xl bg-gradient-to-br ${item.gradient} shadow-lg`}>
                   <Icon size={22} className="text-white" />
                 </div>
-                <span className={`text-sm font-semibold ${item.textColor}`}>
+                <span className={`text-sm font-semibold ${dayMode ? item.textColor.replace('-400', '-600') : item.textColor}`}>
                   {t(`hero2.assets.${item.id}`)}
                 </span>
                 <span className="text-xs text-slate-500 leading-snug">
@@ -375,7 +449,7 @@ const HeroSectionV2: React.FC = () => {
 
         {/* ── Full-width subtitle ─────────────────────────────────────── */}
         <div className="w-full mt-10 text-center">
-          <p className="text-lg sm:text-xl text-white font-light">
+          <p className={`text-lg sm:text-xl font-light ${dayMode ? 'text-slate-700' : 'text-white'}`}>
             {t('hero2.subtitleLine1')} {t('hero2.subtitleLine2')}
           </p>
         </div>

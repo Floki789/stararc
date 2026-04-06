@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import HeroSection from '../components/HeroSectionV2';
 import HeroSectionV3 from '../components/HeroSectionV3';
 import HeroSectionV4 from '../components/HeroSectionV4';
+import { useDayMode } from '../contexts/DayModeContext';
 import OverviewShowcase from '../components/OverviewShowcase';
 import PortfolioShowcase from '../components/PortfolioShowcase';
 import PlanningShowcase from '../components/PlanningShowcase';
@@ -26,6 +27,7 @@ const Home: React.FC = () => {
   const [heroIndex, setHeroIndex] = useState(0);
   const [fading, setFading] = useState(false);
   const [pinned, setPinned] = useState(false);
+  const { dayMode } = useDayMode();
   const HERO_COUNT = 3;
 
   const goTo = (i: number, userClick = false) => {
@@ -76,14 +78,17 @@ const Home: React.FC = () => {
   return (
     <div className="min-h-screen">      
       {/* Hero Section — crossfade on change */}
-      <div className="relative" style={{ minHeight: '100vh' }}>
+      <div
+        className={`relative transition-colors duration-700 ${dayMode ? 'bg-slate-100' : 'bg-slate-950'}`}
+        style={{ minHeight: '100vh' }}
+      >
         <div
           style={{
             opacity: fading ? 0 : 1,
             transition: 'opacity 800ms ease-in-out',
           }}
         >
-          {heroIndex === 0 ? <HeroSection /> : heroIndex === 1 ? <HeroSectionV3 /> : <HeroSectionV4 />}
+          {heroIndex === 0 ? <HeroSection dayMode={dayMode} /> : heroIndex === 1 ? <HeroSectionV3 dayMode={dayMode} /> : <HeroSectionV4 dayMode={dayMode} />}
         </div>
         {/* Slide indicator dots — numbered, click pins the slide */}
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 z-20">
@@ -94,8 +99,12 @@ const Home: React.FC = () => {
               aria-label={`Hero slide ${i + 1}`}
               className={`flex items-center justify-center rounded-full text-[10px] font-bold transition-all duration-300 ${
                 heroIndex === i
-                  ? 'w-7 h-7 bg-white text-slate-900 shadow-lg'
-                  : 'w-6 h-6 bg-white/20 text-white/60 hover:bg-white/40 hover:text-white'
+                  ? dayMode
+                    ? 'w-7 h-7 bg-slate-800 text-white shadow-lg'
+                    : 'w-7 h-7 bg-white text-slate-900 shadow-lg'
+                  : dayMode
+                    ? 'w-6 h-6 bg-slate-700/60 text-white hover:bg-slate-700 border border-slate-400/50'
+                    : 'w-6 h-6 bg-white/20 text-white/60 hover:bg-white/40 hover:text-white'
               }`}
             >
               {i + 1}
@@ -107,7 +116,11 @@ const Home: React.FC = () => {
               onClick={() => setPinned(false)}
               aria-label="Resume auto-play"
               title="Auto-play fortsetzen"
-              className="ml-1 w-6 h-6 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/25 text-white/50 hover:text-white transition-all duration-200"
+              className={`ml-1 w-6 h-6 flex items-center justify-center rounded-full transition-all duration-200 ${
+                dayMode
+                  ? 'bg-slate-700/50 hover:bg-slate-700 text-white'
+                  : 'bg-white/10 hover:bg-white/25 text-white/50 hover:text-white'
+              }`}
             >
               <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor" aria-hidden="true">
                 <polygon points="2,1 9,5 2,9" />

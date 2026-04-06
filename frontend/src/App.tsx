@@ -18,6 +18,7 @@ import GenesisMembersPage from './pages/GenesisMembersPage';
 import SecurityWhitepaper from './pages/SecurityWhitepaper';
 import { AuthProvider } from './hooks/useAuth';
 import { LanguageProvider } from './contexts/LanguageContext';
+import { DayModeProvider } from './contexts/DayModeContext';
 
 function App() {
   const [mounted, setMounted] = useState(false);
@@ -45,6 +46,7 @@ function App() {
 
   return (
     <LanguageProvider>
+      <DayModeProvider>
       <AuthProvider>
         <div className="min-h-screen bg-gray-900 text-white">
           <Header />
@@ -87,6 +89,7 @@ function App() {
           <Footer />
         </div>
       </AuthProvider>
+      </DayModeProvider>
     </LanguageProvider>
   );
 }
