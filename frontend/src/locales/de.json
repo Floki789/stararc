@@ -1117,7 +1117,7 @@
     "confirmPoint1": "Dein Passwort verschlüsselt deine Finanzdaten lokal im Browser",
     "confirmPoint2": "Wir speichern nur verschlüsselte Daten – dein Passwort bleibt bei dir",
     "confirmPoint3": "Ohne Passwort oder Recovery Phrase ist kein Zugriff möglich",
-    "confirmCheckbox": "Ich verstehe, dass ich mein Passwort und/oder meine Recovery Phrase benötige, um auf meine Daten zuzugreifen. Bei Verlust beider sind meine Daten unwiederbringlich verloren.",
+    "confirmCheckbox": "Ich verstehe, dass ich mein privacy Passwort oder meine Recovery Phrase benötige, um auf meine Daten zuzugreifen. Bei Verlust beider sind meine Daten unwiederbringlich verloren.",
     "recommendation": "Empfehlung: Bewahre deine 6-Worte-Passphrase an mindestens zwei geografisch getrennten Orten sicher auf.",
     "activating": "Verschlüsselung wird eingerichtet...",
     "activate": "Zero-Knowledge aktivieren"

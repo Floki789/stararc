@@ -288,6 +288,23 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
     return matches.length > 0 ? matches[0] : null;
   }, []);
 
+  const handleVerificationPaste = (index: number, e: React.ClipboardEvent<HTMLInputElement>) => {
+    const pasted = e.clipboardData.getData('text');
+    const words = pasted.trim().split(/\s+/);
+    if (words.length > 1) {
+      e.preventDefault();
+      const newWords = [...verificationWords];
+      words.slice(0, 6 - index).forEach((w, i) => {
+        newWords[index + i] = w.toLowerCase();
+      });
+      setVerificationWords(newWords);
+      setVerificationError('');
+      setSuggestions([]);
+      const nextIndex = Math.min(index + words.length, 5);
+      inputRefs.current[nextIndex]?.focus();
+    }
+  };
+
   const handleVerificationWordChange = (index: number, value: string) => {
     const newWords = [...verificationWords];
     newWords[index] = value.toLowerCase();
@@ -621,6 +638,7 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
                       type="text"
                       value={word}
                       onChange={(e) => handleVerificationWordChange(index, e.target.value)}
+                      onPaste={(e) => handleVerificationPaste(index, e)}
                       onKeyDown={(e) => handleWordKeyDown(index, e)}
                       onFocus={() => {
                         if (blurTimeoutRef.current) {
@@ -718,27 +736,6 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
         {/* Step 4: Confirm */}
         {step === 'confirm' && (
           <div className="space-y-4">
-            <div className="p-4 bg-gray-900 rounded-lg border border-gray-700 space-y-3">
-              <div className="flex items-start gap-3">
-                <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" />
-                <p className="text-gray-300 text-sm">
-                  {t('zkSetup.confirmPoint1')}
-                </p>
-              </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" />
-                <p className="text-gray-300 text-sm">
-                  {t('zkSetup.confirmPoint2')}
-                </p>
-              </div>
-              <div className="flex items-start gap-3">
-                <AlertTriangle className="w-5 h-5 text-orange-400 flex-shrink-0 mt-0.5" />
-                <p className="text-gray-300 text-sm">
-                  {t('zkSetup.confirmPoint3')}
-                </p>
-              </div>
-            </div>
-
             <label className="flex items-start gap-3 cursor-pointer p-3 bg-gray-900 rounded-lg border border-gray-700 hover:border-orange-500/50 transition-colors">
               <input
                 type="checkbox"
