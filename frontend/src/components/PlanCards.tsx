@@ -13,7 +13,8 @@ interface PlanData {
   currency: string;
   description: string;
   icon: React.ComponentType<{ className?: string }>;
-  color: string;
+  color: string;    // dark mode accent color (e.g. 'text-blue-400')
+  dayColor: string; // day mode accent color (e.g. 'text-blue-600')
   bgGradient: string;
   features: string[];
   isPopular?: boolean;
@@ -101,6 +102,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
       description: t('plans.spark.description'),
       icon: Flame,
       color: 'text-orange-400',
+      dayColor: 'text-orange-600',
       bgGradient: 'bg-gradient-to-r from-orange-500 to-red-600',
       yearlyOnly: true,
       features: [
@@ -129,6 +131,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
       description: t('plans.nova.description'),
       icon: Sparkles,
       color: 'text-blue-400',
+      dayColor: 'text-blue-600',
       bgGradient: 'bg-gradient-to-r from-blue-500 to-cyan-600',
       features: [
         t('plans.nova.features.familyMembers', { count: 4 }),
@@ -156,6 +159,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
       description: t('plans.galaxy.description'),
       icon: Globe,
       color: 'text-purple-400',
+      dayColor: 'text-purple-600',
       bgGradient: 'bg-gradient-to-r from-purple-500 to-indigo-600',
       yearlyOnly: true,
       features: [
@@ -267,7 +271,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
             <div className="flex-none">
               {/* Icon */}
               <div className="flex justify-center mb-3">
-                <IconComponent className={`w-10 h-10 ${plan.color}`} />
+                <IconComponent className={`w-10 h-10 ${dayMode ? plan.dayColor : plan.color}`} />
               </div>
 
               {/* Plan Name */}
@@ -280,21 +284,21 @@ const PlanCards: React.FC<PlanCardsProps> = ({
                   {launchActive && plan.priceValueYearly > 0 && (plan.id === 'Nova' || plan.id === 'Galaxy') ? (
                     <>
                       <div className="flex items-center justify-center gap-1 mb-2">
-                        <span className="text-amber-400 text-xs font-bold">{t('plans.launchSpecial')}</span>
-                        <span className="bg-amber-500/20 text-amber-400 px-1.5 py-0.5 rounded text-xs font-bold ml-1">{t('plans.discount')}</span>
+                        <span className={`text-xs font-bold ${dayMode ? 'text-amber-600' : 'text-amber-400'}`}>{t('plans.launchSpecial')}</span>
+                        <span className={`px-1.5 py-0.5 rounded text-xs font-bold ml-1 ${dayMode ? 'bg-amber-100 text-amber-700' : 'bg-amber-500/20 text-amber-400'}`}>{t('plans.discount')}</span>
                       </div>
                       <div className="flex items-baseline justify-center gap-2">
                         <span className="text-gray-500 line-through text-xl">{price}</span>
-                        <span className={`text-3xl font-bold text-green-400`}>
+                          <span className={`text-3xl font-bold ${dayMode ? 'text-green-600' : 'text-green-400'}`}>
                           {plan.id === 'Nova' ? '$95' : '$195'}
                         </span>
                       </div>
                       <p className={`text-sm mt-1 ${dayMode ? 'text-slate-500' : 'text-gray-400'}`}>{t('plans.perYear')}</p>
                       <div className="flex flex-wrap justify-center gap-2 mt-3">
-                        <span className="bg-green-500/20 text-green-400 px-2 py-1 rounded text-xs font-semibold">
+                        <span className={`px-2 py-1 rounded text-xs font-semibold ${dayMode ? 'bg-green-100 text-green-700' : 'bg-green-500/20 text-green-400'}`}>
                           {t('plans.freeTrial')}
                         </span>
-                        <span className="bg-blue-500/20 text-blue-400 px-2 py-1 rounded text-xs font-semibold">
+                        <span className={`px-2 py-1 rounded text-xs font-semibold ${dayMode ? 'bg-blue-100 text-blue-700' : 'bg-blue-500/20 text-blue-400'}`}>
                           {t('plans.annualBilling')}
                         </span>
                       </div>
@@ -303,14 +307,14 @@ const PlanCards: React.FC<PlanCardsProps> = ({
                     <>
                       {priceValue === 0 ? (
                         <div className="flex items-center justify-center gap-3 mb-2">
-                          <p className={`text-3xl font-bold ${plan.color}`}>{price}</p>
-                          <span className="inline-flex items-center gap-1.5 bg-blue-500/20 border border-blue-500/40 text-blue-300 px-3 py-1.5 rounded-full text-sm font-semibold">
-                            <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
+                          <p className={`text-3xl font-bold ${dayMode ? plan.dayColor : plan.color}`}>{price}</p>
+                          <span className={`inline-flex items-center gap-1.5 border px-3 py-1.5 rounded-full text-sm font-semibold ${dayMode ? 'bg-blue-100 border-blue-300 text-blue-700' : 'bg-blue-500/20 border-blue-500/40 text-blue-300'}`}>
+                            <span className={`w-2 h-2 rounded-full animate-pulse ${dayMode ? 'bg-blue-600' : 'bg-blue-400'}`} />
                             Beta
                           </span>
                         </div>
                       ) : (
-                        <p className={`text-3xl font-bold ${plan.color}`}>
+                        <p className={`text-3xl font-bold ${dayMode ? plan.dayColor : plan.color}`}>
                           {price}
                         </p>
                       )}
@@ -321,11 +325,11 @@ const PlanCards: React.FC<PlanCardsProps> = ({
                       )}
                       {priceValue > 0 && (
                         <div className="flex flex-wrap justify-center gap-2 mt-2">
-                          <span className="bg-green-500/20 text-green-400 px-2 py-1 rounded text-xs font-semibold">
+                          <span className={`px-2 py-1 rounded text-xs font-semibold ${dayMode ? 'bg-green-100 text-green-700' : 'bg-green-500/20 text-green-400'}`}>
                             {t('plans.freeTrial')}
                           </span>
                           {plan.yearlyOnly && (
-                            <span className="bg-blue-500/20 text-blue-400 px-2 py-1 rounded text-xs font-semibold">
+                            <span className={`px-2 py-1 rounded text-xs font-semibold ${dayMode ? 'bg-blue-100 text-blue-700' : 'bg-blue-500/20 text-blue-400'}`}>
                               {t('plans.annualBilling')}
                             </span>
                           )}
@@ -352,7 +356,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
                 <div className="space-y-1.5">
                   {[t('plans.spark.features.budget'), t('plans.spark.features.balance'), t('plans.spark.features.futurePlanning'), t('plans.spark.features.cockpit'), t('plans.spark.features.login'), t('plans.spark.features.bitcoinMatrix')].map((section, i) => (
                     <div key={i} className="flex items-start gap-2">
-                      <Check className={`w-4 h-4 ${plan.color} flex-shrink-0 mt-0.5`} />
+                      <Check className={`w-4 h-4 ${dayMode ? plan.dayColor : plan.color} flex-shrink-0 mt-0.5`} />
                       <span className={`leading-relaxed font-bold ${dayMode ? 'text-slate-800' : 'text-gray-300'}`}>{section}</span>
                     </div>
                   ))}
@@ -363,7 +367,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
               <div className="space-y-2 mb-6 text-left text-sm">
                 {plan.features.map((feature, featureIndex) => (
                   <div key={featureIndex} className="flex items-start gap-2">
-                    <Check className={`w-4 h-4 ${plan.color} flex-shrink-0 mt-0.5`} />
+                      <Check className={`w-4 h-4 ${dayMode ? plan.dayColor : plan.color} flex-shrink-0 mt-0.5`} />
                     <span className={`leading-relaxed ${dayMode ? 'text-slate-700' : 'text-gray-300'}`}>{boldFeature(feature)}</span>
                   </div>
                 ))}

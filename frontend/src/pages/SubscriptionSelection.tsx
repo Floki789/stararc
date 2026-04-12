@@ -388,6 +388,7 @@ const SubscriptionSelection: React.FC = () => {
             loading={loading}
             currentPlan={currentPlan || undefined}
             className="max-w-7xl w-full"
+            dayMode={dayMode}
           />
         </div>
 

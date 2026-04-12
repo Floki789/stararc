@@ -43,14 +43,14 @@ const AuthMethodSelection: React.FC = () => {
           className="text-center mb-10"
         >
           <div className="flex items-center justify-center mb-5">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-500/20 to-red-500/20 border border-orange-500/40 flex items-center justify-center">
-              <Key className="w-8 h-8 text-orange-400" />
+            <div className={`w-16 h-16 rounded-2xl border flex items-center justify-center ${dayMode ? 'bg-orange-50 border-orange-200' : 'bg-gradient-to-br from-orange-500/20 to-red-500/20 border-orange-500/40'}`}>
+              <Key className={`w-8 h-8 ${dayMode ? 'text-orange-500' : 'text-orange-400'}`} />
             </div>
           </div>
           <h1 className={`text-4xl font-bold mb-3 ${dayMode ? 'text-slate-900' : 'text-white'}`}>
             {isDE ? 'Deine Daten gehören dir allein.' : 'Your data belongs to you alone.'}
           </h1>
-          <p className="text-lg text-orange-300 font-medium">
+          <p className={`text-lg font-medium ${dayMode ? 'text-orange-500' : 'text-orange-300'}`}>
             {isDE ? 'Maximale Privatsphäre. Maximale Verantwortung.' : 'Maximum Privacy. Maximum Responsibility.'}
           </p>
         </motion.div>
@@ -60,7 +60,7 @@ const AuthMethodSelection: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.15 }}
-          className={`relative p-6 pt-8 mb-8 border border-orange-500/30 bg-gradient-to-br from-orange-500/5 to-red-500/5 rounded-xl shadow-xl ${dayMode ? 'bg-white/80' : 'bg-gray-800/50 backdrop-blur-sm'}`}
+          className={`relative p-6 pt-8 mb-8 border rounded-xl shadow-xl ${dayMode ? 'bg-white border-orange-200' : 'bg-gradient-to-br from-orange-500/5 to-red-500/5 bg-gray-800/50 backdrop-blur-sm border-orange-500/30'}`}
         >
           <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
             <span className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1.5 whitespace-nowrap">
@@ -71,8 +71,8 @@ const AuthMethodSelection: React.FC = () => {
           <ul className="space-y-3.5">
             {facts.map((fact, i) => (
               <li key={i} className="flex items-start gap-3">
-                <CheckCircle className={`w-4 h-4 mt-0.5 flex-shrink-0 ${i >= 3 ? 'text-orange-400' : 'text-orange-400/60'}`} />
-                <span className={`text-base leading-relaxed ${i >= 3 ? (dayMode ? 'text-slate-900 font-medium' : 'text-white font-medium') : (dayMode ? 'text-slate-500' : 'text-gray-400')}`}>{fact}</span>
+                <CheckCircle className={`w-4 h-4 mt-0.5 flex-shrink-0 ${i >= 3 ? (dayMode ? 'text-orange-500' : 'text-orange-400') : (dayMode ? 'text-orange-400' : 'text-orange-400/60')}`} />
+                <span className={`text-base leading-relaxed ${i >= 3 ? (dayMode ? 'text-slate-900 font-medium' : 'text-white font-medium') : (dayMode ? 'text-slate-600' : 'text-gray-400')}`}>{fact}</span>
               </li>
             ))}
           </ul>
@@ -474,8 +474,8 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500/20 to-red-500/20 border border-orange-500/50 flex items-center justify-center">
-              <Key className="w-5 h-5 text-orange-400" />
+            <div className={`w-10 h-10 rounded-xl border flex items-center justify-center ${dayMode ? 'bg-orange-50 border-orange-200' : 'bg-gradient-to-br from-orange-500/20 to-red-500/20 border-orange-500/50'}`}>
+              <Key className={`w-5 h-5 ${dayMode ? 'text-orange-500' : 'text-orange-400'}`} />
             </div>
             <div>
               <h2 className={`text-xl font-bold ${dayMode ? 'text-slate-900' : 'text-white'}`}>
@@ -495,10 +495,10 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
         {/* Step 1: Password */}
         {step === 'password' && (
           <div className="space-y-4">
-            <div className="p-4 bg-orange-500/10 border border-orange-500/30 rounded-lg">
+            <div className={`p-4 border rounded-lg ${dayMode ? 'bg-orange-50 border-orange-200' : 'bg-orange-500/10 border-orange-500/30'}`}>
               <div className="flex gap-2">
-                <AlertTriangle className="w-5 h-5 text-orange-400 flex-shrink-0 mt-0.5" />
-                <div className="text-sm text-orange-200">
+                <AlertTriangle className={`w-5 h-5 flex-shrink-0 mt-0.5 ${dayMode ? 'text-orange-500' : 'text-orange-400'}`} />
+                <div className={`text-sm ${dayMode ? 'text-orange-800' : 'text-orange-200'}`}>
                   <strong>{t('zkSetup.step1Warning')}</strong> {t('zkSetup.step1WarningText')}
                 </div>
               </div>
@@ -519,7 +519,7 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
+                  className={`absolute right-3 top-1/2 -translate-y-1/2 ${dayMode ? 'text-slate-400 hover:text-slate-700' : 'text-gray-400 hover:text-white'}`}
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
@@ -544,7 +544,7 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
+                  className={`absolute right-3 top-1/2 -translate-y-1/2 ${dayMode ? 'text-slate-400 hover:text-slate-700' : 'text-gray-400 hover:text-white'}`}
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
@@ -569,10 +569,10 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
         {/* Step 2: Recovery Phrase */}
         {step === 'recovery' && (
           <div className="space-y-4">
-            <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-lg">
+            <div className={`p-4 border rounded-lg ${dayMode ? 'bg-red-50 border-red-200' : 'bg-red-500/10 border-red-500/30'}`}>
               <div className="flex gap-2">
-                <AlertTriangle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
-                <div className="text-sm text-red-200">
+                <AlertTriangle className={`w-5 h-5 flex-shrink-0 mt-0.5 ${dayMode ? 'text-red-500' : 'text-red-400'}`} />
+                <div className={`text-sm ${dayMode ? 'text-red-800' : 'text-red-200'}`}>
                   <strong>{t('zkSetup.step2Warning')}</strong> {t('zkSetup.step2WarningText')}
                 </div>
               </div>
@@ -607,10 +607,10 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
         {/* Step 3: Verify Recovery Phrase */}
         {step === 'verify' && (
           <div className="space-y-4">
-            <div className="p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+            <div className={`p-4 border rounded-lg ${dayMode ? 'bg-blue-50 border-blue-200' : 'bg-blue-500/10 border-blue-500/30'}`}>
               <div className="flex gap-2">
-                <Info className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
-                <div className="text-sm text-blue-200">
+                <Info className={`w-5 h-5 flex-shrink-0 mt-0.5 ${dayMode ? 'text-blue-500' : 'text-blue-400'}`} />
+                <div className={`text-sm ${dayMode ? 'text-blue-800' : 'text-blue-200'}`}>
                   {t('zkSetup.step3Info')}
                 </div>
               </div>
