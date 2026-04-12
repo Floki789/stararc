@@ -31,6 +31,7 @@ interface PlanCardsProps {
   showPricing?: boolean;
   className?: string;
   currentPlan?: string; // Current user's plan
+  dayMode?: boolean;
 }
 
 const PlanCards: React.FC<PlanCardsProps> = ({ 
@@ -40,7 +41,8 @@ const PlanCards: React.FC<PlanCardsProps> = ({
   loading = {},
   showPricing = true,
   className = '',
-  currentPlan
+  currentPlan,
+  dayMode = false,
 }) => {
   const { t } = useLanguage();
   // Only yearly plans available now
@@ -108,7 +110,6 @@ const PlanCards: React.FC<PlanCardsProps> = ({
         t('plans.spark.features.realEstate', { count: 1, mortgages: 1 }),
         t('plans.spark.features.pensionAccounts', { count: 1 }),
         t('plans.spark.features.liquidityAccounts', { count: 2 }),
-        t('plans.spark.features.budgetCategories', { categories: 10, items: 50 }),
         t('plans.spark.features.financialInstitutions', { count: 3 }),
         t('plans.spark.features.vaults', { count: 3 }),
         t('plans.spark.features.bitcoinSetups', { count: 2 }),
@@ -136,7 +137,6 @@ const PlanCards: React.FC<PlanCardsProps> = ({
         t('plans.nova.features.realEstate', { count: 2, mortgages: 3 }),
         t('plans.nova.features.pensionAccounts', { count: 4 }),
         t('plans.nova.features.liquidityAccounts', { count: 4 }),
-        t('plans.nova.features.budgetCategories', { categories: 12, items: 70 }),
         t('plans.nova.features.financialInstitutions', { count: 5 }),
         t('plans.nova.features.vaults', { count: 7 }),
         t('plans.nova.features.bitcoinSetups', { count: 4 }),
@@ -165,7 +165,6 @@ const PlanCards: React.FC<PlanCardsProps> = ({
         t('plans.galaxy.features.realEstate'),
         t('plans.galaxy.features.pensionAccounts'),
         t('plans.galaxy.features.liquidityAccounts'),
-        t('plans.galaxy.features.budgetCategories'),
         t('plans.galaxy.features.financialInstitutions'),
         t('plans.galaxy.features.vaults'),
         t('plans.galaxy.features.bitcoinSetups'),
@@ -181,7 +180,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
     const parts = text.split(/(\d+|Unlimited|Unbegrenzt)/g);
     return parts.map((part, i) =>
       /^\d+$/.test(part) || part === 'Unlimited' || part === 'Unbegrenzt'
-        ? <strong key={i} className="font-bold text-white">{part}</strong>
+        ? <strong key={i} className={`font-bold ${dayMode ? 'text-slate-900' : 'text-white'}`}>{part}</strong>
         : part
     );
   };
@@ -205,7 +204,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
       {/* Header Text - hidden during Beta (single plan) */}
       {plans.length > 1 && (
       <div className="text-center mb-8">
-        <p className="text-gray-400 text-lg">
+        <p className={`text-lg ${dayMode ? 'text-slate-600' : 'text-gray-400'}`}>
           {t('plans.headerText')}
         </p>
       </div>
@@ -231,7 +230,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
             viewport={{ once: true }}
-            className={`card p-6 text-center relative min-h-[500px] flex flex-col w-full sm:w-auto sm:flex-1 sm:max-w-sm ${
+            className={`${dayMode ? 'bg-white border border-slate-200 rounded-xl shadow-xl' : 'card'} p-6 text-center relative min-h-[500px] flex flex-col w-full sm:w-auto sm:flex-1 sm:max-w-sm ${
               plan.isPopular ? 'border-2 border-purple-500' : ''
             } ${
               currentPlan === plan.id ? 'border-2 border-blue-500 opacity-75' : ''
@@ -272,7 +271,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
               </div>
 
               {/* Plan Name */}
-              <h3 className="text-xl font-bold text-white mb-2">{plan.name}</h3>
+              <h3 className={`text-xl font-bold mb-2 ${dayMode ? 'text-slate-900' : 'text-white'}`}>{plan.name}</h3>
 
               {/* Price */}
               {showPricing && (
@@ -290,7 +289,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
                           {plan.id === 'Nova' ? '$95' : '$195'}
                         </span>
                       </div>
-                      <p className="text-sm text-gray-400 mt-1">{t('plans.perYear')}</p>
+                      <p className={`text-sm mt-1 ${dayMode ? 'text-slate-500' : 'text-gray-400'}`}>{t('plans.perYear')}</p>
                       <div className="flex flex-wrap justify-center gap-2 mt-3">
                         <span className="bg-green-500/20 text-green-400 px-2 py-1 rounded text-xs font-semibold">
                           {t('plans.freeTrial')}
@@ -316,7 +315,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
                         </p>
                       )}
                       {priceValue > 0 && (
-                        <p className="text-sm text-gray-400 mt-1">
+                        <p className={`text-sm mt-1 ${dayMode ? 'text-slate-500' : 'text-gray-400'}`}>
                           {t('plans.perYear')}
                         </p>
                       )}
@@ -338,7 +337,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
               )}
 
               {/* Description */}
-              <p className={`text-sm mb-6 px-2 leading-relaxed min-h-[3.5rem] ${plan.priceValueYearly === 0 ? 'text-blue-300 font-medium' : 'text-gray-400'}`}>
+              <p className={`text-sm mb-6 px-2 leading-relaxed min-h-[3.5rem] ${plan.priceValueYearly === 0 ? (dayMode ? 'text-blue-600 font-medium' : 'text-blue-300 font-medium') : (dayMode ? 'text-slate-600' : 'text-gray-400')}`}>
                 {plan.description}
               </p>
             </div>
@@ -346,15 +345,15 @@ const PlanCards: React.FC<PlanCardsProps> = ({
             {/* Features - Flexible height */}
             <div className="flex-grow">
               {/* Sections container */}
-              <div className="border border-gray-600 rounded-lg p-3 mb-4 text-left text-sm">
+              <div className={`border rounded-lg p-3 mb-4 text-left text-sm ${dayMode ? 'border-slate-200' : 'border-gray-600'}`}>
                 {plan.id !== 'Spark' && (
-                  <p className="text-gray-500 text-xs mb-2 italic">{t('plans.includedSections')}</p>
+                  <p className={`text-xs mb-2 italic ${dayMode ? 'text-slate-500' : 'text-gray-500'}`}>{t('plans.includedSections')}</p>
                 )}
                 <div className="space-y-1.5">
-                  {[t('plans.spark.features.balance'), t('plans.spark.features.budget'), t('plans.spark.features.cockpit'), t('plans.spark.features.futurePlanning'), t('plans.spark.features.login'), t('plans.spark.features.bitcoinMatrix')].map((section, i) => (
+                  {[t('plans.spark.features.budget'), t('plans.spark.features.balance'), t('plans.spark.features.futurePlanning'), t('plans.spark.features.cockpit'), t('plans.spark.features.login'), t('plans.spark.features.bitcoinMatrix')].map((section, i) => (
                     <div key={i} className="flex items-start gap-2">
                       <Check className={`w-4 h-4 ${plan.color} flex-shrink-0 mt-0.5`} />
-                      <span className="text-gray-300 leading-relaxed font-bold">{section}</span>
+                      <span className={`leading-relaxed font-bold ${dayMode ? 'text-slate-800' : 'text-gray-300'}`}>{section}</span>
                     </div>
                   ))}
                 </div>
@@ -365,7 +364,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
                 {plan.features.map((feature, featureIndex) => (
                   <div key={featureIndex} className="flex items-start gap-2">
                     <Check className={`w-4 h-4 ${plan.color} flex-shrink-0 mt-0.5`} />
-                    <span className="text-gray-300 leading-relaxed">{boldFeature(feature)}</span>
+                    <span className={`leading-relaxed ${dayMode ? 'text-slate-700' : 'text-gray-300'}`}>{boldFeature(feature)}</span>
                   </div>
                 ))}
               </div>
@@ -386,9 +385,9 @@ const PlanCards: React.FC<PlanCardsProps> = ({
                   disabled={loading[plan.id] || loading[`${plan.id}-launch`] || currentPlan === plan.id || !isPlanSelectable(plan.id, currentPlan, plan)}
                   className={`w-full py-3 text-sm font-semibold rounded-lg transition-all duration-200 ${
                     currentPlan === plan.id 
-                      ? 'bg-gray-500 cursor-not-allowed text-white' 
+                      ? (dayMode ? 'bg-slate-300 cursor-not-allowed text-slate-600' : 'bg-gray-500 cursor-not-allowed text-white')
                       : !isPlanSelectable(plan.id, currentPlan, plan)
-                        ? 'bg-gray-600 cursor-not-allowed text-white'
+                        ? (dayMode ? 'bg-slate-200 cursor-not-allowed text-slate-500' : 'bg-gray-600 cursor-not-allowed text-white')
                         : launchActive && plan.priceValueYearly > 0 && (plan.id === 'Nova' || plan.id === 'Galaxy')
                           ? 'bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-900 font-bold hover:shadow-lg hover:shadow-amber-500/30 transform hover:scale-105'
                           : `${plan.bgGradient} hover:shadow-lg transform hover:scale-105 text-white`
