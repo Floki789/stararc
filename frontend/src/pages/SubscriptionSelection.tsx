@@ -6,6 +6,7 @@ import StripeAPIService from '../services/stripeService';
 import { loadStripe } from '@stripe/stripe-js';
 import PlanCards from '../components/PlanCards';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useDayMode } from '../contexts/DayModeContext';
 import { Crown } from 'lucide-react';
 
 interface UpgradePreview {
@@ -23,6 +24,7 @@ interface UpgradePreview {
 const SubscriptionSelection: React.FC = () => {
   const { user } = useAuth();
   const { t } = useLanguage();
+  const { dayMode } = useDayMode();
   const navigate = useNavigate();
   const [loading, setLoading] = useState<Record<string, boolean>>({});
   const [currentPlan, setCurrentPlan] = useState<string | null>(null);
@@ -346,7 +348,7 @@ const SubscriptionSelection: React.FC = () => {
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 pt-32 pb-6 px-6">
+    <div className={`min-h-screen bg-gradient-to-br pt-32 pb-6 px-6 ${dayMode ? 'from-slate-50 via-blue-50 to-indigo-100' : 'from-slate-900 via-blue-900 to-indigo-900'}`}>
       <div className="max-w-7xl mx-auto">
         {/* Welcome Section */}
         <motion.div
@@ -355,7 +357,7 @@ const SubscriptionSelection: React.FC = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h1 className="text-5xl font-bold text-white mb-6">
+          <h1 className={`text-5xl font-bold mb-6 ${dayMode ? 'text-slate-900' : 'text-white'}`}>
             {t('subscriptionSelection.welcome')}
           </h1>
         </motion.div>
@@ -367,7 +369,7 @@ const SubscriptionSelection: React.FC = () => {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl font-bold text-white mb-4">
+          <h2 className={`text-4xl font-bold mb-4 ${dayMode ? 'text-slate-900' : 'text-white'}`}>
             {t('subscriptionSelection.choosePlan')}
           </h2>
           {false && (
@@ -479,7 +481,7 @@ const SubscriptionSelection: React.FC = () => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ duration: 0.3 }}
-              className="bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl max-w-md w-full p-8"
+              className={`border border-slate-700 rounded-2xl shadow-2xl max-w-md w-full p-8 ${dayMode ? 'bg-white' : 'bg-slate-800'}`}
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header */}
@@ -489,32 +491,32 @@ const SubscriptionSelection: React.FC = () => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
                   </svg>
                 </div>
-                <h3 className="text-2xl font-bold text-white">
+                <h3 className={`text-2xl font-bold ${dayMode ? 'text-slate-900' : 'text-white'}`}>
                   {t('upgradePreview.title')}
                 </h3>
-                <p className="text-slate-400 mt-2">
+                <p className={`mt-2 ${dayMode ? 'text-slate-500' : 'text-slate-400'}`}>
                   {upgradePreview.currentPlan} → {upgradePreview.targetPlan}
                 </p>
               </div>
 
               {/* Pricing Breakdown */}
-              <div className="bg-slate-900/60 border border-slate-700 rounded-xl p-5 mb-6">
+              <div className={`border rounded-xl p-5 mb-6 ${dayMode ? 'bg-slate-50 border-slate-200' : 'bg-slate-900/60 border-slate-700'}`}>
                 {/* Current Plan */}
                 <div className="flex justify-between items-center py-2">
-                  <span className="text-slate-400">
+                  <span className={dayMode ? 'text-slate-500' : 'text-slate-400'}>
                     {t('upgradePreview.currentPlan')} ({upgradePreview.currentPlan})
                   </span>
-                  <span className="text-slate-400">
+                  <span className={dayMode ? 'text-slate-500' : 'text-slate-400'}>
                     {formatAmount(upgradePreview.currentPlanPrice, upgradePreview.currency)}/{t('upgradePreview.year')}
                   </span>
                 </div>
 
                 {/* New Plan */}
                 <div className="flex justify-between items-center py-2">
-                  <span className="text-white font-medium">
+                  <span className={`font-medium ${dayMode ? 'text-slate-900' : 'text-white'}`}>
                     {t('upgradePreview.newPlan')} ({upgradePreview.targetPlan})
                   </span>
-                  <span className="text-white font-medium">
+                  <span className={`font-medium ${dayMode ? 'text-slate-900' : 'text-white'}`}>
                     {formatAmount(upgradePreview.targetPlanPrice, upgradePreview.currency)}/{t('upgradePreview.year')}
                   </span>
                 </div>
@@ -537,10 +539,10 @@ const SubscriptionSelection: React.FC = () => {
                 {/* Prorated new plan charge */}
                 {upgradePreview.newPlanAmount > 0 && (
                   <div className="flex justify-between items-center py-2">
-                    <span className="text-slate-300">
-                      {t('upgradePreview.proratedCharge')} ({upgradePreview.targetPlan})
-                    </span>
-                    <span className="text-slate-300">
+                  <span className={`${dayMode ? 'text-slate-700' : 'text-slate-300'}`}>
+                    {t('upgradePreview.proratedCharge')} ({upgradePreview.targetPlan})
+                  </span>
+                  <span className={`${dayMode ? 'text-slate-700' : 'text-slate-300'}`}>
                       {formatAmount(upgradePreview.newPlanAmount, upgradePreview.currency)}
                     </span>
                   </div>
@@ -551,17 +553,17 @@ const SubscriptionSelection: React.FC = () => {
 
                 {/* Total */}
                 <div className="flex justify-between items-center py-2">
-                  <span className="text-white font-bold text-lg">
+                  <span className={`font-bold text-lg ${dayMode ? 'text-slate-900' : 'text-white'}`}>
                     {t('upgradePreview.dueNow')}
                   </span>
-                  <span className="text-white font-bold text-lg">
+                  <span className={`font-bold text-lg ${dayMode ? 'text-slate-900' : 'text-white'}`}>
                     {formatAmount(upgradePreview.totalDue, upgradePreview.currency)}
                   </span>
                 </div>
               </div>
 
               {/* Info Text */}
-              <p className="text-slate-500 text-sm text-center mb-6">
+                <p className={`text-sm text-center mb-6 ${dayMode ? 'text-slate-500' : 'text-slate-500'}`}>
                 {t('upgradePreview.infoText')}
               </p>
 
@@ -570,7 +572,7 @@ const SubscriptionSelection: React.FC = () => {
                 <button
                   onClick={handleCancelPreview}
                   disabled={upgrading}
-                  className="flex-1 px-4 py-3 rounded-xl border border-slate-600 text-slate-300 hover:bg-slate-700 transition-colors disabled:opacity-50"
+                  className={`flex-1 px-4 py-3 rounded-xl border transition-colors disabled:opacity-50 ${dayMode ? 'border-slate-300 text-slate-600 hover:bg-slate-100' : 'border-slate-600 text-slate-300 hover:bg-slate-700'}`}
                 >
                   {t('upgradePreview.cancel')}
                 </button>

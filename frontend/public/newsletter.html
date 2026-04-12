@@ -58,39 +58,28 @@
       font-size: 15px; color: #444; line-height: 2;
       font-family: 'Helvetica Neue', Arial, sans-serif;
     }
-    .cta-banner {
-      display: block;
-      background-color: #0d1526;
-      background-image:
-        radial-gradient(1.5px 1.5px at 10% 22%, rgba(255,255,255,0.88), transparent),
-        radial-gradient(1px   1px   at 27% 12%, rgba(255,255,255,0.65), transparent),
-        radial-gradient(1px   1px   at 52% 28%, rgba(255,255,255,0.75), transparent),
-        radial-gradient(1.5px 1.5px at 77% 16%, rgba(255,255,255,0.90), transparent),
-        radial-gradient(1px   1px   at 91% 48%, rgba(255,255,255,0.65), transparent),
-        radial-gradient(1px   1px   at 18% 68%, rgba(255,255,255,0.70), transparent),
-        radial-gradient(1px   1px   at 44% 76%, rgba(255,255,255,0.60), transparent),
-        radial-gradient(1.5px 1.5px at 69% 70%, rgba(255,255,255,0.82), transparent),
-        radial-gradient(1px   1px   at 87% 80%, rgba(255,255,255,0.65), transparent),
-        radial-gradient(1.5px 1.5px at 33% 48%, rgba(52,211,153,0.95), transparent),
-        radial-gradient(1px   1px   at 61% 58%, rgba(52,211,153,0.80), transparent),
-        radial-gradient(1.5px 1.5px at 82% 33%, rgba(52,211,153,0.75), transparent);
-      border: 1.5px solid rgba(52,211,153,0.55);
-      border-radius: 10px;
-      box-shadow: 0 0 28px rgba(52,211,153,0.30), 0 4px 20px rgba(0,0,0,0.50);
-      padding: 20px 32px;
-      text-align: center;
+    .cta-heading {
+      font-family: 'Lato', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 20px; font-weight: 700; color: #1a1a2e;
+      margin-bottom: 4px; line-height: 1.3;
+    }
+    .cta-subheading {
+      font-family: 'Lato', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 20px; font-weight: 700;
+      background: linear-gradient(90deg, #2563eb 0%, #0ea5e9 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px; line-height: 1.3; display: block;
+    }
+    .cta-btn {
+      display: inline-block;
+      background: linear-gradient(90deg, #2563eb 0%, #0ea5e9 100%);
+      color: #ffffff;
+      font-family: 'Lato', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 14px; font-weight: 700; letter-spacing: 0.3px;
+      padding: 12px 28px; border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(37,99,235,0.30);
       text-decoration: none;
-      margin-top: 4px;
-    }
-    .cta-banner-claim {
-      font-family: 'Lato', 'Helvetica Neue', Arial, sans-serif;
-      font-size: 13px; color: rgba(52,211,153,0.90);
-      letter-spacing: 0.2px; margin-bottom: 10px;
-    }
-    .cta-banner-label {
-      font-family: 'Lato', 'Helvetica Neue', Arial, sans-serif;
-      font-size: 16px; font-weight: 700; color: #ffffff;
-      letter-spacing: 0.4px;
     }
     .feedback-note {
       font-size: 14px; color: #888; margin-top: 12px;
@@ -142,7 +131,7 @@
   <!-- Hero Image -->
   <div class="hero">
     <!-- Das Bild hero.jpg muss im gleichen Ordner wie diese Datei liegen -->
-    <img src="https://mcusercontent.com/be2260b890a9fd31c2fa7d1a2/images/4ca1fc77-2912-f9f9-a34d-b63974467960.jpg" alt="Küstenweg mit Meerblick"
+    <img src="https://img.mailinblue.com/10946715/images/content_library/original/69db6a3dbc57e6c136da88b4.jpg" alt="Küstenweg mit Meerblick"
          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
     <div class="hero-fallback" style="display:none;"></div>
     <div class="hero-overlay">
@@ -165,7 +154,7 @@
         und Zukunftsszenarien konkret zu planen.
       </p>
       <p>
-        Schritt für Schritt erarbeitest du dir die perfekte Übersicht über deine
+        Schritt für Schritt, begleitet von einem Assistenten, erarbeitest du dir die perfekte Übersicht über deine
         finanzielle Situation – und wirst so dein eigener Vermögensberater.
       </p>
       <div class="features">
@@ -173,10 +162,11 @@
         <span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;background:#16a34a;border-radius:50%;color:#fff;font-size:12px;font-weight:900;margin-right:8px;flex-shrink:0;vertical-align:middle;">✓</span><strong>Maximaler Datenschutz</strong> – deine Daten gehören dir allein<br/>
         <span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;background:#16a34a;border-radius:50%;color:#fff;font-size:12px;font-weight:900;margin-right:8px;flex-shrink:0;vertical-align:middle;">✓</span><strong>Spare das Beraterhonorar</strong> – mach eine Reise ans Meer
       </div>
-      <a href="https://www.stararc.one" class="cta-banner">
-        <div class="cta-banner-claim">Deine Assets bleiben, wo sie sind. Stararc bietet Übersicht, Analysen und Planung.</div>
-        <div class="cta-banner-label">→ Stararc kostenlos ausprobieren</div>
-      </a>
+      <div style="margin-top: 18px;">
+        <div class="cta-heading">Überblicke deine Vermögenswerte</div>
+        <span class="cta-subheading">Plane deine Zukunft</span>
+        <a href="https://www.stararc.one" class="cta-btn">→ Stararc kostenlos ausprobieren</a>
+      </div>
       <p class="feedback-note">Über dein Feedback würde ich mich freuen!</p>
     </div>
   </div>

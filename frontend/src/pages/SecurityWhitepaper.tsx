@@ -1,39 +1,41 @@
 import React from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useDayMode } from '../contexts/DayModeContext';
 
 const SecurityWhitepaper: React.FC = () => {
   const { t, language } = useLanguage();
+  const { dayMode } = useDayMode();
   const isDE = language === 'de';
 
   const SectionTitle: React.FC<{ number: number; children: React.ReactNode }> = ({ number, children }) => (
-    <h2 className="text-2xl font-semibold text-white mb-6" id={`section-${number}`}>
+    <h2 className={`text-2xl font-semibold mb-6 ${dayMode ? 'text-slate-900' : 'text-white'}`} id={`section-${number}`}>
       {number}. {children}
     </h2>
   );
 
   const SubTitle: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-    <h3 className="text-xl font-semibold text-white mt-8 mb-4">{children}</h3>
+    <h3 className={`text-xl font-semibold mt-8 mb-4 ${dayMode ? 'text-slate-900' : 'text-white'}`}>{children}</h3>
   );
 
   const P: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-    <p className="text-gray-300 mb-4 leading-relaxed">{children}</p>
+    <p className={`mb-4 leading-relaxed ${dayMode ? 'text-slate-700' : 'text-gray-300'}`}>{children}</p>
   );
 
   const Table: React.FC<{ headers: string[]; rows: string[][] }> = ({ headers, rows }) => (
     <div className="overflow-x-auto mb-6">
-      <table className="w-full text-sm text-left border border-gray-700 rounded-lg overflow-hidden">
-        <thead className="bg-gray-800 text-gray-200">
+      <table className={`w-full text-sm text-left border rounded-lg overflow-hidden ${dayMode ? 'border-slate-300' : 'border-gray-700'}`}>
+        <thead className={dayMode ? 'bg-slate-200 text-slate-800' : 'bg-gray-800 text-gray-200'}>
           <tr>
             {headers.map((h, i) => (
               <th key={i} className="px-4 py-3 font-medium">{h}</th>
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-700">
+        <tbody className={`divide-y ${dayMode ? 'divide-slate-300' : 'divide-gray-700'}`}>
           {rows.map((row, i) => (
-            <tr key={i} className="bg-gray-900 hover:bg-gray-800/50">
+            <tr key={i} className={dayMode ? 'bg-white hover:bg-slate-50' : 'bg-gray-900 hover:bg-gray-800/50'}>
               {row.map((cell, j) => (
-                <td key={j} className="px-4 py-3 text-gray-300">{cell}</td>
+                <td key={j} className={`px-4 py-3 ${dayMode ? 'text-slate-700' : 'text-gray-300'}`}>{cell}</td>
               ))}
             </tr>
           ))}
@@ -43,32 +45,32 @@ const SecurityWhitepaper: React.FC = () => {
   );
 
   const CodeBlock: React.FC<{ children: string }> = ({ children }) => (
-    <pre className="bg-gray-950 border border-gray-700 rounded-lg p-4 mb-6 overflow-x-auto text-sm text-gray-300 font-mono whitespace-pre">
+    <pre className={`border rounded-lg p-4 mb-6 overflow-x-auto text-sm font-mono whitespace-pre ${dayMode ? 'bg-slate-100 border-slate-300 text-slate-800' : 'bg-gray-950 border-gray-700 text-gray-300'}`}>
       {children}
     </pre>
   );
 
   const BulletList: React.FC<{ items: string[] }> = ({ items }) => (
-    <ul className="list-disc list-inside space-y-2 ml-4 text-gray-300 mb-4">
+    <ul className={`list-disc list-inside space-y-2 ml-4 mb-4 ${dayMode ? 'text-slate-700' : 'text-gray-300'}`}>
       {items.map((item, i) => <li key={i}>{item}</li>)}
     </ul>
   );
 
   return (
-    <div className="min-h-screen bg-gray-900 py-20">
+    <div className={`min-h-screen py-20 transition-colors duration-700 ${dayMode ? 'bg-slate-100' : 'bg-gray-900'}`}>
       <div className="max-w-4xl mx-auto px-6">
         {/* Header */}
         <div className="text-center mb-12 pt-8">
           <div className="inline-flex items-center px-3 py-1 rounded-full bg-green-500/10 text-green-400 text-sm font-medium mb-4">
             🔒 {t('securityWhitepaper.badge')}
           </div>
-          <h1 className="text-4xl font-bold text-white mb-4">
+          <h1 className={`text-4xl font-bold mb-4 ${dayMode ? 'text-slate-900' : 'text-white'}`}>
             {t('securityWhitepaper.title')}
           </h1>
-          <p className="text-gray-400 text-lg">
+          <p className={`text-lg ${dayMode ? 'text-slate-600' : 'text-gray-400'}`}>
             {t('securityWhitepaper.subtitle')}
           </p>
-          <p className="text-gray-500 text-sm mt-2">
+          <p className={`text-sm mt-2 ${dayMode ? 'text-slate-500' : 'text-gray-500'}`}>
             {t('securityWhitepaper.version')}
           </p>
         </div>
@@ -721,8 +723,8 @@ Tab close → sessionStorage automatically cleared`}</CodeBlock>
 
           {/* Contact */}
           <section className="mb-12 text-center">
-            <div className="border border-gray-700 rounded-lg p-8 bg-gray-800/30">
-              <h3 className="text-xl font-semibold text-white mb-4">
+            <div className={`border rounded-lg p-8 ${dayMode ? 'border-slate-300 bg-slate-200/50' : 'border-gray-700 bg-gray-800/30'}`}>
+              <h3 className={`text-xl font-semibold mb-4 ${dayMode ? 'text-slate-900' : 'text-white'}`}>
                 {isDE ? 'Kontakt' : 'Contact'}
               </h3>
               <P>
@@ -737,7 +739,7 @@ Tab close → sessionStorage automatically cleared`}</CodeBlock>
           </section>
 
           {/* Footer note */}
-          <p className="text-gray-500 text-sm text-center italic">
+          <p className={`text-sm text-center italic ${dayMode ? 'text-slate-500' : 'text-gray-500'}`}>
             {isDE
               ? 'Dieses Dokument beschreibt den Stand der Sicherheitsarchitektur zum Zeitpunkt der Veröffentlichung (März 2026). Die Sicherheitsmaßnahmen werden kontinuierlich weiterentwickelt.'
               : 'This document describes the state of the security architecture at the time of publication (March 2026). Security measures are continuously evolving.'}

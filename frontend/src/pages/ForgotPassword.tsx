@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
+import { useDayMode } from '../contexts/DayModeContext';
 
 const ForgotPassword: React.FC = () => {
+  const { dayMode } = useDayMode();
   const [email, setEmail] = useState('');
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isLoading, setIsLoading] = useState(false);
@@ -71,9 +73,9 @@ const ForgotPassword: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-24">
+    <div className={`min-h-screen bg-gradient-to-br flex items-center justify-center px-4 sm:px-6 lg:px-8 py-24 ${dayMode ? 'from-violet-50 via-indigo-50 to-slate-100' : 'from-slate-900 via-purple-900 to-slate-900'}`}>
       {/* Background stars */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+      {!dayMode && <div className="fixed inset-0 overflow-hidden pointer-events-none">
         {[...Array(100)].map((_, i) => (
           <motion.div
             key={i}
@@ -92,7 +94,7 @@ const ForgotPassword: React.FC = () => {
             }}
           />
         ))}
-      </div>
+      </div>}
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -104,10 +106,10 @@ const ForgotPassword: React.FC = () => {
           <div className="mx-auto h-12 w-12 flex items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-purple-600">
             <span className="text-white font-bold text-xl">S</span>
           </div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-white">
+          <h2 className={`mt-6 text-center text-3xl font-extrabold ${dayMode ? 'text-slate-900' : 'text-white'}`}>
             Passwort zurücksetzen
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-300">
+          <p className={`mt-2 text-center text-sm ${dayMode ? 'text-slate-600' : 'text-gray-300'}`}>
             Geben Sie Ihre E-Mail-Adresse ein und wir senden Ihnen einen Link zum Zurücksetzen Ihres Passworts.
           </p>
         </div>
@@ -154,8 +156,8 @@ const ForgotPassword: React.FC = () => {
               autoComplete="email"
               required
               className={`appearance-none rounded-lg relative block w-full px-3 py-3 border ${
-                errors.email ? 'border-red-500' : 'border-gray-600'
-              } placeholder-gray-400 text-white bg-gray-800/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
+                errors.email ? 'border-red-500' : dayMode ? 'border-slate-300' : 'border-gray-600'
+              } ${dayMode ? 'placeholder-slate-400 text-slate-900 bg-white' : 'placeholder-gray-400 text-white bg-gray-800/50'} backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
               placeholder="E-Mail-Adresse"
               value={email}
               onChange={(e) => {

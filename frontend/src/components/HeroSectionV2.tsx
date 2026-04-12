@@ -20,7 +20,8 @@ interface AssetClass {
   angleDeg: number;
   Icon: React.ElementType;
   gradient: string; // Tailwind gradient classes for icon pill
-  textColor: string; // Tailwind class for label colour
+  textColor: string; // Tailwind class for label colour (dark mode)
+  dayTextColor: string; // Tailwind class for label colour (day mode)
   borderColor: string; // Tailwind class for card border
   lineColor: string; // SVG stroke colour for spoke
 }
@@ -32,6 +33,7 @@ const assetClasses: AssetClass[] = [
     Icon: TrendingUp,
     gradient: 'from-blue-500 to-cyan-500',
     textColor: 'text-blue-400',
+    dayTextColor: 'text-blue-700',
     borderColor: 'border-blue-500/30',
     lineColor: 'rgba(59,130,246,0.35)',
   },
@@ -41,6 +43,7 @@ const assetClasses: AssetClass[] = [
     Icon: Building2,
     gradient: 'from-violet-500 to-purple-600',
     textColor: 'text-violet-400',
+    dayTextColor: 'text-violet-700',
     borderColor: 'border-violet-500/30',
     lineColor: 'rgba(139,92,246,0.35)',
   },
@@ -50,6 +53,7 @@ const assetClasses: AssetClass[] = [
     Icon: Package,
     gradient: 'from-amber-500 to-orange-500',
     textColor: 'text-amber-400',
+    dayTextColor: 'text-amber-700',
     borderColor: 'border-amber-500/30',
     lineColor: 'rgba(245,158,11,0.35)',
   },
@@ -59,6 +63,7 @@ const assetClasses: AssetClass[] = [
     Icon: PiggyBank,
     gradient: 'from-emerald-500 to-teal-600',
     textColor: 'text-emerald-400',
+    dayTextColor: 'text-emerald-700',
     borderColor: 'border-emerald-500/30',
     lineColor: 'rgba(16,185,129,0.35)',
   },
@@ -68,6 +73,7 @@ const assetClasses: AssetClass[] = [
     Icon: Bitcoin,
     gradient: 'from-orange-500 to-amber-600',
     textColor: 'text-orange-400',
+    dayTextColor: 'text-orange-700',
     borderColor: 'border-orange-500/30',
     lineColor: 'rgba(249,115,22,0.35)',
   },
@@ -77,6 +83,7 @@ const assetClasses: AssetClass[] = [
     Icon: Gem,
     gradient: 'from-yellow-400 to-amber-500',
     textColor: 'text-yellow-400',
+    dayTextColor: 'text-yellow-700',
     borderColor: 'border-yellow-500/30',
     lineColor: 'rgba(234,179,8,0.35)',
   },
@@ -404,12 +411,14 @@ const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
                 </div>
 
                 {/* Label */}
-                <span className={`text-sm font-semibold ${item.textColor} leading-tight`}>
+                <span className={`text-sm font-semibold leading-tight ${
+                  dayMode ? item.dayTextColor : item.textColor
+                }`}>
                   {t(`hero2.assets.${item.id}`)}
                 </span>
 
                 {/* Short description */}
-                <span className={`text-xs leading-tight ${dayMode ? 'text-slate-500' : 'text-slate-500'}`}>
+                <span className={`text-xs leading-tight ${dayMode ? 'text-slate-600' : 'text-slate-500'}`}>
                   {t(`hero2.assets.${item.id}Desc`)}
                 </span>
               </div>
@@ -433,7 +442,7 @@ const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
                 <div className={`p-3 rounded-xl bg-gradient-to-br ${item.gradient} shadow-lg`}>
                   <Icon size={22} className="text-white" />
                 </div>
-                <span className={`text-sm font-semibold ${dayMode ? item.textColor.replace('-400', '-600') : item.textColor}`}>
+                <span className={`text-sm font-semibold ${dayMode ? item.dayTextColor : item.textColor}`}>
                   {t(`hero2.assets.${item.id}`)}
                 </span>
                 <span className="text-xs text-slate-500 leading-snug">

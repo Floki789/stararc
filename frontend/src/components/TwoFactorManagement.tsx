@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Shield, Settings, Smartphone, AlertTriangle, CheckCircle, Key, Copy, RefreshCw, Eye, EyeOff } from 'lucide-react';
 import TwoFactorSetup from './TwoFactorSetup';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useDayMode } from '../contexts/DayModeContext';
 import toast from 'react-hot-toast';
 
 interface TwoFactorStatus {
@@ -18,6 +19,7 @@ const TwoFactorManagement: React.FC = () => {
   const [disableForm, setDisableForm] = useState({ password: '', twoFactorToken: '' });
   const [error, setError] = useState('');
   const { t } = useLanguage();
+  const { dayMode } = useDayMode();
   
   // Backup codes state
   const [remainingCodes, setRemainingCodes] = useState<number | null>(null);
@@ -166,10 +168,10 @@ const TwoFactorManagement: React.FC = () => {
 
   if (loading && !status.enabled) {
     return (
-      <div className="bg-gradient-to-br from-blue-900/30 to-purple-900/30 backdrop-blur-sm border border-blue-500/30 rounded-2xl p-6">
+      <div className={`backdrop-blur-sm border rounded-2xl p-6 ${dayMode ? 'bg-white border-blue-200' : 'bg-gradient-to-br from-blue-900/30 to-purple-900/30 border-blue-500/30'}`}>
         <div className="animate-pulse">
-          <div className="h-6 bg-gray-700 rounded w-1/3 mb-4"></div>
-          <div className="h-4 bg-gray-700 rounded w-2/3"></div>
+          <div className={`h-6 rounded w-1/3 mb-4 ${dayMode ? 'bg-slate-200' : 'bg-gray-700'}`}></div>
+          <div className={`h-4 rounded w-2/3 ${dayMode ? 'bg-slate-200' : 'bg-gray-700'}`}></div>
         </div>
       </div>
     );
@@ -181,12 +183,12 @@ const TwoFactorManagement: React.FC = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.3 }}
-        className="bg-gradient-to-br from-blue-900/30 to-purple-900/30 backdrop-blur-sm border border-blue-500/30 rounded-2xl p-6 mb-6"
+        className={`backdrop-blur-sm border rounded-2xl p-6 mb-6 ${dayMode ? 'bg-white border-blue-200' : 'bg-gradient-to-br from-blue-900/30 to-purple-900/30 border-blue-500/30'}`}
       >
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center space-x-3">
             <Shield className="w-6 h-6 text-blue-400" />
-            <h3 className="text-xl font-bold text-white">{t('twoFactor.title')}</h3>
+            <h3 className={`text-xl font-bold ${dayMode ? 'text-slate-900' : 'text-white'}`}>{t('twoFactor.title')}</h3>
             {status.enabled && (
               <div className="flex items-center space-x-1 bg-green-500/20 px-2 py-1 rounded-full">
                 <CheckCircle className="w-4 h-4 text-green-400" />
@@ -194,15 +196,15 @@ const TwoFactorManagement: React.FC = () => {
               </div>
             )}
           </div>
-          <Settings className="w-5 h-5 text-gray-400" />
+          <Settings className={`w-5 h-5 ${dayMode ? 'text-slate-400' : 'text-gray-400'}`} />
         </div>
 
         {status.enabled ? (
           <div>
-            <p className="text-gray-300 mb-4">
+            <p className={`mb-4 ${dayMode ? 'text-slate-600' : 'text-gray-300'}`}>
               {t('twoFactor.activeMessage')}
               {status.enabledAt && (
-                <span className="text-sm text-gray-400 block">
+                <span className={`text-sm block ${dayMode ? 'text-slate-500' : 'text-gray-400'}`}>
                   {t('twoFactor.enabledOn')} {new Date(status.enabledAt).toLocaleDateString('de-DE')}
                 </span>
               )}
@@ -229,11 +231,11 @@ const TwoFactorManagement: React.FC = () => {
 
             {/* Backup Codes Section */}
             {remainingCodes !== null && (
-              <div className="mt-4 p-4 bg-gray-800/50 rounded-lg border border-gray-700">
+              <div className={`mt-4 p-4 rounded-lg border ${dayMode ? 'bg-slate-100 border-slate-200' : 'bg-gray-800/50 border-gray-700'}`}>
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center space-x-2">
                     <Key className="w-4 h-4 text-yellow-400" />
-                    <span className="text-sm font-semibold text-gray-300">{t('twoFactor.backupCodes.title')}</span>
+                    <span className={`text-sm font-semibold ${dayMode ? 'text-slate-700' : 'text-gray-300'}`}>{t('twoFactor.backupCodes.title')}</span>
                   </div>
                   <span className={`text-sm font-mono font-bold ${
                     remainingCodes === 0 ? 'text-red-400' : remainingCodes <= 3 ? 'text-yellow-400' : 'text-green-400'
@@ -280,7 +282,7 @@ const TwoFactorManagement: React.FC = () => {
                 <Smartphone className="w-4 h-4" />
                 <span>{t('twoFactor.setup')}</span>
               </button>
-              <div className="text-xs text-gray-400">
+              <div className={`text-xs ${dayMode ? 'text-slate-500' : 'text-gray-400'}`}>
                 {t('twoFactor.requiresAuthenticator')}
               </div>
             </div>
@@ -294,10 +296,10 @@ const TwoFactorManagement: React.FC = () => {
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-gray-900 rounded-xl border border-gray-700 max-w-md w-full"
+            className={`rounded-xl border max-w-md w-full ${dayMode ? 'bg-white border-slate-200' : 'bg-gray-900 border-gray-700'}`}
           >
-            <div className="p-6 border-b border-gray-700">
-              <h2 className="text-lg font-bold text-white flex items-center">
+            <div className={`p-6 border-b ${dayMode ? 'border-slate-200' : 'border-gray-700'}`}>
+              <h2 className={`text-lg font-bold flex items-center ${dayMode ? 'text-slate-900' : 'text-white'}`}>
                 <AlertTriangle className="w-5 h-5 text-red-400 mr-2" />
                 {t('twoFactor.disableTitle')}
               </h2>
@@ -318,7 +320,7 @@ const TwoFactorManagement: React.FC = () => {
 
               <div className="space-y-4 mb-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className={`block text-sm font-medium mb-2 ${dayMode ? 'text-slate-700' : 'text-gray-300'}`}>
                     {t('twoFactor.currentPassword')}
                   </label>
                   <div className="relative">
@@ -326,14 +328,14 @@ const TwoFactorManagement: React.FC = () => {
                       type={showDisablePassword ? 'text' : 'password'}
                       value={disableForm.password}
                       onChange={(e) => setDisableForm({ ...disableForm, password: e.target.value })}
-                      className="w-full px-3 py-2 pr-10 bg-gray-800 border border-gray-600 rounded-lg text-white"
+                      className={`w-full px-3 py-2 pr-10 rounded-lg border ${dayMode ? 'bg-white border-slate-300 text-slate-900' : 'bg-gray-800 border-gray-600 text-white'}`}
                       placeholder="Ihr aktuelles Passwort"
                       autoComplete="new-password"
                     />
                     <button
                       type="button"
                       onClick={() => setShowDisablePassword(v => !v)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200"
+                      className={`absolute right-3 top-1/2 -translate-y-1/2 ${dayMode ? 'text-slate-400 hover:text-slate-600' : 'text-gray-400 hover:text-gray-200'}`}
                     >
                       {showDisablePassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
@@ -341,14 +343,14 @@ const TwoFactorManagement: React.FC = () => {
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className={`block text-sm font-medium mb-2 ${dayMode ? 'text-slate-700' : 'text-gray-300'}`}>
                     2FA-Code oder Backup-Code:
                   </label>
                   <input
                     type="text"
                     value={disableForm.twoFactorToken}
                     onChange={(e) => setDisableForm({ ...disableForm, twoFactorToken: e.target.value.replace(/[^0-9A-Fa-f]/g, '').slice(0, 8) })}
-                    className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white font-mono"
+                    className={`w-full px-3 py-2 rounded-lg border font-mono ${dayMode ? 'bg-white border-slate-300 text-slate-900' : 'bg-gray-800 border-gray-600 text-white'}`}
                     placeholder="123456 oder A1B2C3D4"
                     maxLength={8}
                   />
@@ -362,7 +364,7 @@ const TwoFactorManagement: React.FC = () => {
                     setDisableForm({ password: '', twoFactorToken: '' });
                     setError('');
                   }}
-                  className="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-2 rounded-lg transition-colors"
+                  className={`flex-1 py-2 rounded-lg transition-colors ${dayMode ? 'bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300' : 'bg-gray-600 hover:bg-gray-700 text-white'}`}
                 >
                   Abbrechen
                 </button>
@@ -394,10 +396,10 @@ const TwoFactorManagement: React.FC = () => {
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-gray-900 rounded-xl border border-gray-700 max-w-md w-full max-h-[90vh] overflow-y-auto"
+            className={`rounded-xl border max-w-md w-full max-h-[90vh] overflow-y-auto ${dayMode ? 'bg-white border-slate-200' : 'bg-gray-900 border-gray-700'}`}
           >
-            <div className="p-6 border-b border-gray-700">
-              <h2 className="text-lg font-bold text-white flex items-center">
+            <div className={`p-6 border-b ${dayMode ? 'border-slate-200' : 'border-gray-700'}`}>
+              <h2 className={`text-lg font-bold flex items-center ${dayMode ? 'text-slate-900' : 'text-white'}`}>
                 <RefreshCw className="w-5 h-5 text-yellow-400 mr-2" />
                 {t('twoFactor.backupCodes.regenerateTitle')}
               </h2>
@@ -419,14 +421,14 @@ const TwoFactorManagement: React.FC = () => {
                   </div>
 
                   <div className="mb-6">
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label className={`block text-sm font-medium mb-2 ${dayMode ? 'text-slate-700' : 'text-gray-300'}`}>
                       {t('twoFactor.backupCodes.enterTokenLabel')}
                     </label>
                     <input
                       type="text"
                       value={regenerateToken}
                       onChange={(e) => setRegenerateToken(e.target.value.replace(/[^0-9A-Fa-f]/g, '').slice(0, 8))}
-                      className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white font-mono text-center text-lg tracking-wider"
+                      className={`w-full px-3 py-2 rounded-lg border font-mono text-center text-lg tracking-wider ${dayMode ? 'bg-white border-slate-300 text-slate-900' : 'bg-gray-800 border-gray-600 text-white'}`}
                       placeholder="123456 / A1B2C3D4"
                       maxLength={8}
                     />
@@ -435,7 +437,7 @@ const TwoFactorManagement: React.FC = () => {
                   <div className="flex space-x-3">
                     <button
                       onClick={() => { setShowRegenerate(false); setRegenerateToken(''); setError(''); }}
-                      className="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-2 rounded-lg transition-colors"
+                      className={`flex-1 py-2 rounded-lg transition-colors ${dayMode ? 'bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300' : 'bg-gray-600 hover:bg-gray-700 text-white'}`}
                     >
                       {t('twoFactor.backupCodes.cancel')}
                     </button>
@@ -457,10 +459,10 @@ const TwoFactorManagement: React.FC = () => {
                     </p>
                   </div>
 
-                  <div className="bg-gray-800 rounded-lg border border-gray-700 p-4 mb-4">
+                  <div className={`rounded-lg border p-4 mb-4 ${dayMode ? 'bg-slate-100 border-slate-200' : 'bg-gray-800 border-gray-700'}`}>
                     <div className="grid grid-cols-2 gap-2 mb-4">
                       {newBackupCodes.map((code, index) => (
-                        <div key={index} className="bg-gray-900 p-2 rounded text-center">
+                        <div key={index} className={`p-2 rounded text-center ${dayMode ? 'bg-white border border-slate-200' : 'bg-gray-900'}`}>
                           <code className="text-green-400 text-sm">{code}</code>
                         </div>
                       ))}
@@ -482,7 +484,7 @@ const TwoFactorManagement: React.FC = () => {
 
                   <button
                     onClick={() => { setShowRegenerate(false); setNewBackupCodes(null); }}
-                    className="w-full bg-gray-600 hover:bg-gray-700 text-white py-2 rounded-lg transition-colors"
+                    className={`w-full py-2 rounded-lg transition-colors ${dayMode ? 'bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300' : 'bg-gray-600 hover:bg-gray-700 text-white'}`}
                   >
                     {t('twoFactor.backupCodes.done')}
                   </button>

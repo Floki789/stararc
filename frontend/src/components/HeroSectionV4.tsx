@@ -7,7 +7,7 @@ import {
   Layers,
   ArrowDownUp,
   TrendingUp,
-  Activity,
+  CreditCard,
   LayoutDashboard,
   Building2,
   Package,
@@ -75,12 +75,12 @@ const features: Feature[] = [
     glowColor: 'rgba(236,72,153,0.25)',
   },
   {
-    id: 'inflation',
-    Icon: Activity,
-    gradient: 'from-orange-500 to-red-500',
-    textColor: 'text-orange-400',
-    borderColor: 'border-orange-500/30',
-    glowColor: 'rgba(249,115,22,0.25)',
+    id: 'paymentPlans',
+    Icon: CreditCard,
+    gradient: 'from-sky-500 to-cyan-500',
+    textColor: 'text-sky-400',
+    borderColor: 'border-sky-500/30',
+    glowColor: 'rgba(14,165,233,0.25)',
   },
   {
     id: 'charts',
@@ -465,16 +465,7 @@ const HeroSectionV4: React.FC<HeroSectionV4Props> = ({ dayMode = false }) => {
                 );
               })}
 
-              {/* Phase labels at top */}
-              <text x={0.21 * SVG_W} y={13} fontSize={9} fill={dayMode ? 'rgba(59,130,246,0.65)' : 'rgba(147,197,253,0.55)'} fontFamily="system-ui, sans-serif" textAnchor="middle" fontWeight="600">
-                {isDE ? 'BERUFSLEBEN' : 'CAREER'}
-              </text>
-              <text x={0.50 * SVG_W} y={13} fontSize={9} fill={dayMode ? 'rgba(139,92,246,0.65)' : 'rgba(196,181,253,0.55)'} fontFamily="system-ui, sans-serif" textAnchor="middle" fontWeight="600">
-                {isDE ? 'TEILZEIT' : 'PART-TIME'}
-              </text>
-              <text x={0.79 * SVG_W} y={13} fontSize={9} fill={dayMode ? 'rgba(5,150,105,0.65)' : 'rgba(110,231,183,0.55)'} fontFamily="system-ui, sans-serif" textAnchor="middle" fontWeight="600">
-                {isDE ? 'PENSIONIERUNG' : 'RETIREMENT'}
-              </text>
+
               </svg>
 
               {/* Asset class icons — absolutely positioned over SVG, in the area below the curve */}

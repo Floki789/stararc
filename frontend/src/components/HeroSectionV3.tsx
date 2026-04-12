@@ -20,6 +20,7 @@ interface AssetClass {
   Icon: React.ElementType;
   gradient: string;
   textColor: string;
+  dayTextColor: string;
   borderColor: string;
 }
 
@@ -30,6 +31,7 @@ const assetClasses: AssetClass[] = [
     Icon: TrendingUp,
     gradient: 'from-blue-500 to-cyan-500',
     textColor: 'text-blue-400',
+    dayTextColor: 'text-blue-700',
     borderColor: 'border-blue-500/30',
   },
   {
@@ -38,6 +40,7 @@ const assetClasses: AssetClass[] = [
     Icon: Building2,
     gradient: 'from-violet-500 to-purple-600',
     textColor: 'text-violet-400',
+    dayTextColor: 'text-violet-700',
     borderColor: 'border-violet-500/30',
   },
   {
@@ -46,6 +49,7 @@ const assetClasses: AssetClass[] = [
     Icon: Package,
     gradient: 'from-amber-500 to-orange-500',
     textColor: 'text-amber-400',
+    dayTextColor: 'text-amber-700',
     borderColor: 'border-amber-500/30',
   },
   {
@@ -54,6 +58,7 @@ const assetClasses: AssetClass[] = [
     Icon: PiggyBank,
     gradient: 'from-emerald-500 to-teal-600',
     textColor: 'text-emerald-400',
+    dayTextColor: 'text-emerald-700',
     borderColor: 'border-emerald-500/30',
   },
   {
@@ -62,6 +67,7 @@ const assetClasses: AssetClass[] = [
     Icon: Bitcoin,
     gradient: 'from-orange-500 to-amber-600',
     textColor: 'text-orange-400',
+    dayTextColor: 'text-orange-700',
     borderColor: 'border-orange-500/30',
   },
   {
@@ -70,6 +76,7 @@ const assetClasses: AssetClass[] = [
     Icon: Gem,
     gradient: 'from-yellow-400 to-amber-500',
     textColor: 'text-yellow-400',
+    dayTextColor: 'text-yellow-700',
     borderColor: 'border-yellow-500/30',
   },
 ];
@@ -429,10 +436,10 @@ const HeroSectionV3: React.FC<HeroSectionV3Props> = ({ dayMode = false }) => {
                       </div>
                     </div>
 
-                    <span className={`text-sm font-semibold ${item.textColor} leading-tight`}>
+                    <span className={`text-sm font-semibold leading-tight ${dayMode ? item.dayTextColor : item.textColor}`}>
                       {t(`hero2.assets.${item.id}`)}
                     </span>
-                    <span className="text-xs text-slate-500 leading-tight">
+                    <span className={`text-xs leading-tight ${dayMode ? 'text-slate-600' : 'text-slate-500'}`}>
                       {t(`hero2.assets.${item.id}Desc`)}
                     </span>
                   </div>
@@ -459,10 +466,10 @@ const HeroSectionV3: React.FC<HeroSectionV3Props> = ({ dayMode = false }) => {
                         <Lock size={10} className="text-white" />
                       </div>
                     </div>
-                    <span className={`text-sm font-semibold ${item.textColor}`}>
+                    <span className={`text-sm font-semibold ${dayMode ? item.dayTextColor : item.textColor}`}>
                       {t(`hero2.assets.${item.id}`)}
                     </span>
-                    <span className="text-xs text-slate-500 leading-snug">
+                    <span className={`text-xs leading-snug ${dayMode ? 'text-slate-600' : 'text-slate-500'}`}>
                       {t(`hero2.assets.${item.id}Desc`)}
                     </span>
                   </div>

@@ -817,12 +817,12 @@
         "bitcoinSetups": "{{count}} Bitcoin single sig setups (no passphrase)",
         "wallets": "{{count}} Hardware & {{count}} Software wallets",
         "backups": "{{count}} Seed & Descriptor backups each",
-        "balance": "Balance Section",
-        "budget": "Budget Section",
-        "cockpit": "Cockpit Section",
-        "futurePlanning": "Future Planning Section",
-        "login": "Standard or Zero-Knowledge Login",
-        "bitcoinMatrix": "Bitcoin Self Custody Security Matrix"
+        "balance": "Assets Section",
+        "budget": "Setup Assistant",
+        "cockpit": "Cockpit",
+        "futurePlanning": "Future Planning",
+        "login": "Privacy Login",
+        "bitcoinMatrix": "Self Custody Security Matrix"
       }
     },
     "nova": {
@@ -2265,6 +2265,32 @@
       "preciousMetalsDesc": "Gold · Silver · Platinum"
     }
   },
+  "hero5": {
+    "badge": "Setup Assistant",
+    "titleLine1": "Guided by",
+    "titleLine2": "assistants.",
+    "subtitle": "Step by step to your goal. Three guided assistants get your account up to date in no time.",
+    "check1": "Ready in minutes — the assistant takes the lead",
+    "check2": "Capture profile, wealth and planning in a structured way",
+    "check3": "Pause anytime and continue later",
+    "setupLabel": "Setup Assistants",
+    "progressLabel": "Progress",
+    "completionHint": "All done — your account is fully set up",
+    "steps": {
+      "profile": {
+        "label": "Profile Assistant",
+        "desc": "Family, origin, language and basic details"
+      },
+      "balance": {
+        "label": "Wealth Assistant",
+        "desc": "Portfolios, real estate, Bitcoin and all assets"
+      },
+      "planning": {
+        "label": "Planning Assistant",
+        "desc": "Retirement, scenarios and future projections"
+      }
+    }
+  },
   "hero4": {
     "badge": "Intelligent Planning",
     "titleLine1": "Planning that creates",
@@ -2285,6 +2311,8 @@
       "growthDesc": "Returns and compound interest over time",
       "inflation": "Inflation",
       "inflationDesc": "Purchasing power over decades",
+      "paymentPlans": "Payment Plans",
+      "paymentPlansDesc": "Savings and repayment plans over time",
       "charts": "Visual Overview",
       "chartsDesc": "Interactive charts of your financial development"
     },
