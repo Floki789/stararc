@@ -1774,8 +1774,8 @@
       "title": "3. Art und Zweck der Datenverarbeitung",
       "registration": {
         "title": "3.1 Registrierung und Authentifizierung",
-        "intro": "Stararc.one bietet zwei Authentifizierungsmethoden mit grundlegend unterschiedlichen Datenschutzeigenschaften. Die Methode wird einmalig bei der Registrierung gewählt.",
-        "emailIntro": "Die E-Mail-Adresse wird in beiden Modi identisch verarbeitet und niemals im Klartext gespeichert:",
+        "intro": "Stararc.one verwendet ausschliesslich Zero-Knowledge-Login (Privacy Login). Der Server hat zu keinem Zeitpunkt Zugriff auf deine Inhaltsdaten; ein administrativer Passwort-Reset ist technisch nicht möglich.",
+        "emailIntro": "Die E-Mail-Adresse wird niemals im Klartext gespeichert:",
         "emailList": [
           "E-Mail-Hash (Einwegfunktion) – ausschließlich für die Login-Suche, nicht umkehrbar",
           "E-Mail-Adresse (nutzerverschlüsselt) – für die Anzeige in der App",
@@ -1794,8 +1794,8 @@
           "IP-Adresse bei Registrierung (verschlüsselt)"
         ],
         "standardNote": "Beim Standard-Login speichert der Server einen serverseitig verschlüsselten Datenverschlüsselungsschlüssel. Damit ist ein administrativer Passwort-Reset möglich, wenn du dein Passwort vergisst. Das Passwort selbst wird niemals gespeichert. Alle Nutzerdaten bleiben clientseitig über den DEK verschlüsselt; der Server entschlüsselt deine Inhalte ausschließlich im Rahmen eines explizit angeforderten Passwort-Resets.",
-        "zkTitle": "3.1b Zero-Knowledge-Login (Souveränitätsmodus)",
-        "zkIntro": "Zusätzlich verarbeitete Daten:",
+        "zkTitle": "Zero-Knowledge-Login (Privacy Login)",
+        "zkIntro": "Verarbeitete Daten:",
         "zkList": [
           "BCrypt-Hash des Login-Codes",
           "Verschlüsselter Datenverschlüsselungsschlüssel (DEK) – Nutzerseite",
@@ -1820,7 +1820,7 @@
           "Dokumenten-Referenzen (nicht Inhalte)",
           "xPub-Schlüssel und Derivationspfade (optionale Angabe)"
         ],
-        "note": "Diese Daten werden clientseitig verschlüsselt gespeichert. Beim Zero-Knowledge-Login sind sie für den Betreiber nicht lesbar. Beim Standard-Login hat der Betreiber im Rahmen eines explizit angeforderten Passwort-Resets technisch Zugriff auf den Entschlüsselungsschlüssel.",
+        "note": "Diese Daten werden clientseitig verschlüsselt gespeichert und sind für den Betreiber nicht lesbar.",
         "legal": "Rechtsgrundlage: Vertragserfüllung (Art. 6 Abs. 1 lit. b DSGVO)"
       },
       "passwordReset": {
@@ -1830,7 +1830,7 @@
         "legal": "Rechtsgrundlage: Vertragserfüllung (Art. 6 Abs. 1 lit. b DSGVO)"
       },
       "payment": {
-        "title": "3.4 Zahlungsabwicklung",
+        "title": "3.3 Zahlungsabwicklung",
         "intro": "Verarbeitete Daten:",
         "list": [
           "Zahlungsinformationen (über Stripe, Inc., San Francisco, USA)",
@@ -1841,14 +1841,14 @@
         "legal": "Rechtsgrundlage: Vertragserfüllung (Art. 6 Abs. 1 lit. b DSGVO)"
       },
       "notifications": {
-        "title": "3.5 Benachrichtigungen und Kommunikation",
+        "title": "3.4 Benachrichtigungen und Kommunikation",
         "intro": "Verarbeitete Daten: E-Mail-Adresse (betreiberverschlüsselt, zum Versand entschlüsselt).",
         "description": "Zweck: Versand von Benachrichtigungen bei wesentlichen Änderungen der Datenschutzerklärung oder der AGB sowie betriebsnotwendige Kommunikation (z. B. Sicherheitsvorfälle).",
         "note": "Rechtsgrundlage: Berechtigtes Interesse (Art. 6 Abs. 1 lit. f DSGVO). Werbliche Kommunikation erfolgt nur mit ausdrücklicher Einwilligung.",
         "required": "Die Angabe deiner E-Mail-Adresse ist für die Erstellung eines Accounts zwingend erforderlich. Ohne E-Mail-Adresse kann kein Account angelegt werden."
       },
       "newsletter": {
-        "title": "3.6 Newsletter, E-Mail- und SMS-Marketing",
+        "title": "3.5 Newsletter, E-Mail- und SMS-Marketing",
         "intro": "Verarbeitete Daten: E-Mail-Adresse, Mobiltelefonnummer (bei SMS-Abo), Vorname (für Personalisierung).",
         "purpose": "Zweck: Versand von Newslettern, Produktinformationen und Marketingkommunikation per E-Mail und/oder SMS.",
         "legal": "Rechtsgrundlage: Einwilligung (Art. 6 Abs. 1 lit. a DSGVO). Die Einwilligung ist freiwillig und keine Bedingung für den Abschluss eines Abonnements.",
@@ -1870,9 +1870,9 @@
     },
     "section5": {
       "title": "5. Verschlüsselung und technische Sicherheit",
-      "p1": "Client-seitige Verschlüsselung: Sensible Nutzerdaten werden auf deinem Gerät verschlüsselt, bevor sie übertragen werden. Der Umfang hängt von der gewählten Authentifizierungsmethode ab (vgl. Abschnitt 3.1).",
+      "p1": "Client-seitige Verschlüsselung: Sensible Nutzerdaten werden auf deinem Gerät verschlüsselt, bevor sie übertragen werden. Alle Inhaltsdaten werden clientseitig verschlüsselt, bevor sie unsere Server erreichen.",
       "p2": "Keine Klartext-Speicherung: Wir speichern keine privacy-relevanten Daten im Klartext auf unseren Servern.",
-      "p3": "Zugriff abhängig von der Login-Methode: Beim Zero-Knowledge-Login (Souveränitätsmodus) ist es dem Betreiber technisch unmöglich, deine Inhaltsdaten zu entschlüsseln. Beim Standard-Login hält der Server geschützte Schlüsselmaterialien, die ausschließlich für die Durchführung eines explizit angeforderten Passwort-Resets eingesetzt werden."
+      "p3": "Zero-Knowledge-Architektur: Beim Zero-Knowledge-Login (Privacy Login) ist es dem Betreiber technisch unmöglich, deine Inhaltsdaten zu entschlüsseln. Der Server hält zu keinem Zeitpunkt Schlüsselmaterial, das einen Zugriff auf deine Daten erlauben würde."
     },
     "section6": {
       "title": "6. Empfänger und Drittanbieter",
@@ -1916,7 +1916,7 @@
     "section11": {
       "title": "11. Datenschutz-Folgenabschätzung",
       "p1": "Aufgrund unserer Privacy-by-Design-Architektur und der ausschließlichen Verarbeitung von Metadaten ist das Risiko für deine Privatsphäre minimiert.",
-      "p2": "Beim Zero-Knowledge-Login (Souveränitätsmodus) ist die Architektur so ausgelegt, dass Inhaltsdaten selbst bei vollständigem Zugriff auf die Server-Infrastruktur nicht entschlüsselt werden können. Beim Standard-Login hängt die Vertraulichkeit der Nutzerdaten von der Sicherheit der serverseitigen Geheimnisse ab, die angemessen geschützt und regelmäßig überprüft werden."
+      "p2": "Stararc.one verwendet ausschliesslich Zero-Knowledge-Login (Privacy Login). Die Architektur ist so ausgelegt, dass Inhaltsdaten selbst bei vollständigem Zugriff auf die Server-Infrastruktur nicht entschlüsselt werden können."
     },
     "section12": {
       "title": "12. Änderungen dieser Datenschutzerklärung",
@@ -2256,7 +2256,7 @@
     "version": "Version 1.0 — März 2026 • Archimedes Apps"
   },
   "hero2": {
-    "titleLine1": "Überblicke deine Vermögenswerte",
+    "titleLine1": "Überblicke dein Vermögen",
     "titleLine2": "Plane deine Zukunft",
     "subtitleLine1": "Deine Assets bleiben, wo sie sind.",
     "subtitleLine2": "Stararc bietet Übersicht, Analysen und Planung.",
@@ -2284,7 +2284,7 @@
     "badge": "Setup-Assistent",
     "titleLine1": "Von Assistenten",
     "titleLine2": "geführt.",
-    "subtitle": "Schritt für Schritt zum Ziel. Drei geführte Assistenten bringen dein Konto in kürzester Zeit auf den neusten Stand.",
+    "subtitle": "Schritt für Schritt zum Ziel. Drei geführte Assistenten bringen deine Finanzplanung auf ein neues Level.",
     "check1": "In Minuten startklar — der Assistent übernimmt die Führung",
     "check2": "Profil, Vermögen und Planung strukturiert erfassen",
     "check3": "Jederzeit unterbrechbar und später weiterführbar",

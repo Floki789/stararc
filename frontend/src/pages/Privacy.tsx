@@ -86,19 +86,8 @@ const Privacy: React.FC = () => {
                 <p className="mb-2"><strong>{t('privacy.section3.registration.emailIntro')}</strong></p>
                 {renderList(getArray('privacy.section3.registration.emailList'))}
 
-                {/* Standard Login */}
-                <h4 className="text-lg font-semibold text-white mt-6 mb-2">
-                  {t('privacy.section3.registration.standardTitle')}
-                </h4>
-                <p className="mb-2">{t('privacy.section3.registration.standardIntro')}</p>
-                {renderList(getArray('privacy.section3.registration.standardList'))}
-                <p className="mt-3 text-blue-300 text-sm">{t('privacy.section3.registration.standardNote')}</p>
-
                 {/* Zero-Knowledge Login */}
-                <h4 className="text-lg font-semibold text-white mt-6 mb-2">
-                  {t('privacy.section3.registration.zkTitle')}
-                </h4>
-                <p className="mb-2">{t('privacy.section3.registration.zkIntro')}</p>
+                <p className="mb-2 mt-4">{t('privacy.section3.registration.zkIntro')}</p>
                 {renderList(getArray('privacy.section3.registration.zkList'))}
                 <p className="mt-3 text-yellow-300 text-sm">{t('privacy.section3.registration.zkNote')}</p>
 
@@ -114,16 +103,6 @@ const Privacy: React.FC = () => {
                 {renderList(getArray('privacy.section3.metadata.list'))}
                 <p className="mt-3 text-blue-300 text-sm">{t('privacy.section3.metadata.note')}</p>
                 <p className="mt-2 text-sm text-gray-400">{t('privacy.section3.metadata.legal')}</p>
-              </div>
-
-              {/* Password Reset */}
-              <div className="bg-gray-800/50 p-6 rounded-lg">
-                <h3 className="text-xl font-semibold text-white mb-4">
-                  {t('privacy.section3.passwordReset.title')}
-                </h3>
-                <p className="mb-2"><strong>{t('privacy.section3.passwordReset.intro')}</strong></p>
-                <p className="mb-2">{t('privacy.section3.passwordReset.description')}</p>
-                <p className="mt-2 text-sm text-gray-400">{t('privacy.section3.passwordReset.legal')}</p>
               </div>
 
               {/* Payment */}

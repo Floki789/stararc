@@ -1608,15 +1608,15 @@
       "title": "2. Data Processing Principles",
       "p1": "Privacy-by-Design: Stararc.one is designed as a privacy-focused metadata management platform that explicitly warns against using the platform for storing asset access information (accounts, logins, passwords, private keys, etc.).",
       "p2": "Data Minimization: We only process data that is technically required for the operation of the platform.",
-      "p3": "Client-side Encryption: All personal content data (e.g. asset names, institution names, document references) is encrypted on your device before being transmitted to our servers. The key management method differs depending on the authentication method chosen at registration (see Section 3.1).",
+      "p3": "Client-side Encryption: All personal content data (e.g. asset names, institution names, document references) is encrypted on your device before being transmitted to our servers. Stararc.one uses exclusively Zero-Knowledge Login (Privacy Login) — the server never has access to your encryption key at any time.",
       "p4": "Operational Plaintext Data: A portion of data is stored unencrypted for technical reasons (performance, database queries, app logic). This exclusively concerns non-personal, non-sensitive structural data with no relation to personal identity, for example: subscription plan and status (e.g. \"Core\", \"Active\"), asset category and subcategory (e.g. \"Securities\", \"Equities\"), currency code (e.g. \"CHF\", \"USD\"), display order of categories, timestamps (creation date, last login, last update), app-internal status flags (e.g. is active, automatic price update enabled), reminder interval for manual updates (e.g. \"monthly\"). These data enable reliable and performant app rendering but contain no inferences about your specific financial situation."
     },
     "section3": {
       "title": "3. Types and Purposes of Data Processing",
       "registration": {
         "title": "3.1 Registration and Authentication",
-        "intro": "Stararc.one offers two authentication methods with fundamentally different privacy properties. You choose one method at registration.",
-        "emailIntro": "The email address is processed identically in both modes and is never stored in plain text:",
+        "intro": "Stararc.one exclusively uses Zero-Knowledge Login (Privacy Login). The server never has access to your content data; an administrative password reset is technically impossible.",
+        "emailIntro": "The email address is never stored in plain text:",
         "emailList": [
           "Email hash (one-way hashed) — for login lookup only, not reversible",
           "Email address (encrypted, only decryptable by you) — for display in the app",
@@ -1635,8 +1635,8 @@
           "IP address at registration (encrypted)"
         ],
         "standardNote": "With Standard Login, the server stores a server-side encrypted data encryption key. This enables an administrative password reset if you forget your password. Your password itself is never stored. All user data remains client-side encrypted via the DEK; the server decrypts your content only in the context of an explicitly requested password reset.",
-        "zkTitle": "3.1b Zero-Knowledge Login (Privacy Login)",
-        "zkIntro": "Additionally processed data:",
+        "zkTitle": "Zero-Knowledge Login (Privacy Login)",
+        "zkIntro": "Processed data:",
         "zkList": [
           "BCrypt hash of the login code",
           "Encrypted data encryption key (DEK) — user-side",
@@ -1661,7 +1661,7 @@
           "Document references (not contents)",
           "xPub keys and derivation paths (optional)"
         ],
-        "note": "These data are stored client-side encrypted. With Zero-Knowledge Login, they are not readable by the operator. With Standard Login, the operator has technical access to the decryption key in the context of an explicitly requested password reset.",
+        "note": "These data are stored client-side encrypted and are not readable by the operator.",
         "legal": "Legal basis: Contract performance (Art. 6 para. 1 lit. b GDPR)"
       },
       "passwordReset": {
@@ -1671,7 +1671,7 @@
         "legal": "Legal basis: Contract performance (Art. 6 para. 1 lit. b GDPR)"
       },
       "payment": {
-        "title": "3.4 Payment Processing",
+        "title": "3.3 Payment Processing",
         "intro": "Processed data:",
         "list": [
           "Payment information (via Stripe, Inc., San Francisco, USA)",
@@ -1682,14 +1682,14 @@
         "legal": "Legal basis: Contract performance (Art. 6 para. 1 lit. b GDPR)"
       },
       "notifications": {
-        "title": "3.5 Notifications and Communication",
+        "title": "3.4 Notifications and Communication",
         "intro": "Processed data: Email address (operator-encrypted, decrypted for sending).",
         "description": "Purpose: Sending notifications about material changes to the privacy policy or terms of service, and operationally necessary communications (e.g. security incidents).",
         "note": "Legal basis: Legitimate interest (Art. 6 para. 1 lit. f GDPR). Promotional communications are only sent with explicit consent.",
         "required": "Providing your email address is mandatory for creating an account. Without an email address, no account can be created."
       },
       "newsletter": {
-        "title": "3.6 Newsletter, Email and SMS Marketing",
+        "title": "3.5 Newsletter, Email and SMS Marketing",
         "intro": "Processed data: Email address, mobile phone number (for SMS subscription), first name (for personalisation).",
         "purpose": "Purpose: Sending newsletters, product information and marketing communications by email and/or SMS.",
         "legal": "Legal basis: Consent (Art. 6 para. 1 lit. a GDPR). Consent is voluntary and not a condition for purchasing a subscription.",
@@ -1711,9 +1711,9 @@
     },
     "section5": {
       "title": "5. Encryption and Technical Security",
-      "p1": "Client-side Encryption: Sensitive user data is encrypted on your device before transmission. The scope depends on the chosen authentication method (see Section 3.1).",
+      "p1": "Client-side Encryption: Sensitive user data is encrypted on your device before transmission. All content data is encrypted client-side before reaching our servers.",
       "p2": "No Plain Text Storage: We do not store any privacy-relevant data in plain text on our servers.",
-      "p3": "Access depending on login method: With Zero-Knowledge Login (Privacy Login), it is technically impossible for the operator to decrypt your content data. With Standard Login, the server holds protected key material that is used exclusively to perform an explicitly requested password reset."
+      "p3": "Zero-Knowledge Architecture: With Zero-Knowledge Login (Privacy Login), it is technically impossible for the operator to decrypt your content data. The server never holds any key material that could be used to access your data."
     },
     "section6": {
       "title": "6. Recipients and Third Parties",
@@ -1757,7 +1757,7 @@
     "section11": {
       "title": "11. Data Protection Impact Assessment",
       "p1": "Due to our Privacy-by-Design architecture and exclusive processing of metadata, the risk to your privacy is minimized.",
-      "p2": "With Zero-Knowledge Login (Privacy Login), the architecture is designed so that content data cannot be decrypted even with full access to the server infrastructure. With Standard Login, the confidentiality of user data depends on the security of server-side secrets, which are appropriately protected and regularly reviewed."
+      "p2": "Stararc.one uses Zero-Knowledge Login (Privacy Login) exclusively. The architecture is designed so that content data cannot be decrypted even with full access to the server infrastructure."
     },
     "section12": {
       "title": "12. Changes to this Privacy Policy",
@@ -2241,7 +2241,7 @@
     "version": "Version 1.0 — March 2026 • Archimedes Apps"
   },
   "hero2": {
-    "titleLine1": "Track your Assets",
+    "titleLine1": "Track your Wealth",
     "titleLine2": "Plan your Future",
     "subtitleLine1": "Your Assets stay where they are.",
     "subtitleLine2": "Stararc provides overview, analytics and planning.",
@@ -2269,7 +2269,7 @@
     "badge": "Setup Assistant",
     "titleLine1": "Guided by",
     "titleLine2": "assistants.",
-    "subtitle": "Step by step to your goal. Three guided assistants get your account up to date in no time.",
+    "subtitle": "Step by step to your goal. Three guided assistants take your financial planning to the next level.",
     "check1": "Ready in minutes — the assistant takes the lead",
     "check2": "Capture profile, wealth and planning in a structured way",
     "check3": "Pause anytime and continue later",

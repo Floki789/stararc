@@ -210,12 +210,12 @@ const TwoFactorManagement: React.FC = () => {
               )}
             </p>
             
-            <div className="bg-green-900/20 border border-green-500/30 rounded-lg p-4 mb-4">
+            <div className={`rounded-lg p-4 mb-4 border ${dayMode ? 'bg-green-50 border-green-300' : 'bg-green-900/20 border-green-500/30'}`}>
               <div className="flex items-start space-x-2">
-                <CheckCircle className="w-5 h-5 text-green-400 mt-0.5" />
+                <CheckCircle className={`w-5 h-5 mt-0.5 ${dayMode ? 'text-green-600' : 'text-green-400'}`} />
                 <div>
-                  <p className="text-green-300 text-sm font-semibold">{t('twoFactor.securityIncreased')}</p>
-                  <p className="text-green-300 text-xs">
+                  <p className={`text-sm font-semibold ${dayMode ? 'text-green-800' : 'text-green-300'}`}>{t('twoFactor.securityIncreased')}</p>
+                  <p className={`text-xs ${dayMode ? 'text-green-700' : 'text-green-300'}`}>
                     {t('twoFactor.securityIncreasedMessage')}
                   </p>
                 </div>
@@ -245,8 +245,8 @@ const TwoFactorManagement: React.FC = () => {
                 </div>
 
                 {remainingCodes === 0 && (
-                  <div className="mb-3 p-2 bg-red-900/30 border border-red-500/30 rounded-lg">
-                    <p className="text-red-300 text-xs flex items-center gap-1">
+                  <div className={`mb-3 p-2 rounded-lg border ${dayMode ? 'bg-red-50 border-red-300' : 'bg-red-900/30 border-red-500/30'}`}>
+                    <p className={`text-xs flex items-center gap-1 ${dayMode ? 'text-red-700' : 'text-red-300'}`}>
                       <AlertTriangle className="w-3 h-3 flex-shrink-0" />
                       {t('twoFactor.backupCodes.allUsedWarning')}
                     </p>
@@ -254,8 +254,8 @@ const TwoFactorManagement: React.FC = () => {
                 )}
 
                 {remainingCodes > 0 && remainingCodes <= 3 && (
-                  <div className="mb-3 p-2 bg-yellow-900/30 border border-yellow-500/30 rounded-lg">
-                    <p className="text-yellow-300 text-xs flex items-center gap-1">
+                  <div className={`mb-3 p-2 rounded-lg border ${dayMode ? 'bg-yellow-50 border-yellow-300' : 'bg-yellow-900/30 border-yellow-500/30'}`}>
+                    <p className={`text-xs flex items-center gap-1 ${dayMode ? 'text-yellow-700' : 'text-yellow-300'}`}>
                       <AlertTriangle className="w-3 h-3 flex-shrink-0" />
                       {t('twoFactor.backupCodes.lowWarning').replace('{{remaining}}', String(remainingCodes))}
                     </p>
@@ -264,7 +264,7 @@ const TwoFactorManagement: React.FC = () => {
 
                 <button
                   onClick={() => { setShowRegenerate(true); setNewBackupCodes(null); setError(''); }}
-                  className="w-full bg-yellow-600/20 hover:bg-yellow-600/30 border border-yellow-500/30 text-yellow-300 px-3 py-2 rounded-lg transition-colors text-sm flex items-center justify-center gap-2"
+                  className={`w-full px-3 py-2 rounded-lg transition-colors text-sm flex items-center justify-center gap-2 border ${dayMode ? 'bg-yellow-50 hover:bg-yellow-100 border-yellow-300 text-yellow-700' : 'bg-yellow-600/20 hover:bg-yellow-600/30 border-yellow-500/30 text-yellow-300'}`}
                 >
                   <RefreshCw className="w-4 h-4" />
                   {t('twoFactor.backupCodes.regenerate')}
@@ -307,13 +307,13 @@ const TwoFactorManagement: React.FC = () => {
             
             <div className="p-6">
               {error && (
-                <div className="mb-4 p-3 bg-red-900/20 border border-red-500/50 rounded-lg">
-                  <span className="text-red-300 text-sm">{error}</span>
+                <div className={`mb-4 p-3 rounded-lg border ${dayMode ? 'bg-red-50 border-red-300' : 'bg-red-900/20 border-red-500/50'}`}>
+                  <span className={`text-sm ${dayMode ? 'text-red-700' : 'text-red-300'}`}>{error}</span>
                 </div>
               )}
 
-              <div className="bg-red-900/20 border border-red-500/30 rounded-lg p-4 mb-6">
-                <p className="text-red-300 text-sm">
+              <div className={`rounded-lg p-4 mb-6 border ${dayMode ? 'bg-red-50 border-red-300' : 'bg-red-900/20 border-red-500/30'}`}>
+                <p className={`text-sm ${dayMode ? 'text-red-700' : 'text-red-300'}`}>
                   <strong>{t('twoFactor.disableWarning').split(':')[0]}:</strong> {t('twoFactor.disableWarning').split(':')[1]}
                 </p>
               </div>
@@ -407,15 +407,15 @@ const TwoFactorManagement: React.FC = () => {
             
             <div className="p-6">
               {error && (
-                <div className="mb-4 p-3 bg-red-900/20 border border-red-500/50 rounded-lg">
-                  <span className="text-red-300 text-sm">{error}</span>
+                <div className={`mb-4 p-3 rounded-lg border ${dayMode ? 'bg-red-50 border-red-300' : 'bg-red-900/20 border-red-500/50'}`}>
+                  <span className={`text-sm ${dayMode ? 'text-red-700' : 'text-red-300'}`}>{error}</span>
                 </div>
               )}
 
               {!newBackupCodes ? (
                 <>
-                  <div className="bg-yellow-900/20 border border-yellow-500/30 rounded-lg p-4 mb-6">
-                    <p className="text-yellow-300 text-sm">
+                  <div className={`rounded-lg p-4 mb-6 border ${dayMode ? 'bg-yellow-50 border-yellow-300' : 'bg-yellow-900/20 border-yellow-500/30'}`}>
+                    <p className={`text-sm ${dayMode ? 'text-yellow-800' : 'text-yellow-300'}`}>
                       <strong>⚠️</strong> {t('twoFactor.backupCodes.regenerateWarning')}
                     </p>
                   </div>
@@ -452,8 +452,8 @@ const TwoFactorManagement: React.FC = () => {
                 </>
               ) : (
                 <>
-                  <div className="bg-green-900/20 border border-green-500/30 rounded-lg p-4 mb-4">
-                    <p className="text-green-300 text-sm flex items-center gap-1">
+                  <div className={`rounded-lg p-4 mb-4 border ${dayMode ? 'bg-green-50 border-green-300' : 'bg-green-900/20 border-green-500/30'}`}>
+                    <p className={`text-sm flex items-center gap-1 ${dayMode ? 'text-green-700' : 'text-green-300'}`}>
                       <CheckCircle className="w-4 h-4 flex-shrink-0" />
                       {t('twoFactor.backupCodes.regenerated')}
                     </p>
@@ -476,8 +476,8 @@ const TwoFactorManagement: React.FC = () => {
                     </button>
                   </div>
 
-                  <div className="bg-yellow-900/20 border border-yellow-500/30 rounded-lg p-3 mb-4">
-                    <p className="text-yellow-300 text-xs">
+                  <div className={`rounded-lg p-3 mb-4 border ${dayMode ? 'bg-yellow-50 border-yellow-300' : 'bg-yellow-900/20 border-yellow-500/30'}`}>
+                    <p className={`text-xs ${dayMode ? 'text-yellow-800' : 'text-yellow-300'}`}>
                       <strong>⚠️</strong> {t('twoFactor.backupCodes.saveWarning')}
                     </p>
                   </div>
