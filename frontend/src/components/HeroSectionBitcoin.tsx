@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
-import { CheckCircle, ShieldCheck, Infinity, Lock } from 'lucide-react';
+import { CheckCircle } from 'lucide-react';
 
 interface HeroSectionBitcoinProps {
   dayMode?: boolean;
@@ -13,14 +13,14 @@ const HeroSectionBitcoin: React.FC<HeroSectionBitcoinProps> = ({ dayMode = false
 
   const facts = isDE
     ? [
-        { icon: ShieldCheck, text: 'Hard Money — auf 21 Millionen Einheiten begrenzt' },
-        { icon: Infinity,    text: 'Dezentralisiert — keine Zentralbank, kein Staat' },
-        { icon: Lock,        text: 'Unzensurierbar — niemand kann deine Transaktionen blockieren' },
+        'Hard Money — auf 21 Millionen Einheiten begrenzt',
+        'Dezentralisiert — keine Zentralbank, kein Staat',
+        'Unzensurierbar — niemand kann deine Transaktionen blockieren',
       ]
     : [
-        { icon: ShieldCheck, text: 'Hard money — capped at 21 million units' },
-        { icon: Infinity,    text: 'Decentralized — no central bank, no state' },
-        { icon: Lock,        text: 'Uncensorable — no one can block your transactions' },
+        'Hard money — capped at 21 million units',
+        'Decentralized — no central bank, no state',
+        'Uncensorable — no one can block your transactions',
       ];
 
   return (
@@ -217,7 +217,7 @@ const HeroSectionBitcoin: React.FC<HeroSectionBitcoinProps> = ({ dayMode = false
 
             {/* Fact pills */}
             <div className="mt-6 space-y-3 self-center lg:self-start">
-              {facts.map(({ icon: Icon, text }, i) => (
+              {facts.map((text, i) => (
                 <div key={i} className="flex items-center gap-2.5">
                   <CheckCircle
                     className={`w-4 h-4 flex-shrink-0 ${
