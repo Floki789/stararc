@@ -2306,6 +2306,11 @@
       }
     }
   },
+  "heroBitcoin": {
+    "titleLine1": "Bitcoin gehört",
+    "titleLine2": "in dein Leben.",
+    "subtitle": "hartes, dezentrales, unzensurierbares Geld."
+  },
   "hero4": {
     "badge": "Intelligente Planung",
     "titleLine1": "Eine Planung die",

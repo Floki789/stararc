@@ -2291,6 +2291,11 @@
       }
     }
   },
+  "heroBitcoin": {
+    "titleLine1": "Bitcoin belongs",
+    "titleLine2": "in your life.",
+    "subtitle": "Hard, decentralized, uncensorable money."
+  },
   "hero4": {
     "badge": "Intelligent Planning",
     "titleLine1": "Planning that creates",
