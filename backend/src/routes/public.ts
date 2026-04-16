@@ -161,6 +161,7 @@ router.get('/newsletter/confirm/:token', async (req, res): Promise<any> => {
     }
 
     console.log(`✅ Newsletter: ${email} added to Brevo list ${listId}`);
+    emailService.sendAdminNotification('Newsletter-Anmeldung', { Email: email });
     return res.send(html(true, 'Du bist jetzt für den StarArc-Newsletter angemeldet.'));
   } catch (error) {
     console.error('Newsletter confirm error:', error);
