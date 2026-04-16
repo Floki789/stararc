@@ -22,6 +22,7 @@ import SecurityShowcase from '../components/SecurityShowcase';
 import DataArchitectureShowcase from '../components/DataArchitectureShowcase';
 import GettingStartedShowcase from '../components/GettingStartedShowcase';
 import PlanCards from '../components/PlanCards';
+import NewsletterSignup from '../components/NewsletterSignup';
 import { BarChart3, Lock, Rocket, Sparkles, ArrowUp } from 'lucide-react';
 
 const Home: React.FC = () => {
@@ -133,6 +134,17 @@ const Home: React.FC = () => {
         </div>
       </div>
 
+      {/* Newsletter bar — narrow strip between hero and plans */}
+      <div className={`py-4 px-4 border-b transition-colors duration-700 ${
+        dayMode
+          ? 'bg-slate-200/70 border-slate-300'
+          : 'bg-slate-900 border-slate-800'
+      }`}>
+        <div className="max-w-md mx-auto">
+          <NewsletterSignup dayMode={dayMode} />
+        </div>
+      </div>
+
       {/* Subscription Plans */}
       <div id="plans" className={`py-20 transition-colors duration-700 ${dayMode ? 'bg-slate-100' : 'bg-gray-900'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -228,6 +240,7 @@ const Home: React.FC = () => {
               </div>
             </div>
           </div>
+
         </div>
       </div>
       

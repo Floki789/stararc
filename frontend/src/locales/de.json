@@ -1,4 +1,11 @@
 {
+  "newsletter": {
+    "label": "Für den E-Mail Newsletter registrieren",
+    "placeholder": "Für den E-Mail Newsletter registrieren",
+    "signup": "Registrieren",
+    "success": "Bitte bestätige die E-Mail in deinem Postfach.",
+    "error": "Etwas ist schiefgelaufen. Bitte versuche es erneut."
+  },
   "nav": {
     "home": "Startseite",
     "pricing": "Preise",

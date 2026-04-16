@@ -1035,4 +1035,58 @@ export class EmailService {
       console.error('❌ Failed to send welcome email:', error);
     }
   }
+
+  // Send newsletter double opt-in confirmation email
+  async sendNewsletterConfirmation(email: string, token: string): Promise<void> {
+    await this.ensureReady();
+    const confirmUrl = `${process.env.BACKEND_URL || process.env.FRONTEND_URL?.replace(':3003', ':3004') || 'http://localhost:3004'}/api/public/newsletter/confirm/${token}`;
+
+    const mailOptions = {
+      from: this.fromEmail,
+      to: email,
+      subject: 'StarArc Newsletter – Anmeldung bestätigen',
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px;">
+          <h2 style="color: #1f2937; margin-bottom: 20px;">Newsletter bestätigen</h2>
+
+          <p style="color: #4b5563; line-height: 1.6; margin-bottom: 30px;">
+            Klicke auf den Button, um deine Newsletter-Anmeldung zu bestätigen.
+            Du erhältst dann Neuigkeiten und Updates rund um StarArc.
+          </p>
+
+          <div style="margin: 30px 0;">
+            <a href="${confirmUrl}"
+               style="display: inline-block; background: #3b82f6; color: white; padding: 12px 30px;
+                      text-decoration: none; border-radius: 6px; font-weight: 500;">
+              Jetzt bestätigen
+            </a>
+          </div>
+
+          <p style="color: #6b7280; font-size: 14px; margin-top: 30px;">
+            Der Link ist 24 Stunden gültig. Falls du dich nicht angemeldet hast, ignoriere diese E-Mail.
+          </p>
+
+          <p style="color: #9ca3af; font-size: 12px; margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+            Falls der Button nicht funktioniert:<br>
+            <a href="${confirmUrl}" style="color: #3b82f6; word-break: break-all;">${confirmUrl}</a>
+          </p>
+
+          <p style="color: #9ca3af; font-size: 12px; margin-top: 20px;">
+            © ${new Date().getFullYear()} Stararc.one
+          </p>
+        </div>
+      `,
+    };
+
+    try {
+      const info = await this.transporter.sendMail(mailOptions);
+      console.log(`✅ Newsletter confirmation email sent to ${email}`);
+      if (process.env.NODE_ENV !== 'production') {
+        console.log(`🔗 Preview URL: ${nodemailer.getTestMessageUrl(info)}`);
+      }
+    } catch (error) {
+      console.error('❌ Failed to send newsletter confirmation email:', error);
+      throw new Error('Failed to send newsletter confirmation email');
+    }
+  }
 }

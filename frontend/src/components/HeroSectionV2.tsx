@@ -456,7 +456,7 @@ const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
           </div>{/* end right column */}
         </div>{/* end flex row */}
 
-        {/* ── Full-width subtitle ─────────────────────────────────────── */}
+        {/* ── Full-width subtitle ─────────────────────────────────── */}
         <div className="w-full mt-10 text-center">
           <p className={`text-lg sm:text-xl font-light ${dayMode ? 'text-slate-700' : 'text-white'}`}>
             {t('hero2.subtitleLine1')} {t('hero2.subtitleLine2')}
