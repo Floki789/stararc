@@ -4,7 +4,8 @@
     "placeholder": "Für den E-Mail Newsletter registrieren",
     "signup": "Registrieren",
     "success": "Bitte bestätige die E-Mail in deinem Postfach.",
-    "error": "Etwas ist schiefgelaufen. Bitte versuche es erneut."
+    "error": "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
+    "invalid": "Bitte eine gültige E-Mail-Adresse eingeben."
   },
   "nav": {
     "home": "Startseite",

@@ -4,7 +4,8 @@
     "placeholder": "Register for our Email Newsletter",
     "signup": "Register",
     "success": "Please confirm the email in your inbox.",
-    "error": "Something went wrong. Please try again."
+    "error": "Something went wrong. Please try again.",
+    "invalid": "Please enter a valid email address."
   },
   "nav": {
     "home": "Home",

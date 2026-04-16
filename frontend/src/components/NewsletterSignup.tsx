@@ -16,7 +16,13 @@ const NewsletterSignup: React.FC<Props> = ({ dayMode }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const trimmed = email.trim();
-    if (!trimmed || state === 'loading') return;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!trimmed || !emailRegex.test(trimmed)) {
+      setErrorMsg(t('newsletter.invalid'));
+      setState('error');
+      return;
+    }
+    if (state === 'loading') return;
 
     setState('loading');
     setErrorMsg('');
@@ -58,7 +64,6 @@ const NewsletterSignup: React.FC<Props> = ({ dayMode }) => {
         value={email}
         onChange={e => { setEmail(e.target.value); if (state === 'error') setState('idle'); }}
         placeholder={t('newsletter.placeholder')}
-        required
         disabled={state === 'loading'}
         className={`flex-1 min-w-0 px-3 py-2 text-sm rounded-lg border outline-none transition-colors ${
           dayMode

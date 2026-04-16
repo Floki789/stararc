@@ -23,7 +23,7 @@ import DataArchitectureShowcase from '../components/DataArchitectureShowcase';
 import GettingStartedShowcase from '../components/GettingStartedShowcase';
 import PlanCards from '../components/PlanCards';
 import NewsletterSignup from '../components/NewsletterSignup';
-import { BarChart3, Lock, Rocket, Sparkles, ArrowUp } from 'lucide-react';
+import { BarChart3, Lock, Rocket, Sparkles, ArrowUp, Bitcoin } from 'lucide-react';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -163,12 +163,12 @@ const Home: React.FC = () => {
               dayMode={dayMode}
             />
 
-            {/* Hero Feature Highlights — 4 cards, one per hero slide */}
+            {/* Hero Feature Highlights — 5 cards, one per hero slide */}
             <div className="mt-16">
               <p className={`text-center text-sm font-semibold uppercase tracking-widest mb-8 ${dayMode ? 'text-slate-500' : 'text-slate-500'}`}>
                 Was dich erwartet
               </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                 {[
                   {
                     index: 0,
@@ -209,6 +209,16 @@ const Home: React.FC = () => {
                     textColor: dayMode ? 'text-violet-600' : 'text-violet-400',
                     title: 'Geführte Assistenten',
                     desc: 'Profil, Vermögen und Planung — drei Assistenten führen dich Schritt für Schritt.',
+                  },
+                  {
+                    index: 4,
+                    Icon: Bitcoin,
+                    gradient: 'from-orange-400 to-amber-500',
+                    glow: dayMode ? 'rgba(251,146,60,0.14)' : 'rgba(251,146,60,0.09)',
+                    border: dayMode ? 'rgba(251,146,60,0.30)' : 'rgba(251,146,60,0.22)',
+                    textColor: dayMode ? 'text-orange-600' : 'text-orange-400',
+                    title: 'Bitcoin',
+                    desc: 'Hartes, dezentrales, unzensurierbares Geld — Bitcoin gehört in dein Leben.',
                   },
                 ].map(({ index, Icon, gradient, glow, border, textColor, title, desc }) => (
                   <button
