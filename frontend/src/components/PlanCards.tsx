@@ -134,7 +134,7 @@ const PlanCards: React.FC<PlanCardsProps> = ({
       dayColor: 'text-blue-600',
       bgGradient: 'bg-gradient-to-r from-blue-500 to-cyan-600',
       features: [
-        t('plans.nova.features.familyMembers', { count: 4 }),
+        t('plans.nova.features.familyMembers', { count: 2 }),
         t('plans.nova.features.securities', { count: 25 }),
         t('plans.nova.features.preciousMetals', { count: 4 }),
         t('plans.nova.features.realEstate', { count: 2, mortgages: 3 }),
