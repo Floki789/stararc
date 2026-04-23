@@ -994,7 +994,7 @@
     },
     "nova": {
       "name": "Nova",
-      "description": "Kostenloser Zugang in BETA",
+      "description": "Kostenlos registrieren — Early Access",
       "button": "Kostenlos registrieren",
       "features": {
         "familyMembers": "{{count}} Familienmitglieder",
@@ -2260,7 +2260,7 @@
   "securityWhitepaper": {
     "badge": "Security Whitepaper",
     "title": "StarArc Security Whitepaper",
-    "subtitle": "Sicherheitsarchitektur im Detail — transparent dokumentiert",
+    "subtitle": "Sicherheitsarchitektur im Detail",
     "version": "Version 1.0 — April 2026"
   },
   "hero2": {
@@ -2268,7 +2268,7 @@
     "titleLine2": "Plane deine Zukunft",
     "subtitleLine1": "Deine Assets bleiben, wo sie sind.",
     "subtitleLine2": "Stararc bietet Übersicht, Analysen und Planung.",
-    "freeAccess": "Kostenloser Zugang in BETA",
+    "freeAccess": "Kostenlos registrieren — Early Access",
     "securityLabel": "Sicherheit & Datenschutz:",
     "securityLink": "Security & Privacy Whitepaper lesen",
     "cta": "Kostenlos starten",
