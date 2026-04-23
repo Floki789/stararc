@@ -24,8 +24,11 @@
     name = name.replace(/\s+/g, ' ');
     if (name.length > 40) name = name.slice(0, 40);
     if (!/^[\p{L}][\p{L}\s'\-]*$/u.test(name)) return '';
-    name = name.toLocaleLowerCase('de').replace(/\b\p{L}/gu, function (c) {
-      return c.toLocaleUpperCase('de');
+    // Capitalize first letter of each word (after start, space or hyphen).
+    // Do NOT use \b — it only recognises ASCII word chars, causing diacritics
+    // like è to trigger false boundaries (e.g. "Alès" → "AlÈS").
+    name = name.toLocaleLowerCase('de').replace(/(^|[\s-])(\p{L})/gu, function (_, sep, c) {
+      return sep + c.toLocaleUpperCase('de');
     });
     return name;
   }
