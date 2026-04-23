@@ -173,7 +173,7 @@ app.get('/hi/:slug', (req, res) => {
   if (!match) {
     return res.redirect(302, '/');
   }
-  const name = encodeURIComponent(match[1]);
+  const name = encodeURIComponent(match[1] ?? '');
   const gender = match[2] ? match[2].toLowerCase() : null;
   const target = gender
     ? `/firstinfo_wa.html?name=${name}&g=${gender}`
