@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Stararc – Eine persönliche Nachricht von Samuel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet"/>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background-color: #e8edf2; font-family: 'Lato', 'Helvetica Neue', Arial, sans-serif; color: #2c2c2c; }
+    .wrapper { max-width: 640px; margin: 40px auto; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.12); }
+    .content { padding: 36px 40px; }
+    .greeting { font-size: 18px; color: #1a1a2e; margin-bottom: 16px; }
+    .section { margin-bottom: 28px; }
+    .section p { font-size: 15.5px; color: #444; line-height: 1.8; margin-bottom: 14px; }
+    .section p:last-child { margin-bottom: 0; }
+    .info-box {
+      background: #f0f7fb;
+      border-left: 4px solid #2a7bb5;
+      border-radius: 0 8px 8px 0;
+      padding: 20px 24px;
+      margin-bottom: 28px;
+    }
+    .info-box p {
+      font-size: 15px; color: #444; line-height: 1.8; margin-bottom: 10px;
+    }
+    .info-box p:last-child { margin-bottom: 0; }
+    .info-box a { color: #2a7bb5; text-decoration: none; font-weight: bold; }
+    .highlight-box {
+      background: #f5fafd;
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin-bottom: 28px;
+      font-size: 15.5px; color: #444; line-height: 1.8;
+    }
+    .cta-area {
+      text-align: center;
+      margin: 32px 0;
+    }
+    .cta-btn {
+      display: inline-block;
+      background: linear-gradient(90deg, #2563eb 0%, #0ea5e9 100%);
+      color: #ffffff;
+      font-family: 'Lato', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 14px; font-weight: 700; letter-spacing: 0.3px;
+      padding: 14px 32px; border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(37,99,235,0.30);
+      text-decoration: none;
+    }
+    .divider { border: none; border-top: 1px solid #e8edf2; margin: 28px 0; }
+    .signoff { font-size: 15.5px; color: #444; line-height: 1.8; }
+    .signoff strong { color: #1a1a2e; }
+    .footer {
+      background: #f0f4f7; padding: 28px 40px; text-align: center;
+      border-top: 1px solid #dde4ea;
+    }
+    .footer .sig {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 17px; font-weight: bold; color: #1a1a2e;
+      margin-bottom: 10px;
+    }
+    .footer p {
+      font-family: 'Lato', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 13.5px; color: #667; line-height: 2;
+    }
+    .footer a { color: #2a7bb5; text-decoration: none; }
+    .footer .legal {
+      margin-top: 16px; font-size: 11.5px; color: #aaa; line-height: 1.7;
+    }
+  </style>
+</head>
+<body>
+<div class="wrapper">
+  <!-- Content -->
+  <div class="content">
+    <p class="greeting">
+      <span id="greeting-prefix">Hallo</span><span id="greeting-name"></span>,
+    </p>
+
+    <div class="section">
+      <p>
+        Gerne möchte ich dir von meinem Projekt berichten – es ist aus einem persönlichen Bedürfnis entstanden
+        und bietet vielleicht auch dir einen Mehrwert.
+      </p>
+      <p>
+        Die Plattform <strong>Stararc</strong> hilft dir, deine Vermögenssituation ganzheitlich zu erfassen
+        und anschliessend Szenarien für deine Zukunft zu planen.
+      </p>
+    </div>
+
+    <!-- Security -->
+    <div class="info-box">
+      <p>
+        <strong>Ist die Plattform sicher?</strong>
+      </p>
+      <p>
+        Ausser deiner E-Mail-Adresse sind alle persönlichen Daten für mich – und alle anderen – unlesbar.
+        Dies dank <strong>Ende-zu-Ende-Verschlüsselung</strong>: Alle deine Daten werden auf deinem Gerät
+        verschlüsselt, bevor sie übertragen werden, und können nur mit deinem Passwort entschlüsselt werden.
+      </p>
+      <p>
+        <a href="https://www.stararc.one/security">→ Mehr Informationen zur Sicherheitsarchitektur</a>
+      </p>
+      <p style="font-size: 14px; color: #666;">
+        Zum Vergleich: Ein ähnlicher Anbieter, <a href="https://www.kubera.com/security" style="color: #2a7bb5;">Kubera</a>, bietet keine Ende-zu-Ende-Verschlüsselung der Daten.
+      </p>
+    </div>
+
+    <!-- Personal story -->
+    <div class="section">
+      <p>
+        Mir selbst hat Stararc geholfen, meine finanzielle Situation zu überblicken und ein Zukunftsszenario
+        für mich und meine Familie zu erstellen, das ich jederzeit anpassen kann.
+      </p>
+    </div>
+
+    <!-- CTA -->
+    <div class="highlight-box">
+      <p>
+        Wenn du Stararc ausprobieren möchtest, würde mich das freuen. Du bekommst dafür eine
+        <strong>lebenslange, kostenlose Nutzung</strong> der App – das heisst, so lange es sie gibt.
+      </p>
+    </div>
+
+    <div class="cta-area">
+      <a href="https://www.stararc.one" class="cta-btn">→ Stararc ausprobieren</a>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="section">
+      <p>
+        Wenn du Fragen hast, kannst du mir gerne direkt auf WhatsApp oder per E-Mail antworten –
+        und dich so auch vergewissern, dass dies kein Spam oder Phishing ist.
+      </p>
+    </div>
+
+    <div class="signoff">
+      <p>Liebe Grüsse</p>
+      <p><strong>Samuel</strong></p>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="sig">Samuel Bumann</div>
+    <p>
+      <a href="mailto:info@stararc.one">info@stararc.one</a>
+    </p>
+  </div>
+</div>
+
+<script>
+  // Read first name + optional gender from URL.
+  // Supported: ?name=Max  ?n=Max  ?vorname=Max  (also via #hash)
+  //            ?g=f|m|w   (f/w = weiblich, m = männlich)
+  // Safely set as text (no HTML injection).
+  (function () {
+    function readParams() {
+      var out = { name: null, gender: null };
+      try {
+        var qs = new URLSearchParams(window.location.search);
+        out.name = qs.get('name') || qs.get('n') || qs.get('vorname');
+        out.gender = qs.get('g') || qs.get('gender') || qs.get('geschlecht');
+        if ((!out.name || !out.gender) && window.location.hash) {
+          var hs = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+          out.name = out.name || hs.get('name') || hs.get('n') || hs.get('vorname');
+          out.gender = out.gender || hs.get('g') || hs.get('gender') || hs.get('geschlecht');
+        }
+      } catch (e) { /* ignore */ }
+      return out;
+    }
+
+    function sanitize(raw) {
+      if (!raw) return '';
+      var name = String(raw).replace(/[\u0000-\u001F\u007F<>]/g, '').trim();
+      name = name.replace(/\s+/g, ' ');
+      if (name.length > 40) name = name.slice(0, 40);
+      if (!/^[\p{L}][\p{L}\s'\-]*$/u.test(name)) return '';
+      name = name.toLocaleLowerCase('de').replace(/\b\p{L}/gu, function (c) { return c.toLocaleUpperCase('de'); });
+      return name;
+    }
+
+    function normalizeGender(g) {
+      if (!g) return null;
+      g = String(g).trim().toLowerCase();
+      if (g === 'f' || g === 'w' || g === 'female' || g === 'weiblich') return 'f';
+      if (g === 'm' || g === 'male' || g === 'maennlich' || g === 'männlich') return 'm';
+      return null;
+    }
+
+    // Heuristic for German/European first names. Not perfect, but works for
+    // the common cases. Explicit ?g=f|m overrides the heuristic.
+    function guessGender(firstName) {
+      if (!firstName) return null;
+      var n = firstName.split(/[\s-]/)[0].toLocaleLowerCase('de');
+
+      // Known exceptions (mostly male names ending in -a or -e).
+      var maleExceptions = [
+        'luca', 'luka', 'noah', 'joshua', 'elia', 'elias', 'tobia',
+        'andrea', 'nikita', 'mika', 'attila', 'joshua', 'jona', 'jonah',
+        'uwe', 'ole', 'helge', 'ronge', 'arne', 'kai', 'bjarne', 'hauke',
+        'enrique', 'jose', 'pascha', 'sascha', 'mischa', 'nemanja'
+      ];
+      var femaleExceptions = [
+        'kim', 'ruth', 'ingeborg', 'astrid', 'ingrid', 'sigrid', 'brigitt',
+        'jennifer', 'heather', 'esther', 'ester', 'rahel', 'abigail',
+        'gwen', 'carmen', 'doris', 'iris', 'beatrix', 'alix', 'miriam',
+        'hannah', 'hanna', 'sarah', 'sara', 'deborah', 'rebekah', 'judith'
+      ];
+      if (maleExceptions.indexOf(n) !== -1) return 'm';
+      if (femaleExceptions.indexOf(n) !== -1) return 'f';
+
+      // Endings strongly indicating female names.
+      if (/(?:a|e|ie|ine|ina|ette|elle|ique|een|eke|a[hu]|ya|ja|lla|nna|tta)$/.test(n)) return 'f';
+
+      // Default: assume male (safer fallback than "Liebe/r").
+      return 'm';
+    }
+
+    var params = readParams();
+    var first = sanitize(params.name);
+    var gender = normalizeGender(params.gender) || guessGender(first);
+
+    var prefixEl = document.getElementById('greeting-prefix');
+    var nameEl = document.getElementById('greeting-name');
+    if (first) {
+      prefixEl.textContent = gender === 'f' ? 'Liebe' : 'Lieber';
+      nameEl.textContent = ' ' + first;
+    } else {
+      prefixEl.textContent = 'Hallo';
+      nameEl.textContent = '';
+    }
+  })();
+</script>
+</body>
+</html>
