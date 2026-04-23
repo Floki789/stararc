@@ -225,11 +225,11 @@ const HeroSectionV3: React.FC<HeroSectionV3Props> = ({ dayMode = false }) => {
                 <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
                 <span className={`text-sm font-semibold uppercase tracking-wider ${dayMode ? 'text-blue-600' : 'text-blue-400'}`}>Beta</span>
               </div>
-              <div className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full border ${
+              <Link to="/register" className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full border transition-opacity hover:opacity-80 ${
                 dayMode ? 'bg-emerald-100 border-emerald-300' : 'bg-emerald-500/10 border-emerald-500/30'
               }`}>
                 <span className={`text-sm font-semibold tracking-wide ${dayMode ? 'text-emerald-700' : 'text-emerald-400'}`}>{t('hero2.freeAccess')}</span>
-              </div>
+              </Link>
             </div>
 
             {/* Title */}

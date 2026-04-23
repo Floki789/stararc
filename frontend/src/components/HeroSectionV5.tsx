@@ -183,13 +183,13 @@ const HeroSectionV5: React.FC<HeroSectionV5Props> = ({ dayMode = false }) => {
                   {t('hero5.badge')}
                 </span>
               </div>
-              <div className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full border ${
+              <Link to="/register" className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full border transition-opacity hover:opacity-80 ${
                 dayMode ? 'bg-emerald-100 border-emerald-300' : 'bg-emerald-500/10 border-emerald-500/30'
               }`}>
                 <span className={`text-sm font-semibold tracking-wide ${dayMode ? 'text-emerald-700' : 'text-emerald-400'}`}>
                   {t('hero2.freeAccess')}
                 </span>
-              </div>
+              </Link>
             </div>
 
             {/* Title */}

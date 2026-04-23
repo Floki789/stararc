@@ -173,8 +173,9 @@ const HeroSectionBitcoin: React.FC<HeroSectionBitcoinProps> = ({ dayMode = false
                   Bitcoin
                 </span>
               </div>
-              <div
-                className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full border ${
+              <Link
+                to="/register"
+                className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full border transition-opacity hover:opacity-80 ${
                   dayMode
                     ? 'bg-emerald-100 border-emerald-300'
                     : 'bg-emerald-500/10 border-emerald-500/30'
@@ -187,7 +188,7 @@ const HeroSectionBitcoin: React.FC<HeroSectionBitcoinProps> = ({ dayMode = false
                 >
                   {t('hero2.freeAccess')}
                 </span>
-              </div>
+              </Link>
             </div>
 
             {/* Title */}
