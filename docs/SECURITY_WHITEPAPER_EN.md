@@ -1,7 +1,6 @@
 # StarArc Security Whitepaper
 
 **Version 1.0 — March 2026**
-**Authors:** Archimedes Apps
 
 ---
 
@@ -27,7 +26,7 @@
 
 ## 1. Executive Summary
 
-StarArc is a personal finance platform consisting of two tightly integrated applications: **StarArc** (authentication, user management, subscriptions) and **Spaceship** (financial planning with all user data). Both applications employ a multi-layered security architecture with **client-side AES-256-GCM encryption and envelope key management** at its core.
+StarArc is an inventory platform consisting of two tightly integrated applications: **StarArc** (authentication, user management, subscriptions) and **Spaceship** (financial planning with all user data). Both applications employ a multi-layered security architecture with **client-side AES-256-GCM encryption and envelope key management** at its core.
 
 ### Core Promises
 
@@ -43,7 +42,7 @@ StarArc is a personal finance platform consisting of two tightly integrated appl
 
 ### Security by Design
 
-The security architecture was not bolted on retroactively but is an integral part of the data model. Every table storing personal data is designed from the ground up with encrypted fields.
+The security architecture is an integral part of the data model. Every table storing personal data is designed from the ground up with encrypted fields.
 
 ### Principle of Minimal Trust
 

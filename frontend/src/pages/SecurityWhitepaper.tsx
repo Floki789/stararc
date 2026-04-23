@@ -85,8 +85,8 @@ const SecurityWhitepaper: React.FC = () => {
             </SectionTitle>
             <P>
               {isDE
-                ? 'StarArc ist eine Personal-Finance-Plattform, die aus zwei eng integrierten Anwendungen besteht: StarArc (Authentifizierung, Benutzerverwaltung, Abonnements) und Spaceship (Finanzplanung mit allen Nutzerdaten). Beide Anwendungen nutzen eine mehrschichtige Sicherheitsarchitektur, deren zentrales Element eine clientseitige AES-256-GCM-Verschlüsselung mit Envelope-Key-Management ist.'
-                : 'StarArc is a personal finance platform consisting of two tightly integrated applications: StarArc (authentication, user management, subscriptions) and Spaceship (financial planning with all user data). Both applications employ a multi-layered security architecture with client-side AES-256-GCM encryption and envelope key management at its core.'}
+                ? 'StarArc ist eine Inventar-Plattform, die aus zwei eng integrierten Anwendungen besteht: StarArc (Authentifizierung, Benutzerverwaltung, Abonnements) und Spaceship (Finanzplanung mit allen Nutzerdaten). Beide Anwendungen nutzen eine mehrschichtige Sicherheitsarchitektur, deren zentrales Element eine clientseitige AES-256-GCM-Verschlüsselung mit Envelope-Key-Management ist.'
+                : 'StarArc is an inventory platform consisting of two tightly integrated applications: StarArc (authentication, user management, subscriptions) and Spaceship (financial planning with all user data). Both applications employ a multi-layered security architecture with client-side AES-256-GCM encryption and envelope key management at its core.'}
             </P>
             <SubTitle>{isDE ? 'Kernversprechen' : 'Core Promises'}</SubTitle>
             <BulletList items={isDE ? [
@@ -112,8 +112,8 @@ const SecurityWhitepaper: React.FC = () => {
             <SubTitle>Security by Design</SubTitle>
             <P>
               {isDE
-                ? 'Die Sicherheitsarchitektur wurde nicht nachträglich aufgesetzt, sondern ist integraler Bestandteil des Datenmodells. Jede Tabelle, die persönliche Daten speichert, ist von Grund auf mit verschlüsselten Feldern konzipiert.'
-                : 'The security architecture was not bolted on retroactively but is an integral part of the data model. Every table storing personal data is designed from the ground up with encrypted fields.'}
+                ? 'Die Sicherheitsarchitektur ist integraler Bestandteil des Datenmodells. Jede Tabelle, die persönliche Daten speichert, ist von Grund auf mit verschlüsselten Feldern konzipiert.'
+                : 'The security architecture is an integral part of the data model. Every table storing personal data is designed from the ground up with encrypted fields.'}
             </P>
             <SubTitle>
               {isDE ? 'Prinzip der minimalen Vertrauensanforderung' : 'Principle of Minimal Trust'}
