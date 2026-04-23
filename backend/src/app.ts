@@ -164,6 +164,23 @@ app.get('/api/privacy', (req, res) => {
   });
 });
 
+// Short personal links: /hi/Max → firstinfo_wa.html?name=Max[&g=f]
+// Optional gender suffix: /hi/Maria-f  or  /hi/Kim-m
+app.get('/hi/:slug', (req, res) => {
+  const raw = req.params.slug || '';
+  // Check for gender suffix: name-f or name-m (case-insensitive, last segment only)
+  const match = raw.match(/^([\p{L}][\p{L}\s'\-]*?)(?:-(f|m|w))?$/iu);
+  if (!match) {
+    return res.redirect(302, '/');
+  }
+  const name = encodeURIComponent(match[1]);
+  const gender = match[2] ? match[2].toLowerCase() : null;
+  const target = gender
+    ? `/firstinfo_wa.html?name=${name}&g=${gender}`
+    : `/firstinfo_wa.html?name=${name}`;
+  return res.redirect(302, target);
+});
+
 // Serve static files from React build in production
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../../frontend/dist')));
