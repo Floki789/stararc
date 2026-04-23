@@ -88,7 +88,7 @@ const SecurityWhitepaper: React.FC = () => {
                 ? 'StarArc ist eine Inventar-Plattform, die aus zwei eng integrierten Anwendungen besteht: StarArc (Authentifizierung, Benutzerverwaltung, Abonnements) und Spaceship (Finanzplanung mit allen Nutzerdaten). Beide Anwendungen nutzen eine mehrschichtige Sicherheitsarchitektur, deren zentrales Element eine clientseitige AES-256-GCM-Verschlüsselung mit Envelope-Key-Management ist.'
                 : 'StarArc is an inventory platform consisting of two tightly integrated applications: StarArc (authentication, user management, subscriptions) and Spaceship (financial planning with all user data). Both applications employ a multi-layered security architecture with client-side AES-256-GCM encryption and envelope key management at its core.'}
             </P>
-            <SubTitle>{isDE ? 'Kernversprechen' : 'Core Promises'}</SubTitle>
+            <SubTitle>{isDE ? 'Grundsätze' : 'Principles'}</SubTitle>
             <BulletList items={isDE ? [
               'Alle persönlichen und finanziellen Daten werden clientseitig verschlüsselt, bevor sie den Server erreichen',
               'Jedes Datenfeld wird einzeln verschlüsselt — mit frischem Zufalls-IV und -Salt pro Verschlüsselung',

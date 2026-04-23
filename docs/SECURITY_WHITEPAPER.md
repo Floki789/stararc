@@ -1,4 +1,4 @@
-# StarArc Security Whitepaper
+# Stararc Security Whitepaper
 
 **Version 1.0 — April 2026**
 
@@ -26,9 +26,9 @@
 
 ## 1. Zusammenfassung
 
-StarArc ist eine Inventar-Plattform, die aus zwei eng integrierten Anwendungen besteht: **StarArc** (Authentifizierung, Benutzerverwaltung, Abonnements) und **Spaceship** (Finanzplanung mit allen Nutzerdaten). Beide Anwendungen nutzen eine mehrschichtige Sicherheitsarchitektur, deren zentrales Element eine **clientseitige AES-256-GCM-Verschlüsselung mit Envelope-Key-Management** ist.
+Stararc ist eine Inventar-Plattform, die aus zwei eng integrierten Anwendungen besteht: **Stararc** (Authentifizierung, Benutzerverwaltung, Abonnements) und **Spaceship** (Finanzplanung mit allen Nutzerdaten). Beide Anwendungen nutzen eine mehrschichtige Sicherheitsarchitektur, deren zentrales Element eine **clientseitige AES-256-GCM-Verschlüsselung mit Envelope-Key-Management** ist.
 
-### Kernversprechen
+### Grundsätze
 
 - **Alle persönlichen und finanziellen Daten werden clientseitig verschlüsselt**, bevor sie den Server erreichen
 - **Jedes Datenfeld wird einzeln verschlüsselt** — mit frischem Zufalls-IV und -Salt pro Verschlüsselung
@@ -46,7 +46,7 @@ Die Sicherheitsarchitektur ist integraler Bestandteil des Datenmodells. Jede Tab
 
 ### Prinzip der minimalen Vertrauensanforderung
 
-StarArc minimiert die erforderliche Vertrauensbasis gegenüber dem Serverbetreiber konsequent:
+Stararc minimiert die erforderliche Vertrauensbasis gegenüber dem Serverbetreiber konsequent:
 
 | Modus | Vertrauensbedarf gegenüber Server |
 |---|---|
@@ -76,7 +76,7 @@ Alle personenbezogenen und finanziellen Daten werden **vor dem Verlassen des Bro
 ┌──────────────────────────────────────────────────┐
 │                    Nutzer-Browser                 │
 │  ┌──────────────────┐  ┌───────────────────────┐ │
-│  │    StarArc UI     │  │     Spaceship UI      │ │
+│  │    Stararc UI     │  │     Spaceship UI      │ │
 │  │  (Registrierung,  │  │  (Finanzplanung,      │ │
 │  │   Login, 2FA)     │  │   verschlüsselte      │ │
 │  │                   │  │   Datenverwaltung)     │ │
@@ -87,7 +87,7 @@ Alle personenbezogenen und finanziellen Daten werden **vor dem Verlassen des Bro
            │ HTTPS/TLS              │ HTTPS/TLS
            ▼                        ▼
 ┌──────────────────┐      ┌──────────────────────┐
-│  StarArc Backend │      │  Spaceship Backend    │
+│  Stararc Backend │      │  Spaceship Backend    │
 │  (Express.js/TS) │◄────►│  (Express.js/Node)    │
 │                  │ JWT  │                       │
 │  PostgreSQL (EU) │ 5min │  PostgreSQL (EU)      │
@@ -129,7 +129,7 @@ Die gesamte clientseitige Kryptografie nutzt ausschließlich `crypto.subtle` —
 
 ## 5. Envelope-Verschlüsselung (KEK/DEK)
 
-StarArc verwendet ein **zweistufiges Schlüsselsystem** nach dem Envelope-Encryption-Prinzip, wie es auch von AWS KMS, Google Cloud KMS und Apple iCloud eingesetzt wird.
+Stararc verwendet ein **zweistufiges Schlüsselsystem** nach dem Envelope-Encryption-Prinzip, wie es auch von AWS KMS, Google Cloud KMS und Apple iCloud eingesetzt wird.
 
 ```
 Nutzer-Passwort (oder Wiederherstellungsphrase)
@@ -201,13 +201,13 @@ Anmeldung bei Spaceship:
 
 ## 7. Feldbasierte Verschlüsselung
 
-Im Gegensatz zu vielen Anwendungen, die Daten auf Container- oder Datenbankebene verschlüsseln, verschlüsselt StarArc **jedes sensible Feld einzeln**.
+Im Gegensatz zu vielen Anwendungen, die Daten auf Container- oder Datenbankebene verschlüsseln, verschlüsselt Stararc **jedes sensible Feld einzeln**.
 
 ### Verschlüsselte Datenfelder (Auszug)
 
 | Anwendung | Verschlüsselte Felder |
 |---|---|
-| **StarArc** | E-Mail, Name/Alias, 2FA-Geheimnisse, Backup-Codes, Rechtskenntnis-Einwilligungen |
+| **Stararc** | E-Mail, Name/Alias, 2FA-Geheimnisse, Backup-Codes, Rechtskenntnis-Einwilligungen |
 | **Spaceship** | Asset-Namen, Werte, Mengen, Währungen, ISINs, Bitcoin-xPubs, Ableitungspfade, Wallet-Details, Familiennamen, Geburtsjahre, Budget-Beträge, Immobilienwerte, Hypotheken, Edelmetallbestände, Seed-Informationen, Hardware-Seriennummern, Kontowerte, Verbindlichkeiten, Standortdaten |
 
 ### Eigenschaften
@@ -252,7 +252,7 @@ Kein einzelner Schlüssel gewährt Zugriff auf alle Daten. Das System setzt auf 
 
 ## 9. Zwei-Faktor-Authentifizierung
 
-StarArc bietet TOTP-basierte Zwei-Faktor-Authentifizierung (kompatibel mit Google Authenticator, Authy, etc.):
+Stararc bietet TOTP-basierte Zwei-Faktor-Authentifizierung (kompatibel mit Google Authenticator, Authy, etc.):
 
 - **Algorithmus:** TOTP (RFC 6238) mit 30-Sekunden-Intervall
 - **Toleranz:** ±1 Intervall (30 Sekunden Kulanzzeit)
@@ -264,7 +264,7 @@ StarArc bietet TOTP-basierte Zwei-Faktor-Authentifizierung (kompatibel mit Googl
 
 ## 10. Cross-App-Sicherheit
 
-Die Kommunikation zwischen StarArc und Spaceship erfolgt über signierte, kurzlebige JWT-Token:
+Die Kommunikation zwischen Stararc und Spaceship erfolgt über signierte, kurzlebige JWT-Token:
 
 | Eigenschaft | Wert |
 |---|---|
@@ -275,7 +275,7 @@ Die Kommunikation zwischen StarArc und Spaceship erfolgt über signierte, kurzle
 
 ### Privacy Login Transport
 
-1. StarArc sendet die Nutzer-Schlüssel-Kopie + Salt im JWT (kein roher DEK)
+1. Stararc sendet die Nutzer-Schlüssel-Kopie + Salt im JWT (kein roher DEK)
 2. Spaceship fordert das Privacy-Login-Passwort vom Nutzer
 3. Client leitet KEK ab → entpackt DEK
 4. Kein nahtloser Login — by Design
@@ -304,12 +304,12 @@ Beide Anwendungen nutzen [Helmet.js](https://helmetjs.github.io/) mit folgenden 
 | `Strict-Transport-Security` | HTTPS-Erzwingung (1 Jahr, inkl. Subdomains, Preload) |
 
 Die Content Security Policy ist pro Anwendung maßgeschneidert:
-- **StarArc:** Erlaubt `js.stripe.com` und `api.stripe.com` für Zahlungsabwicklung
+- **Stararc:** Erlaubt `js.stripe.com` und `api.stripe.com` für Zahlungsabwicklung
 - **Spaceship:** Blockiert alle Frames (`frame-src: 'none'`) und Plugins (`object-src: 'none'`)
 
 ### Rate Limiting
 
-| Kategorie | StarArc | Spaceship |
+| Kategorie | Stararc | Spaceship |
 |---|---|---|
 | Globale API | Aktiv | Aktiv |
 | Anmeldung (Login) | Striktes Limit | — |
@@ -334,7 +334,7 @@ SELECT * FROM users WHERE id = '...' -- ✗ Wird nicht verwendet
 
 ### Eingabevalidierung
 
-StarArc verwendet `express-validator` für eine konsistente, deklarative Eingabevalidierung:
+Stararc verwendet `express-validator` für eine konsistente, deklarative Eingabevalidierung:
 
 - E-Mail-Normalisierung und -Validierung
 - Passwort-Komplexität (Mindestlänge, Groß-/Kleinbuchstaben, Ziffern)
@@ -379,7 +379,7 @@ Alle Daten werden auf **Heroku EU (Irland)** verarbeitet und gespeichert. Es fin
 Beide Anwendungen bieten vollständige Datenlöschung:
 
 - **Spaceship:** Kaskadierende Löschung über 20+ Tabellen in korrekter Fremdschlüssel-Reihenfolge
-- **StarArc:** Eine automatisierte Anonymisierungsfunktion anonymisiert alle personenbezogenen Felder, löscht Zahlungsinformationen und deaktiviert Zugangsschlüssel
+- **Stararc:** Eine automatisierte Anonymisierungsfunktion anonymisiert alle personenbezogenen Felder, löscht Zahlungsinformationen und deaktiviert Zugangsschlüssel
 
 ### Einwilligungsnachverfolgung (Art. 7 DSGVO)
 
@@ -393,7 +393,7 @@ Abgelaufene Verifikations- und Reset-Token werden automatisch durch geplante Dat
 
 ## 14. Branchenvergleich
 
-| Eigenschaft | StarArc | Bitwarden | Proton Mail |
+| Eigenschaft | Stararc | Bitwarden | Proton Mail |
 |---|---|---|---|
 | Clientseitige Verschlüsselung | AES-256-GCM | AES-256-CBC + HMAC | OpenPGP |
 | Schlüsselableitung | PBKDF2-SHA256, 600k | PBKDF2/Argon2id, 600k | Bcrypt + SRP |
@@ -406,7 +406,7 @@ Abgelaufene Verifikations- und Reset-Token werden automatisch durch geplante Dat
 
 ### Einordnung
 
-StarArc implementiert dieselben kryptografischen Primitiven wie führende Security-Produkte (Bitwarden, Proton Mail). Das **Privacy Login** bietet ein Schutzniveau, das mit reinen Zero-Knowledge-Diensten vergleichbar ist.
+Stararc implementiert dieselben kryptografischen Primitiven wie führende Security-Produkte (Bitwarden, Proton Mail). Das **Privacy Login** bietet ein Schutzniveau, das mit reinen Zero-Knowledge-Diensten vergleichbar ist.
 
 ---
 
@@ -432,7 +432,7 @@ Die Wiederherstellungsphrase im Privacy Login umfasst 6 BIP39-Wörter (~66 Bit E
 
 ## Kontakt
 
-Für Sicherheitsfragen oder die verantwortungsvolle Meldung von Schwachstellen wenden Sie sich bitte an das StarArc-Team.
+Für Sicherheitsfragen oder die verantwortungsvolle Meldung von Schwachstellen wenden Sie sich bitte an das Stararc-Team.
 
 ---
 

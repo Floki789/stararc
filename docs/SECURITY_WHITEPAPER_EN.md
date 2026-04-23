@@ -1,4 +1,4 @@
-# StarArc Security Whitepaper
+# Stararc Security Whitepaper
 
 **Version 1.0 — April 2026**
 
@@ -26,9 +26,9 @@
 
 ## 1. Executive Summary
 
-StarArc is an inventory platform consisting of two tightly integrated applications: **StarArc** (authentication, user management, subscriptions) and **Spaceship** (financial planning with all user data). Both applications employ a multi-layered security architecture with **client-side AES-256-GCM encryption and envelope key management** at its core.
+Stararc is an inventory platform consisting of two tightly integrated applications: **Stararc** (authentication, user management, subscriptions) and **Spaceship** (financial planning with all user data). Both applications employ a multi-layered security architecture with **client-side AES-256-GCM encryption and envelope key management** at its core.
 
-### Core Promises
+### Principles
 
 - **All personal and financial data is encrypted client-side** before it reaches the server
 - **Every data field is individually encrypted** — with fresh random IV and salt per encryption
@@ -46,7 +46,7 @@ The security architecture is an integral part of the data model. Every table sto
 
 ### Principle of Minimal Trust
 
-StarArc consistently minimizes the required trust in the server operator:
+Stararc consistently minimizes the required trust in the server operator:
 
 | Mode | Trust Required in Server |
 |---|---|
@@ -76,7 +76,7 @@ All personal and financial data is encrypted **before leaving the browser**. Onl
 ┌──────────────────────────────────────────────────┐
 │                   User Browser                   │
 │  ┌──────────────────┐  ┌───────────────────────┐ │
-│  │    StarArc UI     │  │     Spaceship UI      │ │
+│  │    Stararc UI     │  │     Spaceship UI      │ │
 │  │  (Registration,   │  │  (Financial planning, │ │
 │  │   Login, 2FA)     │  │   encrypted data      │ │
 │  │                   │  │   management)          │ │
@@ -87,7 +87,7 @@ All personal and financial data is encrypted **before leaving the browser**. Onl
            │ HTTPS/TLS              │ HTTPS/TLS
            ▼                        ▼
 ┌──────────────────┐      ┌──────────────────────┐
-│  StarArc Backend │      │  Spaceship Backend    │
+│  Stararc Backend │      │  Spaceship Backend    │
 │  (Express.js/TS) │◄────►│  (Express.js/Node)    │
 │                  │ JWT  │                       │
 │  PostgreSQL (EU) │ 5min │  PostgreSQL (EU)      │
@@ -129,7 +129,7 @@ All client-side cryptography exclusively uses `crypto.subtle` — the hardware-a
 
 ## 5. Envelope Encryption (KEK/DEK)
 
-StarArc uses a **two-tier key system** following the envelope encryption principle, also employed by AWS KMS, Google Cloud KMS, and Apple iCloud.
+Stararc uses a **two-tier key system** following the envelope encryption principle, also employed by AWS KMS, Google Cloud KMS, and Apple iCloud.
 
 ```
 User Password (or Recovery Phrase)
@@ -201,13 +201,13 @@ Login to Spaceship:
 
 ## 7. Field-Level Encryption
 
-Unlike many applications that encrypt data at the container or database level, StarArc encrypts **every sensitive field individually**.
+Unlike many applications that encrypt data at the container or database level, Stararc encrypts **every sensitive field individually**.
 
 ### Encrypted Data Fields (Excerpt)
 
 | Application | Encrypted Fields |
 |---|---|
-| **StarArc** | Email, name/alias, 2FA secrets, backup codes, legal consent records |
+| **Stararc** | Email, name/alias, 2FA secrets, backup codes, legal consent records |
 | **Spaceship** | Asset names, values, quantities, currencies, ISINs, Bitcoin xPubs, derivation paths, wallet details, family names, birth years, budget amounts, real estate values, mortgages, precious metal holdings, seed information, hardware serial numbers, account values, liabilities, location data |
 
 ### Properties
@@ -252,7 +252,7 @@ No single key grants access to all data. The system relies on **key separation**
 
 ## 9. Two-Factor Authentication
 
-StarArc offers TOTP-based two-factor authentication (compatible with Google Authenticator, Authy, etc.):
+Stararc offers TOTP-based two-factor authentication (compatible with Google Authenticator, Authy, etc.):
 
 - **Algorithm:** TOTP (RFC 6238) with 30-second interval
 - **Tolerance:** ±1 interval (30-second grace period)
@@ -264,7 +264,7 @@ StarArc offers TOTP-based two-factor authentication (compatible with Google Auth
 
 ## 10. Cross-App Security
 
-Communication between StarArc and Spaceship uses signed, short-lived JWT tokens:
+Communication between Stararc and Spaceship uses signed, short-lived JWT tokens:
 
 | Property | Value |
 |---|---|
@@ -275,7 +275,7 @@ Communication between StarArc and Spaceship uses signed, short-lived JWT tokens:
 
 ### Privacy Login Transport
 
-1. StarArc sends the user key copy + salt in the JWT (no raw DEK)
+1. Stararc sends the user key copy + salt in the JWT (no raw DEK)
 2. Spaceship prompts the user for the Privacy Login password
 3. Client derives KEK → unwraps DEK
 4. No seamless login — by design
@@ -304,12 +304,12 @@ Both applications use [Helmet.js](https://helmetjs.github.io/) with the followin
 | `Strict-Transport-Security` | HTTPS enforcement (1 year, including subdomains, preload) |
 
 The Content Security Policy is tailored per application:
-- **StarArc:** Allows `js.stripe.com` and `api.stripe.com` for payment processing
+- **Stararc:** Allows `js.stripe.com` and `api.stripe.com` for payment processing
 - **Spaceship:** Blocks all frames (`frame-src: 'none'`) and plugins (`object-src: 'none'`)
 
 ### Rate Limiting
 
-| Category | StarArc | Spaceship |
+| Category | Stararc | Spaceship |
 |---|---|---|
 | Global API | Enforced | Enforced |
 | Login | Strict limit | — |
@@ -334,7 +334,7 @@ SELECT * FROM users WHERE id = '...' -- ✗ Not used
 
 ### Input Validation
 
-StarArc uses `express-validator` for consistent, declarative input validation:
+Stararc uses `express-validator` for consistent, declarative input validation:
 
 - Email normalization and validation
 - Password complexity (minimum length, upper/lowercase, digits)
@@ -379,7 +379,7 @@ All data is processed and stored on **Heroku EU (Ireland)**. No data transfer ou
 Both applications offer complete data deletion:
 
 - **Spaceship:** Cascading deletion across 20+ tables in correct foreign key order
-- **StarArc:** An automated anonymization function anonymizes all personal fields, deletes payment information, and deactivates access keys
+- **Stararc:** An automated anonymization function anonymizes all personal fields, deletes payment information, and deactivates access keys
 
 ### Consent Tracking (Art. 7 GDPR)
 
@@ -393,7 +393,7 @@ Expired verification and reset tokens are automatically cleaned up by scheduled 
 
 ## 14. Industry Comparison
 
-| Feature | StarArc | Bitwarden | Proton Mail |
+| Feature | Stararc | Bitwarden | Proton Mail |
 |---|---|---|---|
 | Client-side encryption | AES-256-GCM | AES-256-CBC + HMAC | OpenPGP |
 | Key derivation | PBKDF2-SHA256, 600k | PBKDF2/Argon2id, 600k | Bcrypt + SRP |
@@ -406,7 +406,7 @@ Expired verification and reset tokens are automatically cleaned up by scheduled 
 
 ### Assessment
 
-StarArc implements the same cryptographic primitives as leading security products (Bitwarden, Proton Mail). **Privacy Login** provides a protection level comparable to pure zero-knowledge services.
+Stararc implements the same cryptographic primitives as leading security products (Bitwarden, Proton Mail). **Privacy Login** provides a protection level comparable to pure zero-knowledge services.
 
 ---
 
@@ -432,7 +432,7 @@ The Privacy Login recovery phrase comprises 6 BIP39 words (~66 bits entropy). Th
 
 ## Contact
 
-For security questions or responsible vulnerability disclosure, please contact the StarArc team.
+For security questions or responsible vulnerability disclosure, please contact the Stararc team.
 
 ---
 
