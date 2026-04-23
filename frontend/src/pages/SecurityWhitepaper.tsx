@@ -741,8 +741,8 @@ Tab close → sessionStorage automatically cleared`}</CodeBlock>
           {/* Footer note */}
           <p className={`text-sm text-center italic ${dayMode ? 'text-slate-500' : 'text-gray-500'}`}>
             {isDE
-              ? 'Dieses Dokument beschreibt den Stand der Sicherheitsarchitektur zum Zeitpunkt der Veröffentlichung (März 2026). Die Sicherheitsmaßnahmen werden kontinuierlich weiterentwickelt.'
-              : 'This document describes the state of the security architecture at the time of publication (March 2026). Security measures are continuously evolving.'}
+              ? 'Dieses Dokument beschreibt den Stand der Sicherheitsarchitektur zum Zeitpunkt der Veröffentlichung (April 2026). Die Sicherheitsmaßnahmen werden kontinuierlich weiterentwickelt.'
+              : 'This document describes the state of the security architecture at the time of publication (April 2026). Security measures are continuously evolving.'}
           </p>
 
         </div>
