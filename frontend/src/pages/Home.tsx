@@ -5,6 +5,7 @@ import HeroSectionV3 from '../components/HeroSectionV3';
 import HeroSectionV4 from '../components/HeroSectionV4';
 import HeroSectionV5 from '../components/HeroSectionV5';
 import HeroSectionBitcoin from '../components/HeroSectionBitcoin';
+import HeroSectionVault from '../components/HeroSectionVault';
 import { useDayMode } from '../contexts/DayModeContext';
 import OverviewShowcase from '../components/OverviewShowcase';
 import PortfolioShowcase from '../components/PortfolioShowcase';
@@ -32,7 +33,7 @@ const Home: React.FC = () => {
   const [fading, setFading] = useState(false);
   const [pinned, setPinned] = useState(false);
   const { dayMode } = useDayMode();
-  const HERO_COUNT = 5;
+  const HERO_COUNT = 6;
 
   const goTo = (i: number, userClick = false) => {
     if (i === heroIndex || fading) return;
@@ -92,7 +93,7 @@ const Home: React.FC = () => {
             transition: 'opacity 800ms ease-in-out',
           }}
         >
-          {heroIndex === 0 ? <HeroSection dayMode={dayMode} /> : heroIndex === 1 ? <HeroSectionV3 dayMode={dayMode} /> : heroIndex === 2 ? <HeroSectionV4 dayMode={dayMode} /> : heroIndex === 3 ? <HeroSectionV5 dayMode={dayMode} /> : <HeroSectionBitcoin dayMode={dayMode} />}
+          {heroIndex === 0 ? <HeroSection dayMode={dayMode} /> : heroIndex === 1 ? <HeroSectionV3 dayMode={dayMode} /> : heroIndex === 2 ? <HeroSectionV4 dayMode={dayMode} /> : heroIndex === 3 ? <HeroSectionV5 dayMode={dayMode} /> : heroIndex === 4 ? <HeroSectionBitcoin dayMode={dayMode} /> : <HeroSectionVault dayMode={dayMode} />}
         </div>
         {/* Slide indicator dots — numbered, click pins the slide */}
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 z-20">

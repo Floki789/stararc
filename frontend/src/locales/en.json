@@ -2304,6 +2304,12 @@
     "titleLine2": "in your life.",
     "subtitle": "Bitcoin as its own asset class – on equal footing with stocks, real estate, and precious metals."
   },
+  "heroVault": {
+    "badge": "Vault Management",
+    "titleLine1": "Diversified",
+    "titleLine2": "Custody.",
+    "subtitle": "Protect your wealth from single points of failure."
+  },
   "hero4": {
     "badge": "Intelligent Planning",
     "titleLine1": "Planning that creates",

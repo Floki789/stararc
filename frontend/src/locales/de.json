@@ -2319,6 +2319,12 @@
     "titleLine2": "in dein Leben.",
     "subtitle": "Bitcoin als eigene Asset Klasse – auf Augenhöhe mit Aktien, Immobilien und Edelmetallen."
   },
+  "heroVault": {
+    "badge": "Vault Management",
+    "titleLine1": "Diversifizierte",
+    "titleLine2": "Verwahrung.",
+    "subtitle": "Schütze dein Vermögen vor Single Points of Failure."
+  },
   "hero4": {
     "badge": "Intelligente Planung",
     "titleLine1": "Eine Planung die",
