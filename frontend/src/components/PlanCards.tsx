@@ -350,9 +350,6 @@ const PlanCards: React.FC<PlanCardsProps> = ({
             <div className="flex-grow">
               {/* Sections container */}
               <div className={`border rounded-lg p-3 mb-4 text-left text-sm ${dayMode ? 'border-slate-200' : 'border-gray-600'}`}>
-                {plan.id !== 'Spark' && (
-                  <p className={`text-xs mb-2 italic ${dayMode ? 'text-slate-500' : 'text-gray-500'}`}>{t('plans.includedSections')}</p>
-                )}
                 <div className="space-y-1.5">
                   {[t('plans.spark.features.budget'), t('plans.spark.features.balance'), t('plans.spark.features.futurePlanning'), t('plans.spark.features.cockpit'), t('plans.spark.features.login'), t('plans.spark.features.bitcoinMatrix')].map((section, i) => (
                     <div key={i} className="flex items-start gap-2">
