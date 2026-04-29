@@ -218,7 +218,7 @@ const Home: React.FC = () => {
                     border: dayMode ? 'rgba(251,146,60,0.30)' : 'rgba(251,146,60,0.22)',
                     textColor: dayMode ? 'text-orange-600' : 'text-orange-400',
                     title: 'Bitcoin',
-                    desc: 'Hartes, dezentrales, unzensurierbares Geld — Bitcoin gehört in dein Leben.',
+                    desc: 'Bitcoin als eigene Asset Klasse – auf Augenhöhe mit Aktien, Immobilien und Edelmetallen.',
                   },
                 ].map(({ index, Icon, gradient, glow, border, textColor, title, desc }) => (
                   <button
