@@ -167,7 +167,7 @@ const HeroSectionV5: React.FC<HeroSectionV5Props> = ({ dayMode = false }) => {
       <div className={`absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:64px_64px] pointer-events-none ${dayMode ? 'opacity-40' : ''}`} aria-hidden="true" />
 
       {/* ── Main Content ───────────────────────────────────────────────── */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 lg:py-12">
         <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-4">
 
           {/* ── Left column ─────────────────────────────────────────────── */}
@@ -193,7 +193,7 @@ const HeroSectionV5: React.FC<HeroSectionV5Props> = ({ dayMode = false }) => {
             </div>
 
             {/* Title */}
-            <h1 className="text-5xl sm:text-6xl lg:text-6xl xl:text-7xl font-bold leading-tight tracking-tight">
+            <h1 className="text-5xl sm:text-6xl lg:text-6xl xl:text-7xl font-black uppercase leading-tight tracking-tight">
               <span className={`block ${dayMode ? 'text-slate-900' : 'text-white'}`}>
                 {t('hero5.titleLine1')}
               </span>

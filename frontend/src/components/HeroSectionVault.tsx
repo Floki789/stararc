@@ -141,7 +141,7 @@ const HeroSectionVault: React.FC<HeroSectionVaultProps> = ({ dayMode = false }) 
       />
 
       {/* ── Main Content ───────────────────────────────────────────────── */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 lg:py-12">
         <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-6">
 
           {/* ── Left column ─────────────────────────────────────────────── */}
@@ -187,7 +187,7 @@ const HeroSectionVault: React.FC<HeroSectionVaultProps> = ({ dayMode = false }) 
             </div>
 
             {/* Title */}
-            <h1 className="text-5xl sm:text-6xl lg:text-6xl xl:text-7xl font-bold leading-tight tracking-tight">
+            <h1 className="text-5xl sm:text-6xl lg:text-6xl xl:text-7xl font-black uppercase leading-tight tracking-tight">
               <span className={`block ${dayMode ? 'text-slate-900' : 'text-white'}`}>
                 {t('heroVault.titleLine1')}
               </span>

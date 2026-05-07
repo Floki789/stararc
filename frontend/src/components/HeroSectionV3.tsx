@@ -233,7 +233,7 @@ const HeroSectionV3: React.FC<HeroSectionV3Props> = ({ dayMode = false }) => {
             </div>
 
             {/* Title */}
-            <h1 className="text-5xl sm:text-6xl lg:text-6xl xl:text-7xl font-bold leading-tight tracking-tight">
+            <h1 className="text-5xl sm:text-6xl lg:text-6xl xl:text-7xl font-black uppercase leading-tight tracking-tight">
               <span className={`block ${dayMode ? 'text-slate-900' : 'text-white'}`}>{isDE ? 'Deine Daten geh\u00f6ren' : 'Your Data Belongs'}</span>
               <span className={`block text-transparent bg-clip-text ${
                 dayMode
