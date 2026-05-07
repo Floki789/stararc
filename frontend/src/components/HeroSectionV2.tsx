@@ -215,7 +215,7 @@ const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
           {/* ── Left column: Title ─────────────────────────────────────── */}
           <div className="flex-1 flex flex-col justify-center text-center lg:text-left">
             {/* Badges */}
-            <div className="flex items-center gap-2 mb-5 self-center lg:self-start">
+            <div className="hidden sm:flex items-center gap-2 mb-5 self-center lg:self-start">
               <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full border ${
                 dayMode ? 'bg-blue-100 border-blue-300' : 'bg-blue-500/10 border-blue-500/30'
               }`}>

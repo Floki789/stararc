@@ -174,7 +174,7 @@ const HeroSectionV5: React.FC<HeroSectionV5Props> = ({ dayMode = false }) => {
           <div className="flex-1 flex flex-col justify-center text-center lg:text-left">
 
             {/* Badges */}
-            <div className="flex items-center gap-2 mb-5 self-center lg:self-start">
+            <div className="hidden sm:flex items-center gap-2 mb-5 self-center lg:self-start">
               <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full border ${
                 dayMode ? 'bg-violet-100 border-violet-300' : 'bg-violet-500/10 border-violet-500/30'
               }`}>
