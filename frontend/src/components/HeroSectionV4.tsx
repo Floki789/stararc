@@ -362,7 +362,7 @@ const HeroSectionV4: React.FC<HeroSectionV4Props> = ({ dayMode = false }) => {
               <span className={`text-xs font-semibold uppercase tracking-wider ${dayMode ? 'text-slate-600' : 'text-slate-400'}`}>
                 {isDE ? 'Kapitalentwicklung über die Lebensphasen' : 'Capital Development Across Life Phases'}
               </span>
-              <span className={`text-[10px] font-semibold rounded-full px-2.5 py-0.5 tracking-wide ${
+              <span className={`hidden sm:inline text-[10px] font-semibold rounded-full px-2.5 py-0.5 tracking-wide ${
                 dayMode
                   ? 'text-slate-700 bg-slate-100 border border-slate-300'
                   : 'text-white bg-slate-600/90 border border-slate-500/60'
@@ -465,7 +465,7 @@ const HeroSectionV4: React.FC<HeroSectionV4Props> = ({ dayMode = false }) => {
               </svg>
 
               {/* Asset class icons — absolutely positioned over SVG, in the area below the curve */}
-              <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+              <div className="hidden sm:block absolute inset-0 pointer-events-none" aria-hidden="true">
                 {svgAssets.map(({ Icon, svgX, svgY, color, bg }, i) => (
                   <div
                     key={i}
