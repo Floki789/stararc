@@ -228,7 +228,7 @@ const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
                 <span className={`text-sm font-semibold tracking-wide ${dayMode ? 'text-emerald-700' : 'text-emerald-400'}`}>{t('hero2.freeAccess')}</span>
               </Link>
             </div>
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight tracking-tight pb-2">
+            <h1 className="text-5xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight tracking-tight pb-2">
               <span className={dayMode ? 'text-slate-900' : 'text-white'}>{t('hero2.titleLine1')}</span>
               <br />
               <span className={`block mt-3 sm:mt-6 pb-2 text-transparent bg-clip-text ${
