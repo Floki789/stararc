@@ -96,7 +96,7 @@ const Home: React.FC = () => {
           {heroIndex === 0 ? <HeroSection dayMode={dayMode} /> : heroIndex === 1 ? <HeroSectionV3 dayMode={dayMode} /> : heroIndex === 2 ? <HeroSectionV4 dayMode={dayMode} /> : heroIndex === 3 ? <HeroSectionV5 dayMode={dayMode} /> : heroIndex === 4 ? <HeroSectionBitcoin dayMode={dayMode} /> : <HeroSectionVault dayMode={dayMode} />}
         </div>
         {/* Slide indicator dots — numbered, click pins the slide */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 z-20">
+        <div className="absolute bottom-16 sm:bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 z-20">
           {Array.from({ length: HERO_COUNT }).map((_, i) => (
             <button
               key={i}

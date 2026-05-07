@@ -291,19 +291,15 @@ const HeroSectionV4: React.FC<HeroSectionV4Props> = ({ dayMode = false }) => {
       <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:64px_64px] pointer-events-none" aria-hidden="true" />
 
       {/* ── Main Content — vertical layout ─────────────────────────────── */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex flex-col gap-10 flex-1">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-32 sm:py-10 flex flex-col gap-10 flex-1">
 
         {/* ── TOP: Headline section (full width, centred) ──────────────── */}
         <div className="flex flex-col items-center text-center gap-4">
 
           {/* Title */}
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight tracking-tight">
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black uppercase leading-tight tracking-tight">
             <span className={`block ${dayMode ? 'text-slate-900' : 'text-white'}`}>{t('hero4.titleLine1')}</span>
-            <span className={`block pb-2 text-transparent bg-clip-text ${
-              dayMode
-                ? 'bg-gradient-to-r from-emerald-600 via-teal-500 to-cyan-500'
-                : 'bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400'
-            }`}>
+            <span className={`block pb-2 ${dayMode ? 'text-emerald-600' : 'text-emerald-400'}`}>
               {t('hero4.titleLine2')}
             </span>
           </h1>

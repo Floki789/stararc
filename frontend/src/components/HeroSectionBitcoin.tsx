@@ -142,7 +142,7 @@ const HeroSectionBitcoin: React.FC<HeroSectionBitcoinProps> = ({ dayMode = false
       />
 
       {/* ── Main Content ───────────────────────────────────────────────── */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 lg:py-12">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-32 sm:py-10 lg:py-12">
         <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-6">
 
           {/* ── Left column ─────────────────────────────────────────────── */}
@@ -197,11 +197,7 @@ const HeroSectionBitcoin: React.FC<HeroSectionBitcoinProps> = ({ dayMode = false
                 {t('heroBitcoin.titleLine1')}
               </span>
               <span
-                className={`block mt-3 pb-2 text-transparent bg-clip-text ${
-                  dayMode
-                    ? 'bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600'
-                    : 'bg-gradient-to-r from-orange-400 via-amber-400 to-orange-500'
-                }`}
+                className={`block mt-3 pb-2 ${dayMode ? 'text-orange-600' : 'text-orange-400'}`}
               >
                 {t('heroBitcoin.titleLine2')}
               </span>
