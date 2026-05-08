@@ -144,12 +144,6 @@ const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
           </div>
 
           {/* ── Right column: Layered mountain sunrise ───────────────── */}
-          {/*
-            Sunrise atmospheric perspective:
-            Day:   back layers pale/transparent → front layer dark silhouette
-            Night: back layers slightly backlit → front layers near-opaque dark
-            Sun drawn first; mountain fills laid on top naturally mask it.
-          */}
           <div className="flex-1 flex items-end justify-center w-full pb-8 lg:pb-0 lg:items-center">
             <div className="relative w-full">
               <svg
@@ -157,68 +151,91 @@ const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
                 className="w-full"
                 aria-hidden="true"
               >
-                {/* ── Sun disc — drawn first, mountains stack on top ── */}
+                {/*
+                  Sun drawn first — mountains painted on top in order back→front.
+                  Each layer has completely independent peak positions.
+                  Atmospheric depth: back = very transparent/pale, front = opaque/dark.
+                  Sun is above the tallest visible peaks so it's never fully hidden.
+                */}
+
+                {/* ── Sun disc ── */}
                 <circle
-                  cx="280" cy="180" r="68"
+                  cx="280" cy="148" r="58"
                   fill={dayMode ? '#fde047' : '#a7f3d0'}
-                  opacity={dayMode ? 0.88 : 0.70}
+                  opacity={dayMode ? 0.90 : 0.72}
                 />
 
-                {/* ── Layer 1: farthest back — palest (day) / backlit glow (night) ── */}
-                {/* peaks ~y 138–162, baseline ~y 185 */}
+                {/* ── Layer 1 — farthest back, palest
+                     Peaks: ~x 80 (y≈195), x 290 (y≈182), x 470 (y≈188)
+                     Valley centres: ~x 175, x 380
+                ── */}
                 <path
-                  d="M 0 280 L 0 180
-                     C 40 170, 80 156, 120 164
-                     C 160 172, 196 146, 232 138
-                     C 268 130, 296 142, 328 138
-                     C 360 134, 388 150, 420 158
-                     C 452 166, 496 172, 560 178
+                  d="M 0 280 L 0 218
+                     C 30 212 58 200 80 195
+                     C 102 190 130 200 160 208
+                     C 190 216 220 200 255 188
+                     C 270 183 280 182 295 184
+                     C 320 188 348 204 378 210
+                     C 398 214 425 200 450 192
+                     C 462 188 472 187 490 190
+                     C 515 195 542 206 560 210
                      L 560 280 Z"
-                  fill={dayMode ? 'rgba(167,243,208,0.32)' : 'rgba(5,26,14,0.50)'}
+                  fill={dayMode ? 'rgba(167,243,208,0.28)' : 'rgba(4,20,11,0.50)'}
                 />
 
-                {/* ── Layer 2 ── */}
-                {/* peaks ~y 158–178, baseline ~y 205 */}
+                {/* ── Layer 2 — independent peaks
+                     Peaks: ~x 145 (y≈198), x 400 (y≈195)
+                     Valley near: x 50, x 270, x 520
+                ── */}
                 <path
-                  d="M 0 280 L 0 200
-                     C 35 193, 65 180, 98 188
-                     C 131 196, 162 172, 196 165
-                     C 230 158, 256 170, 284 178
-                     C 312 186, 340 165, 372 155
-                     C 404 145, 432 165, 462 174
-                     C 492 183, 526 192, 560 196
+                  d="M 0 280 L 0 238
+                     C 28 232 55 225 82 230
+                     C 110 235 128 215 148 205
+                     C 168 195 190 202 215 212
+                     C 240 222 265 218 292 222
+                     C 320 226 348 216 372 208
+                     C 385 204 395 198 408 196
+                     C 430 192 455 205 478 216
+                     C 500 226 530 234 560 236
                      L 560 280 Z"
-                  fill={dayMode ? 'rgba(110,231,183,0.46)' : 'rgba(3,18,10,0.72)'}
+                  fill={dayMode ? 'rgba(110,231,183,0.48)' : 'rgba(3,13,8,0.72)'}
                 />
 
-                {/* ── Layer 3 ── */}
-                {/* peaks ~y 184–208, baseline ~y 232 */}
+                {/* ── Layer 3
+                     Peaks: ~x 210 (y≈212), x 455 (y≈208)
+                     Valley near: x 100, x 340, right edge
+                ── */}
                 <path
-                  d="M 0 280 L 0 228
-                     C 30 220, 58 208, 88 215
-                     C 118 222, 150 202, 180 194
-                     C 210 186, 236 198, 264 208
-                     C 292 218, 320 196, 352 184
-                     C 384 172, 410 190, 438 200
-                     C 466 210, 494 220, 528 224
-                     C 546 226, 554 226, 560 225
+                  d="M 0 280 L 0 255
+                     C 32 248 62 240 90 245
+                     C 118 250 145 238 172 228
+                     C 192 220 205 214 218 212
+                     C 240 209 265 218 292 228
+                     C 318 238 342 232 368 226
+                     C 390 220 420 218 442 212
+                     C 455 209 468 208 480 210
+                     C 504 215 532 226 560 228
                      L 560 280 Z"
-                  fill={dayMode ? 'rgba(52,211,153,0.62)' : 'rgba(2,12,7,0.87)'}
+                  fill={dayMode ? 'rgba(52,211,153,0.65)' : 'rgba(2,10,6,0.88)'}
                 />
 
-                {/* ── Layer 4: foreground — darkest silhouette ── */}
-                {/* peaks ~y 220–244, fills to bottom */}
+                {/* ── Layer 4 — foreground silhouette, darkest
+                     Peaks: ~x 115 (y≈238), x 340 (y≈232)
+                     Valley near: x 220, x 450, right edge slopes
+                ── */}
                 <path
-                  d="M 0 280 L 0 258
-                     C 28 250, 56 240, 86 246
-                     C 116 252, 146 234, 176 224
-                     C 206 214, 232 226, 260 238
-                     C 288 250, 316 232, 348 220
-                     C 380 208, 406 222, 434 234
-                     C 462 246, 490 254, 520 258
-                     C 542 261, 554 260, 560 258
+                  d="M 0 280 L 0 270
+                     C 30 264 58 256 85 260
+                     C 100 262 112 250 118 242
+                     C 128 234 140 238 158 245
+                     C 178 253 202 258 228 260
+                     C 252 262 278 254 305 245
+                     C 322 239 336 233 348 232
+                     C 365 230 385 240 410 250
+                     C 432 258 456 264 484 266
+                     C 510 268 538 268 560 266
                      L 560 280 Z"
-                  fill={dayMode ? 'rgba(6,78,59,0.92)' : 'rgba(2,10,6,0.97)'}
+                  fill={dayMode ? 'rgba(6,78,59,0.95)' : 'rgba(1,6,3,0.98)'}
                 />
               </svg>
             </div>
