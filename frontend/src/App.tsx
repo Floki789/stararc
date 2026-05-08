@@ -48,7 +48,7 @@ function App() {
     <LanguageProvider>
       <DayModeProvider>
       <AuthProvider>
-        <div className="min-h-screen bg-gray-900 text-white">
+        <div className="min-h-screen bg-gray-900 text-white overflow-x-hidden">
           <Header />
           <main className="flex-1">
             <Routes>
