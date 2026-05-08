@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 
 
@@ -123,24 +122,6 @@ const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
                 {t('hero2.titleLine2')}
               </span>
             </h1>
-            {/* Registration CTA */}
-            <div className="mt-5 self-center lg:self-start">
-              <Link to="/register" className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border transition-opacity hover:opacity-80 ${
-                dayMode ? 'bg-emerald-100 border-emerald-300' : 'bg-emerald-500/10 border-emerald-500/30'
-              }`}>
-                <span className={`text-xs font-semibold uppercase tracking-wider ${dayMode ? 'text-emerald-700' : 'text-emerald-400'}`}>{t('hero2.freeAccess')}</span>
-              </Link>
-            </div>
-            {/* Security badge */}
-            <div className="mt-5 self-center lg:self-start">
-              <Link to="/security" className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full transition-colors ${
-                dayMode
-                  ? 'bg-white/70 border border-slate-300 hover:bg-white hover:border-slate-400'
-                  : 'bg-slate-700/60 border border-slate-600/50 hover:bg-slate-700 hover:border-slate-500'
-              }`}>
-                <span className={`text-xs font-semibold uppercase tracking-wider ${dayMode ? 'text-emerald-600' : 'text-emerald-400'}`}>{t('hero2.securityLink')}</span>
-              </Link>
-            </div>
           </div>
 
           {/* ── Right column: Layered mountain sunrise ───────────────── */}
