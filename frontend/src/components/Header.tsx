@@ -31,10 +31,8 @@ const Header: React.FC = () => {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-1 group">
-            <span className={`text-3xl font-bold bg-clip-text text-transparent ${
-              dayMode
-                ? 'bg-gradient-to-r from-blue-600 to-purple-600'
-                : 'bg-gradient-to-r from-blue-400 to-purple-400'
+            <span className={`text-3xl font-bold ${
+              dayMode ? 'text-sky-600' : 'text-sky-400'
             }`}>
               Stararc
             </span>
@@ -77,7 +75,7 @@ const Header: React.FC = () => {
                 
                 {/* User Profile Dropdown */}
                 <div className={`flex items-center space-x-3 rounded-lg px-3 py-2 border ${dayMode ? 'bg-slate-100 border-slate-300' : 'bg-slate-800/50 border-slate-600'}`}>
-                  <UserCircleIcon className="w-6 h-6 text-blue-400" />
+                  <UserCircleIcon className="w-6 h-6 text-emerald-500" />
                   <div className="flex flex-col">
                     <span className={`text-sm font-medium ${dayMode ? 'text-slate-800' : 'text-white'}`}>
                       {user?.firstName} {user?.lastName}
@@ -105,7 +103,7 @@ const Header: React.FC = () => {
                 </Link>
                 <Link
                   to="/register"
-                  className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
+                  className="px-6 py-3 bg-emerald-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl hover:bg-emerald-700 transform hover:scale-105 transition-all duration-200"
                 >
                   {t('nav.register')}
                 </Link>
@@ -150,7 +148,7 @@ const Header: React.FC = () => {
                 onClick={() => setLanguage('de')}
                 className={`px-3 py-1 text-sm rounded transition-colors ${
                   language === 'de'
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-emerald-700 text-white'
                     : dayMode ? 'text-slate-600 hover:text-slate-900' : 'text-slate-400 hover:text-white'
                 }`}
               >
@@ -160,7 +158,7 @@ const Header: React.FC = () => {
                 onClick={() => setLanguage('en')}
                 className={`px-3 py-1 text-sm rounded transition-colors ${
                   language === 'en'
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-emerald-700 text-white'
                     : dayMode ? 'text-slate-600 hover:text-slate-900' : 'text-slate-400 hover:text-white'
                 }`}
               >
@@ -208,7 +206,7 @@ const Header: React.FC = () => {
                   </Link>
                   <div className={`rounded-lg p-3 border ${dayMode ? 'bg-slate-100 border-slate-300' : 'bg-slate-800/50 border-slate-600'}`}>
                     <div className="flex items-center space-x-3">
-                      <UserCircleIcon className="w-8 h-8 text-blue-400" />
+                      <UserCircleIcon className="w-8 h-8 text-emerald-500" />
                       <div className="flex flex-col">
                         <span className={`text-sm font-medium ${dayMode ? 'text-slate-800' : 'text-white'}`}>
                           {user?.firstName} {user?.lastName}
@@ -244,7 +242,7 @@ const Header: React.FC = () => {
                   </Link>
                   <Link
                     to="/login"
-                    className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 inline-block text-center"
+                    className="px-6 py-3 bg-emerald-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl hover:bg-emerald-700 transform hover:scale-105 transition-all duration-200 inline-block text-center"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     {t('nav.login')}

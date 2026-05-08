@@ -2266,6 +2266,7 @@
   "hero2": {
     "titleLine1": "Deine Finanzplanung",
     "titleLine2": "in einer App",
+    "subtitle": "Übernimm die Kontrolle über deine finanzielle Zukunft.",
     "subtitleLine1": "Deine Assets bleiben, wo sie sind.",
     "subtitleLine2": "Stararc bietet Übersicht, Analysen und Planung.",
     "freeAccess": "Kostenlos registrieren — Early Access",
@@ -2287,6 +2288,12 @@
       "preciousMetals": "Edelmetalle",
       "preciousMetalsDesc": "Gold · Silber · Platin"
     }
+  },
+  "hero2classic": {
+    "titleLine1": "Überblicke dein Vermögen",
+    "titleLine2": "Plane deine Zukunft",
+    "subtitleLine1": "Deine Assets bleiben, wo sie sind.",
+    "subtitleLine2": "Stararc bietet Übersicht, Analysen und Planung."
   },
   "hero5": {
     "badge": "Setup-Assistent",

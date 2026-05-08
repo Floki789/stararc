@@ -156,20 +156,6 @@ const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
                   opacity={dayMode ? 0.92 : 0.75}
                 />
 
-                {/* ── Layer 1 — farthest, palest ── */}
-                <path
-                  d="M 0 280 L 0 215
-                     C 40 210 75 200 100 188
-                     C 125 178 150 195 185 206
-                     C 210 214 245 198 275 184
-                     C 295 175 320 178 342 186
-                     C 365 194 395 206 422 200
-                     C 442 196 462 190 480 190
-                     C 500 190 530 200 560 212
-                     L 560 280 Z"
-                  fill={dayMode ? '#c6f0dd' : '#0d2818'}
-                />
-
                 {/* ── Layer 2 ── */}
                 <path
                   d="M 0 280 L 0 232
@@ -227,7 +213,7 @@ const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
         {/* ── Full-width subtitle ─────────────────────────────────── */}
         <div className="w-full mt-10 text-center">
           <p className={`text-lg sm:text-xl font-light ${dayMode ? 'text-slate-700' : 'text-white'}`}>
-            {t('hero2.subtitleLine1')} {t('hero2.subtitleLine2')}
+            {t('hero2.subtitle')}
           </p>
         </div>
 

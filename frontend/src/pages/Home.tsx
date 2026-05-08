@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import HeroSection from '../components/HeroSectionV2';
+import HeroSectionV2Classic from '../components/HeroSectionV2Classic';
 import HeroSectionV3 from '../components/HeroSectionV3';
 import HeroSectionV4 from '../components/HeroSectionV4';
 import HeroSectionV5 from '../components/HeroSectionV5';
@@ -63,8 +64,9 @@ const Home: React.FC = () => {
     <div className="min-h-screen">
       {/* Hero sections — stacked, scrollable */}
       <div id="hero-0"><HeroSection dayMode={dayMode} /></div>
-      <div id="hero-1"><HeroSectionV3 dayMode={dayMode} /></div>
-      <div id="hero-2"><HeroSectionV4 dayMode={dayMode} /></div>
+      <div id="hero-0b"><HeroSectionV2Classic dayMode={dayMode} /></div>
+      <div id="hero-1"><HeroSectionV4 dayMode={dayMode} /></div>
+      <div id="hero-2"><HeroSectionV3 dayMode={dayMode} /></div>
       <div id="hero-3"><HeroSectionV5 dayMode={dayMode} /></div>
       <div id="hero-4"><HeroSectionBitcoin dayMode={dayMode} /></div>
       <div id="hero-5"><HeroSectionVault dayMode={dayMode} /></div>
