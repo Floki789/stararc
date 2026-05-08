@@ -156,6 +156,38 @@ const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
                   opacity={dayMode ? 0.92 : 0.75}
                 />
 
+                {/*
+                  Edge-fade mask: opaque centre, fades left, right and bottom.
+                  Three overlapping linear gradients multiplied via a rect stack.
+                  We approximate this with a single radial + two side rects in
+                  luminance space — easiest: one rect with a compound gradient.
+                */}
+                <defs>
+                  <linearGradient id="v2mLeft" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%"   stopColor="black" stopOpacity="1" />
+                    <stop offset="18%"  stopColor="black" stopOpacity="0" />
+                  </linearGradient>
+                  <linearGradient id="v2mRight" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="82%"  stopColor="black" stopOpacity="0" />
+                    <stop offset="100%" stopColor="black" stopOpacity="1" />
+                  </linearGradient>
+                  <linearGradient id="v2mBottom" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="68%"  stopColor="black" stopOpacity="0" />
+                    <stop offset="100%" stopColor="black" stopOpacity="1" />
+                  </linearGradient>
+                  <mask id="v2sMtnMask">
+                    {/* start fully white (opaque) */}
+                    <rect x="0" y="0" width="560" height="280" fill="white" />
+                    {/* subtract left edge */}
+                    <rect x="0" y="0" width="560" height="280" fill="url(#v2mLeft)" />
+                    {/* subtract right edge */}
+                    <rect x="0" y="0" width="560" height="280" fill="url(#v2mRight)" />
+                    {/* subtract bottom edge */}
+                    <rect x="0" y="0" width="560" height="280" fill="url(#v2mBottom)" />
+                  </mask>
+                </defs>
+
+                <g mask="url(#v2sMtnMask)">
                 {/* ── Layer 1 — farthest, palest
                      Peaks: x=100(y≈188), x=310(y≈180), x=480(y≈190)
                      → sun arc from y=163 to y≈180 visible above highest peak ── */}
@@ -226,6 +258,7 @@ const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
                      L 560 280 Z"
                   fill={dayMode ? '#065f46' : '#030f07'}
                 />
+                </g>
               </svg>
             </div>
           </div>{/* end right column */}
