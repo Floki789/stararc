@@ -142,7 +142,37 @@ const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
                   - Peak x-positions are completely independent per layer
                 */}
 
-                {/* Subtle halo behind sun — just a larger semi-transparent disc */}
+                {/*
+                  defs first — mask wraps ALL content (sun + mountains) so
+                  edges fade uniformly; no bleed-through possible.
+                  Horizontal gradient fades left 0-18% and right 82-100%.
+                  Vertical gradient fades bottom 65-100%.
+                */}
+                <defs>
+                  <linearGradient id="v2mH" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%"   stopColor="black" />
+                    <stop offset="16%"  stopColor="white" />
+                    <stop offset="84%"  stopColor="white" />
+                    <stop offset="100%" stopColor="black" />
+                  </linearGradient>
+                  <linearGradient id="v2mV" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="65%"  stopColor="white" />
+                    <stop offset="100%" stopColor="black" />
+                  </linearGradient>
+                  {/*
+                    Two-pass mask: first rect defines H fade, second rect
+                    uses multiply blend to AND in the V fade.
+                  */}
+                  <mask id="v2sEdgeMask" maskContentUnits="userSpaceOnUse">
+                    <rect x="0" y="0" width="560" height="280" fill="url(#v2mH)" />
+                    <rect x="0" y="0" width="560" height="280" fill="url(#v2mV)" style={{mixBlendMode: 'multiply'}} />
+                  </mask>
+                </defs>
+
+                {/* Everything inside the mask — fades at edges, fully opaque in centre */}
+                <g mask="url(#v2sEdgeMask)">
+
+                {/* Subtle halo behind sun */}
                 <circle
                   cx="280" cy="215" r="105"
                   fill={dayMode ? '#fef9c3' : '#d1fae5'}
@@ -156,41 +186,7 @@ const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
                   opacity={dayMode ? 0.92 : 0.75}
                 />
 
-                {/*
-                  Edge-fade mask: opaque centre, fades left, right and bottom.
-                  Three overlapping linear gradients multiplied via a rect stack.
-                  We approximate this with a single radial + two side rects in
-                  luminance space — easiest: one rect with a compound gradient.
-                */}
-                <defs>
-                  <linearGradient id="v2mLeft" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%"   stopColor="black" stopOpacity="1" />
-                    <stop offset="18%"  stopColor="black" stopOpacity="0" />
-                  </linearGradient>
-                  <linearGradient id="v2mRight" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="82%"  stopColor="black" stopOpacity="0" />
-                    <stop offset="100%" stopColor="black" stopOpacity="1" />
-                  </linearGradient>
-                  <linearGradient id="v2mBottom" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="68%"  stopColor="black" stopOpacity="0" />
-                    <stop offset="100%" stopColor="black" stopOpacity="1" />
-                  </linearGradient>
-                  <mask id="v2sMtnMask">
-                    {/* start fully white (opaque) */}
-                    <rect x="0" y="0" width="560" height="280" fill="white" />
-                    {/* subtract left edge */}
-                    <rect x="0" y="0" width="560" height="280" fill="url(#v2mLeft)" />
-                    {/* subtract right edge */}
-                    <rect x="0" y="0" width="560" height="280" fill="url(#v2mRight)" />
-                    {/* subtract bottom edge */}
-                    <rect x="0" y="0" width="560" height="280" fill="url(#v2mBottom)" />
-                  </mask>
-                </defs>
-
-                <g mask="url(#v2sMtnMask)">
-                {/* ── Layer 1 — farthest, palest
-                     Peaks: x=100(y≈188), x=310(y≈180), x=480(y≈190)
-                     → sun arc from y=163 to y≈180 visible above highest peak ── */}
+                {/* ── Layer 1 — farthest, palest ── */}
                 <path
                   d="M 0 280 L 0 215
                      C 40 210 75 200 100 188
@@ -204,9 +200,7 @@ const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
                   fill={dayMode ? '#c6f0dd' : '#0d2818'}
                 />
 
-                {/* ── Layer 2
-                     Peaks: x=58(y≈206), x=200(y≈198), x=414(y≈204)
-                     → covers sun below y≈198 at centre ── */}
+                {/* ── Layer 2 ── */}
                 <path
                   d="M 0 280 L 0 232
                      C 28 226 45 220 58 208
@@ -222,9 +216,7 @@ const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
                   fill={dayMode ? '#6ee7b7' : '#083d1c'}
                 />
 
-                {/* ── Layer 3
-                     Peaks: x=145(y≈217), x=355(y≈213), x=508(y≈221)
-                     → covers sun below y≈213 at centre ── */}
+                {/* ── Layer 3 ── */}
                 <path
                   d="M 0 280 L 0 248
                      C 30 243 58 238 84 240
@@ -240,9 +232,7 @@ const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
                   fill={dayMode ? '#1aab6d' : '#052e14'}
                 />
 
-                {/* ── Layer 4 — foreground, darkest
-                     Peaks: x=95(y≈238), x=268(y≈232), x=440(y≈238)
-                     → almost fully covers sun; only top arc above y≈232 survives ── */}
+                {/* ── Layer 4 — foreground, darkest ── */}
                 <path
                   d="M 0 280 L 0 262
                      C 28 258 54 252 74 248
@@ -258,6 +248,7 @@ const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
                      L 560 280 Z"
                   fill={dayMode ? '#065f46' : '#030f07'}
                 />
+
                 </g>
               </svg>
             </div>
