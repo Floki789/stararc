@@ -242,6 +242,22 @@ const HeroSectionV3: React.FC<HeroSectionV3Props> = ({ dayMode = false }) => {
               ))}
             </div>
 
+            {/* Security badge */}
+            <div className="mt-6 self-center lg:self-start">
+              <Link
+                to="/security"
+                className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full transition-colors ${
+                  dayMode
+                    ? 'bg-white/70 border border-slate-300 hover:bg-white hover:border-slate-400'
+                    : 'bg-slate-700/60 border border-slate-600/50 hover:bg-slate-700 hover:border-slate-500'
+                }`}
+              >
+                <span className={`text-xs font-semibold uppercase tracking-wider ${dayMode ? 'text-orange-600' : 'text-orange-400'}`}>
+                  {t('hero2.securityLink')}
+                </span>
+              </Link>
+            </div>
+
           </div>
 
           {/* ── Right column: ZK-protected orbital ────────────────────── */}
