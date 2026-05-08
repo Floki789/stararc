@@ -143,79 +143,69 @@ const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
             </div>
           </div>
 
-          {/* ── Right column: Sunrise illustration ──────────────────── */}
-          <div className="flex-1 flex items-center justify-center w-full">
+          {/* ── Right column: Minimalist horizon + rising sun ───────── */}
+          <div className="flex-1 flex items-end justify-center w-full pb-16 lg:pb-0 lg:items-center">
             <div className="relative w-full">
               <svg
-                viewBox="0 0 560 440"
+                viewBox="0 0 560 320"
                 className="w-full"
                 aria-hidden="true"
               >
                 <defs>
-                  {/* Sea – blue tones, fades to transparent at bottom */}
-                  <linearGradient id="v2sSea" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor={dayMode ? '#7dd3fc' : '#0d1f3c'} stopOpacity="1" />
-                    <stop offset="75%" stopColor={dayMode ? '#0284c7' : '#060d1a'} stopOpacity="0.85" />
-                    <stop offset="100%" stopColor={dayMode ? '#0284c7' : '#060d1a'} stopOpacity="0" />
-                  </linearGradient>
-                  {/* Vertical fade mask for sea */}
-                  <linearGradient id="v2sSeaMG" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="white" stopOpacity="1" />
-                    <stop offset="65%" stopColor="white" stopOpacity="1" />
-                    <stop offset="100%" stopColor="white" stopOpacity="0" />
-                  </linearGradient>
-                  <mask id="v2sSeaMask">
-                    <rect x="0" y="248" width="560" height="192" fill="url(#v2sSeaMG)" />
-                  </mask>
-                  {/* Sun reflection column */}
-                  <linearGradient id="v2sRefl" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor={dayMode ? '#fef9c3' : '#ecfdf5'} stopOpacity="0.5" />
-                    <stop offset="100%" stopColor={dayMode ? '#fef9c3' : '#ecfdf5'} stopOpacity="0" />
-                  </linearGradient>
-                  {/* Clip sun to above-horizon half */}
-                  <clipPath id="v2sSunUp">
-                    <rect x="0" y="0" width="560" height="248" />
+                  {/* Sun clips to above the mountain silhouette horizon */}
+                  <clipPath id="v2sSunClip">
+                    {/* Clip path mirrors the mountain silhouette so sun hides behind peaks */}
+                    <path d="
+                      M 0 0
+                      L 560 0
+                      L 560 220
+                      L 490 220 L 470 192 L 450 178 L 430 170 L 412 175 L 395 162 L 378 148 L 360 162 L 342 175 L 325 168 L 308 155 L 290 168 L 272 182 L 255 195 L 238 210 L 220 202 L 200 185 L 180 170 L 158 182 L 138 195 L 118 205 L 98 212 L 80 220
+                      L 0 220
+                      Z
+                    " />
                   </clipPath>
                 </defs>
 
-                {/* ── Sun – flat silhouette disc, rising at horizon ── */}
-                <g clipPath="url(#v2sSunUp)">
+                {/* ── Sun disc — clipped behind mountains ── */}
+                <g clipPath="url(#v2sSunClip)">
                   <circle
-                    cx="280" cy="248" r="58"
-                    fill={dayMode ? '#fde047' : '#d1fae5'}
+                    cx="280" cy="220" r="64"
+                    fill={dayMode ? '#fde047' : '#6ee7b7'}
+                    opacity={dayMode ? 0.9 : 0.75}
                   />
                 </g>
 
+                {/* ── Mountain silhouette — back range (lighter) ── */}
+                <path
+                  d="M 0 220 L 80 220 L 118 205 L 138 195 L 158 182 L 180 170 L 200 185 L 220 202 L 238 210 L 255 195 L 272 182 L 290 168 L 308 155 L 325 168 L 342 175 L 360 162 L 378 148 L 395 162 L 412 175 L 430 170 L 450 178 L 470 192 L 490 220 L 560 220"
+                  fill="none"
+                  stroke={dayMode ? 'rgba(16,185,129,0.18)' : 'rgba(52,211,153,0.12)'}
+                  strokeWidth="1"
+                />
+
+                {/* ── Mountain silhouette — foreground range (solid) ── */}
+                <path
+                  d="M 0 320
+                     L 0 240
+                     Q 30 238 55 228 Q 72 222 90 230
+                     Q 110 238 130 224 Q 148 212 165 220
+                     Q 182 228 200 218 Q 218 208 238 198
+                     Q 255 190 272 202 Q 288 214 305 205
+                     Q 322 196 340 185 Q 358 174 375 188
+                     Q 392 202 408 190 Q 425 178 442 188
+                     Q 460 198 478 208 Q 496 218 516 224
+                     Q 538 230 560 225
+                     L 560 320
+                     Z"
+                  fill={dayMode ? 'rgba(16,185,129,0.22)' : 'rgba(6,78,59,0.65)'}
+                />
+
                 {/* ── Horizon line ── */}
-                <line x1="0" y1="248" x2="560" y2="248"
-                  stroke={dayMode ? '#93c5fd' : '#1e3a5f'} strokeWidth="1" opacity="0.6" />
-
-                {/* ── Sea with vertical fade ── */}
-                <g mask="url(#v2sSeaMask)">
-                  <rect x="0" y="248" width="560" height="192" fill="url(#v2sSea)" />
-
-                  {/* Reflection column below sun */}
-                  <path d="M 255 248 L 308 248 L 328 440 L 235 440 Z"
-                    fill="url(#v2sRefl)" opacity="0.45" />
-
-                  {/* Wave lines */}
-                  <path d="M 0 272 Q 56 262 112 272 Q 168 282 224 272 Q 280 262 336 272 Q 392 282 448 272 Q 504 262 560 272"
-                    fill="none"
-                    stroke={dayMode ? '#bae6fd' : '#1e3a5f'}
-                    strokeWidth="1.5" opacity="0.65" />
-                  <path d="M 0 306 Q 70 296 140 306 Q 210 316 280 306 Q 350 296 420 306 Q 490 316 560 306"
-                    fill="none"
-                    stroke={dayMode ? '#7dd3fc' : '#172a4a'}
-                    strokeWidth="1.2" opacity="0.5" />
-                  <path d="M 0 344 Q 80 334 160 344 Q 240 354 320 344 Q 400 334 480 344 Q 520 349 560 344"
-                    fill="none"
-                    stroke={dayMode ? '#38bdf8' : '#0d1b30'}
-                    strokeWidth="0.9" opacity="0.3" />
-                </g>
-
-                {/* ── Distant island silhouette ── */}
-                <path d="M 468 248 Q 492 232 516 236 Q 534 234 548 248"
-                  fill={dayMode ? '#0369a1' : '#0a1628'} opacity="0.55" />
+                <line
+                  x1="0" y1="220" x2="560" y2="220"
+                  stroke={dayMode ? 'rgba(16,185,129,0.45)' : 'rgba(52,211,153,0.25)'}
+                  strokeWidth="1"
+                />
               </svg>
             </div>
           </div>{/* end right column */}
