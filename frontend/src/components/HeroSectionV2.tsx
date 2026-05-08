@@ -1,99 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
-import {
-  TrendingUp,
-  Building2,
-  Package,
-  Bitcoin,
-  Gem,
-  PiggyBank,
-} from 'lucide-react';
 
-// ─── Asset class ring configuration ─────────────────────────────────────────
-// Angles: 0° = top, clockwise. Six items at 60° increments with a 30° offset
-// so no node sits directly at the top or bottom (cleaner layout).
-const RADIUS = 195; // px from center to node
-
-interface AssetClass {
-  id: string;
-  angleDeg: number;
-  Icon: React.ElementType;
-  gradient: string; // Tailwind gradient classes for icon pill
-  textColor: string; // Tailwind class for label colour (dark mode)
-  dayTextColor: string; // Tailwind class for label colour (day mode)
-  borderColor: string; // Tailwind class for card border
-  lineColor: string; // SVG stroke colour for spoke
-}
-
-const assetClasses: AssetClass[] = [
-  {
-    id: 'securities',
-    angleDeg: 30,
-    Icon: TrendingUp,
-    gradient: 'from-blue-500 to-cyan-500',
-    textColor: 'text-blue-400',
-    dayTextColor: 'text-blue-700',
-    borderColor: 'border-blue-500/30',
-    lineColor: 'rgba(59,130,246,0.35)',
-  },
-  {
-    id: 'realEstate',
-    angleDeg: 90,
-    Icon: Building2,
-    gradient: 'from-violet-500 to-purple-600',
-    textColor: 'text-violet-400',
-    dayTextColor: 'text-violet-700',
-    borderColor: 'border-violet-500/30',
-    lineColor: 'rgba(139,92,246,0.35)',
-  },
-  {
-    id: 'collections',
-    angleDeg: 150,
-    Icon: Package,
-    gradient: 'from-amber-500 to-orange-500',
-    textColor: 'text-amber-400',
-    dayTextColor: 'text-amber-700',
-    borderColor: 'border-amber-500/30',
-    lineColor: 'rgba(245,158,11,0.35)',
-  },
-  {
-    id: 'pension',
-    angleDeg: 210,
-    Icon: PiggyBank,
-    gradient: 'from-emerald-500 to-teal-600',
-    textColor: 'text-emerald-400',
-    dayTextColor: 'text-emerald-700',
-    borderColor: 'border-emerald-500/30',
-    lineColor: 'rgba(16,185,129,0.35)',
-  },
-  {
-    id: 'bitcoin',
-    angleDeg: 270,
-    Icon: Bitcoin,
-    gradient: 'from-orange-500 to-amber-600',
-    textColor: 'text-orange-400',
-    dayTextColor: 'text-orange-700',
-    borderColor: 'border-orange-500/30',
-    lineColor: 'rgba(249,115,22,0.35)',
-  },
-  {
-    id: 'preciousMetals',
-    angleDeg: 330,
-    Icon: Gem,
-    gradient: 'from-yellow-400 to-amber-500',
-    textColor: 'text-yellow-400',
-    dayTextColor: 'text-yellow-700',
-    borderColor: 'border-yellow-500/30',
-    lineColor: 'rgba(234,179,8,0.35)',
-  },
-];
-
-// Helper: cartesian position from angle (degrees, 0 = top, clockwise)
-const toXY = (angleDeg: number, r: number) => {
-  const rad = (angleDeg * Math.PI) / 180;
-  return { x: r * Math.sin(rad), y: -r * Math.cos(rad) };
-};
 
 interface HeroSectionV2Props {
   dayMode?: boolean;
@@ -102,12 +10,6 @@ interface HeroSectionV2Props {
 // ─── Component ───────────────────────────────────────────────────────────────
 const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
   const { t } = useLanguage();
-
-  // SVG viewport constants
-  const SVG_W = 580;
-  const SVG_H = 560;
-  const CX = SVG_W / 2; // 290
-  const CY = SVG_H / 2; // 280
 
   return (
     <div className={`relative min-h-screen flex items-center overflow-hidden pt-20 transition-colors duration-700 ${
@@ -241,208 +143,189 @@ const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
             </div>
           </div>
 
-          {/* ── Right column: Visualization ────────────────────────────── */}
-          <div className="flex-1 flex items-center justify-center">
-
-        {/* Desktop: circular layout */}
-        <div className="relative hidden lg:block" style={{ width: SVG_W, height: SVG_H }}>
-
-          {/* SVG layer: orbit ring + spokes */}
-          <svg
-            viewBox={`0 0 ${SVG_W} ${SVG_H}`}
-            className="absolute inset-0 w-full h-full pointer-events-none"
-            aria-hidden="true"
-          >
-            {/* Outer glow aura for the orbit */}
-            <circle
-              cx={CX}
-              cy={CY}
-              r={RADIUS}
-              fill="none"
-              stroke={dayMode ? 'rgba(52,211,153,0.12)' : 'rgba(52,211,153,0.06)'}
-              strokeWidth={40}
-            />
-            {/* Dashed orbit ring – slowly rotates via SVG animation */}
-            <circle
-              cx={CX}
-              cy={CY}
-              r={RADIUS}
-              fill="none"
-              stroke={dayMode ? 'rgba(16,185,129,0.25)' : 'rgba(255,255,255,0.08)'}
-              strokeWidth={1.5}
-              strokeDasharray="8 8"
-            >
-              <animateTransform
-                attributeName="transform"
-                type="rotate"
-                from={`0 ${CX} ${CY}`}
-                to={`360 ${CX} ${CY}`}
-                dur="60s"
-                repeatCount="indefinite"
-              />
-            </circle>
-
-            {/* Spokes (dashed gradient lines from center to each node) */}
-            {assetClasses.map((item) => {
-              // Draw line only up to ~70% of radius so it stops before the node card
-              const { x: xe, y: ye } = toXY(item.angleDeg, RADIUS * 0.72);
-              return (
-                <line
-                  key={item.id}
-                  x1={CX}
-                  y1={CY}
-                  x2={CX + xe}
-                  y2={CY + ye}
-                  stroke={item.lineColor}
-                  strokeWidth={1.5}
-                  strokeDasharray="5 5"
-                />
-              );
-            })}
-
-            {/* Subtle inner ring */}
-            <circle
-              cx={CX}
-              cy={CY}
-              r={80}
-              fill="none"
-              stroke={dayMode ? 'rgba(16,185,129,0.10)' : 'rgba(255,255,255,0.04)'}
-              strokeWidth={1}
-            />
-          </svg>
-
-          {/* Center element: StarArc hub */}
-          <div
-            className="absolute flex items-center justify-center"
-            style={{
-              left: '50%',
-              top: '50%',
-              transform: 'translate(-50%, -50%)',
-            }}
-          >
-            {/* Pulsing aura rings */}
-            <span
-              className="absolute rounded-full border border-emerald-500/20 animate-ping"
-              style={{ width: 176, height: 176, animationDuration: '3s' }}
-            />
-            <span
-              className="absolute rounded-full border border-teal-500/15 animate-ping"
-              style={{ width: 200, height: 200, animationDuration: '4.5s', animationDelay: '1.5s' }}
-            />
-
-            {/* Glow backdrop */}
-            <span
-              className="absolute rounded-full"
-              style={{
-                width: 160,
-                height: 160,
-                background: 'radial-gradient(circle, rgba(16,185,129,0.18) 0%, transparent 70%)',
-                filter: 'blur(16px)',
-              }}
-            />
-
-            {/* Main circle */}
-            <div
-              className={`relative flex flex-col items-center justify-center rounded-full border shadow-2xl ${
-                dayMode
-                  ? 'border-emerald-200 bg-gradient-to-br from-white to-emerald-50'
-                  : 'border-slate-600/60 bg-gradient-to-br from-slate-800 to-[#020f0a]'
-              }`}
-              style={{ width: 148, height: 148 }}
-            >
-              {/* Gradient border shimmer */}
-              <div
-                className="absolute inset-0 rounded-full"
-                style={{
-                  background:
-                    'conic-gradient(from 0deg, rgba(16,185,129,0.5), rgba(52,211,153,0.3), rgba(20,184,166,0.5), rgba(16,185,129,0.5))',
-                  padding: 1,
-                  WebkitMask:
-                    'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-                  WebkitMaskComposite: 'xor',
-                  maskComposite: 'exclude',
-                }}
+          {/* ── Right column: Tropical illustration ─────────────────── */}
+          <div className="flex-1 flex items-center justify-center w-full">
+            <div className="relative w-full max-w-lg xl:max-w-2xl mx-auto px-4 lg:px-0">
+              <svg
+                viewBox="0 0 560 440"
+                className="w-full rounded-3xl drop-shadow-xl"
+                aria-hidden="true"
               >
-                <div className="absolute inset-0 rounded-full" />
-              </div>
+                <defs>
+                  {/* Sky gradient */}
+                  <linearGradient id="v2sSky" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor={dayMode ? '#ecfdf5' : '#020c07'} />
+                    <stop offset="65%" stopColor={dayMode ? '#d1fae5' : '#051a0e'} />
+                    <stop offset="100%" stopColor={dayMode ? '#a7f3d0' : '#0d2b18'} />
+                  </linearGradient>
+                  {/* Sea gradient */}
+                  <linearGradient id="v2sSea" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor={dayMode ? '#34d399' : '#064e3b'} />
+                    <stop offset="100%" stopColor={dayMode ? '#059669' : '#021f12'} />
+                  </linearGradient>
+                  {/* Sun glow radial */}
+                  <radialGradient id="v2sSunGlow" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stopColor={dayMode ? '#fef9c3' : '#d1fae5'} stopOpacity="0.9" />
+                    <stop offset="35%" stopColor={dayMode ? '#fde68a' : '#6ee7b7'} stopOpacity="0.5" />
+                    <stop offset="100%" stopColor={dayMode ? '#fde68a' : '#34d399'} stopOpacity="0" />
+                  </radialGradient>
+                  {/* Sun core */}
+                  <radialGradient id="v2sSunCore" cx="40%" cy="35%" r="60%">
+                    <stop offset="0%" stopColor={dayMode ? '#fffbeb' : '#f0fdf4'} />
+                    <stop offset="100%" stopColor={dayMode ? '#f59e0b' : '#10b981'} />
+                  </radialGradient>
+                  {/* Water reflection column */}
+                  <linearGradient id="v2sRefl" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor={dayMode ? '#fbbf24' : '#34d399'} stopOpacity="0.4" />
+                    <stop offset="100%" stopColor={dayMode ? '#fbbf24' : '#34d399'} stopOpacity="0" />
+                  </linearGradient>
+                  {/* Palm trunk */}
+                  <linearGradient id="v2sTrunk" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stopColor={dayMode ? '#065f46' : '#022c1a'} />
+                    <stop offset="50%" stopColor={dayMode ? '#059669' : '#064e3b'} />
+                    <stop offset="100%" stopColor={dayMode ? '#065f46' : '#022c1a'} />
+                  </linearGradient>
+                  {/* Clip to rounded rect */}
+                  <clipPath id="v2sClip">
+                    <rect x="0" y="0" width="560" height="440" rx="24" ry="24" />
+                  </clipPath>
+                  {/* Clip sun above horizon */}
+                  <clipPath id="v2sSunUp">
+                    <rect x="0" y="0" width="560" height="248" />
+                  </clipPath>
+                </defs>
 
-              {/* StarArc label */}
-              <span className={`text-xl font-bold text-transparent bg-clip-text tracking-wide ${
-                dayMode
-                  ? 'bg-gradient-to-r from-emerald-600 to-teal-500'
-                  : 'bg-gradient-to-r from-emerald-400 to-teal-400'
-              }`}>
-                Stararc
-              </span>
+                <g clipPath="url(#v2sClip)">
+                  {/* ── Sky ── */}
+                  <rect x="0" y="0" width="560" height="440" fill="url(#v2sSky)" />
 
+                  {/* Stars — night only */}
+                  {!dayMode && (
+                    <g>
+                      <circle cx="42" cy="32" r="1.2" fill="white" opacity="0.8" />
+                      <circle cx="108" cy="58" r="0.8" fill="white" opacity="0.6" />
+                      <circle cx="195" cy="22" r="1.1" fill="white" opacity="0.7" />
+                      <circle cx="290" cy="45" r="1.5" fill="white" opacity="0.5" />
+                      <circle cx="365" cy="28" r="0.9" fill="white" opacity="0.8" />
+                      <circle cx="430" cy="68" r="1.1" fill="white" opacity="0.6" />
+                      <circle cx="505" cy="38" r="1.3" fill="white" opacity="0.7" />
+                      <circle cx="78" cy="105" r="0.8" fill="white" opacity="0.5" />
+                      <circle cx="235" cy="82" r="1.2" fill="white" opacity="0.6" />
+                      <circle cx="340" cy="92" r="0.9" fill="white" opacity="0.5" />
+                      <circle cx="455" cy="112" r="0.8" fill="white" opacity="0.4" />
+                      <circle cx="500" cy="148" r="1" fill="white" opacity="0.4" />
+                      <circle cx="140" cy="135" r="1" fill="#6ee7b7" opacity="0.8" />
+                      <circle cx="390" cy="55" r="1.5" fill="#34d399" opacity="0.7" />
+                    </g>
+                  )}
+
+                  {/* Cloud wisps — day only */}
+                  {dayMode && (
+                    <g>
+                      <ellipse cx="85" cy="65" rx="58" ry="20" fill="white" opacity="0.4" />
+                      <ellipse cx="135" cy="58" rx="38" ry="14" fill="white" opacity="0.35" />
+                      <ellipse cx="425" cy="45" rx="72" ry="18" fill="white" opacity="0.3" />
+                      <ellipse cx="472" cy="38" rx="45" ry="13" fill="white" opacity="0.25" />
+                      <ellipse cx="320" cy="108" rx="52" ry="15" fill="white" opacity="0.2" />
+                    </g>
+                  )}
+
+                  {/* ── Sun glow aura ── */}
+                  <ellipse cx="372" cy="248" rx="135" ry="105" fill="url(#v2sSunGlow)" />
+
+                  {/* ── Sun disc (clipped above horizon) ── */}
+                  <g clipPath="url(#v2sSunUp)">
+                    <circle cx="372" cy="255" r="72" fill={dayMode ? '#fef3c7' : '#bbf7d0'} opacity="0.22" />
+                    <circle cx="372" cy="255" r="58" fill={dayMode ? '#fde68a' : '#6ee7b7'} opacity="0.45" />
+                    <circle cx="372" cy="255" r="44" fill="url(#v2sSunCore)" />
+                  </g>
+
+                  {/* ── Horizon line ── */}
+                  <line x1="0" y1="248" x2="560" y2="248"
+                    stroke={dayMode ? '#6ee7b7' : '#065f46'} strokeWidth="1.5" opacity="0.8" />
+
+                  {/* ── Sea ── */}
+                  <rect x="0" y="248" width="560" height="192" fill="url(#v2sSea)" />
+
+                  {/* Sun reflection on water */}
+                  <path d="M 338 248 L 410 248 L 440 440 L 308 440 Z"
+                    fill="url(#v2sRefl)" opacity="0.5" />
+
+                  {/* Wave lines */}
+                  <path d="M 0 272 Q 56 262 112 272 Q 168 282 224 272 Q 280 262 336 272 Q 392 282 448 272 Q 504 262 560 272"
+                    fill="none" stroke={dayMode ? '#a7f3d0' : '#065f46'} strokeWidth="1.6" opacity="0.75" />
+                  <path d="M 0 302 Q 70 292 140 302 Q 210 312 280 302 Q 350 292 420 302 Q 490 312 560 302"
+                    fill="none" stroke={dayMode ? '#6ee7b7' : '#047857'} strokeWidth="1.3" opacity="0.55" />
+                  <path d="M 0 338 Q 80 328 160 338 Q 240 348 320 338 Q 400 328 480 338 Q 520 343 560 338"
+                    fill="none" stroke={dayMode ? '#34d399' : '#065f46'} strokeWidth="1" opacity="0.35" />
+
+                  {/* ── Distant island silhouette ── */}
+                  <path d="M 480 248 Q 500 236 520 240 Q 535 238 545 248"
+                    fill={dayMode ? '#059669' : '#053d25'} opacity="0.45" />
+
+                  {/* ── Palm trunk ── */}
+                  {/* Shadow */}
+                  <path d="M 92 440 Q 108 375 128 315 Q 142 268 162 228"
+                    fill="none" stroke={dayMode ? '#022c1a' : '#010f07'}
+                    strokeWidth="18" strokeLinecap="round" opacity="0.35" />
+                  {/* Main trunk */}
+                  <path d="M 92 440 Q 108 375 128 315 Q 142 268 162 228"
+                    fill="none" stroke="url(#v2sTrunk)"
+                    strokeWidth="14" strokeLinecap="round" />
+                  {/* Highlight */}
+                  <path d="M 95 430 Q 112 362 132 300 Q 146 255 166 218"
+                    fill="none" stroke={dayMode ? '#10b981' : '#065f46'}
+                    strokeWidth="3" strokeLinecap="round" opacity="0.4" />
+
+                  {/* ── Palm leaves (6 blades from crown at 162, 228) ── */}
+                  {/* Leaf 1: far right horizontal */}
+                  <path d="M 162 228 C 198 215 248 202 285 198 C 255 210 215 222 180 232 Z"
+                    fill={dayMode ? '#059669' : '#065f46'} />
+                  <path d="M 162 228 C 198 215 248 202 285 198"
+                    stroke={dayMode ? '#34d399' : '#6ee7b7'} strokeWidth="1.5" fill="none" opacity="0.8" />
+
+                  {/* Leaf 2: right-down drooping */}
+                  <path d="M 162 228 C 198 230 248 242 278 262 C 245 248 202 238 168 235 Z"
+                    fill={dayMode ? '#047857' : '#053d25'} />
+                  <path d="M 162 228 C 198 230 248 242 278 262"
+                    stroke={dayMode ? '#6ee7b7' : '#047857'} strokeWidth="1.5" fill="none" opacity="0.7" />
+
+                  {/* Leaf 3: straight up */}
+                  <path d="M 162 228 C 160 202 156 168 154 142 C 158 168 164 202 168 228 Z"
+                    fill={dayMode ? '#059669' : '#064e3b'} />
+                  <path d="M 162 228 C 160 202 156 168 154 142"
+                    stroke={dayMode ? '#34d399' : '#6ee7b7'} strokeWidth="1.5" fill="none" opacity="0.8" />
+
+                  {/* Leaf 4: upper-left */}
+                  <path d="M 162 228 C 138 210 98 198 64 196 C 96 208 136 218 158 228 Z"
+                    fill={dayMode ? '#059669' : '#064e3b'} />
+                  <path d="M 162 228 C 138 210 98 198 64 196"
+                    stroke={dayMode ? '#6ee7b7' : '#6ee7b7'} strokeWidth="1.5" fill="none" opacity="0.7" />
+
+                  {/* Leaf 5: far-left drooping */}
+                  <path d="M 162 228 C 132 232 90 248 62 270 C 94 252 135 238 160 232 Z"
+                    fill={dayMode ? '#047857' : '#053d25'} />
+                  <path d="M 162 228 C 132 232 90 248 62 270"
+                    stroke={dayMode ? '#34d399' : '#047857'} strokeWidth="1.5" fill="none" opacity="0.6" />
+
+                  {/* Leaf 6: upper-right diagonal */}
+                  <path d="M 162 228 C 178 205 210 185 238 175 C 212 192 178 212 164 230 Z"
+                    fill={dayMode ? '#10b981' : '#074b30'} />
+                  <path d="M 162 228 C 178 205 210 185 238 175"
+                    stroke={dayMode ? '#6ee7b7' : '#065f46'} strokeWidth="1.2" fill="none" opacity="0.6" />
+
+                  {/* Coconuts at crown */}
+                  <circle cx="160" cy="234" r="5.5" fill={dayMode ? '#78350f' : '#052e16'} />
+                  <circle cx="168" cy="238" r="5" fill={dayMode ? '#92400e' : '#042416'} />
+                  <circle cx="153" cy="237" r="4.5" fill={dayMode ? '#78350f' : '#052e16'} />
+
+                  {/* ── Frame border ── */}
+                  <rect x="1" y="1" width="558" height="438" fill="none"
+                    stroke={dayMode ? 'rgba(16,185,129,0.25)' : 'rgba(52,211,153,0.1)'}
+                    strokeWidth="2" rx="23" ry="23" />
+                </g>
+              </svg>
             </div>
-          </div>
-
-          {/* Asset nodes */}
-          {assetClasses.map((item) => {
-            const { x, y } = toXY(item.angleDeg, RADIUS);
-            const { Icon } = item;
-            return (
-              <div
-                key={item.id}
-                className="absolute flex flex-col items-center gap-2 text-center group"
-                style={{
-                  left: '50%',
-                  top: '50%',
-                  transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`,
-                  width: 108,
-                }}
-              >
-                {/* Icon pill */}
-                <div
-                  className={`p-3 rounded-2xl bg-gradient-to-br ${item.gradient} shadow-lg transition-transform duration-300 group-hover:scale-110`}
-                >
-                  <Icon size={24} className="text-white" />
-                </div>
-
-                {/* Label */}
-                <span className={`text-sm font-semibold leading-tight ${
-                  dayMode ? item.dayTextColor : item.textColor
-                }`}>
-                  {t(`hero2.assets.${item.id}`)}
-                </span>
-
-                {/* Short description */}
-                <span className={`text-xs leading-tight ${dayMode ? 'text-slate-600' : 'text-slate-500'}`}>
-                  {t(`hero2.assets.${item.id}Desc`)}
-                </span>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Mobile: 2×3 grid fallback */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 w-full max-w-md sm:max-w-2xl lg:hidden">
-          {assetClasses.map((item) => {
-            const { Icon } = item;
-            return (
-              <div
-                key={item.id}
-                className={`flex flex-col items-center gap-2.5 p-4 rounded-2xl border text-center ${
-                  dayMode
-                    ? `bg-white/70 ${item.borderColor.replace('/30', '/50')}`
-                    : `bg-slate-800/60 ${item.borderColor}`
-                }`}
-              >
-                <div className={`p-3 rounded-xl bg-gradient-to-br ${item.gradient} shadow-lg`}>
-                  <Icon size={22} className="text-white" />
-                </div>
-                <span className={`text-sm font-semibold ${dayMode ? item.dayTextColor : item.textColor}`}>
-                  {t(`hero2.assets.${item.id}`)}
-                </span>
-                <span className="text-xs text-slate-500 leading-snug">
-                  {t(`hero2.assets.${item.id}Desc`)}
-                </span>
-              </div>
-            );
-          })}
-        </div>
-
           </div>{/* end right column */}
         </div>{/* end flex row */}
 
