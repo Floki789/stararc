@@ -217,21 +217,6 @@ const HeroSectionV3: React.FC<HeroSectionV3Props> = ({ dayMode = false }) => {
           {/* ── Left column ─────────────────────────────────────────────── */}
           <div className="flex-1 flex flex-col justify-center text-center lg:text-left">
 
-            {/* Badges */}
-            <div className="hidden sm:flex items-center gap-2 mb-5 self-center lg:self-start">
-              <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full border ${
-                dayMode ? 'bg-blue-100 border-blue-300' : 'bg-blue-500/10 border-blue-500/30'
-              }`}>
-                <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
-                <span className={`text-sm font-semibold uppercase tracking-wider ${dayMode ? 'text-blue-600' : 'text-blue-400'}`}>Beta</span>
-              </div>
-              <Link to="/register" className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full border transition-opacity hover:opacity-80 ${
-                dayMode ? 'bg-emerald-100 border-emerald-300' : 'bg-emerald-500/10 border-emerald-500/30'
-              }`}>
-                <span className={`text-sm font-semibold tracking-wide ${dayMode ? 'text-emerald-700' : 'text-emerald-400'}`}>{t('hero2.freeAccess')}</span>
-              </Link>
-            </div>
-
             {/* Title */}
             <h1 className="text-5xl sm:text-6xl lg:text-6xl xl:text-7xl font-black uppercase leading-tight tracking-tight">
               <span className={`block ${dayMode ? 'text-slate-900' : 'text-white'}`}>{isDE ? 'Deine Daten geh\u00f6ren' : 'Your Data Belongs'}</span>
@@ -257,21 +242,6 @@ const HeroSectionV3: React.FC<HeroSectionV3Props> = ({ dayMode = false }) => {
               ))}
             </div>
 
-            {/* Security badge */}
-            <div className="mt-6 self-center lg:self-start">
-              <Link
-                to="/security"
-                className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full transition-colors ${
-                  dayMode
-                    ? 'bg-white/70 border border-slate-300 hover:bg-white hover:border-slate-400'
-                    : 'bg-slate-700/60 border border-slate-600/50 hover:bg-slate-700 hover:border-slate-500'
-                }`}
-              >
-                <span className={`text-xs font-semibold uppercase tracking-wider ${dayMode ? 'text-orange-600' : 'text-orange-400'}`}>
-                  {t('hero2.securityLink')}
-                </span>
-              </Link>
-            </div>
           </div>
 
           {/* ── Right column: ZK-protected orbital ────────────────────── */}

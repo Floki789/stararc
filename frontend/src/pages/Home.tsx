@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import HeroSection from '../components/HeroSectionV2';
 import HeroSectionV3 from '../components/HeroSectionV3';
@@ -24,39 +24,20 @@ import DataArchitectureShowcase from '../components/DataArchitectureShowcase';
 import GettingStartedShowcase from '../components/GettingStartedShowcase';
 import PlanCards from '../components/PlanCards';
 import NewsletterSignup from '../components/NewsletterSignup';
-import { BarChart3, Lock, Rocket, Sparkles, ArrowUp, Bitcoin } from 'lucide-react';
+import { BarChart3, Lock, Rocket, Sparkles, ArrowDown, Bitcoin } from 'lucide-react';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [heroIndex, setHeroIndex] = useState(0);
-  const [fading, setFading] = useState(false);
-  const [pinned, setPinned] = useState(false);
   const { dayMode } = useDayMode();
-  const HERO_COUNT = 6;
 
-  const goTo = (i: number, userClick = false) => {
-    if (i === heroIndex || fading) return;
-    if (userClick) setPinned(true);
-    setFading(true);
-    setTimeout(() => {
-      setHeroIndex(i);
-      setFading(false);
-    }, 800);
+  const scrollToHero = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
-
-  // Cycle heroes every 12 s — stop if user has pinned a slide
-  useEffect(() => {
-    if (pinned) return;
-    const timer = setInterval(() => {
-      goTo((heroIndex + 1) % HERO_COUNT);
-    }, 12000);
-    return () => clearInterval(timer);
-  }, [heroIndex, fading, pinned]);
 
   const handleNavigateToRegister = () => {
     navigate('/register');
-    // Scroll to top after navigation
     setTimeout(() => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }, 100);
@@ -65,7 +46,6 @@ const Home: React.FC = () => {
   // Handle scrolling to hash fragments (e.g., #plans) or top of page
   useEffect(() => {
     if (location.hash) {
-      // Scroll to specific section if hash is present
       const element = document.getElementById(location.hash.substring(1));
       if (element) {
         setTimeout(() => {
@@ -73,7 +53,6 @@ const Home: React.FC = () => {
         }, 100);
       }
     } else {
-      // Scroll to top if no hash (home link clicked)
       setTimeout(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }, 100);
@@ -81,59 +60,14 @@ const Home: React.FC = () => {
   }, [location.hash, location.pathname]);
 
   return (
-    <div className="min-h-screen">      
-      {/* Hero Section — crossfade on change */}
-      <div
-        className={`relative transition-colors duration-700 ${dayMode ? 'bg-slate-100' : 'bg-slate-950'}`}
-        style={{ minHeight: '100vh' }}
-      >
-        <div
-          style={{
-            opacity: fading ? 0 : 1,
-            transition: 'opacity 800ms ease-in-out',
-          }}
-        >
-          {heroIndex === 0 ? <HeroSection dayMode={dayMode} /> : heroIndex === 1 ? <HeroSectionV3 dayMode={dayMode} /> : heroIndex === 2 ? <HeroSectionV4 dayMode={dayMode} /> : heroIndex === 3 ? <HeroSectionV5 dayMode={dayMode} /> : heroIndex === 4 ? <HeroSectionBitcoin dayMode={dayMode} /> : <HeroSectionVault dayMode={dayMode} />}
-        </div>
-        {/* Slide indicator dots — numbered, click pins the slide */}
-        <div className="absolute bottom-16 sm:bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 z-20">
-          {Array.from({ length: HERO_COUNT }).map((_, i) => (
-            <button
-              key={i}
-              onClick={() => goTo(i, true)}
-              aria-label={`Hero slide ${i + 1}`}
-              className={`flex items-center justify-center rounded-full text-[10px] font-bold transition-all duration-300 ${
-                heroIndex === i
-                  ? dayMode
-                    ? 'w-7 h-7 bg-slate-800 text-white shadow-lg'
-                    : 'w-7 h-7 bg-white text-slate-900 shadow-lg'
-                  : dayMode
-                    ? 'w-6 h-6 bg-slate-700/60 text-white hover:bg-slate-700 border border-slate-400/50'
-                    : 'w-6 h-6 bg-white/20 text-white/60 hover:bg-white/40 hover:text-white'
-              }`}
-            >
-              {i + 1}
-            </button>
-          ))}
-          {/* Unpin button — only visible when pinned */}
-          {pinned && (
-            <button
-              onClick={() => setPinned(false)}
-              aria-label="Resume auto-play"
-              title="Auto-play fortsetzen"
-              className={`ml-1 w-6 h-6 flex items-center justify-center rounded-full transition-all duration-200 ${
-                dayMode
-                  ? 'bg-slate-700/50 hover:bg-slate-700 text-white'
-                  : 'bg-white/10 hover:bg-white/25 text-white/50 hover:text-white'
-              }`}
-            >
-              <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor" aria-hidden="true">
-                <polygon points="2,1 9,5 2,9" />
-              </svg>
-            </button>
-          )}
-        </div>
-      </div>
+    <div className="min-h-screen">
+      {/* Hero sections — stacked, scrollable */}
+      <div id="hero-0"><HeroSection dayMode={dayMode} /></div>
+      <div id="hero-1"><HeroSectionV3 dayMode={dayMode} /></div>
+      <div id="hero-2"><HeroSectionV4 dayMode={dayMode} /></div>
+      <div id="hero-3"><HeroSectionV5 dayMode={dayMode} /></div>
+      <div id="hero-4"><HeroSectionBitcoin dayMode={dayMode} /></div>
+      <div id="hero-5"><HeroSectionVault dayMode={dayMode} /></div>
 
       {/* Newsletter bar — narrow strip between hero and plans */}
       <div className={`py-4 px-4 border-b transition-colors duration-700 ${
@@ -224,10 +158,7 @@ const Home: React.FC = () => {
                 ].map(({ index, Icon, gradient, glow, border, textColor, title, desc }) => (
                   <button
                     key={index}
-                    onClick={() => {
-                      goTo(index, true);
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }}
+                    onClick={() => scrollToHero(`hero-${index}`)}
                     className="group text-left rounded-2xl p-5 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl"
                     style={{
                       background: dayMode
@@ -243,8 +174,8 @@ const Home: React.FC = () => {
                     <p className={`text-sm font-bold mb-1 ${dayMode ? 'text-slate-800' : 'text-white'}`}>{title}</p>
                     <p className={`text-xs leading-relaxed ${dayMode ? 'text-slate-500' : 'text-slate-400'}`}>{desc}</p>
                     <div className={`mt-3 flex items-center gap-1 text-xs font-semibold ${textColor} opacity-0 group-hover:opacity-100 transition-opacity duration-200`}>
-                      <ArrowUp size={11} />
-                      <span>Zum Slide</span>
+                      <ArrowDown size={11} />
+                      <span>Zum Abschnitt</span>
                     </div>
                   </button>
                 ))}
