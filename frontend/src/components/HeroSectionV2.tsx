@@ -142,36 +142,6 @@ const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
                   - Peak x-positions are completely independent per layer
                 */}
 
-                {/*
-                  defs first — mask wraps ALL content (sun + mountains) so
-                  edges fade uniformly; no bleed-through possible.
-                  Horizontal gradient fades left 0-18% and right 82-100%.
-                  Vertical gradient fades bottom 65-100%.
-                */}
-                <defs>
-                  <linearGradient id="v2mH" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%"   stopColor="black" />
-                    <stop offset="16%"  stopColor="white" />
-                    <stop offset="84%"  stopColor="white" />
-                    <stop offset="100%" stopColor="black" />
-                  </linearGradient>
-                  <linearGradient id="v2mV" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="65%"  stopColor="white" />
-                    <stop offset="100%" stopColor="black" />
-                  </linearGradient>
-                  {/*
-                    Two-pass mask: first rect defines H fade, second rect
-                    uses multiply blend to AND in the V fade.
-                  */}
-                  <mask id="v2sEdgeMask" maskContentUnits="userSpaceOnUse">
-                    <rect x="0" y="0" width="560" height="280" fill="url(#v2mH)" />
-                    <rect x="0" y="0" width="560" height="280" fill="url(#v2mV)" style={{mixBlendMode: 'multiply'}} />
-                  </mask>
-                </defs>
-
-                {/* Everything inside the mask — fades at edges, fully opaque in centre */}
-                <g mask="url(#v2sEdgeMask)">
-
                 {/* Subtle halo behind sun */}
                 <circle
                   cx="280" cy="215" r="105"
@@ -249,7 +219,6 @@ const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
                   fill={dayMode ? '#065f46' : '#030f07'}
                 />
 
-                </g>
               </svg>
             </div>
           </div>{/* end right column */}
