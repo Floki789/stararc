@@ -152,90 +152,98 @@ const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
                 aria-hidden="true"
               >
                 {/*
-                  Sun drawn first — mountains painted on top in order back→front.
-                  Each layer has completely independent peak positions.
-                  Atmospheric depth: back = very transparent/pale, front = opaque/dark.
-                  Sun is above the tallest visible peaks so it's never fully hidden.
+                  Sunrise physics:
+                  - Sun centre sits BELOW the mountain ridges (cy=235, r=72 → top at y=163)
+                  - Mountain fills are painted on top, each covering more of the sun
+                  - Only the glowing top arc peeks above the farthest range
+                  - Each closer layer has its ridges at HIGHER y-values (lower peaks on screen)
+                    but is more opaque → progressively occludes the sun
+                  - Peak x-positions are completely independent per layer
                 */}
 
-                {/* ── Sun disc ── */}
+                {/* Subtle halo behind sun — just a larger semi-transparent disc */}
                 <circle
-                  cx="280" cy="148" r="58"
+                  cx="280" cy="235" r="105"
+                  fill={dayMode ? '#fef9c3' : '#d1fae5'}
+                  opacity={dayMode ? 0.22 : 0.12}
+                />
+
+                {/* Sun disc */}
+                <circle
+                  cx="280" cy="235" r="72"
                   fill={dayMode ? '#fde047' : '#a7f3d0'}
-                  opacity={dayMode ? 0.90 : 0.72}
+                  opacity={dayMode ? 0.92 : 0.75}
                 />
 
-                {/* ── Layer 1 — farthest back, palest
-                     Peaks: ~x 80 (y≈195), x 290 (y≈182), x 470 (y≈188)
-                     Valley centres: ~x 175, x 380
-                ── */}
+                {/* ── Layer 1 — farthest, palest
+                     Peaks: x=100(y≈188), x=310(y≈180), x=480(y≈190)
+                     → sun arc from y=163 to y≈180 visible above highest peak ── */}
                 <path
-                  d="M 0 280 L 0 218
-                     C 30 212 58 200 80 195
-                     C 102 190 130 200 160 208
-                     C 190 216 220 200 255 188
-                     C 270 183 280 182 295 184
-                     C 320 188 348 204 378 210
-                     C 398 214 425 200 450 192
-                     C 462 188 472 187 490 190
-                     C 515 195 542 206 560 210
+                  d="M 0 280 L 0 215
+                     C 40 210 75 200 100 188
+                     C 125 178 150 195 185 206
+                     C 210 214 245 198 275 184
+                     C 295 175 320 178 342 186
+                     C 365 194 395 206 422 200
+                     C 442 196 462 190 480 190
+                     C 500 190 530 200 560 212
                      L 560 280 Z"
-                  fill={dayMode ? 'rgba(167,243,208,0.28)' : 'rgba(4,20,11,0.50)'}
+                  fill={dayMode ? 'rgba(167,243,208,0.30)' : 'rgba(4,20,11,0.52)'}
                 />
 
-                {/* ── Layer 2 — independent peaks
-                     Peaks: ~x 145 (y≈198), x 400 (y≈195)
-                     Valley near: x 50, x 270, x 520
-                ── */}
+                {/* ── Layer 2
+                     Peaks: x=58(y≈206), x=200(y≈198), x=414(y≈204)
+                     → covers sun below y≈198 at centre ── */}
                 <path
-                  d="M 0 280 L 0 238
-                     C 28 232 55 225 82 230
-                     C 110 235 128 215 148 205
-                     C 168 195 190 202 215 212
-                     C 240 222 265 218 292 222
-                     C 320 226 348 216 372 208
-                     C 385 204 395 198 408 196
-                     C 430 192 455 205 478 216
-                     C 500 226 530 234 560 236
+                  d="M 0 280 L 0 232
+                     C 28 226 45 220 58 208
+                     C 72 196 98 206 128 216
+                     C 154 224 176 210 200 200
+                     C 218 193 240 205 266 216
+                     C 286 223 312 218 336 216
+                     C 358 214 380 210 400 205
+                     C 414 202 428 204 444 208
+                     C 466 214 492 224 522 229
+                     C 542 232 554 232 560 230
                      L 560 280 Z"
-                  fill={dayMode ? 'rgba(110,231,183,0.48)' : 'rgba(3,13,8,0.72)'}
+                  fill={dayMode ? 'rgba(110,231,183,0.50)' : 'rgba(3,13,8,0.74)'}
                 />
 
                 {/* ── Layer 3
-                     Peaks: ~x 210 (y≈212), x 455 (y≈208)
-                     Valley near: x 100, x 340, right edge
-                ── */}
+                     Peaks: x=145(y≈217), x=355(y≈213), x=508(y≈221)
+                     → covers sun below y≈213 at centre ── */}
                 <path
-                  d="M 0 280 L 0 255
-                     C 32 248 62 240 90 245
-                     C 118 250 145 238 172 228
-                     C 192 220 205 214 218 212
-                     C 240 209 265 218 292 228
-                     C 318 238 342 232 368 226
-                     C 390 220 420 218 442 212
-                     C 455 209 468 208 480 210
-                     C 504 215 532 226 560 228
+                  d="M 0 280 L 0 248
+                     C 30 243 58 238 84 240
+                     C 108 242 126 232 145 218
+                     C 162 207 180 215 205 226
+                     C 225 234 248 229 272 228
+                     C 295 228 318 222 340 218
+                     C 356 215 375 218 396 226
+                     C 416 233 440 238 462 236
+                     C 480 234 496 224 508 222
+                     C 524 220 544 226 560 228
                      L 560 280 Z"
-                  fill={dayMode ? 'rgba(52,211,153,0.65)' : 'rgba(2,10,6,0.88)'}
+                  fill={dayMode ? 'rgba(52,211,153,0.68)' : 'rgba(2,10,6,0.90)'}
                 />
 
-                {/* ── Layer 4 — foreground silhouette, darkest
-                     Peaks: ~x 115 (y≈238), x 340 (y≈232)
-                     Valley near: x 220, x 450, right edge slopes
-                ── */}
+                {/* ── Layer 4 — foreground, darkest
+                     Peaks: x=95(y≈238), x=268(y≈232), x=440(y≈238)
+                     → almost fully covers sun; only top arc above y≈232 survives ── */}
                 <path
-                  d="M 0 280 L 0 270
-                     C 30 264 58 256 85 260
-                     C 100 262 112 250 118 242
-                     C 128 234 140 238 158 245
-                     C 178 253 202 258 228 260
-                     C 252 262 278 254 305 245
-                     C 322 239 336 233 348 232
-                     C 365 230 385 240 410 250
-                     C 432 258 456 264 484 266
-                     C 510 268 538 268 560 266
+                  d="M 0 280 L 0 262
+                     C 28 258 54 252 74 248
+                     C 88 245 100 239 110 238
+                     C 128 236 148 244 172 252
+                     C 192 258 215 256 240 252
+                     C 252 250 260 242 268 234
+                     C 278 227 296 236 318 246
+                     C 336 254 356 256 378 254
+                     C 398 252 420 244 440 238
+                     C 452 234 466 238 480 244
+                     C 500 252 526 260 560 262
                      L 560 280 Z"
-                  fill={dayMode ? 'rgba(6,78,59,0.95)' : 'rgba(1,6,3,0.98)'}
+                  fill={dayMode ? 'rgba(6,78,59,0.96)' : 'rgba(1,6,3,0.98)'}
                 />
               </svg>
             </div>
