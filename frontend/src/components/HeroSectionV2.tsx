@@ -121,6 +121,10 @@ const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
               <span className={`block mt-3 sm:mt-6 pb-2 ${dayMode ? 'text-emerald-600' : 'text-emerald-400'}`}>
                 {t('hero2.titleLine2')}
               </span>
+              <br />
+              <span className={`block mt-2 sm:mt-4 pb-2 text-3xl sm:text-3xl lg:text-4xl xl:text-5xl ${dayMode ? 'text-sky-600' : 'text-sky-400'}`}>
+                {t('hero2.titleLine3')}
+              </span>
             </h1>
           </div>
 
