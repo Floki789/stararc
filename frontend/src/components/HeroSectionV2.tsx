@@ -188,7 +188,7 @@ const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
                      C 442 196 462 190 480 190
                      C 500 190 530 200 560 212
                      L 560 280 Z"
-                  fill={dayMode ? 'rgba(167,243,208,0.30)' : 'rgba(4,20,11,0.52)'}
+                  fill={dayMode ? '#c6f0dd' : '#0d2818'}
                 />
 
                 {/* ── Layer 2
@@ -206,7 +206,7 @@ const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
                      C 466 214 492 224 522 229
                      C 542 232 554 232 560 230
                      L 560 280 Z"
-                  fill={dayMode ? 'rgba(110,231,183,0.50)' : 'rgba(3,13,8,0.74)'}
+                  fill={dayMode ? '#6ee7b7' : '#083d1c'}
                 />
 
                 {/* ── Layer 3
@@ -224,7 +224,7 @@ const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
                      C 480 234 496 224 508 222
                      C 524 220 544 226 560 228
                      L 560 280 Z"
-                  fill={dayMode ? 'rgba(52,211,153,0.68)' : 'rgba(2,10,6,0.90)'}
+                  fill={dayMode ? '#1aab6d' : '#052e14'}
                 />
 
                 {/* ── Layer 4 — foreground, darkest
@@ -243,7 +243,7 @@ const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
                      C 452 234 466 238 480 244
                      C 500 252 526 260 560 262
                      L 560 280 Z"
-                  fill={dayMode ? 'rgba(6,78,59,0.96)' : 'rgba(1,6,3,0.98)'}
+                  fill={dayMode ? '#065f46' : '#030f07'}
                 />
               </svg>
             </div>
