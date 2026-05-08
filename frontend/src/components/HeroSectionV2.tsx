@@ -143,68 +143,82 @@ const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
             </div>
           </div>
 
-          {/* ── Right column: Minimalist horizon + rising sun ───────── */}
-          <div className="flex-1 flex items-end justify-center w-full pb-16 lg:pb-0 lg:items-center">
+          {/* ── Right column: Layered mountain sunrise ───────────────── */}
+          {/*
+            Sunrise atmospheric perspective:
+            Day:   back layers pale/transparent → front layer dark silhouette
+            Night: back layers slightly backlit → front layers near-opaque dark
+            Sun drawn first; mountain fills laid on top naturally mask it.
+          */}
+          <div className="flex-1 flex items-end justify-center w-full pb-8 lg:pb-0 lg:items-center">
             <div className="relative w-full">
               <svg
-                viewBox="0 0 560 320"
+                viewBox="0 0 560 280"
                 className="w-full"
                 aria-hidden="true"
               >
-                <defs>
-                  {/* Sun clips to above the mountain silhouette horizon */}
-                  <clipPath id="v2sSunClip">
-                    {/* Clip path mirrors the mountain silhouette so sun hides behind peaks */}
-                    <path d="
-                      M 0 0
-                      L 560 0
-                      L 560 220
-                      L 490 220 L 470 192 L 450 178 L 430 170 L 412 175 L 395 162 L 378 148 L 360 162 L 342 175 L 325 168 L 308 155 L 290 168 L 272 182 L 255 195 L 238 210 L 220 202 L 200 185 L 180 170 L 158 182 L 138 195 L 118 205 L 98 212 L 80 220
-                      L 0 220
-                      Z
-                    " />
-                  </clipPath>
-                </defs>
-
-                {/* ── Sun disc — clipped behind mountains ── */}
-                <g clipPath="url(#v2sSunClip)">
-                  <circle
-                    cx="280" cy="220" r="64"
-                    fill={dayMode ? '#fde047' : '#6ee7b7'}
-                    opacity={dayMode ? 0.9 : 0.75}
-                  />
-                </g>
-
-                {/* ── Mountain silhouette — back range (lighter) ── */}
-                <path
-                  d="M 0 220 L 80 220 L 118 205 L 138 195 L 158 182 L 180 170 L 200 185 L 220 202 L 238 210 L 255 195 L 272 182 L 290 168 L 308 155 L 325 168 L 342 175 L 360 162 L 378 148 L 395 162 L 412 175 L 430 170 L 450 178 L 470 192 L 490 220 L 560 220"
-                  fill="none"
-                  stroke={dayMode ? 'rgba(16,185,129,0.18)' : 'rgba(52,211,153,0.12)'}
-                  strokeWidth="1"
+                {/* ── Sun disc — drawn first, mountains stack on top ── */}
+                <circle
+                  cx="280" cy="180" r="68"
+                  fill={dayMode ? '#fde047' : '#a7f3d0'}
+                  opacity={dayMode ? 0.88 : 0.70}
                 />
 
-                {/* ── Mountain silhouette — foreground range (solid) ── */}
+                {/* ── Layer 1: farthest back — palest (day) / backlit glow (night) ── */}
+                {/* peaks ~y 138–162, baseline ~y 185 */}
                 <path
-                  d="M 0 320
-                     L 0 240
-                     Q 30 238 55 228 Q 72 222 90 230
-                     Q 110 238 130 224 Q 148 212 165 220
-                     Q 182 228 200 218 Q 218 208 238 198
-                     Q 255 190 272 202 Q 288 214 305 205
-                     Q 322 196 340 185 Q 358 174 375 188
-                     Q 392 202 408 190 Q 425 178 442 188
-                     Q 460 198 478 208 Q 496 218 516 224
-                     Q 538 230 560 225
-                     L 560 320
-                     Z"
-                  fill={dayMode ? 'rgba(16,185,129,0.22)' : 'rgba(6,78,59,0.65)'}
+                  d="M 0 280 L 0 180
+                     C 40 170, 80 156, 120 164
+                     C 160 172, 196 146, 232 138
+                     C 268 130, 296 142, 328 138
+                     C 360 134, 388 150, 420 158
+                     C 452 166, 496 172, 560 178
+                     L 560 280 Z"
+                  fill={dayMode ? 'rgba(167,243,208,0.32)' : 'rgba(5,26,14,0.50)'}
                 />
 
-                {/* ── Horizon line ── */}
-                <line
-                  x1="0" y1="220" x2="560" y2="220"
-                  stroke={dayMode ? 'rgba(16,185,129,0.45)' : 'rgba(52,211,153,0.25)'}
-                  strokeWidth="1"
+                {/* ── Layer 2 ── */}
+                {/* peaks ~y 158–178, baseline ~y 205 */}
+                <path
+                  d="M 0 280 L 0 200
+                     C 35 193, 65 180, 98 188
+                     C 131 196, 162 172, 196 165
+                     C 230 158, 256 170, 284 178
+                     C 312 186, 340 165, 372 155
+                     C 404 145, 432 165, 462 174
+                     C 492 183, 526 192, 560 196
+                     L 560 280 Z"
+                  fill={dayMode ? 'rgba(110,231,183,0.46)' : 'rgba(3,18,10,0.72)'}
+                />
+
+                {/* ── Layer 3 ── */}
+                {/* peaks ~y 184–208, baseline ~y 232 */}
+                <path
+                  d="M 0 280 L 0 228
+                     C 30 220, 58 208, 88 215
+                     C 118 222, 150 202, 180 194
+                     C 210 186, 236 198, 264 208
+                     C 292 218, 320 196, 352 184
+                     C 384 172, 410 190, 438 200
+                     C 466 210, 494 220, 528 224
+                     C 546 226, 554 226, 560 225
+                     L 560 280 Z"
+                  fill={dayMode ? 'rgba(52,211,153,0.62)' : 'rgba(2,12,7,0.87)'}
+                />
+
+                {/* ── Layer 4: foreground — darkest silhouette ── */}
+                {/* peaks ~y 220–244, fills to bottom */}
+                <path
+                  d="M 0 280 L 0 258
+                     C 28 250, 56 240, 86 246
+                     C 116 252, 146 234, 176 224
+                     C 206 214, 232 226, 260 238
+                     C 288 250, 316 232, 348 220
+                     C 380 208, 406 222, 434 234
+                     C 462 246, 490 254, 520 258
+                     C 542 261, 554 260, 560 258
+                     L 560 280 Z"
+                  fill={dayMode ? 'rgba(6,78,59,0.92)' : 'rgba(2,10,6,0.97)'}
                 />
               </svg>
             </div>
