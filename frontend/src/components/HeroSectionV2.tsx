@@ -163,14 +163,14 @@ const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
 
                 {/* Subtle halo behind sun — just a larger semi-transparent disc */}
                 <circle
-                  cx="280" cy="235" r="105"
+                  cx="280" cy="215" r="105"
                   fill={dayMode ? '#fef9c3' : '#d1fae5'}
                   opacity={dayMode ? 0.22 : 0.12}
                 />
 
                 {/* Sun disc */}
                 <circle
-                  cx="280" cy="235" r="72"
+                  cx="280" cy="215" r="72"
                   fill={dayMode ? '#fde047' : '#a7f3d0'}
                   opacity={dayMode ? 0.92 : 0.75}
                 />
