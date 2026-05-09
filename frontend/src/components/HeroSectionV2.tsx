@@ -173,7 +173,7 @@ const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
                      C 466 214 492 224 522 229
                      C 542 232 554 232 560 230
                      L 560 280 Z"
-                  fill={dayMode ? '#6ee7b7' : '#083d1c'}
+                  fill={dayMode ? '#a5f3fc' : '#083344'}
                 />
 
                 {/* ── Layer 3 ── */}
@@ -189,7 +189,7 @@ const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
                      C 480 234 496 224 508 222
                      C 524 220 544 226 560 228
                      L 560 280 Z"
-                  fill={dayMode ? '#1aab6d' : '#052e14'}
+                  fill={dayMode ? '#0891b2' : '#052130'}
                 />
 
                 {/* ── Layer 4 — foreground, darkest ── */}
@@ -206,7 +206,7 @@ const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
                      C 452 234 466 238 480 244
                      C 500 252 526 260 560 262
                      L 560 280 Z"
-                  fill={dayMode ? '#065f46' : '#030f07'}
+                  fill={dayMode ? '#0e7490' : '#020d14'}
                 />
 
               </svg>
