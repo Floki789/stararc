@@ -118,18 +118,35 @@ const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
             <h1 className="text-5xl sm:text-5xl lg:text-6xl xl:text-7xl font-black uppercase leading-tight tracking-tight pb-2">
               <span className={dayMode ? 'text-slate-900' : 'text-white'}>{t('hero2.titleLine1')}</span>
               <br />
-              <span className={`block mt-3 sm:mt-6 pb-2 ${dayMode ? 'text-emerald-600' : 'text-emerald-400'}`}>
+              <span className={`block mt-3 sm:mt-6 pb-2 ${dayMode ? 'text-sky-600' : 'text-sky-400'}`}>
                 {t('hero2.titleLine2')}
               </span>
-              <br />
-              <span className={`block mt-2 sm:mt-4 pb-2 text-3xl sm:text-3xl lg:text-4xl xl:text-5xl ${dayMode ? 'text-sky-600' : 'text-sky-400'}`}>
-                {t('hero2.titleLine3')}
-              </span>
             </h1>
+
           </div>
 
           {/* ── Right column: Layered mountain sunrise ───────────────── */}
           <div className="flex-1 flex items-end justify-center w-full pb-8 lg:pb-0 lg:items-center">
+            {/* Swiss badge — top right */}
+            <div className="absolute top-4 right-4 sm:top-6 sm:right-6 lg:top-8 lg:right-8 z-20">
+              <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest ${
+                dayMode ? 'text-slate-500' : 'text-slate-500'
+              }`}>
+                <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
+                  <rect width="14" height="14" rx="2" fill="#FF0000"/>
+                  <rect x="6" y="2" width="2" height="10" fill="white"/>
+                  <rect x="2" y="6" width="10" height="2" fill="white"/>
+                </svg>
+                <span>Swiss Startup</span>
+                <span className="text-slate-600">|</span>
+                <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
+                  <rect width="14" height="14" rx="2" fill="#FF0000"/>
+                  <rect x="6" y="2" width="2" height="10" fill="white"/>
+                  <rect x="2" y="6" width="10" height="2" fill="white"/>
+                </svg>
+                <span>Swiss Quality</span>
+              </div>
+            </div>
             <div className="relative w-full">
               <svg
                 viewBox="0 0 560 280"

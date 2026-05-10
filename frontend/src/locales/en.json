@@ -1,4 +1,32 @@
 {
+  "infoFaq": {
+    "q1": "What does Stararc offer you?",
+    "a1": "With Stararc you create scenarios of your financial planning. Guided by an assistant, you build an overview of your portfolio and the framework conditions of your future life planning.\n\nMost importantly, all data you enter in Stararc is Zero-Knowledge encrypted on your device – meaning nobody can read your data except yourself, as long as you don't lose your encryption password, which we cannot recover either.",
+    "q2": "What is Stararc?",
+    "a2": "Stararc is a startup based in Switzerland. Our goal is to help people gain clarity about their financial present and future, and to improve it through education and long-term perspective.",
+    "q3": "Why Zero-Knowledge Encryption?",
+    "a3": "Our privacy is eroding on all fronts. We offer you a platform where all data – except your email address and payment information for paid plans – is unreadable to anyone but you. Stararc behaves almost like an encrypted spreadsheet on your private computer to which only you know the password. But Stararc offers you a range of features that no spreadsheet ever will.",
+    "q4": "How does Stararc create my future scenario?",
+    "a4": "Stararc fetches your encrypted data from the database and decrypts it only on your device, where all calculations for your scenario are performed fresh – every time you use Stararc. We do not store any scenario data on servers, not even in encrypted form.",
+    "q5": "Where are my assets?",
+    "a5": "Your assets remain with the financial service providers you use, or in your own custody – for example physical precious metals or Bitcoin in self-custody. Stararc is an inventory where all securities that can be traded on exchanges are updated automatically.",
+    "q6": "Which asset types does Stararc support?",
+    "a6": "Stararc supports liquid funds, securities accounts (stocks, ETFs, bonds, crypto), pension fund assets, precious metals and Bitcoin in self-custody, real estate with mortgages, and liabilities.",
+    "q7": "Can I include my partner in the financial planning?",
+    "a7": "No problem. You can add them as a family member and record assets and planning data for them – giving you a comprehensive financial plan for your entire family.",
+    "q8": "What happens if I lose my Zero-Knowledge password?",
+    "a8": "In the worst case, you lose access to your Stararc financial planning – but never your assets, since Stararc does not manage or hold any assets.\n\nWe have built in the following safety measure: During account setup you receive a six-word recovery phrase that you can store in a safe place, such as a bank vault. With this recovery phrase you can set a new Zero-Knowledge password and regain access to your financial planning.",
+    "q9": "What does Stararc cost?",
+    "a9": "Currently nothing. Early Access is free until further notice. If you open a Stararc account today, we gift you a Nova subscription for life (as long as Stararc exists) – so it’s a great idea to get started today.",
+    "q10": "Why did we found Stararc?",
+    "a10": "We were missing a professional financial planning tool for ordinary people – not the super-rich – that is as secure as an encrypted spreadsheet on your own computer, but with all the capabilities of a modern app. That’s how Stararc grew, branch by branch, feature by feature.",
+    "q11": "I hold assets spread across physical safes and multiple hardware wallets — can Stararc map that?",
+    "a11": "That is one of our strengths. Stararc offers vault management for physical and digital vaults (e.g. password managers), including hardware and software wallets.",
+    "q12": "My (early) retirement is on the horizon — can Stararc support me in this process?",
+    "a12": "Yes Sir. Stararc is perfect for retirement planning. We recommend simply giving it a try — as mentioned, Stararc is currently free.",
+    "q13": "What is the unique selling point of Stararc?",
+    "a13": "On one hand, that we encrypt your data so that not even we can read it. On the other hand, that we treat Bitcoin as an asset class on equal footing with equities, precious metals, real estate and bonds — because we are convinced that Bitcoin will be found in the majority of portfolios in the future."
+  },
   "newsletter": {
     "label": "Register for our Email Newsletter",
     "placeholder": "Register for our Email Newsletter",
@@ -933,8 +961,7 @@
       "medium": "Medium",
       "extreme": "Extreme"
     },
-    "footer": {
-    }
+    "footer": {}
   },
   "zkSetup": {
     "step1Title": "Privacy Login Password",
@@ -2250,7 +2277,7 @@
   },
   "hero2": {
     "titleLine1": "Your Financial Planning",
-    "titleLine2": "in One App",
+    "titleLine2": "with Zero Knowledge Privacy",
     "titleLine3": "with Zero Knowledge Privacy",
     "subtitle": "Take control of your financial future.",
     "subtitleLine1": "Your Assets stay where they are.",

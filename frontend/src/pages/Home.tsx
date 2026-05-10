@@ -25,6 +25,7 @@ import DataArchitectureShowcase from '../components/DataArchitectureShowcase';
 import GettingStartedShowcase from '../components/GettingStartedShowcase';
 import PlanCards from '../components/PlanCards';
 import NewsletterSignup from '../components/NewsletterSignup';
+import InfoFaqSection from '../components/InfoFaqSection';
 import { BarChart3, Lock, Rocket, Sparkles, ArrowDown, Bitcoin } from 'lucide-react';
 
 const Home: React.FC = () => {
@@ -64,6 +65,7 @@ const Home: React.FC = () => {
     <div className="min-h-screen">
       {/* Hero sections — stacked, scrollable */}
       <div id="hero-0"><HeroSection dayMode={dayMode} /></div>
+      <InfoFaqSection dayMode={dayMode} />
       <div id="hero-0b"><HeroSectionV2Classic dayMode={dayMode} /></div>
       <div id="hero-1"><HeroSectionV4 dayMode={dayMode} /></div>
       <div id="hero-2"><HeroSectionV3 dayMode={dayMode} /></div>
