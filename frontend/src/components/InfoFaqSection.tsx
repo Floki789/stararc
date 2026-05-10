@@ -5,6 +5,28 @@ interface InfoFaqSectionProps {
   dayMode?: boolean;
 }
 
+const renderAnswer = (text: string, dayMode: boolean) => {
+  const parts = text.split(/({{hl}}[\s\S]*?{{\/hl}})/);
+  return parts.map((part, i) => {
+    if (part.startsWith('{{hl}}')) {
+      const inner = part.slice(6, -7);
+      return (
+        <mark
+          key={i}
+          className={`rounded-sm px-0.5 not-italic font-medium ${
+            dayMode
+              ? 'bg-yellow-200 text-slate-900'
+              : 'bg-yellow-400/25 text-yellow-100'
+          }`}
+        >
+          {inner}
+        </mark>
+      );
+    }
+    return <span key={i}>{part}</span>;
+  });
+};
+
 const InfoFaqSection: React.FC<InfoFaqSectionProps> = ({ dayMode = false }) => {
   const { t } = useLanguage();
 
@@ -22,11 +44,12 @@ const InfoFaqSection: React.FC<InfoFaqSectionProps> = ({ dayMode = false }) => {
     { q: t('infoFaq.q11'), a: t('infoFaq.a11') },
     { q: t('infoFaq.q12'), a: t('infoFaq.a12') },
     { q: t('infoFaq.q13'), a: t('infoFaq.a13') },
+    { q: t('infoFaq.q14'), a: t('infoFaq.a14') },
   ];
 
   return (
     <section className={`transition-colors duration-700 ${dayMode ? 'bg-slate-50' : 'bg-[#020f0a]'}`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16 lg:py-24">
         <div className={`grid grid-cols-1 gap-px rounded-2xl overflow-hidden border ${dayMode ? 'border-slate-200' : 'border-slate-800/60'}`}>
           {faqs.map((faq, i) => (
             <div
@@ -50,7 +73,7 @@ const InfoFaqSection: React.FC<InfoFaqSectionProps> = ({ dayMode = false }) => {
                   <p className={`text-sm sm:text-base leading-relaxed whitespace-pre-line ${
                     dayMode ? 'text-slate-600' : 'text-slate-400'
                   }`}>
-                    {faq.a}
+                    {renderAnswer(faq.a, dayMode)}
                   </p>
                 </div>
               </div>

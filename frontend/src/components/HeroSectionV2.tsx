@@ -110,11 +110,33 @@ const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
       <div className={`absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:64px_64px] pointer-events-none ${dayMode ? 'opacity-50' : ''}`} aria-hidden="true" />
 
       {/* ── Main Content ───────────────────────────────────────────────── */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-32 sm:py-10 lg:py-12">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8 sm:py-10 lg:py-12">
+
+        {/* Swiss badge — full width, right-aligned (centered on mobile) */}
+        <div className="flex justify-center lg:justify-end mb-4">
+          <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest ${
+            dayMode ? 'text-slate-500' : 'text-slate-500'
+          }`}>
+            <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
+              <rect width="14" height="14" rx="2" fill="#FF0000"/>
+              <rect x="6" y="2" width="2" height="10" fill="white"/>
+              <rect x="2" y="6" width="10" height="2" fill="white"/>
+            </svg>
+            <span>Swiss Startup</span>
+            <span className="text-slate-600">|</span>
+            <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
+              <rect width="14" height="14" rx="2" fill="#FF0000"/>
+              <rect x="6" y="2" width="2" height="10" fill="white"/>
+              <rect x="2" y="6" width="10" height="2" fill="white"/>
+            </svg>
+            <span>Swiss Quality</span>
+          </div>
+        </div>
+
         <div className="flex flex-col lg:flex-row items-center gap-6 lg:gap-4">
 
           {/* ── Left column: Title ─────────────────────────────────────── */}
-          <div className="flex-1 flex flex-col justify-center text-center lg:text-left">
+          <div className="flex-1 flex flex-col justify-center text-center lg:text-left pt-4 sm:pt-4 lg:pt-0">
             <h1 className="text-5xl sm:text-5xl lg:text-6xl xl:text-7xl font-black uppercase leading-tight tracking-tight pb-2">
               <span className={dayMode ? 'text-slate-900' : 'text-white'}>{t('hero2.titleLine1')}</span>
               <br />
@@ -127,26 +149,6 @@ const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
 
           {/* ── Right column: Layered mountain sunrise ───────────────── */}
           <div className="flex-1 flex items-end justify-center w-full pb-8 lg:pb-0 lg:items-center">
-            {/* Swiss badge — top right */}
-            <div className="absolute top-4 right-4 sm:top-6 sm:right-6 lg:top-8 lg:right-8 z-20">
-              <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest ${
-                dayMode ? 'text-slate-500' : 'text-slate-500'
-              }`}>
-                <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
-                  <rect width="14" height="14" rx="2" fill="#FF0000"/>
-                  <rect x="6" y="2" width="2" height="10" fill="white"/>
-                  <rect x="2" y="6" width="10" height="2" fill="white"/>
-                </svg>
-                <span>Swiss Startup</span>
-                <span className="text-slate-600">|</span>
-                <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
-                  <rect width="14" height="14" rx="2" fill="#FF0000"/>
-                  <rect x="6" y="2" width="2" height="10" fill="white"/>
-                  <rect x="2" y="6" width="10" height="2" fill="white"/>
-                </svg>
-                <span>Swiss Quality</span>
-              </div>
-            </div>
             <div className="relative w-full">
               <svg
                 viewBox="0 0 560 280"
@@ -233,9 +235,15 @@ const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
 
         {/* ── Full-width subtitle ─────────────────────────────────── */}
         <div className="w-full mt-10 text-center">
-          <p className={`text-lg sm:text-xl font-light ${dayMode ? 'text-slate-700' : 'text-white'}`}>
+          <p className={`text-xl sm:text-2xl ${dayMode ? 'text-slate-700' : 'text-white'}`}>
             {t('hero2.subtitle')}
           </p>
+          <a
+            href="/register"
+            className={`mt-4 inline-block text-sm font-semibold uppercase tracking-widest ${dayMode ? 'text-emerald-600' : 'text-emerald-400'}`}
+          >
+            {t('hero2.freeAccess')}
+          </a>
         </div>
 
       </div>

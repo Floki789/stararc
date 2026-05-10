@@ -1,7 +1,7 @@
 {
   "infoFaq": {
     "q1": "Was bringt dir Stararc?",
-    "a1": "Mit Stararc erstellst du selbständig Szenarien deiner Finanzplanung ohne dass du einem (Bank-)berater deine ganze Vermögens-, Familien- und Einkommenssituation auf den Tisch legen musst.\n\nDas wichtigste dabei: Alle Daten, die du in Stararc eingibst, werden Zero-Knowledge auf deinem Gerät verschlüsselt – d.h. niemand kann deine Daten lesen ausser dir selbst, solange du dein Verschlüsselungspasswort nicht verlierst, das auch wir nicht wiederherstellen können.",
+    "a1": "{{hl}}Mit Stararc erstellst du selbständig ein ausführliches Szenario deiner finanziellen Zukunft, ohne dass du einem (Bank-)berater deine ganze Vermögens-, Familien- und Einkommenssituation auf den Tisch legen musst (und eine Stange Geld){{/hl}}.\n\nDas wichtigste dabei: Alle Daten, die du in Stararc eingibst, werden Zero-Knowledge auf deinem Gerät verschlüsselt – d.h. {{hl}}niemand kann deine Daten lesen ausser dir selbst{{/hl}}, solange du dein Verschlüsselungspasswort nicht verlierst, das auch wir nicht wiederherstellen können.",
     "q2": "Was ist Stararc?",
     "a2": "Stararc ist ein Startup mit Sitz in der Schweiz. Unser Ziel ist es, Menschen zu helfen, Klarheit über ihre finanzielle Gegenwart und Zukunft zu erlangen und diese durch Bildung und langfristige Perspektive zu verbessern.",
     "q3": "Warum Zero-Knowledge Verschlüsselung?",
@@ -11,7 +11,7 @@
     "q5": "Wo sind meine Vermögenswerte?",
     "a5": "Deine Vermögenswerte verbleiben bei den Finanzdienstleistern, die du nutzt, oder in deiner eigenen Verwahrung, z.B. bei physischen Edelmetallen oder Bitcoin in Self-Custody.",
     "q6": "Welche Assets unterstützt Stararc?",
-    "a6": "Stararc unterstützt Liquide Mittel, Wertschriftendepots (Aktien, ETFs, Obligationen, Krypto), Vermögenswerte in Pensionskassen, Edelmetalle und Bitcoin in Self-Custody, Immobilien mit Hypotheken sowie Schulden.",
+    "a6": "Stararc unterstützt Liquide Mittel, Wertschriftendepots (Aktien, ETFs, Obligationen, Krypto), Vermögenswerte in Pensionskassen, Edelmetalle und Bitcoin in Self-Custody, Immobilien mit Hypotheken sowie Schulden.\n\nSammlungen und Wertgegenstände jeglicher Art folgen in Kürze.",
     "q7": "Kann ich meine Partnerin oder meinen Partner in die Finanzplanung integrieren?",
     "a7": "Kein Problem. Du kannst diese als Familienmitglieder hinzufügen und für sie Vermögenswerte und Planungsdaten erfassen – so erstellst du eine gesamtheitliche Finanzplanung für deine Familie.",
     "q8": "Was ist, wenn ich mein Zero-Knowledge Passwort verliere?",
@@ -21,11 +21,13 @@
     "q10": "Warum haben wir Stararc gegründet?",
     "a10": "Uns fehlte ein professionelles Finanzplanungstool für normale Menschen – nicht Superreiche – das so sicher ist wie ein verschlüsseltes Excel auf deinem Computer, aber mit all den Möglichkeiten einer modernen App. So ist Stararc gewachsen wie ein Baum, Ast für Ast, Feature für Feature. Es hat uns soviel Spass gemacht, dass wir einfach nicht mehr aufhören konnten.",
     "q11": "Ich halte Assets verteilt in physischen Tresoren oder verschiedenen Hardware Wallets, kann Stararc das abbilden?",
-    "a11": "Das ist eine unserer Stärken. Stararc bietet ein Tresormanagement für physische und digitale Tresore (z.B. Passwort Manager), inkl. Hardware- und Software Wallets.",
+    "a11": "Stararc bietet ein Tresormanagement für physische und digitale Tresore (z.B. Passwort Manager), inkl. Hardware- und Software Wallets.",
     "q12": "Meine (Früh)-Pensionierung zeichnet sich ab, kann Stararc mich in diesem Prozess unterstützen?",
-    "a12": "Yes Sir or Madam. Stararc ist perfekt für eine Pensionierungsplanung. Wir empfehlen dir, es einfach einmal auszuprobieren – wie gesagt, Stararc ist aktuell kostenlos.",
+    "a12": "Yes Sir or Madam. Stararc ist perfekt für eine Pensionierungsplanung. Wir empfehlen dir, es einfach einmal auszuprobieren – wie gesagt, Stararc ist aktuell kostenlos und deine Daten würden selbst für einen erfolgreichen Hacker wie ein sehr grosses Kauderwelsch aussehen.",
     "q13": "Was ist das Alleinstellungsmerkmal von Stararc?",
-    "a13": "Einerseits, dass wir deine Daten so verschlüsseln, dass nicht mal wir sie lesen können. Andererseits, dass wir Bitcoin als Asset-Klasse auf Augenhöhe mit Aktien, Edelmetallen, Immobilien und Obligationen behandeln – weil wir überzeugt sind, dass Bitcoin zukünftig in der Mehrheit der Portfolios zu finden sein wird."
+    "a13": "Einerseits, dass wir deine Daten so verschlüsseln, dass nicht mal wir sie lesen können. Andererseits, dass wir Bitcoin als Asset-Klasse auf Augenhöhe mit Aktien, Edelmetallen, Immobilien und Obligationen behandeln – weil wir überzeugt sind, dass Bitcoin zukünftig in der Mehrheit der Portfolios zu finden sein wird.",
+    "q14": "Ersetzt Stararc eine Finanzberatung?",
+    "a14": "Nein, Stararc ist ein Vermögensinventar und ein Szenariosimulator beruhend auf deiner Anlagestrategie und deinen Zukunftsprognosen. Stararc ist keine Vermögensberatung und macht keine Anlageempfehlungen."
   },
   "newsletter": {
     "label": "Für den E-Mail Newsletter registrieren",
@@ -1120,8 +1122,7 @@
       "medium": "Mittel",
       "extreme": "Extrem"
     },
-    "footer": {
-    }
+    "footer": {}
   },
   "zkSetup": {
     "step1Title": "Privacy-Login-Passwort",
@@ -1801,7 +1802,7 @@
     },
     "section2": {
       "title": "2. Grundsätze der Datenverarbeitung",
-      "p1": "Privacy-by-Design: Stararc.one ist als privacy-fokussierte Metadaten-Verwaltungsplattform konzipiert, die explizit darauf aufmerksam macht, die Plattform nicht für die Speicherung von Asset-Zugangsinformationen (Accounts, Logins, Passwörter, Private Keys u.\u00a0Ä.) zu verwenden.",
+      "p1": "Privacy-by-Design: Stararc.one ist als privacy-fokussierte Metadaten-Verwaltungsplattform konzipiert, die explizit darauf aufmerksam macht, die Plattform nicht für die Speicherung von Asset-Zugangsinformationen (Accounts, Logins, Passwörter, Private Keys u. Ä.) zu verwenden.",
       "p2": "Datenminimierung: Wir verarbeiten nur die Daten, die für den Betrieb der Plattform technisch erforderlich sind.",
       "p3": "Client-seitige Verschlüsselung: Alle persönlichen Inhaltsdaten (z. B. Asset-Bezeichnungen, Institutionen-Namen, Dokumentenreferenzen) werden auf deinem Gerät verschlüsselt, bevor sie an unsere Server übertragen werden. Die Schlüsselverwaltungsmethode unterscheidet sich je nach der bei der Registrierung gewählten Authentifizierungsmethode (vgl. Abschnitt 3.1).",
       "p4": "Betriebliche Klartextdaten: Ein Teil der Daten wird aus technischen Gründen (Performance, Datenbankabfragen, App-Logik) unverschlüsselt gespeichert. Dies betrifft ausschließlich nicht-personenbezogene, nicht-sensible Strukturdaten ohne Rückschluss auf persönliche Identität, zum Beispiel: Abonnement-Plan und -Status (z. B. \"Core\", \"Aktiv\"), Asset-Kategorie und -Unterkategorie (z. B. \"Wertpapiere\", \"Aktien\"), Währungscode (z. B. \"CHF\", \"USD\"), Anzeigereihenfolge von Kategorien, Zeitstempel (Erstellungsdatum, letzter Login, letzte Aktualisierung), App-interne Statusflags (z. B. ist aktiv, automatische Kursabfrage aktiviert), Erinnerungsintervall für manuelle Updates (z. B. \"monatlich\"). Diese Daten ermöglichen ein zuverlässiges und performantes App-Rendering, enthalten jedoch keinerlei Rückschlüsse auf deine konkrete Vermögenssituation."
@@ -2298,7 +2299,7 @@
     "subtitle": "Übernimm die Kontrolle über deine finanzielle Zukunft.",
     "subtitleLine1": "Deine Assets bleiben, wo sie sind.",
     "subtitleLine2": "Stararc bietet Übersicht, Analysen und Planung.",
-    "freeAccess": "Kostenlos registrieren — Early Access",
+    "freeAccess": "Early Access — Kostenlos registrieren",
     "securityLabel": "Sicherheit & Datenschutz:",
     "securityLink": "Security & Privacy Whitepaper lesen",
     "cta": "Kostenlos starten",
