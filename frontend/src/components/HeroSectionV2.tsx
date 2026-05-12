@@ -235,12 +235,12 @@ const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
 
         {/* ── Full-width subtitle ─────────────────────────────────── */}
         <div className="w-full mt-10 text-center">
-          <p className={`text-xl sm:text-2xl ${dayMode ? 'text-slate-700' : 'text-white'}`}>
+          <p className={`text-xl sm:text-2xl max-w-5xl mx-auto ${dayMode ? 'text-slate-700' : 'text-white'}`}>
             {t('hero2.subtitle')}
           </p>
           <a
             href="/register"
-            className={`mt-4 inline-block text-sm font-semibold uppercase tracking-widest ${dayMode ? 'text-emerald-600' : 'text-emerald-400'}`}
+            className={`mt-8 inline-block text-sm font-semibold uppercase tracking-widest ${dayMode ? 'text-emerald-600' : 'text-emerald-400'}`}
           >
             {t('hero2.freeAccess')}
           </a>

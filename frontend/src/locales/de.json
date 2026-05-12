@@ -1,7 +1,7 @@
 {
   "infoFaq": {
     "q1": "Was bringt dir Stararc?",
-    "a1": "{{hl}}Mit Stararc erstellst du selbständig ein ausführliches Szenario deiner finanziellen Zukunft, ohne dass du einem (Bank-)berater deine ganze Vermögens-, Familien- und Einkommenssituation auf den Tisch legen musst (und eine Stange Geld){{/hl}}.\n\nDas wichtigste dabei: Alle Daten, die du in Stararc eingibst, werden Zero-Knowledge auf deinem Gerät verschlüsselt – d.h. {{hl}}niemand kann deine Daten lesen ausser dir selbst{{/hl}}, solange du dein Verschlüsselungspasswort nicht verlierst, das auch wir nicht wiederherstellen können.",
+    "a1": "Mit Stararc erstellst du selbständig ein ausführliches Szenario deiner finanziellen Zukunft, ganz ohne Bank und Berater.\n\nDas wichtigste dabei: Alle Daten, die du in Stararc eingibst, werden Zero-Knowledge auf deinem Gerät verschlüsselt – d.h. {{hl}}niemand kann deine Daten lesen ausser dir selbst{{/hl}}.",
     "q2": "Was ist Stararc?",
     "a2": "Stararc ist ein Startup mit Sitz in der Schweiz. Unser Ziel ist es, Menschen zu helfen, Klarheit über ihre finanzielle Gegenwart und Zukunft zu erlangen und diese durch Bildung und langfristige Perspektive zu verbessern.",
     "q3": "Warum Zero-Knowledge Verschlüsselung?",
@@ -2296,7 +2296,7 @@
     "titleLine1": "Deine Finanz­planung",
     "titleLine2": "mit Zero Knowledge Privacy",
     "titleLine3": "mit Zero Knowledge Privacy",
-    "subtitle": "Übernimm die Kontrolle über deine finanzielle Zukunft.",
+    "subtitle": "Mit Stararc erstellst du selbständig ein ausführliches Szenario deiner finanziellen Zukunft, ganz ohne Bank und Berater - mit Zero-Knowledge-Privacy.",
     "subtitleLine1": "Deine Assets bleiben, wo sie sind.",
     "subtitleLine2": "Stararc bietet Übersicht, Analysen und Planung.",
     "freeAccess": "Early Access — Kostenlos registrieren",
