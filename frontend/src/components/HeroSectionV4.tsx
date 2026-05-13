@@ -9,10 +9,6 @@ import {
   TrendingUp,
   CreditCard,
   LayoutDashboard,
-  Building2,
-  Package,
-  Bitcoin,
-  Gem,
 } from 'lucide-react';
 
 // ─── Feature items displayed on the timeline ─────────────────────────────────
@@ -177,20 +173,6 @@ const HeroSectionV4: React.FC<HeroSectionV4Props> = ({ dayMode = false }) => {
     { pos: 60, color: '#ec4899' },              // Hypothek abbezahlt
     { pos: 65, color: '#10b981' },              // Pensionierung
     { pos: 72, color: '#a78bfa' },              // Immobilienverkauf
-  ];
-
-  // Additional unnamed event dots — spread along the curve
-  const unnamedDots = [8, 25, 35, 48, 55, 78, 88];
-
-  // Asset class icons floating in the area below the capital curve
-  // Clustered in center band x≈300–600 (SVG 900 wide), same vertical
-  const svgAssets = [
-    { Icon: TrendingUp, svgX: 310, svgY: 155, color: '#3b82f6', bg: 'rgba(59,130,246,0.18)'  },
-    { Icon: Building2,  svgX: 360, svgY: 155, color: '#8b5cf6', bg: 'rgba(139,92,246,0.18)'  },
-    { Icon: Package,    svgX: 410, svgY: 155, color: '#f59e0b', bg: 'rgba(245,158,11,0.18)'  },
-    { Icon: PiggyBank,  svgX: 460, svgY: 155, color: '#10b981', bg: 'rgba(16,185,129,0.18)'  },
-    { Icon: Bitcoin,    svgX: 510, svgY: 155, color: '#fb923c', bg: 'rgba(251,146,60,0.18)'  },
-    { Icon: Gem,        svgX: 560, svgY: 155, color: '#eab308', bg: 'rgba(234,179,8,0.18)'   },
   ];
 
   return (
