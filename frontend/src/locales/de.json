@@ -2322,8 +2322,8 @@
   "hero2classic": {
     "titleLine1": "Überblicke dein Vermögen",
     "titleLine2": "Plane deine Zukunft",
-    "subtitleLine1": "Deine Assets bleiben, wo sie sind.",
-    "subtitleLine2": "Stararc bietet Übersicht, Analysen und Planung."
+    "subtitleLine1": "Alle Assets die du bei verschiedenen Finanzdienstleistern, Pensionskassen, in Tresoren oder Wallets hälst, auf einen Blick – inkl. Immobilien, Hypotheken und Schulden.",
+    "subtitleLine2": "Deine Assets bleiben, wo sie sind. Stararc bietet Übersicht, Analysen und Planung."
   },
   "hero5": {
     "badge": "Setup-Assistent",
@@ -2366,7 +2366,7 @@
     "badge": "Intelligente Planung",
     "titleLine1": "Eine Planung die",
     "titleLine2": "Klarheit schafft.",
-    "subtitle": "Vom Vermögensaufbau bis zur Vermögensweitergabe — alles in einem Blick.",
+    "subtitle": "Vom Vermögensaufbau bis zur Pensionierung – plane Kapital- und Rentenbezüge, Einnahmen und Ausgaben über alle Lebensphasen hinweg in einem einzigen, klaren Szenario.",
     "features": {
       "retirement": "Pensionierung",
       "retirementDesc": "Staatliche Rente, Betriebsrente und private Vorsorge im Zeitverlauf",

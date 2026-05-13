@@ -305,9 +305,7 @@ const HeroSectionV4: React.FC<HeroSectionV4Props> = ({ dayMode = false }) => {
           </h1>
 
           {/* Subtitle */}
-          <p className={`text-base sm:text-lg max-w-2xl ${dayMode ? 'text-slate-700' : 'text-slate-400'}`}>
-            {t('hero4.subtitle')}
-          </p>
+
         </div>
 
         {/* ── BOTTOM: Full-width visualisation ────────────────────────── */}
@@ -354,8 +352,8 @@ const HeroSectionV4: React.FC<HeroSectionV4Props> = ({ dayMode = false }) => {
           {/* ── Capital development chart (SVG) ─────────────────────────── */}
           <div className={`relative w-full rounded-2xl border overflow-hidden p-4 shadow-xl ${
             dayMode
-              ? 'border-slate-200 bg-white/70'
-              : 'border-slate-700/50 bg-slate-900/50'
+              ? 'border-slate-200 bg-white/80'
+              : 'border-slate-700/60 bg-slate-900/70'
           }`}>
             {/* Chart header */}
             <div className="flex items-center justify-between px-1 mb-2">
@@ -380,22 +378,19 @@ const HeroSectionV4: React.FC<HeroSectionV4Props> = ({ dayMode = false }) => {
               >
               <defs>
                 <linearGradient id="v4GradGreen" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="rgba(16,185,129,0.35)" />
-                  <stop offset="100%" stopColor="rgba(16,185,129,0.03)" />
+                  <stop offset="0%" stopColor="rgba(16,185,129,0.45)" />
+                  <stop offset="100%" stopColor="rgba(16,185,129,0.04)" />
                 </linearGradient>
               </defs>
 
               {/* Phase background bands */}
-              <rect x={0} y={0} width={0.42 * SVG_W} height={SVG_H} fill="rgba(59,130,246,0.06)" />
-              <rect x={0.42 * SVG_W} y={0} width={(0.58 - 0.42) * SVG_W} height={SVG_H} fill="rgba(139,92,246,0.06)" />
-              <rect x={0.58 * SVG_W} y={0} width={(1 - 0.58) * SVG_W} height={SVG_H} fill="rgba(16,185,129,0.06)" />
+              <rect x={0} y={0} width={0.42 * SVG_W} height={SVG_H} fill={dayMode ? 'rgba(59,130,246,0.07)' : 'rgba(59,130,246,0.10)'} />
+              <rect x={0.42 * SVG_W} y={0} width={(0.58 - 0.42) * SVG_W} height={SVG_H} fill={dayMode ? 'rgba(139,92,246,0.07)' : 'rgba(139,92,246,0.10)'} />
+              <rect x={0.58 * SVG_W} y={0} width={(1 - 0.58) * SVG_W} height={SVG_H} fill={dayMode ? 'rgba(16,185,129,0.07)' : 'rgba(16,185,129,0.10)'} />
 
               {/* Phase separator verticals */}
-              <line x1={0.42 * SVG_W} y1={0} x2={0.42 * SVG_W} y2={SVG_H} stroke="rgba(139,92,246,0.20)" strokeWidth={1} strokeDasharray="3 3" />
-              <line x1={0.58 * SVG_W} y1={0} x2={0.58 * SVG_W} y2={SVG_H} stroke="rgba(16,185,129,0.20)" strokeWidth={1} strokeDasharray="3 3" />
-
-              {/* Phase transition: steeper consumption at 72% */}
-              <line x1={0.72 * SVG_W} y1={0} x2={0.72 * SVG_W} y2={SVG_H} stroke="rgba(16,185,129,0.12)" strokeWidth={1} strokeDasharray="2 5" />
+              <line x1={0.42 * SVG_W} y1={0} x2={0.42 * SVG_W} y2={SVG_H} stroke={dayMode ? 'rgba(139,92,246,0.35)' : 'rgba(139,92,246,0.40)'} strokeWidth={1.5} strokeDasharray="4 3" />
+              <line x1={0.58 * SVG_W} y1={0} x2={0.58 * SVG_W} y2={SVG_H} stroke={dayMode ? 'rgba(16,185,129,0.35)' : 'rgba(16,185,129,0.40)'} strokeWidth={1.5} strokeDasharray="4 3" />
 
               {/* Grid lines */}
               {[0.25, 0.5, 0.75].map((frac) => (
@@ -405,7 +400,7 @@ const HeroSectionV4: React.FC<HeroSectionV4Props> = ({ dayMode = false }) => {
                   y1={SVG_H * (1 - frac)}
                   x2={SVG_W}
                   y2={SVG_H * (1 - frac)}
-                  stroke={dayMode ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.04)'}
+                  stroke={dayMode ? 'rgba(0,0,0,0.10)' : 'rgba(255,255,255,0.08)'}
                   strokeWidth={1}
                 />
               ))}
@@ -421,75 +416,38 @@ const HeroSectionV4: React.FC<HeroSectionV4Props> = ({ dayMode = false }) => {
               <polyline
                 points={capitalCurvePoints}
                 fill="none"
-                stroke="rgba(16,185,129,0.90)"
-                strokeWidth={2.5}
+                stroke={dayMode ? 'rgba(5,150,105,1)' : 'rgba(52,211,153,1)'}
+                strokeWidth={3}
                 strokeLinejoin="round"
               />
 
-              {/* Unnamed background dots — subtle markers along the curve */}
-              {unnamedDots.map((pos) => {
-                const cx = (pos / 100) * SVG_W;
-                const cy = SVG_H * (1 - interpolateCapitalY(pos / 100));
-                return (
-                  <g key={`unnamed-${pos}`}>
-                    <circle cx={cx} cy={cy} r={3.5} fill="rgba(255,255,255,0.25)" />
-                    <circle cx={cx} cy={cy} r={7} fill="rgba(255,255,255,0.05)" />
-                  </g>
-                );
-              })}
-
-              {/* Named event dots — highlighted, colored */}
+              {/* Named event dots — solid fill, white ring */}
               {chartDots.map((ev) => {
                 const cx = (ev.pos / 100) * SVG_W;
                 const cy = SVG_H * (1 - interpolateCapitalY(ev.pos / 100));
                 return (
                   <g key={`dot-${ev.pos}`}>
-                    <circle cx={cx} cy={cy} r={5} fill={ev.color} opacity={0.95} />
-                    <circle cx={cx} cy={cy} r={10} fill={ev.color} opacity={0.15} />
-                    {ev.label && (
-                      <>
-                        <line x1={cx} y1={cy - 7} x2={cx} y2={cy - 18}
-                          stroke={ev.color} strokeWidth={1} strokeOpacity={0.6} />
-                        <text x={cx} y={cy - 21} fontSize={8} fill={ev.color}
-                          fontFamily="system-ui, sans-serif" textAnchor="middle" fontWeight="700"
-                          opacity={0.9}>
-                          {ev.label}
-                        </text>
-                      </>
-                    )}
+                    <circle cx={cx} cy={cy} r={8} fill="white" opacity={dayMode ? 0.9 : 0.15} />
+                    <circle cx={cx} cy={cy} r={6} fill={ev.color} />
+                    <circle cx={cx} cy={cy} r={6} fill="none" stroke="white" strokeWidth={1.5} opacity={0.6} />
                   </g>
                 );
               })}
 
-
               </svg>
-
-              {/* Asset class icons — absolutely positioned over SVG, in the area below the curve */}
-              <div className="hidden sm:block absolute inset-0 pointer-events-none" aria-hidden="true">
-                {svgAssets.map(({ Icon, svgX, svgY, color, bg }, i) => (
-                  <div
-                    key={i}
-                    className="absolute flex items-center justify-center rounded-full"
-                    style={{
-                      left: `${(svgX / SVG_W) * 100}%`,
-                      top:  `${(svgY / SVG_H) * 100}%`,
-                      transform: 'translate(-50%, -50%)',
-                      width: 38,
-                      height: 38,
-                      background: bg,
-                      border: `1px solid ${color}40`,
-                      opacity: 0.60,
-                    }}
-                  >
-                    <Icon size={18} color={color} />
-                  </div>
-                ))}
-              </div>
             </div>
           </div>
 
 
         </div>
+
+        {/* ── Subtitle under graphic ──────────────────────────────────── */}
+        <div className="w-full text-center mt-6">
+          <p className={`text-xl sm:text-2xl max-w-5xl mx-auto ${dayMode ? 'text-slate-700' : 'text-white'}`}>
+            {t('hero4.subtitle')}
+          </p>
+        </div>
+
       </div>
     </div>
   );

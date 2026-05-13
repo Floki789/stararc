@@ -393,10 +393,11 @@ const HeroSectionV2Classic: React.FC<HeroSectionV2ClassicProps> = ({ dayMode = f
 
         {/* ── Full-width subtitle ─────────────────────────────────── */}
         <div className="w-full mt-10 text-center">
-          <p className={`text-lg sm:text-xl font-light ${dayMode ? 'text-slate-700' : 'text-white'}`}>
-            {t('hero2classic.subtitleLine1')} {t('hero2classic.subtitleLine2')}
+          <p className={`text-xl sm:text-2xl max-w-5xl mx-auto ${dayMode ? 'text-slate-700' : 'text-white'}`}>
+            {t('hero2classic.subtitleLine1')}<br /><br />{t('hero2classic.subtitleLine2')}
           </p>
         </div>
+
 
       </div>
     </div>
