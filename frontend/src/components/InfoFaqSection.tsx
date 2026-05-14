@@ -45,6 +45,7 @@ const InfoFaqSection: React.FC<InfoFaqSectionProps> = ({ dayMode = false }) => {
     { q: t('infoFaq.q12'), a: t('infoFaq.a12') },
     { q: t('infoFaq.q13'), a: t('infoFaq.a13') },
     { q: t('infoFaq.q14'), a: t('infoFaq.a14') },
+    { q: t('infoFaq.q15'), a: t('infoFaq.a15') },
   ];
 
   return (
@@ -54,7 +55,7 @@ const InfoFaqSection: React.FC<InfoFaqSectionProps> = ({ dayMode = false }) => {
           {faqs.map((faq, i) => (
             <div
               key={i}
-              className={`px-8 py-8 sm:px-10 sm:py-10 ${
+              className={`px-8 py-4 sm:px-10 sm:py-5 ${
                 dayMode ? 'bg-white' : 'bg-slate-900/30'
               }`}
             >
