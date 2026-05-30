@@ -2,6 +2,7 @@ import React from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 
 
+
 interface HeroSectionV2Props {
   dayMode?: boolean;
 }
@@ -244,6 +245,23 @@ const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
           >
             {t('hero2.freeAccess')}
           </a>
+
+          {/* Brought to you by */}
+          <div className="flex justify-center lg:justify-end mt-4">
+            <div className="flex flex-col items-start gap-1">
+              <span className={`text-[10px] font-semibold uppercase tracking-widest ${dayMode ? 'text-slate-500' : 'text-slate-400'}`}>
+                Brought to you by
+              </span>
+              <div className="text-left relative w-[158px] h-[39px]">
+                <div className="absolute top-0 left-0 scale-[0.75] origin-top-left">
+                  <a href="https://archimedes.finance" target="_blank" rel="noopener noreferrer" className="flex flex-col leading-none">
+                      <span className="text-2xl font-black tracking-widest text-gray-900 uppercase">Archimedes</span>
+                      <span className="text-[11px] font-semibold tracking-widest text-gray-500 uppercase">Freedom Ahead</span>
+                    </a>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
       </div>
