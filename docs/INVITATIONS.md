@@ -28,6 +28,8 @@ Neue Registrierungen benötigen eine persönlich freigegebene Einladung. Es gibt
 
 Codes und Link-Token werden nur als Hash gespeichert. Der lange Link-Token steht im URL-Fragment und wird nach dem Einlesen aus der Browseradresse entfernt. Der kurze Code besteht aus einem leicht lesbaren Wort und vier Ziffern; Gross-/Kleinschreibung und äussere Leerzeichen werden ignoriert.
 
+Im Produktionsbetrieb werden Browserseiten auf die in `FRONTEND_URL` konfigurierte HTTPS-Domain weitergeleitet. Dadurch funktioniert die Cloudflare-Prüfung auch beim Einstieg über die direkte Heroku-Adresse; Pfad, Query-Parameter und Einladungsfragment bleiben erhalten. API- und Health-Endpunkte auf Heroku sind weiterhin direkt erreichbar.
+
 Nach zehn falschen Code-Eingaben ist die Einladung gesperrt, bis ein Admin sie erneut ausstellt. Es gelten zusätzlich IP-Limits für Anfragen und Registrierungen sowie die vorhandene Cloudflare-Turnstile-Konfiguration. Der Server prüft jede Freigabe unabhängig vom Formular.
 
 Account-Erstellung und Einladungseinlösung laufen in einer Transaktion mit Zeilensperre. Gleichzeitige Anfragen können die Einladung nur einmal verwenden. Ein Fehler bei der Erstellung rollt Account und Einlösung zurück. Bestehende Logins ändern sich nicht.

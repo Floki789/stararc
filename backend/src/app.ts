@@ -185,6 +185,20 @@ app.get('/hi/:slug', (req, res) => {
 
 // Serve static files from React build in production
 if (process.env.NODE_ENV === 'production') {
+  // Keep browser pages on the configured frontend hostname, where Turnstile is authorized.
+  // API and health endpoints above remain available on the Heroku hostname.
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api/')) return next();
+    try {
+      const frontend = new URL(process.env.FRONTEND_URL || '');
+      if (frontend.protocol === 'https:' && req.hostname !== frontend.hostname) {
+        return res.redirect(302, frontend.origin + req.originalUrl);
+      }
+    } catch {
+      // Without a valid frontend URL, retain the existing serving behavior.
+    }
+    return next();
+  });
   app.use(express.static(path.join(__dirname, '../../frontend/dist')));
   
   // Catch all handler: send back React's index.html file for SPA routing
