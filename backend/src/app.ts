@@ -14,6 +14,7 @@ import subscriptionRoutes from './routes/subscriptions';
 import stripeRoutes from './routes/stripe';
 import twoFactorRoutes from './routes/twoFactor';
 import publicRoutes from './routes/public';
+import invitationRoutes from './routes/invitations';
 
 // Import middleware
 import { errorHandler } from './middleware/errorHandler';
@@ -142,6 +143,7 @@ app.get('/health', (req, res) => {
 
 // API routes
 app.use('/api/auth', authRoutes);
+app.use('/api/invitations', invitationRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/subscriptions', subscriptionRoutes);
 app.use('/api/stripe', stripeRoutes);

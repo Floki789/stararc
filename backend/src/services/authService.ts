@@ -4,6 +4,7 @@ import crypto from 'crypto';
 import { Pool } from 'pg';
 import { User } from '../types';
 import { UserEncryptionService } from './userEncryptionService';
+import { InvitationService, InvitationError } from './invitationService';
 
 export class AuthService {
   private pool: Pool;
@@ -145,11 +146,14 @@ export class AuthService {
     termsAccepted: boolean = false, 
     clientIp?: string, 
     languageCode?: string,
-    dekData?: { dek: string; wrapped_dek: string; dek_salt: string }
+    dekData?: { dek: string; wrapped_dek: string; dek_salt: string },
+    invitationCredential?: string
   ): Promise<User> {
     const client = await this.pool.connect();
     
     try {
+      await client.query('BEGIN');
+      const invitationId = await new InvitationService(this.pool).lockForRegistration(client, email, invitationCredential);
       // Check if user already exists
       const emailHash = UserEncryptionService.generateEmailHash(email);
       const existingUser = await client.query('SELECT id FROM users WHERE email_hash = $1', [emailHash]);
@@ -249,7 +253,16 @@ export class AuthService {
       // Store verification token temporarily for email sending
       user.emailVerificationToken = emailVerificationToken;
       
+      await client.query(
+        `UPDATE access_requests SET status = 'used', used_by = $2, code_hash = NULL, token_hash = NULL,
+         updated_at = NOW() WHERE id = $1`, [invitationId, user.id]
+      );
+      await client.query('COMMIT');
       return user;
+    } catch (error) {
+      // Only invitation failures may have changed the persistent failed-attempt counter.
+      await client.query(error instanceof InvitationError ? 'COMMIT' : 'ROLLBACK');
+      throw error;
     } finally {
       client.release();
     }

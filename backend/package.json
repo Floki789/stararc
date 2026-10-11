@@ -8,8 +8,10 @@
     "build": "npx tsc",
     "start": "node dist/app.js",
     "migrate": "ts-node src/database/migrate.ts",
+    "migrate:invitations": "node scripts/migrate-invitations.cjs",
     "seed": "ts-node src/database/seed.ts",
     "test": "jest",
+    "test:invitations": "npm run build && node --test tests/invitations.test.cjs",
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint src/**/*.ts --fix"
   },
