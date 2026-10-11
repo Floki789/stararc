@@ -6,7 +6,7 @@ Neue Registrierungen benötigen eine persönlich freigegebene Einladung. Es gibt
 
 1. `INVITATION_ADMIN_EMAIL` auf die E-Mail-Adresse des bereits bestehenden, verifizierten Eigentümerkontos setzen. Ohne diesen Wert wird `ADMIN_EMAIL`, danach `info@stararc.one` verwendet. An diese Adresse werden neue Zugangsanfragen gesendet. Verifizierte Konten mit Datenbankrolle `admin` dürfen ebenfalls Einladungen verwalten.
 2. `FRONTEND_URL` auf die öffentliche Adresse setzen. Die bestehende SMTP-Konfiguration wird für Benachrichtigungen und Einladungen verwendet.
-3. Mit der Zieldatenbank in `DATABASE_URL` vor dem Start der neuen Anwendung ausführen:
+3. Auf Heroku führt die Release-Phase die Migration vor dem Start der neuen Anwendung automatisch aus. Bei anderen Deployments mit der Zieldatenbank in `DATABASE_URL` vor dem Start ausführen:
 
    ```bash
    npm run migrate:invitations --workspace=backend
