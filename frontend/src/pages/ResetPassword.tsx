@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { ArrowLeftIcon, EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
+import { useDayMode } from '../contexts/DayModeContext';
 
 interface FormData {
   password: string;
@@ -10,6 +11,7 @@ interface FormData {
 }
 
 const ResetPassword: React.FC = () => {
+  const { dayMode } = useDayMode();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const token = searchParams.get('token');
@@ -126,9 +128,9 @@ const ResetPassword: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-24">
+    <div className={`min-h-screen bg-gradient-to-br flex items-center justify-center px-4 sm:px-6 lg:px-8 py-24 ${dayMode ? 'from-violet-50 via-indigo-50 to-slate-100' : 'from-slate-900 via-purple-900 to-slate-900'}`}>
       {/* Background stars */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+      {!dayMode && <div className="fixed inset-0 overflow-hidden pointer-events-none">
         {[...Array(100)].map((_, i) => (
           <motion.div
             key={i}
@@ -147,16 +149,16 @@ const ResetPassword: React.FC = () => {
             }}
           />
         ))}
-      </div>
+      </div>}
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="bg-white/10 backdrop-blur-md rounded-3xl shadow-2xl border border-white/20 p-8 w-full max-w-md relative overflow-hidden"
+        className={`rounded-3xl shadow-2xl border p-8 w-full max-w-md relative overflow-hidden ${dayMode ? 'bg-white border-slate-200' : 'bg-white/10 backdrop-blur-md border-white/20'}`}
       >
         {/* Animated gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-400/10 to-pink-400/10 rounded-3xl" />
+        {!dayMode && <div className="absolute inset-0 bg-gradient-to-r from-purple-400/10 to-pink-400/10 rounded-3xl" />}
         
         <div className="relative z-10">
           {/* Header */}
@@ -183,8 +185,7 @@ const ResetPassword: React.FC = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
-              className="text-gray-300 mt-2"
-            >
+              className={`mt-2 ${dayMode ? 'text-slate-600' : 'text-gray-300'}`}>
               Geben Sie Ihr neues Passwort ein
             </motion.p>
           </div>
@@ -219,7 +220,7 @@ const ResetPassword: React.FC = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.5 }}
             >
-              <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
+              <label htmlFor="password" className={`block text-sm font-medium mb-2 ${dayMode ? 'text-slate-700' : 'text-gray-300'}`}>
                 Neues Passwort
               </label>
               <div className="relative">
@@ -229,10 +230,10 @@ const ResetPassword: React.FC = () => {
                   name="password"
                   value={formData.password}
                   onChange={handleInputChange}
-                  className={`w-full px-4 py-3 rounded-lg bg-white/5 border text-white placeholder-gray-400 focus:outline-none focus:ring-2 transition-all duration-200 pr-12 ${
+                  className={`w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 transition-all duration-200 pr-12 ${dayMode ? 'bg-white text-slate-900 placeholder-slate-400' : 'bg-white/5 text-white placeholder-gray-400'} ${
                     errors.password
                       ? 'border-red-500 focus:ring-red-500/50'
-                      : 'border-white/20 focus:ring-purple-500/50 focus:border-purple-500/50'
+                      : dayMode ? 'border-slate-300 focus:ring-purple-500/50 focus:border-purple-500/50' : 'border-white/20 focus:ring-purple-500/50 focus:border-purple-500/50'
                   }`}
                   placeholder="Mindestens 8 Zeichen"
                   autoComplete="new-password"
@@ -261,7 +262,7 @@ const ResetPassword: React.FC = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.6 }}
             >
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-300 mb-2">
+              <label htmlFor="confirmPassword" className={`block text-sm font-medium mb-2 ${dayMode ? 'text-slate-700' : 'text-gray-300'}`}>
                 Passwort bestätigen
               </label>
               <div className="relative">
@@ -271,10 +272,10 @@ const ResetPassword: React.FC = () => {
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleInputChange}
-                  className={`w-full px-4 py-3 rounded-lg bg-white/5 border text-white placeholder-gray-400 focus:outline-none focus:ring-2 transition-all duration-200 pr-12 ${
+                  className={`w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 transition-all duration-200 pr-12 ${dayMode ? 'bg-white text-slate-900 placeholder-slate-400' : 'bg-white/5 text-white placeholder-gray-400'} ${
                     errors.confirmPassword
                       ? 'border-red-500 focus:ring-red-500/50'
-                      : 'border-white/20 focus:ring-purple-500/50 focus:border-purple-500/50'
+                      : dayMode ? 'border-slate-300 focus:ring-purple-500/50 focus:border-purple-500/50' : 'border-white/20 focus:ring-purple-500/50 focus:border-purple-500/50'
                   }`}
                   placeholder="Passwort wiederholen"
                   autoComplete="new-password"
@@ -304,7 +305,7 @@ const ResetPassword: React.FC = () => {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.7 }}
               >
-                <label htmlFor="twoFactorCode" className="block text-sm font-medium text-gray-300 mb-2">
+                <label htmlFor="twoFactorCode" className={`block text-sm font-medium mb-2 ${dayMode ? 'text-slate-700' : 'text-gray-300'}`}>
                   2FA Authenticator Code
                 </label>
                 <input
@@ -313,10 +314,10 @@ const ResetPassword: React.FC = () => {
                   name="twoFactorCode"
                   value={formData.twoFactorCode}
                   onChange={handleInputChange}
-                  className={`w-full px-4 py-3 rounded-lg bg-white/5 border text-white placeholder-gray-400 focus:outline-none focus:ring-2 transition-all duration-200 ${
+                  className={`w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 transition-all duration-200 ${dayMode ? 'bg-white text-slate-900 placeholder-slate-400' : 'bg-white/5 text-white placeholder-gray-400'} ${
                     errors.twoFactorCode
                       ? 'border-red-500 focus:ring-red-500/50'
-                      : 'border-white/20 focus:ring-purple-500/50 focus:border-purple-500/50'
+                      : dayMode ? 'border-slate-300 focus:ring-purple-500/50 focus:border-purple-500/50' : 'border-white/20 focus:ring-purple-500/50 focus:border-purple-500/50'
                   }`}
                   placeholder="123456"
                   maxLength={6}

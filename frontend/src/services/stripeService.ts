@@ -79,7 +79,8 @@ export class StripeAPIService {
       expiresAt: data.expiresAt,
       cancelAtPeriodEnd: data.cancelAtPeriodEnd || false,
       canceledAt: data.canceledAt,
-      spaceshipIntegrationCompleted: data.spaceshipIntegrationCompleted
+      spaceshipIntegrationCompleted: data.spaceshipIntegrationCompleted,
+      hallOfFameName: data.hallOfFameName || null
     };
   }
 

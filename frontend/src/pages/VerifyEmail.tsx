@@ -3,11 +3,13 @@ import { motion } from 'framer-motion';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useDayMode } from '../contexts/DayModeContext';
 
 const VerifyEmail: React.FC = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { t } = useLanguage();
+  const { dayMode } = useDayMode();
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
   const [message, setMessage] = useState('');
   const verificationAttempted = useRef(false);
@@ -55,9 +57,9 @@ const VerifyEmail: React.FC = () => {
   }, [searchParams, navigate]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-24">
+    <div className={`min-h-screen bg-gradient-to-br flex items-center justify-center px-4 sm:px-6 lg:px-8 py-24 ${dayMode ? 'from-violet-50 via-indigo-50 to-slate-100' : 'from-slate-900 via-purple-900 to-slate-900'}`}>
       {/* Background stars */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+      {!dayMode && <div className="fixed inset-0 overflow-hidden pointer-events-none">
         {[...Array(100)].map((_, i) => (
           <motion.div
             key={i}
@@ -76,7 +78,7 @@ const VerifyEmail: React.FC = () => {
             }}
           />
         ))}
-      </div>
+      </div>}
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -88,7 +90,7 @@ const VerifyEmail: React.FC = () => {
           <div className="mx-auto h-12 w-12 flex items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-purple-600">
             <span className="text-white font-bold text-xl">S</span>
           </div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-white">
+          <h2 className={`mt-6 text-center text-3xl font-extrabold ${dayMode ? 'text-slate-900' : 'text-white'}`}>
             {t('verifyEmailPage.title')}
           </h2>
         </div>
@@ -104,7 +106,7 @@ const VerifyEmail: React.FC = () => {
               <div className="flex justify-center">
                 <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
               </div>
-              <p className="text-gray-300">
+              <p className={dayMode ? 'text-slate-600' : 'text-gray-300'}>
                 {t('verifyEmailPage.verifying')}
               </p>
             </div>
@@ -121,11 +123,11 @@ const VerifyEmail: React.FC = () => {
                 <CheckCircleIcon className="w-16 h-16 text-green-400" />
               </div>
               <div className="space-y-2">
-                <h3 className="text-xl font-semibold text-white">
+                <h3 className={`text-xl font-semibold ${dayMode ? 'text-slate-900' : 'text-white'}`}>
                   {t('verifyEmailPage.successTitle')}
                 </h3>
-                <p className="text-gray-300">{t('verifyEmailPage.successMessage')}</p>
-                <p className="text-sm text-gray-400">
+                <p className={dayMode ? 'text-slate-600' : 'text-gray-300'}>{t('verifyEmailPage.successMessage')}</p>
+                <p className={`text-sm ${dayMode ? 'text-slate-500' : 'text-gray-400'}`}>
                   {t('verifyEmailPage.redirecting')}
                 </p>
               </div>
@@ -143,10 +145,10 @@ const VerifyEmail: React.FC = () => {
                 <XCircleIcon className="w-16 h-16 text-red-400" />
               </div>
               <div className="space-y-2">
-                <h3 className="text-xl font-semibold text-white">
+                <h3 className={`text-xl font-semibold ${dayMode ? 'text-slate-900' : 'text-white'}`}>
                   {t('verifyEmailPage.errorTitle')}
                 </h3>
-                <p className="text-gray-300">{message}</p>
+                <p className={dayMode ? 'text-slate-600' : 'text-gray-300'}>{message}</p>
               </div>
               <div className="space-y-3 pt-4">
                 <Link
@@ -157,7 +159,7 @@ const VerifyEmail: React.FC = () => {
                 </Link>
                 <Link
                   to="/login"
-                  className="inline-flex items-center justify-center w-full py-2 px-4 border border-gray-600 text-sm font-medium rounded-lg text-gray-300 bg-transparent hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all duration-200"
+                  className={`inline-flex items-center justify-center w-full py-2 px-4 border text-sm font-medium rounded-lg transition-all duration-200 ${dayMode ? 'border-slate-300 text-slate-700 hover:bg-slate-100' : 'border-gray-600 text-gray-300 bg-transparent hover:bg-gray-800'} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500`}
                 >
                   {t('verifyEmailPage.toLogin')}
                 </Link>

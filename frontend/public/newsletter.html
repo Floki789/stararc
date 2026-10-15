@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Newsletter – Samuel · April 2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet"/>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background-color: #e8edf2; font-family: 'Lato', 'Helvetica Neue', Arial, sans-serif; color: #2c2c2c; }
+    .wrapper { max-width: 640px; margin: 40px auto; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.12); }
+    .hero { position: relative; height: 280px; overflow: hidden; }
+    .hero img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+    .hero-fallback {
+      width: 100%; height: 100%;
+      background: linear-gradient(160deg, #7ec8d8 0%, #2a7bb5 40%, #1a4a6e 70%, #0d2a42 100%);
+      display: flex; align-items: flex-end;
+    }
+    .hero-overlay {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.80) 0%, rgba(0,0,0,0.30) 60%, transparent 100%);
+      padding: 32px 36px 24px;
+    }
+    .hero-label {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase;
+      color: #ffffff; margin-bottom: 8px;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+      display: inline-block;
+      background: rgba(0,0,0,0.45);
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+    .hero-title {
+      font-family: 'Lato', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 34px; font-weight: 700; color: #ffffff; line-height: 1.4;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.9);
+      letter-spacing: 0.3px;
+    }
+    .content { padding: 36px 40px; }
+    .greeting { font-size: 18px; color: #1a1a2e; margin-bottom: 16px; }
+    .intro { font-size: 15.5px; color: #444; line-height: 1.8; margin-bottom: 28px; }
+    .section-tag {
+      display: inline-block;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+      color: #ffffff; background: #2a7bb5; border-radius: 3px;
+      padding: 3px 10px; margin-bottom: 12px;
+    }
+    .section { margin-bottom: 32px; }
+    .section h2 { font-size: 20px; color: #1a1a2e; margin-bottom: 12px; line-height: 1.4; }
+    .section p { font-size: 15.5px; color: #444; line-height: 1.8; margin-bottom: 14px; }
+    .features {
+      background: #f5fafd; border-radius: 8px;
+      padding: 16px 20px; margin-bottom: 18px;
+      font-size: 15px; color: #444; line-height: 2;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+    }
+    .cta-heading {
+      font-family: 'Lato', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 20px; font-weight: 700; color: #1a1a2e;
+      margin-bottom: 4px; line-height: 1.3;
+    }
+    .cta-subheading {
+      font-family: 'Lato', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 20px; font-weight: 700;
+      background: linear-gradient(90deg, #2563eb 0%, #0ea5e9 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px; line-height: 1.3; display: block;
+    }
+    .cta-btn {
+      display: inline-block;
+      background: linear-gradient(90deg, #2563eb 0%, #0ea5e9 100%);
+      color: #ffffff;
+      font-family: 'Lato', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 14px; font-weight: 700; letter-spacing: 0.3px;
+      padding: 12px 28px; border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(37,99,235,0.30);
+      text-decoration: none;
+    }
+    .feedback-note {
+      font-size: 14px; color: #888; margin-top: 12px;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-style: italic;
+    }
+    .divider { border: none; border-top: 1px solid #e8edf2; margin: 32px 0; }
+    .coaching-box {
+      background: #f0f7fb; border-left: 4px solid #2a7bb5;
+      border-radius: 0 8px 8px 0; padding: 20px 24px; margin-top: 4px;
+    }
+    .coaching-box h3 {
+      font-size: 17px; color: #1a1a2e; margin-bottom: 8px;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+    }
+    .coaching-box p { font-size: 15px; color: #555; line-height: 1.7; }
+    .coaching-box a { color: #2a7bb5; text-decoration: none; font-weight: bold; }
+    .quote-block {
+      background: #1a1a2e; border-radius: 8px;
+      padding: 28px 32px; margin: 32px 0;
+      text-align: center;
+    }
+    .quote-mark { font-size: 48px; color: #2a7bb5; line-height: 1; margin-bottom: -8px; display: block; }
+    .quote-block blockquote {
+      font-size: 16px; font-style: italic; color: #d8eaf5;
+      line-height: 1.75;
+    }
+    .footer {
+      background: #f0f4f7; padding: 28px 40px; text-align: center;
+      border-top: 1px solid #dde4ea;
+    }
+    .footer .sig {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 17px; font-weight: bold; color: #1a1a2e;
+      margin-bottom: 10px;
+    }
+    .footer p {
+      font-family: 'Lato', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 13.5px; color: #667; line-height: 2;
+    }
+    .footer a { color: #2a7bb5; text-decoration: none; }
+    .footer .legal {
+      margin-top: 16px; font-size: 11.5px; color: #aaa; line-height: 1.7;
+    }
+  </style>
+</head>
+<body>
+<div class="wrapper">
+  <!-- Hero Image -->
+  <div class="hero">
+    <!-- Das Bild hero.jpg muss im gleichen Ordner wie diese Datei liegen -->
+    <img src="https://img.mailinblue.com/10946715/images/content_library/original/69db6a3dbc57e6c136da88b4.jpg" alt="Küstenweg mit Meerblick"
+         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+    <div class="hero-fallback" style="display:none;"></div>
+    <div class="hero-overlay">
+      <div class="hero-label">Persönliches Projekt · April 2026</div>
+      <div class="hero-title">Die richtige Zeit, deine finanzielle<br/>Zukunft zu planen, <span style="color:#f5c842;">ist jetzt.</span></div>
+    </div>
+  </div>
+  <!-- Content -->
+  <div class="content">
+    <p class="greeting">Lieber {{ contact.FIRSTNAME }},</p>
+    <p class="intro">
+      Gerne möchte ich dir von meinem Projekt berichten – es ist aus einem persönlichen Bedürfnis entstanden und bietet vielleicht auch dir einen Mehrwert.
+    </p>
+    <!-- Stararc -->
+    <div class="section">
+      <h2>Denkst du über deine finanzielle Zukunft nach?</h2>
+      <p>
+        Ob Frühpensionierung, Vermögensaufbau oder einfach ein besserer Überblick –
+        <strong>Stararc</strong> hilft dir, deine Finanzen ganzheitlich zu erfassen
+        und Zukunftsszenarien konkret zu planen.
+      </p>
+      <p>
+        Schritt für Schritt, begleitet von einem Assistenten, erarbeitest du dir die perfekte Übersicht über deine
+        finanzielle Situation – und wirst so dein eigener Vermögensberater.
+      </p>
+      <div class="features">
+        <span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;background:#16a34a;border-radius:50%;color:#fff;font-size:12px;font-weight:900;margin-right:8px;flex-shrink:0;vertical-align:middle;">✓</span><strong>Kostenlos</strong><br/>
+        <span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;background:#16a34a;border-radius:50%;color:#fff;font-size:12px;font-weight:900;margin-right:8px;flex-shrink:0;vertical-align:middle;">✓</span><strong>Maximaler Datenschutz</strong><br/>
+        <span style="display:inline-block;width:28px;flex-shrink:0;"></span>deine Daten können nur von dir gelesen werden
+      </div>
+      <div style="margin-top: 18px;">
+        <div class="cta-heading">Überblicke deine Vermögenswerte</div>
+        <span class="cta-subheading">Plane deine Zukunft</span>
+        <a href="https://www.stararc.one" class="cta-btn">→ Stararc ausprobieren</a>
+      </div>
+      <p class="feedback-note">Über dein Feedback würde ich mich freuen!</p>
+    </div>
+  </div>
+  <!-- Footer -->
+  <div class="footer">
+    <div class="sig">Samuel Bumann</div>
+    <p>
+      <a href="mailto:info@stararc.one">info@stararc.one</a>
+    </p>
+    <p class="legal">
+      Du erhältst diese E-Mail, weil wir uns kennen.<br/>
+      Wenn du keine weiteren Nachrichten erhalten möchtest,
+      <a href="{{ unsubscribe }}" style="color:#aaa;">hier abmelden</a>.
+    </p>
+  </div>
+</div>
+</body>
+</html>

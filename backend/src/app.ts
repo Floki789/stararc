@@ -56,19 +56,19 @@ app.use(helmet({
       defaultSrc: ["'self'"],
       styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
       fontSrc: ["'self'", "https://fonts.gstatic.com"],
-      scriptSrc: ["'self'", "https://js.stripe.com"],
+      scriptSrc: ["'self'", "https://js.stripe.com", "https://challenges.cloudflare.com"],
       imgSrc: ["'self'", "data:", "https:"],
       connectSrc: [
         "'self'", 
         "https://api.stripe.com",
-        "https://spaceship.paymebits.com",
         "https://spaceship-app-05fdc7b20f43.herokuapp.com",
         "https://stararc-app-e576e504324e.herokuapp.com",
-        "https://paymebits.com",
-        "https://www.paymebits.com",
-        "https://stararc.paymebits.com"
+        "https://spaceship.stararc.one",
+        "https://stararc.one",
+        "https://www.stararc.one",
+        "https://challenges.cloudflare.com"
       ],
-      frameSrc: ["'self'", "https://js.stripe.com"],
+      frameSrc: ["'self'", "https://js.stripe.com", "https://challenges.cloudflare.com"],
     },
   },
   crossOriginEmbedderPolicy: false
@@ -82,11 +82,8 @@ app.use(cors({
     'http://localhost:3000', // Fallback for testing
     'http://localhost:3001',
     'http://localhost:3003',
-    'https://spaceship.paymebits.com', // Production Spaceship domain
     'https://spaceship-app-05fdc7b20f43.herokuapp.com', // Production Spaceship Heroku domain
     'https://spaceship.stararc.one', // Production Spaceship custom domain
-    'https://paymebits.com', // Production StarArc domain
-    'https://www.paymebits.com', // Production StarArc www domain
     'https://stararc-app-e576e504324e.herokuapp.com', // Production StarArc Heroku domain
     'https://stararc.one', // Production StarArc custom domain
     'https://www.stararc.one' // Production StarArc custom www domain
@@ -165,6 +162,23 @@ app.get('/api/privacy', (req, res) => {
     ],
     contact: 'privacy@stararc.one'
   });
+});
+
+// Short personal links: /hi/Max → firstinfo_wa.html?name=Max[&g=f]
+// Optional gender suffix: /hi/Maria-f  or  /hi/Kim-m
+app.get('/hi/:slug', (req, res) => {
+  const raw = req.params.slug || '';
+  // Check for gender suffix: name-f or name-m (case-insensitive, last segment only)
+  const match = raw.match(/^([\p{L}][\p{L}\s'\-]*?)(?:-(f|m|w))?$/iu);
+  if (!match) {
+    return res.redirect(302, '/');
+  }
+  const name = encodeURIComponent(match[1] ?? '');
+  const gender = match[2] ? match[2].toLowerCase() : null;
+  const target = gender
+    ? `/firstinfo_wa.html?name=${name}&g=${gender}`
+    : `/firstinfo_wa.html?name=${name}`;
+  return res.redirect(302, target);
 });
 
 // Serve static files from React build in production

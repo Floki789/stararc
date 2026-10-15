@@ -1,9 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+
+// Cloudflare Turnstile global type
+declare global {
+  interface Window {
+    turnstile?: {
+      render: (container: string | HTMLElement, options: Record<string, unknown>) => string;
+      reset: (widgetId: string) => void;
+    };
+  }
+}
 import { motion } from 'framer-motion';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useDayMode } from '../contexts/DayModeContext';
 import { setupDEKForRegistration } from '../utils/clientCrypto';
 
 interface RegisterFormData {
@@ -18,6 +29,7 @@ const Register: React.FC = () => {
   const location = useLocation();
   const { login } = useAuth();
   const { t, language, setLanguage } = useLanguage();
+  const { dayMode } = useDayMode();
   
   // Scroll to top when register page loads or when navigating to register
   useEffect(() => {
@@ -43,6 +55,40 @@ const Register: React.FC = () => {
 
   // Registrierung vorübergehend deaktiviert
   const isRegistrationEnabled = true;
+
+  // Cloudflare Turnstile
+  const siteKey = (import.meta as any).env.VITE_TURNSTILE_SITE_KEY as string | undefined;
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const turnstileContainerRef = useRef<HTMLDivElement>(null);
+  const turnstileWidgetId = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (!siteKey) return; // No site key → skip (dev without Turnstile)
+
+    const scriptId = 'cf-turnstile-script';
+    const initWidget = () => {
+      if (!turnstileContainerRef.current || !window.turnstile) return;
+      turnstileWidgetId.current = window.turnstile.render(turnstileContainerRef.current, {
+        sitekey: siteKey,
+        theme: 'dark',
+        callback: (token: string) => setTurnstileToken(token),
+        'expired-callback': () => setTurnstileToken(null),
+        'error-callback': () => setTurnstileToken(null),
+      });
+    };
+
+    if (!document.getElementById(scriptId)) {
+      const script = document.createElement('script');
+      script.id = scriptId;
+      script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+      script.async = true;
+      script.defer = true;
+      script.onload = initWidget;
+      document.head.appendChild(script);
+    } else if (window.turnstile) {
+      initWidget();
+    }
+  }, [siteKey]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -122,7 +168,9 @@ const Register: React.FC = () => {
           // DEK data for client-side encryption
           dek: dekSetup.dekBase64,           // Raw DEK (sent once, for server to create wrapped_dek_server)
           wrapped_dek: dekSetup.wrappedDek,  // DEK wrapped with user's password-derived KEK
-          dek_salt: dekSetup.dekSalt         // Salt for password key derivation
+          dek_salt: dekSetup.dekSalt,        // Salt for password key derivation
+          // Cloudflare Turnstile bot protection
+          'cf-turnstile-response': turnstileToken ?? '',
         }),
       });
 
@@ -162,9 +210,9 @@ const Register: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-24">
+    <div className={`min-h-screen bg-gradient-to-br flex items-center justify-center px-4 sm:px-6 lg:px-8 py-24 ${dayMode ? 'from-violet-50 via-indigo-50 to-slate-100' : 'from-slate-900 via-purple-900 to-slate-900'}`}>
       {/* Background stars */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+      {!dayMode && <div className="fixed inset-0 overflow-hidden pointer-events-none">
         {[...Array(100)].map((_, i) => (
           <motion.div
             key={i}
@@ -183,7 +231,7 @@ const Register: React.FC = () => {
             }}
           />
         ))}
-      </div>
+      </div>}
 
       {/* Success Screen */}
       {showSuccessScreen ? (
@@ -193,7 +241,7 @@ const Register: React.FC = () => {
           transition={{ duration: 0.5 }}
           className="max-w-md w-full relative z-10"
         >
-          <div className="bg-white/10 backdrop-blur-lg p-8 rounded-2xl shadow-2xl border border-white/20">
+          <div className={`p-8 rounded-2xl shadow-2xl border ${dayMode ? 'bg-white/95 border-slate-200' : 'bg-white/10 backdrop-blur-lg border-white/20'}`}>
             <div className="text-center">
               {/* Success Icon */}
               <motion.div
@@ -214,8 +262,7 @@ const Register: React.FC = () => {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className="text-2xl font-bold text-white mb-3"
-              >
+                className={`text-2xl font-bold mb-3 ${dayMode ? 'text-slate-900' : 'text-white'}`}>
                 {t('auth.emailSent')}
               </motion.h2>
 
@@ -226,7 +273,7 @@ const Register: React.FC = () => {
                 transition={{ delay: 0.4 }}
                 className="space-y-4"
               >
-                <p className="text-gray-300 text-sm leading-relaxed">
+                <p className={`text-sm leading-relaxed ${dayMode ? 'text-slate-600' : 'text-gray-300'}`}>
                   {t('auth.confirmationEmailSent')}
                 </p>
                 <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3">
@@ -234,7 +281,7 @@ const Register: React.FC = () => {
                     {registeredEmail}
                   </p>
                 </div>
-                <p className="text-gray-300 text-sm leading-relaxed">
+                <p className={`text-sm leading-relaxed ${dayMode ? 'text-slate-600' : 'text-gray-300'}`}>
                   {t('auth.pleaseCheckInbox')}
                 </p>
 
@@ -299,10 +346,16 @@ const Register: React.FC = () => {
           className="max-w-md w-full space-y-8 relative z-10"
         >
         <div className="-mt-4">
-          <h2 className="text-center text-3xl font-extrabold text-white">
+          <div className="flex justify-center mb-3">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-500/10 border border-blue-500/30 rounded-full">
+              <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
+              <span className="text-sm font-semibold text-blue-400 uppercase tracking-wider">Beta</span>
+            </div>
+          </div>
+          <h2 className={`text-center text-3xl font-extrabold ${dayMode ? 'text-slate-900' : 'text-white'}`}>
             {t('auth.registerTitle')}
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-300">
+          <p className={`mt-2 text-center text-sm ${dayMode ? 'text-slate-600' : 'text-gray-300'}`}>
             {t('auth.or')}{' '}
             <Link
               to="/login"
@@ -334,14 +387,14 @@ const Register: React.FC = () => {
 
           {/* Language Switcher */}
           <div className="flex justify-center">
-            <div className="flex space-x-1 bg-white/10 backdrop-blur-sm rounded-lg p-1 border border-white/20">
+            <div className={`flex space-x-1 rounded-lg p-1 border ${dayMode ? 'bg-slate-100 border-slate-200' : 'bg-white/10 backdrop-blur-sm border-white/20'}`}>
               <button
                 type="button"
                 onClick={() => setLanguage('de')}
                 className={`px-4 py-2 text-sm font-medium rounded transition-colors ${
                   language === 'de'
                     ? 'bg-blue-600 text-white shadow-md'
-                    : 'text-gray-300 hover:text-white hover:bg-white/5'
+                    : dayMode ? 'text-slate-500 hover:text-slate-900 hover:bg-slate-200' : 'text-gray-300 hover:text-white hover:bg-white/5'
                 }`}
               >
                 DE
@@ -352,7 +405,7 @@ const Register: React.FC = () => {
                 className={`px-4 py-2 text-sm font-medium rounded transition-colors ${
                   language === 'en'
                     ? 'bg-blue-600 text-white shadow-md'
-                    : 'text-gray-300 hover:text-white hover:bg-white/5'
+                    : dayMode ? 'text-slate-500 hover:text-slate-900 hover:bg-slate-200' : 'text-gray-300 hover:text-white hover:bg-white/5'
                 }`}
               >
                 EN
@@ -371,8 +424,8 @@ const Register: React.FC = () => {
               autoComplete="email"
               required
               className={`appearance-none rounded-lg relative block w-full px-3 py-3 border ${
-                errors.email ? 'border-red-500' : 'border-gray-600'
-              } placeholder-gray-400 text-white bg-gray-800/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
+                errors.email ? 'border-red-500' : dayMode ? 'border-slate-300' : 'border-gray-600'
+              } ${dayMode ? 'placeholder-slate-400 text-slate-900 bg-white' : 'placeholder-gray-400 text-white bg-gray-800/50'} backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
               placeholder={t('auth.email')}
               value={formData.email}
               onChange={handleInputChange}
@@ -393,8 +446,8 @@ const Register: React.FC = () => {
               autoComplete="new-password"
               required
               className={`appearance-none rounded-lg relative block w-full px-3 py-3 pr-10 border ${
-                errors.password ? 'border-red-500' : 'border-gray-600'
-              } placeholder-gray-400 text-white bg-gray-800/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
+                errors.password ? 'border-red-500' : dayMode ? 'border-slate-300' : 'border-gray-600'
+              } ${dayMode ? 'placeholder-slate-400 text-slate-900 bg-white' : 'placeholder-gray-400 text-white bg-gray-800/50'} backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
               placeholder={t('auth.passwordPlaceholder')}
               value={formData.password}
               onChange={handleInputChange}
@@ -426,8 +479,8 @@ const Register: React.FC = () => {
               autoComplete="new-password"
               required
               className={`appearance-none rounded-lg relative block w-full px-3 py-3 pr-10 border ${
-                errors.confirmPassword ? 'border-red-500' : 'border-gray-600'
-              } placeholder-gray-400 text-white bg-gray-800/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
+                errors.confirmPassword ? 'border-red-500' : dayMode ? 'border-slate-300' : 'border-gray-600'
+              } ${dayMode ? 'placeholder-slate-400 text-slate-900 bg-white' : 'placeholder-gray-400 text-white bg-gray-800/50'} backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
               placeholder={t('auth.confirmPassword')}
               value={formData.confirmPassword}
               onChange={handleInputChange}
@@ -457,11 +510,11 @@ const Register: React.FC = () => {
                 checked={formData.termsAccepted}
                 onChange={handleInputChange}
                 className={`mt-1 h-4 w-4 rounded border-2 ${
-                  errors.termsAccepted ? 'border-red-500' : 'border-gray-600'
-                } bg-gray-800/50 text-blue-600 focus:ring-blue-500 focus:ring-2`}
+                  errors.termsAccepted ? 'border-red-500' : dayMode ? 'border-slate-300' : 'border-gray-600'
+                } ${dayMode ? 'bg-white' : 'bg-gray-800/50'} text-blue-600 focus:ring-blue-500 focus:ring-2`}
                 required
               />
-              <span className="text-sm text-gray-300 leading-tight">
+              <span className={`text-sm leading-tight ${dayMode ? 'text-slate-600' : 'text-gray-300'}`}>
                 {t('auth.acceptTerms')}{' '}
                 <Link to="/agb" className="text-blue-400 hover:text-blue-300 underline" target="_blank">
                   {t('nav.terms')}
@@ -478,11 +531,15 @@ const Register: React.FC = () => {
           </div>
 
           <div>
+            {/* Cloudflare Turnstile widget */}
+            {siteKey && (
+              <div ref={turnstileContainerRef} className="flex justify-center mb-4" />
+            )}
             <motion.button
               whileHover={{ scale: isRegistrationEnabled && formData.termsAccepted ? 1.02 : 1 }}
               whileTap={{ scale: isRegistrationEnabled && formData.termsAccepted ? 0.98 : 1 }}
               type={isRegistrationEnabled ? 'submit' : 'button'}
-              disabled={!isRegistrationEnabled || !formData.termsAccepted}
+              disabled={!isRegistrationEnabled || !formData.termsAccepted || (!!siteKey && !turnstileToken)}
               className={`group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 ${
                 isRegistrationEnabled
                   ? formData.termsAccepted

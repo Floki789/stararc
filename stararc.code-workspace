@@ -7,5 +7,7 @@
 			"path": "../spaceship"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"chat.agent.maxRequests": 100
+	}
 }

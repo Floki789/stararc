@@ -108,7 +108,7 @@ const SecurityShowcase: React.FC = () => {
             </div>
           </div>
 
-          {/* Sovereignty Mode Card */}
+          {/* Privacy Login Card */}
           <div className="relative group">
             <div className="absolute -inset-[1px] bg-gradient-to-r from-orange-500/40 to-red-500/40 rounded-2xl opacity-50 group-hover:opacity-70 transition-opacity" />
             <div className="relative bg-slate-900/90 backdrop-blur-xl rounded-2xl p-8">

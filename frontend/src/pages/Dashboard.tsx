@@ -11,6 +11,7 @@ import ZKRecoveryModal from '../components/ZKRecoveryModal';
 import ZKRevealRecoveryPhraseModal from '../components/ZKRevealRecoveryPhraseModal';
 import ServerSecurityOverview from '../components/ServerSecurityOverview';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useDayMode } from '../contexts/DayModeContext';
 
 interface Subscription {
   plan: string;
@@ -19,11 +20,13 @@ interface Subscription {
   cancelAtPeriodEnd?: boolean;
   canceledAt?: string;
   spaceshipIntegrationCompleted?: boolean;
+  hallOfFameName?: string | null;
 }
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
   const { t } = useLanguage();
+  const { dayMode } = useDayMode();
   const navigate = useNavigate();
   const [subscription, setSubscription] = useState<Subscription | null>(null);
   const [loading, setLoading] = useState(true);
@@ -169,7 +172,8 @@ const Dashboard: React.FC = () => {
               status: subData.status,
               expiresAt: subData.expiresAt,
               cancelAtPeriodEnd: subData.cancelAtPeriodEnd,
-              canceledAt: subData.canceledAt
+              canceledAt: subData.canceledAt,
+              hallOfFameName: subData.hallOfFameName || null
             });
             setLoading(false);
             return;
@@ -211,7 +215,8 @@ const Dashboard: React.FC = () => {
                   status: subData.status,
                   expiresAt: subData.expiresAt,
                   cancelAtPeriodEnd: subData.cancelAtPeriodEnd,
-                  canceledAt: subData.canceledAt
+                  canceledAt: subData.canceledAt,
+                  hallOfFameName: subData.hallOfFameName || null
                 });
                 setLoading(false);
                 setPollingError(false);
@@ -246,7 +251,8 @@ const Dashboard: React.FC = () => {
           expiresAt: subData.expiresAt,
           cancelAtPeriodEnd: subData.cancelAtPeriodEnd,
           canceledAt: subData.canceledAt,
-          spaceshipIntegrationCompleted: subData.spaceshipIntegrationCompleted
+          spaceshipIntegrationCompleted: subData.spaceshipIntegrationCompleted,
+          hallOfFameName: subData.hallOfFameName || null
         });
       } catch (error) {
         console.error('Failed to load subscription data:', error);
@@ -325,10 +331,10 @@ const Dashboard: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 flex items-center justify-center">
+      <div className={`min-h-screen bg-gradient-to-br flex items-center justify-center ${dayMode ? 'from-slate-50 via-blue-50 to-indigo-100' : 'from-slate-900 via-blue-900 to-indigo-900'}`}>
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <div className="text-white text-xl mb-2">
+          <div className={`text-xl mb-2 ${dayMode ? 'text-slate-900' : 'text-white'}`}>
             {t('dashboard.loading')}
           </div>
         </div>
@@ -338,12 +344,12 @@ const Dashboard: React.FC = () => {
 
   if (pollingError) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 flex items-center justify-center">
+      <div className={`min-h-screen bg-gradient-to-br flex items-center justify-center ${dayMode ? 'from-slate-50 via-blue-50 to-indigo-100' : 'from-slate-900 via-blue-900 to-indigo-900'}`}>
         <div className="max-w-md bg-red-900/20 border border-red-500 rounded-lg p-6 text-center">
           <div className="text-red-400 text-xl font-semibold mb-4">
             {t('dashboard.activationFailed')}
           </div>
-          <p className="text-slate-300 mb-6">
+          <p className={`mb-6 ${dayMode ? 'text-slate-600' : 'text-slate-300'}`}>
             {t('dashboard.activationFailedMessage')}
           </p>
           <button
@@ -359,16 +365,17 @@ const Dashboard: React.FC = () => {
 
   if (!subscription) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 flex items-center justify-center">
-        <div className="text-white text-xl">{t('dashboard.noSubscription')}</div>
+      <div className={`min-h-screen bg-gradient-to-br flex items-center justify-center ${dayMode ? 'from-slate-50 via-blue-50 to-indigo-100' : 'from-slate-900 via-blue-900 to-indigo-900'}`}>
+        <div className={`text-xl ${dayMode ? 'text-slate-900' : 'text-white'}`}>{t('dashboard.noSubscription')}</div>
       </div>
     );
   }
 
   const Icon = getPlanIcon(subscription.plan);
+  const isGenesis = subscription.status === 'lifetime';
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 pt-32 pb-6">
+    <div className={`min-h-screen bg-gradient-to-br pt-32 pb-6 ${dayMode ? 'from-slate-50 via-blue-50 to-indigo-100' : 'from-slate-900 via-blue-900 to-indigo-900'}`}>
       <div className="max-w-6xl mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -396,26 +403,26 @@ const Dashboard: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="bg-slate-800/40 backdrop-blur-sm border border-slate-600/50 rounded-2xl p-6 mb-6"
+          className={`backdrop-blur-sm border rounded-2xl p-6 mb-6 ${dayMode ? 'bg-white/80 border-slate-200' : 'bg-slate-800/40 border-slate-600/50'}`}
         >
           <div className="flex items-center gap-4 mb-4">
             <div className={`p-3 rounded-full ${
               subscription.plan === 'Free' ? 'bg-green-500/20' :
               subscription.plan === 'Spark' ? 'bg-blue-500/20' :
               subscription.plan === 'Nova' ? 'bg-purple-500/20' :
-              subscription.plan === 'Galaxy' ? 'bg-indigo-500/20' :
+              subscription.plan === 'Galaxy' ? (isGenesis ? 'bg-yellow-500/20' : 'bg-indigo-500/20') :
               subscription.plan === 'Apex' ? 'bg-yellow-500/20' : 'bg-gray-500/20'
             }`}>
               <Icon className={`w-6 h-6 ${
                 subscription.plan === 'Free' ? 'text-green-400' :
                 subscription.plan === 'Spark' ? 'text-blue-400' :
                 subscription.plan === 'Nova' ? 'text-purple-400' :
-                subscription.plan === 'Galaxy' ? 'text-indigo-400' :
+                subscription.plan === 'Galaxy' ? (isGenesis ? 'text-yellow-400' : 'text-indigo-400') :
                 subscription.plan === 'Apex' ? 'text-yellow-400' : 'text-gray-400'
               }`} />
             </div>
             <div className="flex-1">
-              <h2 className="text-2xl font-bold text-white capitalize">
+              <h2 className={`text-2xl font-bold capitalize ${dayMode ? 'text-slate-900' : 'text-white'}`}>
                 {subscription.plan} {t('dashboard.plan')}
               </h2>
               {/* Subscription Status */}
@@ -439,6 +446,21 @@ const Dashboard: React.FC = () => {
               ) : (
                 <p className="text-green-400 font-semibold">● {t('dashboard.active')}</p>
               )}
+
+              {/* Genesis Member Info */}
+              {isGenesis && (
+                <div className="mt-2 space-y-1.5">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-yellow-500/20 border border-yellow-500/40 text-yellow-300 text-xs font-semibold">
+                    ⭐ {t('dashboard.genesisMember')}
+                  </span>
+                  {subscription.hallOfFameName && (
+                    <p className="text-sm text-slate-300">
+                      {t('dashboard.genesisHallOfFame')} <span className="font-semibold text-yellow-200">{subscription.hallOfFameName}</span>
+                    </p>
+                  )}
+                  <p className="text-xs text-yellow-400/70">{t('dashboard.genesisLifetime')}</p>
+                </div>
+              )}
               
               {/* Subscription Expiry Date (only when active, not cancelled) */}
               {!subscription.cancelAtPeriodEnd && subscription.status !== 'canceled' && subscription.plan && subscription.plan.toLowerCase() !== 'free' && subscription.expiresAt && (
@@ -456,21 +478,21 @@ const Dashboard: React.FC = () => {
                       <>
                         {isTrialPhase ? (
                           <>
-                            <p className="text-sm text-slate-300">
-                              {t('dashboard.trialEndsOn')} <span className="font-semibold text-white">{expiryDate}</span>
+                    <p className={`text-sm mt-1 ${dayMode ? 'text-slate-600' : 'text-slate-300'}`}>
+                      {t('dashboard.trialEndsOn')} <span className={`font-semibold ${dayMode ? 'text-slate-900' : 'text-white'}`}>{expiryDate}</span>
                             </p>
-                            <p className="text-xs text-slate-400">
+                            <p className={`text-xs ${dayMode ? 'text-slate-500' : 'text-slate-400'}`}>
                               {t('dashboard.trialAutoRenews')}
                             </p>
                           </>
                         ) : (
                           <>
-                            <p className="text-sm text-slate-300">
-                              {t('dashboard.renewsOn')} <span className="font-semibold text-white">{expiryDate}</span>
+                            <p className={`text-sm ${dayMode ? 'text-slate-600' : 'text-slate-300'}`}>
+                              {t('dashboard.renewsOn')} <span className={`font-semibold ${dayMode ? 'text-slate-900' : 'text-white'}`}>{expiryDate}</span>
                             </p>
                             {daysLeft > 0 && (
-                              <p className="text-xs text-slate-400">
-                                {daysLeft === 1 ? t('dashboard.renewsTomorrow') : `${t('dashboard.daysRemaining').replace('{{days}}', daysLeft.toString())}`}
+                              <p className={`text-xs ${dayMode ? 'text-slate-500' : 'text-slate-400'}`}>
+                                {daysLeft === 1 ? t('dashboard.renewsTomorrow') : t('dashboard.daysRemaining').replace('{{days}}', daysLeft.toString())}
                               </p>
                             )}
                           </>
@@ -484,10 +506,11 @@ const Dashboard: React.FC = () => {
             
             {/* Upgrade Option */}
             {(() => {
+              if (isGenesis) return null;
               const nextUpgrade = getNextUpgrade(subscription.plan);
               if (nextUpgrade) {
                 return (
-                  <div className="flex items-center gap-3">
+                  <div className="hidden flex items-center gap-3">
                     <div className="text-right">
                       <p className="text-slate-200 text-sm">{t('dashboard.nextUpgrade')}</p>
                       <p className={`font-semibold ${
@@ -500,7 +523,7 @@ const Dashboard: React.FC = () => {
                     </div>
                     <button
                       onClick={handleUpgrade}
-                      className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                      className={`hidden px-4 py-2 rounded-lg font-medium transition-colors ${
                         nextUpgrade.color === 'blue' ? 'bg-blue-500 text-white hover:bg-blue-600' :
                         nextUpgrade.color === 'purple' ? 'bg-purple-500 text-white hover:bg-purple-600' :
                         nextUpgrade.color === 'yellow' ? 'bg-yellow-500 text-white hover:bg-yellow-600' : 'bg-gray-500 text-white hover:bg-gray-600'
@@ -516,11 +539,11 @@ const Dashboard: React.FC = () => {
           </div>
           
           {/* Subscription Management Actions */}
-          {subscription.plan && subscription.plan.toLowerCase() !== 'free' && (
+          {!isGenesis && subscription.plan && subscription.plan.toLowerCase() !== 'free' && (
             <div className="mt-4 pt-4 border-t border-slate-600/50">
               <button
                 onClick={handleManageSubscription}
-                className="px-4 py-2 bg-slate-600 hover:bg-slate-700 text-white rounded-lg font-medium transition-colors"
+                className="hidden px-4 py-2 bg-slate-600 hover:bg-slate-700 text-white rounded-lg font-medium transition-colors"
               >
                 {t('dashboard.manageSubscription')}
               </button>

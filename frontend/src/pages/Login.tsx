@@ -4,6 +4,7 @@ import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useDayMode } from '../contexts/DayModeContext';
 import { unwrapDEKForLogin, storeDEKInSession } from '../utils/clientCrypto';
 import { AlertTriangle, CheckCircle, X } from 'lucide-react';
 
@@ -18,6 +19,7 @@ const Login: React.FC = () => {
   const location = useLocation();
   const { login } = useAuth();
   const { t } = useLanguage();
+  const { dayMode } = useDayMode();
   
   // Scroll to top when login page loads or when navigating to login
   useEffect(() => {
@@ -191,9 +193,9 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-24">
+    <div className={`min-h-screen bg-gradient-to-br flex items-center justify-center px-4 sm:px-6 lg:px-8 py-24 ${dayMode ? 'from-violet-50 via-indigo-50 to-slate-100' : 'from-slate-900 via-purple-900 to-slate-900'}`}>
       {/* Background stars */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+      {!dayMode && <div className="fixed inset-0 overflow-hidden pointer-events-none">
         {[...Array(100)].map((_, i) => (
           <motion.div
             key={i}
@@ -212,7 +214,7 @@ const Login: React.FC = () => {
             }}
           />
         ))}
-      </div>
+      </div>}
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -221,10 +223,10 @@ const Login: React.FC = () => {
         className="max-w-md w-full space-y-8 relative z-10"
       >
         <div className="-mt-4">
-          <h2 className="text-center text-3xl font-extrabold text-white">
+          <h2 className={`text-center text-3xl font-extrabold ${dayMode ? 'text-slate-900' : 'text-white'}`}>
             {t('auth.loginTitle')}
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-300">
+          <p className={`mt-2 text-center text-sm ${dayMode ? 'text-slate-600' : 'text-gray-300'}`}>
             {t('auth.or')}{' '}
             <Link
               to="/register"
@@ -259,8 +261,8 @@ const Login: React.FC = () => {
               autoComplete="email"
               required
               className={`appearance-none rounded-lg relative block w-full px-3 py-3 border ${
-                errors.email ? 'border-red-500' : 'border-gray-600'
-              } placeholder-gray-400 text-white bg-gray-800/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
+                errors.email ? 'border-red-500' : dayMode ? 'border-slate-300' : 'border-gray-600'
+              } ${dayMode ? 'placeholder-slate-400 text-slate-900 bg-white' : 'placeholder-gray-400 text-white bg-gray-800/50'} backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
               placeholder={t('auth.email')}
               value={formData.email}
               onChange={handleInputChange}
@@ -281,8 +283,8 @@ const Login: React.FC = () => {
               autoComplete="current-password"
               required
               className={`appearance-none rounded-lg relative block w-full px-3 py-3 pr-10 border ${
-                errors.password ? 'border-red-500' : 'border-gray-600'
-              } placeholder-gray-400 text-white bg-gray-800/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
+                errors.password ? 'border-red-500' : dayMode ? 'border-slate-300' : 'border-gray-600'
+              } ${dayMode ? 'placeholder-slate-400 text-slate-900 bg-white' : 'placeholder-gray-400 text-white bg-gray-800/50'} backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
               placeholder={t('auth.password')}
               value={formData.password}
               onChange={handleInputChange}
@@ -319,8 +321,8 @@ const Login: React.FC = () => {
                 type="text"
                 autoComplete="one-time-code"
                 className={`appearance-none rounded-lg relative block w-full px-3 py-3 border ${
-                  errors.twoFactorToken ? 'border-red-500' : 'border-gray-600'
-                } placeholder-gray-400 text-white bg-gray-800/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-center text-lg tracking-wider`}
+                  errors.twoFactorToken ? 'border-red-500' : dayMode ? 'border-slate-300' : 'border-gray-600'
+                } ${dayMode ? 'placeholder-slate-400 text-slate-900 bg-white' : 'placeholder-gray-400 text-white bg-gray-800/50'} backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-center text-lg tracking-wider`}
                 placeholder="2FA Code oder Backup Code"
                 value={formData.twoFactorToken || ''}
                 onChange={(e) => {
@@ -334,9 +336,9 @@ const Login: React.FC = () => {
               {errors.twoFactorToken && (
                 <p className="mt-1 text-sm text-red-400">{errors.twoFactorToken}</p>
               )}
-              <p className="mt-2 text-xs text-gray-400 text-center">
+              <p className={`mt-2 text-xs text-center ${dayMode ? 'text-slate-500' : 'text-gray-400'}`}>
                 Geben Sie den 6-stelligen Code aus Ihrer Authenticator-App ein.<br />
-                <span className="text-gray-500">Oder verwenden Sie einen 8-stelligen Backup-Code (wird einmalig verbraucht).</span>
+                <span className={dayMode ? 'text-slate-400' : 'text-gray-500'}>Oder verwenden Sie einen 8-stelligen Backup-Code (wird einmalig verbraucht).</span>
               </p>
             </motion.div>
           )}

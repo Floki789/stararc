@@ -127,7 +127,27 @@ router.post('/select-plan', authMiddleware, async (req, res): Promise<any> => {
       });
     }
 
-    // Paid plans (Spark, Nova, Galaxy, Apex) - Stripe workflow
+    // BETA PHASE: Nova is free – activate directly without Stripe.
+    // Remove this block (and restore priceValueYearly in PlanCards.tsx) when Nova becomes paid again.
+    if (planId === 'Nova') {
+      await pool.query(
+        `UPDATE users SET
+         subscription_plan = 'Nova',
+         subscription_status = 'active',
+         onboarding_step = CASE WHEN onboarding_step = 'completed' THEN 'completed' ELSE 'auth_method_selection' END,
+         updated_at = CURRENT_TIMESTAMP
+         WHERE id = $1`,
+        [userId]
+      );
+      return res.json({
+        success: true,
+        plan: 'Nova',
+        status: 'active',
+        workflow: 'direct'
+      });
+    }
+
+    // Paid plans (Spark, Galaxy, Apex) - Stripe workflow
     if (['Spark', 'Nova', 'Galaxy', 'Apex'].includes(planId)) {
       // Get or create Stripe customer
       let stripeCustomerId: string;
@@ -559,7 +579,7 @@ router.get('/subscription', authMiddleware, async (req, res): Promise<any> => {
     const userId = (req as any).user.id;
     
     const result = await pool.query(
-      'SELECT subscription_plan, subscription_status, subscription_expires_at, subscription_cancel_at_period_end, subscription_canceled_at, spaceship_integration_completed FROM users WHERE id = $1',
+      'SELECT subscription_plan, subscription_status, subscription_expires_at, subscription_cancel_at_period_end, subscription_canceled_at, spaceship_integration_completed, admin_encrypted_genesis_hall_of_fame_name FROM users WHERE id = $1',
       [userId]
     );
 
@@ -576,6 +596,15 @@ router.get('/subscription', authMiddleware, async (req, res): Promise<any> => {
       hasSubscription: !!(user.subscription_plan && user.subscription_status)
     });
     
+    // Decrypt genesis hall of fame name if present
+    let hallOfFameName: string | null = null;
+    if (user.admin_encrypted_genesis_hall_of_fame_name) {
+      try {
+        const { UserEncryptionService } = require('../services/userEncryptionService');
+        hallOfFameName = UserEncryptionService.decryptWithMasterKey(user.admin_encrypted_genesis_hall_of_fame_name);
+      } catch { /* ignore decryption errors */ }
+    }
+
     // Return null for plan/status if user has no subscription
     res.json({
       plan: user.subscription_plan,
@@ -584,7 +613,8 @@ router.get('/subscription', authMiddleware, async (req, res): Promise<any> => {
       cancelAtPeriodEnd: user.subscription_cancel_at_period_end || false,
       canceledAt: user.subscription_canceled_at,
       hasSubscription: !!(user.subscription_plan && user.subscription_status),
-      spaceshipIntegrationCompleted: user.spaceship_integration_completed
+      spaceshipIntegrationCompleted: user.spaceship_integration_completed,
+      hallOfFameName
     });
 
   } catch (error) {

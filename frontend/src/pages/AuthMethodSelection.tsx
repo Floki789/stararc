@@ -1,243 +1,98 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Shield, Lock, Key, CheckCircle, Info, AlertTriangle, Copy, Eye, EyeOff, X } from 'lucide-react';
+import { Lock, Key, CheckCircle, AlertTriangle, Info, Copy, Eye, EyeOff, X } from 'lucide-react';
 import { BIP39_WORDLIST, RECOVERY_WORD_COUNT } from '../utils/bip39Wordlist';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../hooks/useAuth';
-
-type AuthMethodType = 'standard' | 'sovereignty';
-
-interface AuthMethod {
-  id: AuthMethodType;
-  name: string;
-  tagline: string;
-  icon: React.ElementType;
-  iconColor: string;
-  bgGradient: string;
-  borderColor: string;
-  pros: string[];
-  cons: string[];
-  bestFor: string;
-  warningLevel: 'low' | 'high';
-}
+import { useDayMode } from '../contexts/DayModeContext';
 
 const AuthMethodSelection: React.FC = () => {
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { updateUser } = useAuth();
-  const [selectedMethod, setSelectedMethod] = useState<AuthMethodType | null>('standard');
+  const { dayMode } = useDayMode();
   const [showZKSetup, setShowZKSetup] = useState(false);
 
-  const authMethods: AuthMethod[] = [
-    {
-      id: 'standard',
-      name: t('authMethod.standard.name'),
-      tagline: t('authMethod.standard.tagline'),
-      icon: Shield,
-      iconColor: 'text-blue-400',
-      bgGradient: 'from-blue-500/10 to-purple-500/10',
-      borderColor: 'border-blue-500/50',
-      pros: [
-        t('authMethod.standard.pros.recovery'),
-        t('authMethod.standard.pros.encrypted')
-      ],
-      cons: [
-        t('authMethod.standard.cons.adminAccess')
-      ],
-      bestFor: t('authMethod.standard.bestFor'),
-      warningLevel: 'low'
-    },
-    {
-      id: 'sovereignty',
-      name: t('authMethod.sovereignty.name'),
-      tagline: t('authMethod.sovereignty.tagline'),
-      icon: Key,
-      iconColor: 'text-orange-400',
-      bgGradient: 'from-orange-500/10 to-red-500/10',
-      borderColor: 'border-orange-500/50',
-      pros: [
-        t('authMethod.sovereignty.pros.zeroKnowledge'),
-        t('authMethod.sovereignty.pros.maxPrivacy')
-      ],
-      cons: [
-        t('authMethod.sovereignty.cons.dualPassword'),
-        t('authMethod.sovereignty.cons.passphraseRecovery')
-      ],
-      bestFor: t('authMethod.sovereignty.bestFor'),
-      warningLevel: 'high'
-    }
+  const isDE = language === 'de';
+
+  const facts = isDE ? [
+    'Deine Daten werden im Browser verschlüsselt, bevor sie den Server erreichen (AES-256-GCM).',
+    'Der Server speichert ausschliesslich verschlüsselte Daten — ohne Entschlüsselungsmöglichkeit.',
+    'Nur du hast Zugriff auf deine Inhalte — wir nicht.',
+    'Ein separates Privacy-Login-Passwort schützt den Zugang zu deinen Daten.',
+    'Wiederherstellung erfolgt über eine 6-Wort-Phrase, die du selbst aufbewahrst.',
+    'Das Privacy-Login-Passwort und die 6-Wort-Phrase kann durch uns nicht wiederhergestellt werden. Du trägst die volle Verantwortung.',
+  ] : [
+    'Your data is encrypted in the browser before reaching the server (AES-256-GCM).',
+    'The server stores only encrypted data — with no ability to decrypt it.',
+    'Only you have access to your content — not us.',
+    'A separate Privacy Login password protects access to your data.',
+    'Recovery is possible via a 6-word phrase that only you keep.',
+    'The Privacy Login password and 6-word phrase cannot be recovered by us. You bear full responsibility.',
   ];
 
-  const handleContinue = async () => {
-    if (!selectedMethod) return;
-    if (selectedMethod === 'sovereignty') {
-      setShowZKSetup(true);
-      return;
-    }
-
-    try {
-      // Update onboarding step and selected login method
-      const apiUrl = (import.meta as any).env.VITE_API_URL || 'http://localhost:3004';
-      const response = await fetch(`${apiUrl}/api/auth/update-onboarding-step`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify({
-          onboardingStep: 'completed',
-          loginMethod: 'standard'
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to update onboarding step');
-      }
-
-      // Update user data in Auth Context and localStorage
-      const updatedUserData = {
-        onboardingStep: 'completed',
-        loginMethodSelected: 'standard'
-      };
-      
-      // Update Auth Context (this will also update localStorage)
-      updateUser(updatedUserData);
-
-      // Redirect to dashboard
-      navigate('/dashboard');
-    } catch (error) {
-      console.error('Error updating onboarding step:', error);
-      alert('Fehler beim Speichern der Einstellungen. Bitte versuchen Sie es erneut.');
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 pt-32 pb-12 px-4">
-      <div className="max-w-6xl mx-auto">
+    <div className={`min-h-screen bg-gradient-to-br pt-32 pb-12 px-4 ${dayMode ? 'from-gray-50 via-slate-50 to-gray-100' : 'from-gray-900 via-gray-800 to-gray-900'}`}>
+      <div className="max-w-2xl mx-auto">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-12"
+          className="text-center mb-10"
         >
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <Lock className="w-10 h-10 text-primary-400" />
-            <h1 className="text-4xl font-bold text-white">
-              {t('authMethod.title')}
-            </h1>
+          <div className="flex items-center justify-center mb-5">
+            <div className={`w-16 h-16 rounded-2xl border flex items-center justify-center ${dayMode ? 'bg-orange-50 border-orange-200' : 'bg-gradient-to-br from-orange-500/20 to-red-500/20 border-orange-500/40'}`}>
+              <Key className={`w-8 h-8 ${dayMode ? 'text-orange-500' : 'text-orange-400'}`} />
+            </div>
           </div>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            {t('authMethod.subtitle')}
+          <h1 className={`text-4xl font-bold mb-3 ${dayMode ? 'text-slate-900' : 'text-white'}`}>
+            {isDE ? 'Deine Daten gehören dir allein.' : 'Your data belongs to you alone.'}
+          </h1>
+          <p className={`text-lg font-medium ${dayMode ? 'text-orange-500' : 'text-orange-300'}`}>
+            {isDE ? 'Maximale Privatsphäre. Maximale Verantwortung.' : 'Maximum Privacy. Maximum Responsibility.'}
           </p>
         </motion.div>
 
-        {/* Method Selection Cards */}
-        <div className="grid md:grid-cols-2 gap-6 mb-8">
-          {authMethods.map((method, index) => (
-            <motion.div
-              key={method.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              onClick={() => setSelectedMethod(method.id)}
-              className={`relative card p-6 transition-all duration-300 cursor-pointer hover:scale-[1.02] ${
-                selectedMethod === method.id
-                  ? `ring-4 ${method.id === 'standard' ? 'ring-blue-500' : 'ring-orange-500'} bg-gradient-to-br ${method.bgGradient}`
-                  : 'hover:bg-gray-700/50'
-              }`}
-            >
-              {/* Badge for sovereignty */}
-              {method.id === 'sovereignty' && (
-                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                  <span className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-4 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
-                    <Key className="w-4 h-4" />
-                    Zero-Knowledge
-                  </span>
-                </div>
-              )}
-
-              {/* Header */}
-              <div className="flex items-center gap-4 mb-4">
-                <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${method.bgGradient} border ${method.borderColor} flex items-center justify-center`}>
-                  <method.icon className={`w-8 h-8 ${method.iconColor}`} />
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-2xl font-bold text-white mb-1">{method.name}</h3>
-                  <p className="text-gray-400 text-sm">{method.tagline}</p>
-                </div>
-                {selectedMethod === method.id && (
-                  <CheckCircle className={`w-6 h-6 ${method.id === 'standard' ? 'text-blue-400' : 'text-orange-400'}`} />
-                )}
-              </div>
-
-              {/* Pros */}
-              <div className="mb-3">
-                <span className="text-sm font-semibold text-green-400 mb-2 block">
-                  {t('authMethod.advantages')}
-                </span>
-                <ul className="space-y-1">
-                  {method.pros.map((pro, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-gray-300">
-                      <CheckCircle className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />
-                      {pro}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Cons */}
-              <div className="mb-4">
-                <span className="text-sm font-semibold text-red-400 mb-2 block">
-                  {t('authMethod.disadvantages')}
-                </span>
-                <ul className="space-y-1">
-                  {method.cons.map((con, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-gray-400">
-                      <AlertTriangle className="w-4 h-4 text-red-400 mt-0.5 flex-shrink-0" />
-                      {con}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Best For */}
-              <div className="p-3 bg-gray-800/50 rounded-lg border border-gray-700">
-                <div className="flex items-center gap-2 mb-1">
-                  <Info className="w-4 h-4 text-gray-400" />
-                  <span className="text-sm font-semibold text-gray-300">
-                    {t('authMethod.bestFor')}:
-                  </span>
-                </div>
-                <p className="text-gray-400 text-sm ml-6">{method.bestFor}</p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-
-
-
-
-
-        {/* Action Button */}
+        {/* Info box */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
+          transition={{ duration: 0.5, delay: 0.15 }}
+          className={`relative p-6 pt-8 mb-8 border rounded-xl shadow-xl ${dayMode ? 'bg-white border-orange-200' : 'bg-gradient-to-br from-orange-500/5 to-red-500/5 bg-gray-800/50 backdrop-blur-sm border-orange-500/30'}`}
+        >
+          <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
+            <span className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1.5 whitespace-nowrap">
+              <Key className="w-3.5 h-3.5" />
+              Zero-Knowledge · Privacy Login
+            </span>
+          </div>
+          <ul className="space-y-3.5">
+            {facts.map((fact, i) => (
+              <li key={i} className="flex items-start gap-3">
+                <CheckCircle className={`w-4 h-4 mt-0.5 flex-shrink-0 ${i >= 3 ? (dayMode ? 'text-orange-500' : 'text-orange-400') : (dayMode ? 'text-orange-400' : 'text-orange-400/60')}`} />
+                <span className={`text-base leading-relaxed ${i >= 3 ? (dayMode ? 'text-slate-900 font-medium' : 'text-white font-medium') : (dayMode ? 'text-slate-600' : 'text-gray-400')}`}>{fact}</span>
+              </li>
+            ))}
+          </ul>
+        </motion.div>
+
+        {/* Action button */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
           className="flex justify-center"
         >
           <button
-            onClick={handleContinue}
-            disabled={!selectedMethod}
-            className={`px-8 py-3 font-semibold rounded-lg transition-all duration-200 flex items-center justify-center gap-2 ${selectedMethod ? 'btn-primary hover:shadow-lg hover:scale-105' : 'bg-gray-600 text-gray-400 cursor-not-allowed'}`}
+            onClick={() => setShowZKSetup(true)}
+            className="px-8 py-3 font-semibold rounded-lg btn-primary hover:shadow-lg hover:scale-105 transition-all duration-200 flex items-center gap-2"
           >
             {t('authMethod.continue')}
             <span>→</span>
           </button>
         </motion.div>
-
-        {/* Info Footer */}
       </div>
 
       {/* ZK Setup Modal */}
@@ -246,20 +101,23 @@ const AuthMethodSelection: React.FC = () => {
           <ZKSetupModal
             onClose={() => setShowZKSetup(false)}
             onComplete={async () => {
-              // Update onboarding and redirect to spaceship
-              const apiUrl = (import.meta as any).env.VITE_API_URL || 'http://localhost:3004';
-              await fetch(`${apiUrl}/api/auth/update-onboarding-step`, {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                  'Authorization': `Bearer ${localStorage.getItem('token')}`
-                },
-                body: JSON.stringify({
-                  onboardingStep: 'completed',
-                  loginMethod: 'password_zk'
-                })
-              });
-              updateUser({ onboardingStep: 'completed', loginMethodSelected: 'password_zk' });
+              try {
+                const apiUrl = (import.meta as any).env.VITE_API_URL || 'http://localhost:3004';
+                await fetch(`${apiUrl}/api/auth/update-onboarding-step`, {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                  },
+                  body: JSON.stringify({
+                    onboardingStep: 'completed',
+                    loginMethod: 'password_zk'
+                  })
+                });
+                updateUser({ onboardingStep: 'completed', loginMethodSelected: 'password_zk' });
+              } catch (e) {
+                console.error('onboarding step update failed:', e);
+              }
               navigate('/dashboard');
             }}
           />
@@ -378,6 +236,7 @@ function arrayBufferToBase64(buffer: ArrayBuffer): string {
 
 const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
   const { t } = useLanguage();
+  const { dayMode } = useDayMode();
   const [step, setStep] = useState<SetupStep>('password');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -431,6 +290,23 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
     const matches = BIP39_WORDLIST.filter(word => word.startsWith(lowerInput));
     return matches.length > 0 ? matches[0] : null;
   }, []);
+
+  const handleVerificationPaste = (index: number, e: React.ClipboardEvent<HTMLInputElement>) => {
+    const pasted = e.clipboardData.getData('text');
+    const words = pasted.trim().split(/\s+/);
+    if (words.length > 1) {
+      e.preventDefault();
+      const newWords = [...verificationWords];
+      words.slice(0, 6 - index).forEach((w, i) => {
+        newWords[index + i] = w.toLowerCase();
+      });
+      setVerificationWords(newWords);
+      setVerificationError('');
+      setSuggestions([]);
+      const nextIndex = Math.min(index + words.length, 5);
+      inputRefs.current[nextIndex]?.focus();
+    }
+  };
 
   const handleVerificationWordChange = (index: number, value: string) => {
     const newWords = [...verificationWords];
@@ -593,25 +469,25 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
-        className="bg-gray-800 rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-gray-700"
+        className={`rounded-2xl max-w-lg w-full p-6 shadow-2xl border ${dayMode ? 'bg-white border-slate-200' : 'bg-gray-800 border-gray-700'}`}
       >
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500/20 to-red-500/20 border border-orange-500/50 flex items-center justify-center">
-              <Key className="w-5 h-5 text-orange-400" />
+            <div className={`w-10 h-10 rounded-xl border flex items-center justify-center ${dayMode ? 'bg-orange-50 border-orange-200' : 'bg-gradient-to-br from-orange-500/20 to-red-500/20 border-orange-500/50'}`}>
+              <Key className={`w-5 h-5 ${dayMode ? 'text-orange-500' : 'text-orange-400'}`} />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-white">
+              <h2 className={`text-xl font-bold ${dayMode ? 'text-slate-900' : 'text-white'}`}>
                 {step === 'password' && t('zkSetup.step1Title')}
                 {step === 'recovery' && t('zkSetup.step2Title')}
                 {step === 'verify' && t('zkSetup.step3Title')}
                 {step === 'confirm' && t('zkSetup.step4Title')}
               </h2>
-              <p className="text-sm text-gray-400">{t('zkSetup.stepOf').replace('{{step}}', String(step === 'password' ? 1 : step === 'recovery' ? 2 : step === 'verify' ? 3 : 4))}</p>
+              <p className={`text-sm ${dayMode ? 'text-slate-500' : 'text-gray-400'}`}>{t('zkSetup.stepOf').replace('{{step}}', String(step === 'password' ? 1 : step === 'recovery' ? 2 : step === 'verify' ? 3 : 4))}</p>
             </div>
           </div>
-          <button onClick={onClose} className="text-gray-400 hover:text-white">
+          <button onClick={onClose} className={dayMode ? 'text-slate-400 hover:text-slate-900' : 'text-gray-400 hover:text-white'}>
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -619,17 +495,17 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
         {/* Step 1: Password */}
         {step === 'password' && (
           <div className="space-y-4">
-            <div className="p-4 bg-orange-500/10 border border-orange-500/30 rounded-lg">
+            <div className={`p-4 border rounded-lg ${dayMode ? 'bg-orange-50 border-orange-200' : 'bg-orange-500/10 border-orange-500/30'}`}>
               <div className="flex gap-2">
-                <AlertTriangle className="w-5 h-5 text-orange-400 flex-shrink-0 mt-0.5" />
-                <div className="text-sm text-orange-200">
+                <AlertTriangle className={`w-5 h-5 flex-shrink-0 mt-0.5 ${dayMode ? 'text-orange-500' : 'text-orange-400'}`} />
+                <div className={`text-sm ${dayMode ? 'text-orange-800' : 'text-orange-200'}`}>
                   <strong>{t('zkSetup.step1Warning')}</strong> {t('zkSetup.step1WarningText')}
                 </div>
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className={`block text-sm font-medium mb-2 ${dayMode ? 'text-slate-700' : 'text-gray-300'}`}>
                 {t('zkSetup.passwordLabel')}
               </label>
               <div className="relative">
@@ -637,13 +513,13 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 bg-gray-900 border border-gray-600 rounded-lg text-white focus:border-orange-500 focus:ring-1 focus:ring-orange-500 outline-none"
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-1 outline-none ${dayMode ? 'bg-white border-slate-300 text-slate-900 placeholder-slate-400 focus:border-orange-500 focus:ring-orange-500' : 'bg-gray-900 border-gray-600 text-white focus:border-orange-500 focus:ring-orange-500'}`}
                   placeholder={t('zkSetup.passwordPlaceholder')}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
+                  className={`absolute right-3 top-1/2 -translate-y-1/2 ${dayMode ? 'text-slate-400 hover:text-slate-700' : 'text-gray-400 hover:text-white'}`}
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
@@ -654,7 +530,7 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className={`block text-sm font-medium mb-2 ${dayMode ? 'text-slate-700' : 'text-gray-300'}`}>
                 {t('zkSetup.confirmPasswordLabel')}
               </label>
               <div className="relative">
@@ -662,13 +538,13 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
                   type={showPassword ? 'text' : 'password'}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full px-4 py-3 bg-gray-900 border border-gray-600 rounded-lg text-white focus:border-orange-500 focus:ring-1 focus:ring-orange-500 outline-none"
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-1 outline-none ${dayMode ? 'bg-white border-slate-300 text-slate-900 placeholder-slate-400 focus:border-orange-500 focus:ring-orange-500' : 'bg-gray-900 border-gray-600 text-white focus:border-orange-500 focus:ring-orange-500'}`}
                   placeholder={t('zkSetup.confirmPasswordPlaceholder')}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
+                  className={`absolute right-3 top-1/2 -translate-y-1/2 ${dayMode ? 'text-slate-400 hover:text-slate-700' : 'text-gray-400 hover:text-white'}`}
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
@@ -693,27 +569,27 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
         {/* Step 2: Recovery Phrase */}
         {step === 'recovery' && (
           <div className="space-y-4">
-            <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-lg">
+            <div className={`p-4 border rounded-lg ${dayMode ? 'bg-red-50 border-red-200' : 'bg-red-500/10 border-red-500/30'}`}>
               <div className="flex gap-2">
-                <AlertTriangle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
-                <div className="text-sm text-red-200">
+                <AlertTriangle className={`w-5 h-5 flex-shrink-0 mt-0.5 ${dayMode ? 'text-red-500' : 'text-red-400'}`} />
+                <div className={`text-sm ${dayMode ? 'text-red-800' : 'text-red-200'}`}>
                   <strong>{t('zkSetup.step2Warning')}</strong> {t('zkSetup.step2WarningText')}
                 </div>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-2 p-4 bg-gray-900 rounded-lg border border-gray-700">
+            <div className={`grid grid-cols-2 gap-2 p-4 rounded-lg border ${dayMode ? 'bg-slate-50 border-slate-200' : 'bg-gray-900 border-gray-700'}`}>
               {recoveryWords.map((word, index) => (
-                <div key={index} className="flex items-center gap-2 p-2 bg-gray-800 rounded">
-                  <span className="text-gray-500 text-xs w-4">{index + 1}.</span>
-                  <span className="text-white font-mono text-sm">{word}</span>
+                <div key={index} className={`flex items-center gap-2 p-2 rounded ${dayMode ? 'bg-white border border-slate-200' : 'bg-gray-800'}`}>
+                  <span className={`text-xs w-4 ${dayMode ? 'text-slate-400' : 'text-gray-500'}`}>{index + 1}.</span>
+                  <span className={`font-mono text-sm ${dayMode ? 'text-slate-900' : 'text-white'}`}>{word}</span>
                 </div>
               ))}
             </div>
 
             <button
               onClick={copyRecoveryPhrase}
-              className="w-full py-2 border border-gray-600 text-gray-300 rounded-lg hover:bg-gray-700 flex items-center justify-center gap-2 transition-colors"
+              className={`w-full py-2 border rounded-lg flex items-center justify-center gap-2 transition-colors ${dayMode ? 'border-slate-300 text-slate-600 hover:bg-slate-100' : 'border-gray-600 text-gray-300 hover:bg-gray-700'}`}
             >
               <Copy className="w-4 h-4" />
               {copiedRecovery ? t('zkSetup.copied') : t('zkSetup.copyToClipboard')}
@@ -731,10 +607,10 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
         {/* Step 3: Verify Recovery Phrase */}
         {step === 'verify' && (
           <div className="space-y-4">
-            <div className="p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+            <div className={`p-4 border rounded-lg ${dayMode ? 'bg-blue-50 border-blue-200' : 'bg-blue-500/10 border-blue-500/30'}`}>
               <div className="flex gap-2">
-                <Info className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
-                <div className="text-sm text-blue-200">
+                <Info className={`w-5 h-5 flex-shrink-0 mt-0.5 ${dayMode ? 'text-blue-500' : 'text-blue-400'}`} />
+                <div className={`text-sm ${dayMode ? 'text-blue-800' : 'text-blue-200'}`}>
                   {t('zkSetup.step3Info')}
                 </div>
               </div>
@@ -765,6 +641,7 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
                       type="text"
                       value={word}
                       onChange={(e) => handleVerificationWordChange(index, e.target.value)}
+                      onPaste={(e) => handleVerificationPaste(index, e)}
                       onKeyDown={(e) => handleWordKeyDown(index, e)}
                       onFocus={() => {
                         if (blurTimeoutRef.current) {
@@ -782,12 +659,12 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
                           blurTimeoutRef.current = null;
                         }, 200);
                       }}
-                      className={`w-full pl-8 pr-12 py-2.5 bg-gray-900 border rounded-lg text-white font-mono text-sm focus:ring-1 outline-none ${
+                      className={`w-full pl-8 pr-12 py-2.5 border rounded-lg font-mono text-sm focus:ring-1 outline-none ${dayMode ? 'bg-white text-slate-900' : 'bg-gray-900 text-white'} ${
                         isCorrect
                           ? 'border-green-500/50 focus:border-green-500 focus:ring-green-500'
                           : isIncorrect
                           ? 'border-red-500/50 focus:border-red-500 focus:ring-red-500'
-                          : 'border-gray-600 focus:border-orange-500 focus:ring-orange-500'
+                          : dayMode ? 'border-slate-300 focus:border-orange-500 focus:ring-orange-500' : 'border-gray-600 focus:border-orange-500 focus:ring-orange-500'
                       }`}
                       placeholder={t('zkSetup.wordPlaceholder').replace('{{num}}', String(index + 1))}
                       autoComplete="off"
@@ -796,7 +673,7 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
 
                     {/* Suggestions dropdown */}
                     {currentSuggestions.length > 1 && focusedIndex === index && (
-                      <div className="absolute z-20 top-full left-0 right-0 mt-1 bg-gray-800 border border-gray-600 rounded-lg shadow-lg overflow-hidden max-h-40 overflow-y-auto">
+                      <div className={`absolute z-20 top-full left-0 right-0 mt-1 border rounded-lg shadow-lg overflow-hidden max-h-40 overflow-y-auto ${dayMode ? 'bg-white border-slate-200' : 'bg-gray-800 border-gray-600'}`}>
                         {currentSuggestions.map((s, i) => (
                           <button
                             key={s}
@@ -804,9 +681,9 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
                               e.preventDefault();
                               handleSuggestionClick(index, s);
                             }}
-                            className={`w-full px-3 py-2 text-left font-mono text-sm hover:bg-gray-700 ${
-                              i === 0 ? 'bg-orange-500/20 text-orange-300' : 'text-white'
-                            } ${s === recoveryWords[index] ? 'text-green-400' : ''}`}
+                            className={`w-full px-3 py-2 text-left font-mono text-sm ${dayMode ? 'hover:bg-slate-100' : 'hover:bg-gray-700'} ${
+                              i === 0 ? 'bg-orange-500/20 text-orange-600' : dayMode ? 'text-slate-900' : 'text-white'
+                            } ${s === recoveryWords[index] ? 'text-green-600' : ''}`}
                           >
                             <span className="text-orange-400">{word}</span>
                             <span>{s.slice(word.length)}</span>
@@ -817,7 +694,7 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
 
                     {/* Tab hint */}
                     {showGhostText && (
-                      <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-gray-500 bg-gray-800 px-1.5 py-0.5 rounded border border-gray-600">
+                      <span className={`absolute right-2 top-1/2 -translate-y-1/2 text-xs px-1.5 py-0.5 rounded border ${dayMode ? 'text-slate-500 bg-slate-100 border-slate-300' : 'text-gray-500 bg-gray-800 border-gray-600'}`}>
                         Tab
                       </span>
                     )}
@@ -826,7 +703,7 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
               })}
             </div>
 
-            <p className="text-xs text-gray-500 text-center">
+            <p className={`text-xs text-center ${dayMode ? 'text-slate-500' : 'text-gray-500'}`}>
               {t('zkSetup.step3Tip')}
             </p>
 
@@ -844,7 +721,7 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
                   setVerificationError('');
                   setStep('recovery');
                 }}
-                className="flex-1 py-3 border border-gray-600 text-gray-300 rounded-lg hover:bg-gray-700 transition-colors"
+                className={`flex-1 py-3 border rounded-lg transition-colors ${dayMode ? 'border-slate-300 text-slate-600 hover:bg-slate-100' : 'border-gray-600 text-gray-300 hover:bg-gray-700'}`}
               >
                 {t('zkSetup.back')}
               </button>
@@ -862,42 +739,21 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
         {/* Step 4: Confirm */}
         {step === 'confirm' && (
           <div className="space-y-4">
-            <div className="p-4 bg-gray-900 rounded-lg border border-gray-700 space-y-3">
-              <div className="flex items-start gap-3">
-                <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" />
-                <p className="text-gray-300 text-sm">
-                  {t('zkSetup.confirmPoint1')}
-                </p>
-              </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" />
-                <p className="text-gray-300 text-sm">
-                  {t('zkSetup.confirmPoint2')}
-                </p>
-              </div>
-              <div className="flex items-start gap-3">
-                <AlertTriangle className="w-5 h-5 text-orange-400 flex-shrink-0 mt-0.5" />
-                <p className="text-gray-300 text-sm">
-                  {t('zkSetup.confirmPoint3')}
-                </p>
-              </div>
-            </div>
-
-            <label className="flex items-start gap-3 cursor-pointer p-3 bg-gray-900 rounded-lg border border-gray-700 hover:border-orange-500/50 transition-colors">
+            <label className={`flex items-start gap-3 cursor-pointer p-3 rounded-lg border hover:border-orange-500/50 transition-colors ${dayMode ? 'bg-slate-50 border-slate-200' : 'bg-gray-900 border-gray-700'}`}>
               <input
                 type="checkbox"
                 checked={confirmChecked}
                 onChange={(e) => setConfirmChecked(e.target.checked)}
                 className="mt-1 w-4 h-4 accent-orange-500"
               />
-              <span className="text-sm text-gray-300">
+              <span className={`text-sm ${dayMode ? 'text-slate-700' : 'text-gray-300'}`}>
                 {t('zkSetup.confirmCheckbox')}
               </span>
             </label>
 
-            <div className="flex items-start gap-3 p-3 bg-orange-950/40 rounded-lg border border-orange-500/30">
+            <div className={`flex items-start gap-3 p-3 rounded-lg border border-orange-500/30 ${dayMode ? 'bg-orange-50' : 'bg-orange-950/40'}`}>
               <AlertTriangle className="w-5 h-5 text-orange-400 flex-shrink-0 mt-0.5" />
-              <span className="text-sm text-orange-200">
+              <span className={`text-sm ${dayMode ? 'text-orange-700' : 'text-orange-200'}`}>
                 {t('zkSetup.recommendation')}
               </span>
             </div>

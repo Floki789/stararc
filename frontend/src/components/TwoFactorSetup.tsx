@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Shield, Copy, CheckCircle, AlertTriangle, Smartphone, Key, X } from 'lucide-react';
+import { useDayMode } from '../contexts/DayModeContext';
 
 interface TwoFactorSetupProps {
   isOpen: boolean;
@@ -23,6 +24,7 @@ const TwoFactorSetup: React.FC<TwoFactorSetupProps> = ({ isOpen, onClose, onSetu
   const [error, setError] = useState('');
   const [copiedBackupCodes, setCopiedBackupCodes] = useState(false);
   const [acknowledgedWarning, setAcknowledgedWarning] = useState(false);
+  const { dayMode } = useDayMode();
 
   const initiate2FASetup = async () => {
     setLoading(true);
@@ -126,18 +128,18 @@ const TwoFactorSetup: React.FC<TwoFactorSetupProps> = ({ isOpen, onClose, onSetu
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="bg-gray-900 rounded-xl border border-gray-700 max-w-md w-full max-h-[90vh] overflow-y-auto"
+        className={`rounded-xl border max-w-md w-full max-h-[90vh] overflow-y-auto ${dayMode ? 'bg-white border-slate-200' : 'bg-gray-900 border-gray-700'}`}
       >
         {/* Header */}
-        <div className="p-6 border-b border-gray-700">
+        <div className={`p-6 border-b ${dayMode ? 'border-slate-200' : 'border-gray-700'}`}>
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <Shield className="w-6 h-6 text-blue-400" />
-              <h2 className="text-xl font-bold text-white">Zwei-Faktor-Authentifizierung einrichten</h2>
+              <h2 className={`text-xl font-bold ${dayMode ? 'text-slate-900' : 'text-white'}`}>Zwei-Faktor-Authentifizierung einrichten</h2>
             </div>
             <button
               onClick={() => { onClose(); resetState(); }}
-              className="text-gray-400 hover:text-white transition-colors"
+              className={`transition-colors ${dayMode ? 'text-slate-400 hover:text-slate-700' : 'text-gray-400 hover:text-white'}`}
             >
               <X className="w-5 h-5" />
             </button>
@@ -147,9 +149,9 @@ const TwoFactorSetup: React.FC<TwoFactorSetupProps> = ({ isOpen, onClose, onSetu
         {/* Content */}
         <div className="p-6">
           {error && (
-            <div className="mb-4 p-3 bg-red-900/20 border border-red-500/50 rounded-lg flex items-center space-x-2">
-              <AlertTriangle className="w-4 h-4 text-red-400" />
-              <span className="text-red-300 text-sm">{error}</span>
+            <div className={`mb-4 p-3 rounded-lg flex items-center space-x-2 border ${dayMode ? 'bg-red-50 border-red-300' : 'bg-red-900/20 border-red-500/50'}`}>
+              <AlertTriangle className={`w-4 h-4 flex-shrink-0 ${dayMode ? 'text-red-500' : 'text-red-400'}`} />
+              <span className={`text-sm ${dayMode ? 'text-red-700' : 'text-red-300'}`}>{error}</span>
             </div>
           )}
 
@@ -159,13 +161,13 @@ const TwoFactorSetup: React.FC<TwoFactorSetupProps> = ({ isOpen, onClose, onSetu
               {loading ? (
                 <div className="py-8">
                   <div className="animate-spin w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full mx-auto mb-4"></div>
-                  <p className="text-gray-300">2FA wird eingerichtet...</p>
+                  <p className={`${dayMode ? 'text-slate-600' : 'text-gray-300'}`}>2FA wird eingerichtet...</p>
                 </div>
               ) : (
                 <div className="py-4">
                   <Smartphone className="w-16 h-16 text-blue-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold text-white mb-2">Authenticator-App erforderlich</h3>
-                  <p className="text-gray-300 text-sm mb-4">
+                  <h3 className={`text-lg font-semibold mb-2 ${dayMode ? 'text-slate-900' : 'text-white'}`}>Authenticator-App erforderlich</h3>
+                  <p className={`text-sm mb-4 ${dayMode ? 'text-slate-600' : 'text-gray-300'}`}>
                     Bitte installieren Sie eine Authenticator-App wie Google Authenticator oder Authy auf Ihrem Smartphone.
                   </p>
                   <button
@@ -183,25 +185,25 @@ const TwoFactorSetup: React.FC<TwoFactorSetupProps> = ({ isOpen, onClose, onSetu
           {step === 'verify' && setupData && (
             <div>
               <div className="text-center mb-6">
-                <h3 className="text-lg font-semibold text-white mb-2">QR-Code scannen</h3>
-                <p className="text-gray-300 text-sm mb-4">
+                <h3 className={`text-lg font-semibold mb-2 ${dayMode ? 'text-slate-900' : 'text-white'}`}>QR-Code scannen</h3>
+                <p className={`text-sm mb-4 ${dayMode ? 'text-slate-600' : 'text-gray-300'}`}>
                   Scannen Sie diesen QR-Code mit Ihrer Authenticator-App:
                 </p>
-                <div className="bg-white p-4 rounded-lg inline-block">
+                <div className="bg-white p-4 rounded-lg inline-block border border-slate-200">
                   <img src={setupData.qrCode} alt="2FA QR Code" className="w-48 h-48" />
                 </div>
               </div>
 
               <div className="mb-6">
-                <h4 className="text-sm font-semibold text-gray-300 mb-2 flex items-center">
+                <h4 className={`text-sm font-semibold mb-2 flex items-center ${dayMode ? 'text-slate-700' : 'text-gray-300'}`}>
                   <Key className="w-4 h-4 mr-2" />
                   Manuelle Eingabe (falls QR-Code nicht funktioniert):
                 </h4>
-                <div className="bg-gray-800 p-3 rounded-lg border border-gray-700">
-                  <code className="text-green-400 text-sm break-all">{setupData.manualEntryKey}</code>
+                <div className={`p-3 rounded-lg border flex items-center justify-between ${dayMode ? 'bg-slate-100 border-slate-200' : 'bg-gray-800 border-gray-700'}`}>
+                  <code className={`text-sm break-all ${dayMode ? 'text-green-700' : 'text-green-400'}`}>{setupData.manualEntryKey}</code>
                   <button
                     onClick={() => copyToClipboard(setupData.manualEntryKey)}
-                    className="ml-2 text-gray-400 hover:text-white"
+                    className={`ml-2 flex-shrink-0 ${dayMode ? 'text-slate-400 hover:text-slate-700' : 'text-gray-400 hover:text-white'}`}
                     title="In Zwischenablage kopieren"
                   >
                     <Copy className="w-4 h-4" />
@@ -210,7 +212,7 @@ const TwoFactorSetup: React.FC<TwoFactorSetupProps> = ({ isOpen, onClose, onSetu
               </div>
 
               <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className={`block text-sm font-medium mb-2 ${dayMode ? 'text-slate-700' : 'text-gray-300'}`}>
                   Bestätigungscode eingeben:
                 </label>
                 <input
@@ -218,10 +220,10 @@ const TwoFactorSetup: React.FC<TwoFactorSetupProps> = ({ isOpen, onClose, onSetu
                   value={verificationCode}
                   onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
                   placeholder="123456"
-                  className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white text-center text-lg tracking-wider"
+                  className={`w-full px-3 py-2 rounded-lg border text-center text-lg tracking-wider focus:outline-none focus:ring-2 focus:ring-blue-500 ${dayMode ? 'bg-white border-slate-300 text-slate-900' : 'bg-gray-800 border-gray-600 text-white'}`}
                   maxLength={6}
                 />
-                <p className="text-xs text-gray-400 mt-2">
+                <p className={`text-xs mt-2 ${dayMode ? 'text-slate-500' : 'text-gray-400'}`}>
                   Geben Sie den 6-stelligen Code aus Ihrer Authenticator-App ein.
                 </p>
               </div>
@@ -240,16 +242,16 @@ const TwoFactorSetup: React.FC<TwoFactorSetupProps> = ({ isOpen, onClose, onSetu
           {step === 'backup' && setupData && (
             <div>
               <div className="mb-6">
-                <h3 className="text-lg font-semibold text-white mb-2 flex items-center">
-                  <Key className="w-5 h-5 mr-2 text-yellow-400" />
+                <h3 className={`text-lg font-semibold mb-2 flex items-center ${dayMode ? 'text-slate-900' : 'text-white'}`}>
+                  <Key className="w-5 h-5 mr-2 text-yellow-500" />
                   Backup-Codes
                 </h3>
-                <div className="bg-yellow-900/20 border border-yellow-500/50 rounded-lg p-4 mb-4">
+                <div className={`rounded-lg p-4 mb-4 border ${dayMode ? 'bg-yellow-50 border-yellow-300' : 'bg-yellow-900/20 border-yellow-500/50'}`}>
                   <div className="flex items-start space-x-2">
-                    <AlertTriangle className="w-5 h-5 text-yellow-400 mt-0.5 flex-shrink-0" />
+                    <AlertTriangle className={`w-5 h-5 mt-0.5 flex-shrink-0 ${dayMode ? 'text-yellow-600' : 'text-yellow-400'}`} />
                     <div>
-                      <p className="text-yellow-300 text-sm font-semibold mb-1">Wichtig!</p>
-                      <p className="text-yellow-300 text-xs">
+                      <p className={`text-sm font-semibold mb-1 ${dayMode ? 'text-yellow-800' : 'text-yellow-300'}`}>Wichtig!</p>
+                      <p className={`text-xs ${dayMode ? 'text-yellow-700' : 'text-yellow-300'}`}>
                         Speichern Sie diese Backup-Codes an einem sicheren Ort. Sie können diese verwenden, 
                         wenn Sie keinen Zugriff auf Ihre Authenticator-App haben.
                       </p>
@@ -257,11 +259,11 @@ const TwoFactorSetup: React.FC<TwoFactorSetupProps> = ({ isOpen, onClose, onSetu
                   </div>
                 </div>
                 
-                <div className="bg-gray-800 rounded-lg border border-gray-700 p-4">
+                <div className={`rounded-lg border p-4 ${dayMode ? 'bg-slate-100 border-slate-200' : 'bg-gray-800 border-gray-700'}`}>
                   <div className="grid grid-cols-2 gap-2 mb-4">
                     {setupData.backupCodes.map((code, index) => (
-                      <div key={index} className="bg-gray-900 p-2 rounded text-center">
-                        <code className="text-green-400 text-sm">{code}</code>
+                      <div key={index} className={`p-2 rounded text-center ${dayMode ? 'bg-white border border-slate-200' : 'bg-gray-900'}`}>
+                        <code className={`text-sm font-mono ${dayMode ? 'text-green-700' : 'text-green-400'}`}>{code}</code>
                       </div>
                     ))}
                   </div>
@@ -283,7 +285,7 @@ const TwoFactorSetup: React.FC<TwoFactorSetupProps> = ({ isOpen, onClose, onSetu
                     onChange={(e) => setAcknowledgedWarning(e.target.checked)}
                     className="mt-1 w-4 h-4 text-blue-500"
                   />
-                  <span className="text-gray-300 text-sm">
+                  <span className={`text-sm ${dayMode ? 'text-slate-700' : 'text-gray-300'}`}>
                     Ich habe die Backup-Codes an einem sicheren Ort gespeichert und verstehe, 
                     dass ich ohne sie und ohne meine Authenticator-App keinen Zugang zu meinem Konto haben werde.
                   </span>
@@ -303,9 +305,9 @@ const TwoFactorSetup: React.FC<TwoFactorSetupProps> = ({ isOpen, onClose, onSetu
           {/* Step 4: Complete */}
           {step === 'complete' && (
             <div className="text-center py-8">
-              <CheckCircle className="w-16 h-16 text-green-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-white mb-2">2FA erfolgreich aktiviert!</h3>
-              <p className="text-gray-300 text-sm">
+              <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
+              <h3 className={`text-lg font-semibold mb-2 ${dayMode ? 'text-slate-900' : 'text-white'}`}>2FA erfolgreich aktiviert!</h3>
+              <p className={`text-sm ${dayMode ? 'text-slate-600' : 'text-gray-300'}`}>
                 Ihr Konto ist jetzt mit Zwei-Faktor-Authentifizierung geschützt.
               </p>
             </div>

@@ -246,7 +246,7 @@ const PensionShowcase: React.FC = () => {
             </div>
             <h3 className="text-lg font-semibold text-white mb-2">{t('pension.highlights.saeulenSystem')}</h3>
             <p className="text-sm text-slate-400">
-              Überblick über Pilar 1 (AHV), Pilar 2 (beruflich) und Pilar 3 (privat)
+              Überblick über staatliche Rente, betriebliche Vorsorge und private Vorsorge
             </p>
           </div>
           
