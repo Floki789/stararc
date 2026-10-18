@@ -22,7 +22,7 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b transition-colors duration-700 ${
+    <header className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b transition-colors duration-700 font-mono ${
       dayMode
         ? 'bg-white/85 border-slate-200'
         : 'bg-slate-900/80 border-slate-700/50'

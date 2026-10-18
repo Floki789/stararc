@@ -33,7 +33,7 @@ const AuthMethodSelection: React.FC = () => {
   ];
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br pt-32 pb-12 px-4 ${dayMode ? 'from-gray-50 via-slate-50 to-gray-100' : 'from-gray-900 via-gray-800 to-gray-900'}`}>
+    <div className={`min-h-screen bg-gradient-to-br pt-32 pb-12 px-4 font-mono ${dayMode ? 'from-gray-50 via-slate-50 to-gray-100' : 'from-gray-900 via-gray-800 to-gray-900'}`}>
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <motion.div

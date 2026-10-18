@@ -376,7 +376,7 @@ const Dashboard: React.FC = () => {
   const isGenesis = subscription.status === 'lifetime';
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br pt-32 pb-6 ${dayMode ? 'from-slate-50 via-blue-50 to-indigo-100' : 'from-slate-900 via-blue-900 to-indigo-900'}`}>
+    <div className={`min-h-screen bg-gradient-to-br pt-32 pb-6 font-mono ${dayMode ? 'from-slate-50 via-blue-50 to-indigo-100' : 'from-slate-900 via-blue-900 to-indigo-900'}`}>
       <div className="max-w-6xl mx-auto px-6">
         {/* Hero: Login to Portfolio - the most important action on this page */}
         <motion.div
