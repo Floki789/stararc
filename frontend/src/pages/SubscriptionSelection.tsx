@@ -7,7 +7,8 @@ import { loadStripe } from '@stripe/stripe-js';
 import PlanCards from '../components/PlanCards';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useDayMode } from '../contexts/DayModeContext';
-import { Crown } from 'lucide-react';
+import { Crown, Lock, Key, Clock, ShieldCheck } from 'lucide-react';
+import { ZKSetupModal } from './AuthMethodSelection';
 
 interface UpgradePreview {
   currentPlan: string;
@@ -22,7 +23,7 @@ interface UpgradePreview {
 }
 
 const SubscriptionSelection: React.FC = () => {
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
   const { t } = useLanguage();
   const { dayMode } = useDayMode();
   const navigate = useNavigate();
@@ -31,6 +32,29 @@ const SubscriptionSelection: React.FC = () => {
   const [upgradePreview, setUpgradePreview] = useState<UpgradePreview | null>(null);
   const [, setPreviewLoading] = useState(false);
   const [upgrading, setUpgrading] = useState(false);
+  const [showAuthStep, setShowAuthStep] = useState(false);
+  const [showZKSetup, setShowZKSetup] = useState(false);
+
+  const completeAuthSetup = async () => {
+    try {
+      const apiUrl = (import.meta as any).env.VITE_API_URL || 'http://localhost:3004';
+      await fetch(`${apiUrl}/api/auth/update-onboarding-step`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({
+          onboardingStep: 'completed',
+          loginMethod: 'password_zk'
+        })
+      });
+      updateUser({ onboardingStep: 'completed', loginMethodSelected: 'password_zk' });
+    } catch (e) {
+      console.error('onboarding step update failed:', e);
+    }
+    navigate('/dashboard');
+  };
 
   useEffect(() => {
     const initializeSubscriptionSelection = async () => {
@@ -75,9 +99,9 @@ const SubscriptionSelection: React.FC = () => {
             if (!isUpgrade) {
               // Check onboarding status with fresh data
               if (freshUserData.onboardingStep === 'completed') {
-                // If completed but no login method, go to auth method selection
+                // If completed but no login method, show the inline auth setup step
                 if (!freshUserData.loginMethodSelected) {
-                  navigate('/auth-method-selection');
+                  setShowAuthStep(true);
                   return;
                 }
                 navigate('/dashboard');
@@ -85,15 +109,15 @@ const SubscriptionSelection: React.FC = () => {
               }
 
               if (freshUserData.onboardingStep === 'auth_method_selection') {
-                navigate('/auth-method-selection');
+                setShowAuthStep(true);
                 return;
               }
               
               // If user has a subscription but onboarding step is still 'registration',
               // they need to select their auth method
               if (freshUserData.subscriptionPlan && freshUserData.onboardingStep === 'registration') {
-                console.log('User has subscription but onboarding not updated, redirecting to auth-method-selection');
-                navigate('/auth-method-selection');
+                console.log('User has subscription but onboarding not updated, showing inline auth setup');
+                setShowAuthStep(true);
                 return;
               }
             }
@@ -114,7 +138,7 @@ const SubscriptionSelection: React.FC = () => {
         if (user && user.onboardingStep === 'completed') {
           // Unless they haven't selected a login method yet
           if (!(user as any).loginMethodSelected) {
-            navigate('/auth-method-selection');
+            setShowAuthStep(true);
             return;
           }
           navigate('/dashboard');
@@ -124,14 +148,14 @@ const SubscriptionSelection: React.FC = () => {
         // If user has already selected a subscription but not completed onboarding
         // redirect to the next step in the workflow
         if (user && user.onboardingStep === 'auth_method_selection') {
-          navigate('/auth-method-selection');
+          setShowAuthStep(true);
           return;
         }
         
         // If user has a subscription but onboarding step is still 'registration'
         if (user && (user as any).subscriptionPlan && user.onboardingStep === 'registration') {
-          console.log('User has subscription but onboarding not updated, redirecting to auth-method-selection');
-          navigate('/auth-method-selection');
+          console.log('User has subscription but onboarding not updated, showing inline auth setup');
+          setShowAuthStep(true);
           return;
         }
       }
@@ -169,7 +193,7 @@ const SubscriptionSelection: React.FC = () => {
             localStorage.setItem('user', JSON.stringify(userData));
           }
           sessionStorage.setItem('selectedPlan', planId);
-          navigate('/auth-method-selection');
+          setShowAuthStep(true);
         }
       } catch (error) {
         console.error('Free plan activation error:', error);
@@ -241,7 +265,7 @@ const SubscriptionSelection: React.FC = () => {
             }
 
             sessionStorage.setItem('selectedPlan', result.plan || 'Free');
-            navigate('/auth-method-selection');
+            setShowAuthStep(true);
           }
           
         } else if (result.workflow === 'stripe') {
@@ -350,6 +374,56 @@ const SubscriptionSelection: React.FC = () => {
   return (
     <div className={`min-h-screen bg-gradient-to-br pt-32 pb-6 px-6 font-mono ${dayMode ? 'from-slate-50 via-blue-50 to-indigo-100' : 'from-slate-900 via-blue-900 to-indigo-900'}`}>
       <div className="max-w-7xl mx-auto">
+        {showAuthStep ? (
+          /* ── Inline, plain-language auth setup step (replaces the old /auth-method-selection page) ── */
+          showZKSetup ? (
+            <div className="py-12">
+              <ZKSetupModal
+                inline
+                onClose={() => setShowZKSetup(false)}
+                onComplete={completeAuthSetup}
+              />
+            </div>
+          ) : (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="max-w-xl mx-auto text-center py-12"
+          >
+            <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl border mb-6 ${dayMode ? 'bg-orange-50 border-orange-200' : 'bg-gradient-to-br from-orange-500/20 to-red-500/20 border-orange-500/40'}`}>
+              <Lock className={`w-8 h-8 ${dayMode ? 'text-orange-500' : 'text-orange-400'}`} />
+            </div>
+            <h1 className={`text-3xl font-bold mb-4 ${dayMode ? 'text-slate-900' : 'text-white'}`}>
+              {t('simpleAuthStep.title')}
+            </h1>
+            <p className={`text-base leading-relaxed mb-8 ${dayMode ? 'text-slate-600' : 'text-slate-300'}`}>
+              {t('simpleAuthStep.description')}
+            </p>
+            <ul className="text-left max-w-sm mx-auto space-y-3 mb-10">
+              <li className="flex items-center gap-3">
+                <Key className={`w-5 h-5 flex-shrink-0 ${dayMode ? 'text-orange-500' : 'text-orange-400'}`} />
+                <span className={dayMode ? 'text-slate-700' : 'text-slate-300'}>{t('simpleAuthStep.point1')}</span>
+              </li>
+              <li className="flex items-center gap-3">
+                <ShieldCheck className={`w-5 h-5 flex-shrink-0 ${dayMode ? 'text-orange-500' : 'text-orange-400'}`} />
+                <span className={dayMode ? 'text-slate-700' : 'text-slate-300'}>{t('simpleAuthStep.point2')}</span>
+              </li>
+              <li className="flex items-center gap-3">
+                <Clock className={`w-5 h-5 flex-shrink-0 ${dayMode ? 'text-orange-500' : 'text-orange-400'}`} />
+                <span className={dayMode ? 'text-slate-700' : 'text-slate-300'}>{t('simpleAuthStep.point3')}</span>
+              </li>
+            </ul>
+            <button
+              onClick={() => setShowZKSetup(true)}
+              className="px-8 py-3 font-semibold rounded-lg btn-primary hover:shadow-lg hover:scale-105 transition-all duration-200"
+            >
+              {t('simpleAuthStep.cta')}
+            </button>
+          </motion.div>
+          )
+        ) : (
+        <>
         {/* Welcome Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -391,6 +465,8 @@ const SubscriptionSelection: React.FC = () => {
             dayMode={dayMode}
           />
         </div>
+        </>
+        )}
 
       </div>
 

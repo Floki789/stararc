@@ -158,7 +158,7 @@ const Login: React.FC = () => {
             break;
           case 'subscription_selection':
           case 'auth_method_selection':
-            navTarget = '/auth-method-selection';
+            navTarget = '/subscription-selection';
             break;
           case 'completed':
             navTarget = from;

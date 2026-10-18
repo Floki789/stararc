@@ -134,6 +134,7 @@ const AuthMethodSelection: React.FC = () => {
 interface ZKSetupModalProps {
   onClose: () => void;
   onComplete: () => void;
+  inline?: boolean;
 }
 
 type SetupStep = 'password' | 'recovery' | 'verify' | 'confirm';
@@ -234,7 +235,7 @@ function arrayBufferToBase64(buffer: ArrayBuffer): string {
   return btoa(binary);
 }
 
-const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
+export const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete, inline = false }) => {
   const { t } = useLanguage();
   const { dayMode } = useDayMode();
   const [step, setStep] = useState<SetupStep>('password');
@@ -458,18 +459,15 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
     }
   };
 
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4"
-    >
+  const card = (
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
-        className={`rounded-2xl max-w-lg w-full p-6 shadow-2xl border ${dayMode ? 'bg-white border-slate-200' : 'bg-gray-800 border-gray-700'}`}
+        className={inline
+          ? 'w-full p-0'
+          : `rounded-2xl w-full max-w-lg p-6 shadow-2xl border ${dayMode ? 'bg-white border-slate-200' : 'bg-gray-800 border-gray-700'}`
+        }
       >
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
@@ -495,15 +493,6 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
         {/* Step 1: Password */}
         {step === 'password' && (
           <div className="space-y-4">
-            <div className={`p-4 border rounded-lg ${dayMode ? 'bg-orange-50 border-orange-200' : 'bg-orange-500/10 border-orange-500/30'}`}>
-              <div className="flex gap-2">
-                <AlertTriangle className={`w-5 h-5 flex-shrink-0 mt-0.5 ${dayMode ? 'text-orange-500' : 'text-orange-400'}`} />
-                <div className={`text-sm ${dayMode ? 'text-orange-800' : 'text-orange-200'}`}>
-                  <strong>{t('zkSetup.step1Warning')}</strong> {t('zkSetup.step1WarningText')}
-                </div>
-              </div>
-            </div>
-
             <div>
               <label className={`block text-sm font-medium mb-2 ${dayMode ? 'text-slate-700' : 'text-gray-300'}`}>
                 {t('zkSetup.passwordLabel')}
@@ -569,15 +558,6 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
         {/* Step 2: Recovery Phrase */}
         {step === 'recovery' && (
           <div className="space-y-4">
-            <div className={`p-4 border rounded-lg ${dayMode ? 'bg-red-50 border-red-200' : 'bg-red-500/10 border-red-500/30'}`}>
-              <div className="flex gap-2">
-                <AlertTriangle className={`w-5 h-5 flex-shrink-0 mt-0.5 ${dayMode ? 'text-red-500' : 'text-red-400'}`} />
-                <div className={`text-sm ${dayMode ? 'text-red-800' : 'text-red-200'}`}>
-                  <strong>{t('zkSetup.step2Warning')}</strong> {t('zkSetup.step2WarningText')}
-                </div>
-              </div>
-            </div>
-
             <div className={`grid grid-cols-2 gap-2 p-4 rounded-lg border ${dayMode ? 'bg-slate-50 border-slate-200' : 'bg-gray-900 border-gray-700'}`}>
               {recoveryWords.map((word, index) => (
                 <div key={index} className={`flex items-center gap-2 p-2 rounded ${dayMode ? 'bg-white border border-slate-200' : 'bg-gray-800'}`}>
@@ -780,6 +760,20 @@ const ZKSetupModal: React.FC<ZKSetupModalProps> = ({ onClose, onComplete }) => {
           </div>
         )}
       </motion.div>
+  );
+
+  if (inline) {
+    return <div className="max-w-lg mx-auto">{card}</div>;
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4"
+    >
+      {card}
     </motion.div>
   );
 };

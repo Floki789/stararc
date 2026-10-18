@@ -74,7 +74,7 @@ const Dashboard: React.FC = () => {
             // First, check if user has completed onboarding but hasn't selected login method
             // (for users created before auth method selection was implemented)
             if (freshUserData.onboardingStep === 'completed' && !freshUserData.loginMethodSelected) {
-              navigate('/auth-method-selection');
+              navigate('/subscription-selection');
               return false;
             }
             
@@ -86,7 +86,7 @@ const Dashboard: React.FC = () => {
                   return false;
                 case 'subscription_selection':
                 case 'auth_method_selection':
-                  navigate('/auth-method-selection');
+                  navigate('/subscription-selection');
                   return false;
                 default:
                   navigate('/subscription-selection');
@@ -160,10 +160,10 @@ const Dashboard: React.FC = () => {
               if (step === 'completed') {
                 // Upgrade detected - onboarding already completed, staying on dashboard
               } else if (step === 'auth_method_selection' || step === 'subscription_selection') {
-                navigate('/auth-method-selection');
+                navigate('/subscription-selection');
                 return;
               } else if (!meData.user.loginMethodSelected) {
-                navigate('/auth-method-selection');
+                navigate('/subscription-selection');
                 return;
               }
             }
