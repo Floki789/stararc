@@ -417,7 +417,12 @@
     "revealRecoveryPhraseButton": "Show Recovery Phrase",
     "genesisMember": "Genesis Member",
     "genesisLifetime": "Lifetime",
-    "genesisHallOfFame": "Hall of Fame:"
+    "genesisHallOfFame": "Hall of Fame:",
+    "loginHeroTitle": "Go to Your Portfolio",
+    "loginHeroSubtitle": "Your most important action: log in to your portfolio",
+    "architectureToggle": "Architecture Details",
+    "architectureSubtitle": "How your data is technically protected",
+    "securityRecoveryTitle": "Security & Recovery"
   },
   "revealRecoveryPhrase": {
     "title": "Show Recovery Phrase",

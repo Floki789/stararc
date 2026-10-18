@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Server, Shield, Key, Mail, Lock, Smartphone, Fingerprint } from 'lucide-react';
+import { Shield } from 'lucide-react';
 import TwoFactorManagement from './TwoFactorManagement';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useDayMode } from '../contexts/DayModeContext';
@@ -16,7 +16,7 @@ const ServerSecurityOverview: React.FC<ServerSecurityOverviewProps> = ({ onOpenZ
 
   return (
     <div className="mb-6 space-y-4">
-      {/* Login Method Badge */}
+      {/* Security & Recovery header */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -26,7 +26,7 @@ const ServerSecurityOverview: React.FC<ServerSecurityOverviewProps> = ({ onOpenZ
         <div className={`p-2 rounded-full ${dayMode ? 'bg-slate-100' : 'bg-slate-700/50'}`}>
           <Shield className={`w-5 h-5 ${dayMode ? 'text-slate-500' : 'text-slate-300'}`} />
         </div>
-        <h2 className={`text-lg font-bold ${dayMode ? 'text-slate-900' : 'text-white'}`}>{t('serverOverview.title')}</h2>
+        <h2 className={`text-lg font-bold ${dayMode ? 'text-slate-900' : 'text-white'}`}>{t('dashboard.securityRecoveryTitle')}</h2>
       </motion.div>
 
       {/* Two Column Layout */}
@@ -38,92 +38,13 @@ const ServerSecurityOverview: React.FC<ServerSecurityOverviewProps> = ({ onOpenZ
       >
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         
-        {/* LEFT COLUMN: Authentication Server */}
+        {/* LEFT COLUMN: 2FA Management */}
         <div className="flex flex-col gap-4">
-          {/* Authentication Server Header */}
-          <div className={`backdrop-blur-sm border rounded-2xl p-5 ${dayMode ? 'bg-blue-50 border-blue-200' : 'bg-gradient-to-br from-blue-900/40 to-indigo-900/30 border-blue-500/30'}`}>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-2.5 rounded-full bg-blue-500/20">
-                <Server className="w-5 h-5 text-blue-400" />
-              </div>
-              <div>
-                <h3 className={`text-lg font-bold ${dayMode ? 'text-slate-900' : 'text-white'}`}>Authentication Server</h3>
-                <p className={`text-xs ${dayMode ? 'text-blue-600' : 'text-blue-300'}`}>{t('serverOverview.stararc.subtitle')}</p>
-              </div>
-            </div>
-
-            {/* Login Method Info */}
-            <div className="space-y-3 mb-4">
-              <div className={`flex items-center gap-3 border rounded-lg p-3 ${dayMode ? 'bg-blue-100 border-blue-200' : 'bg-blue-900/20 border-blue-500/20'}`}>
-                <Mail className="w-4 h-4 text-blue-400 flex-shrink-0" />
-                <div>
-                  <p className={`text-sm font-medium ${dayMode ? 'text-blue-800' : 'text-blue-200'}`}>{t('serverOverview.stararc.emailLogin')}</p>
-                  <p className={`text-xs ${dayMode ? 'text-blue-600/70' : 'text-blue-300/60'}`}>{t('serverOverview.stararc.emailLoginDesc')}</p>
-                </div>
-              </div>
-              <div className={`flex items-center gap-3 border rounded-lg p-3 ${dayMode ? 'bg-blue-100 border-blue-200' : 'bg-blue-900/20 border-blue-500/20'}`}>
-                <Lock className="w-4 h-4 text-blue-400 flex-shrink-0" />
-                <div>
-                  <p className={`text-sm font-medium ${dayMode ? 'text-blue-800' : 'text-blue-200'}`}>{t('serverOverview.stararc.passwordLogin')}</p>
-                  <p className={`text-xs ${dayMode ? 'text-blue-600/70' : 'text-blue-300/60'}`}>{t('serverOverview.stararc.passwordLoginDesc')}</p>
-                </div>
-              </div>
-            </div>
-
-            {/* 2FA Info Badge */}
-            <div className={`flex items-center gap-2 border rounded-lg p-3 ${dayMode ? 'bg-blue-100 border-blue-200' : 'bg-blue-900/30 border-blue-500/20'}`}>
-              <Smartphone className="w-4 h-4 text-blue-400 flex-shrink-0" />
-              <p className={`text-xs ${dayMode ? 'text-blue-700' : 'text-blue-200/80'}`}>
-                {t('serverOverview.stararc.twoFactorInfo')}
-              </p>
-            </div>
-          </div>
-
-          {/* 2FA Management embedded */}
           <TwoFactorManagement />
         </div>
 
-        {/* RIGHT COLUMN: Data Server */}
+        {/* RIGHT COLUMN: ZK Recovery */}
         <div className="flex flex-col gap-4">
-          {/* Data Server Header */}
-          <div className={`backdrop-blur-sm border rounded-2xl p-5 ${dayMode ? 'bg-amber-50 border-amber-200' : 'bg-gradient-to-br from-amber-900/40 to-orange-900/30 border-amber-500/30'}`}>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-2.5 rounded-full bg-amber-500/20">
-                <Server className="w-5 h-5 text-amber-400" />
-              </div>
-              <div>
-                <h3 className={`text-lg font-bold ${dayMode ? 'text-slate-900' : 'text-white'}`}>Data Server</h3>
-                <p className={`text-xs ${dayMode ? 'text-amber-700' : 'text-amber-300'}`}>{t('serverOverview.spaceship.subtitle')}</p>
-              </div>
-            </div>
-
-            {/* Privacy Login Info */}
-            <div className="space-y-3 mb-4">
-              <div className={`flex items-center gap-3 border rounded-lg p-3 ${dayMode ? 'bg-amber-100 border-amber-200' : 'bg-amber-900/20 border-amber-500/20'}`}>
-                <Lock className="w-4 h-4 text-amber-400 flex-shrink-0" />
-                <div>
-                  <p className={`text-sm font-medium ${dayMode ? 'text-amber-900' : 'text-amber-200'}`}>{t('serverOverview.spaceship.passwordLogin')}</p>
-                  <p className={`text-xs ${dayMode ? 'text-amber-700/70' : 'text-amber-300/60'}`}>{t('serverOverview.spaceship.passwordLoginDesc')}</p>
-                </div>
-              </div>
-              <div className={`flex items-center gap-3 border rounded-lg p-3 ${dayMode ? 'bg-amber-100 border-amber-200' : 'bg-amber-900/20 border-amber-500/20'}`}>
-                <Key className="w-4 h-4 text-amber-400 flex-shrink-0" />
-                <div>
-                  <p className={`text-sm font-medium ${dayMode ? 'text-amber-900' : 'text-amber-200'}`}>{t('serverOverview.spaceship.recoveryWords')}</p>
-                  <p className={`text-xs ${dayMode ? 'text-amber-700/70' : 'text-amber-300/60'}`}>{t('serverOverview.spaceship.recoveryWordsDesc')}</p>
-                </div>
-              </div>
-            </div>
-
-            {/* ZK Info Badge */}
-            <div className={`flex items-center gap-2 border rounded-lg p-3 ${dayMode ? 'bg-amber-100 border-amber-200' : 'bg-amber-900/30 border-amber-500/20'}`}>
-              <Fingerprint className="w-4 h-4 text-amber-400 flex-shrink-0" />
-              <p className={`text-xs ${dayMode ? 'text-amber-800' : 'text-amber-200/80'}`}>
-                {t('serverOverview.spaceship.zkInfo')}
-              </p>
-            </div>
-          </div>
-
           {/* ZK Encryption / Recovery Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}

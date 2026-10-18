@@ -10,6 +10,7 @@ import TwoFactorManagement from '../components/TwoFactorManagement';
 import ZKRecoveryModal from '../components/ZKRecoveryModal';
 import ZKRevealRecoveryPhraseModal from '../components/ZKRevealRecoveryPhraseModal';
 import ServerSecurityOverview from '../components/ServerSecurityOverview';
+import ArchitectureInfo from '../components/ArchitectureInfo';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useDayMode } from '../contexts/DayModeContext';
 
@@ -377,26 +378,26 @@ const Dashboard: React.FC = () => {
   return (
     <div className={`min-h-screen bg-gradient-to-br pt-32 pb-6 ${dayMode ? 'from-slate-50 via-blue-50 to-indigo-100' : 'from-slate-900 via-blue-900 to-indigo-900'}`}>
       <div className="max-w-6xl mx-auto px-6">
+        {/* Hero: Login to Portfolio - the most important action on this page */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="mb-8"
+          className={`backdrop-blur-sm border rounded-2xl p-8 mb-6 text-center ${dayMode ? 'bg-white/80 border-slate-200' : 'bg-gradient-to-br from-blue-900/40 to-purple-900/30 border-blue-500/30'}`}
         >
-        </motion.div>
-
-        {/* Spaceship Access Button */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="flex justify-start mb-6"
-        >
-          <SpaceshipAccessButton 
-            variant="primary" 
-            size="md" 
-            className="px-6 py-3"
-          />
+          <h1 className={`text-2xl font-bold mb-1 ${dayMode ? 'text-slate-900' : 'text-white'}`}>
+            {t('dashboard.loginHeroTitle')}
+          </h1>
+          <p className={`text-sm mb-6 ${dayMode ? 'text-slate-600' : 'text-slate-300'}`}>
+            {t('dashboard.loginHeroSubtitle')}
+          </p>
+          <div className="flex justify-center">
+            <SpaceshipAccessButton
+              variant="primary"
+              size="lg"
+              className="px-10 py-4"
+            />
+          </div>
         </motion.div>
 
         <motion.div
@@ -582,6 +583,9 @@ const Dashboard: React.FC = () => {
         {subscription?.plan === 'Apex' && (
           <ApexManagement userToken={localStorage.getItem('token') || ''} />
         )}
+
+        {/* Architecture Info - collapsed by default, for users who want technical details */}
+        <ArchitectureInfo />
 
       </div>
     </div>
