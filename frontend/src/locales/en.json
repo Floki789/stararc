@@ -511,6 +511,7 @@
     "passwordRequired": "Password is required",
     "passwordMinLength": "Password must be at least 8 characters",
     "passwordsNotMatch": "Passwords do not match",
+    "passwordComplexity": "Password must contain at least one uppercase letter, one lowercase letter and one number",
     "passwordPlaceholder": "Password (min. 8 characters, A-z, 0-9)",
     "registering": "Registering...",
     "or": "Or",

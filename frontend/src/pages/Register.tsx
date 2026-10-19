@@ -111,21 +111,21 @@ const Register: React.FC = () => {
 
 
     if (!formData.email.trim()) {
-      newErrors.email = 'E-Mail ist erforderlich';
+      newErrors.email = t('auth.emailRequired');
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Ungültige E-Mail-Adresse';
+      newErrors.email = t('auth.emailInvalid');
     }
 
     if (!formData.password) {
-      newErrors.password = 'Passwort ist erforderlich';
+      newErrors.password = t('auth.passwordRequired');
     } else if (formData.password.length < 8) {
-      newErrors.password = 'Passwort muss mindestens 8 Zeichen lang sein';
+      newErrors.password = t('auth.passwordMinLength');
     } else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
-      newErrors.password = 'Passwort muss mindestens einen Großbuchstaben, einen Kleinbuchstaben und eine Zahl enthalten';
+      newErrors.password = t('auth.passwordComplexity');
     }
 
     if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Passwörter stimmen nicht überein';
+      newErrors.confirmPassword = t('auth.passwordsNotMatch');
     }
 
     if (!formData.termsAccepted) {
