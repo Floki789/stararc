@@ -57,7 +57,7 @@ const HeroSectionV5: React.FC<HeroSectionV5Props> = ({ dayMode = false }) => {
   const isDE = language === 'de';
 
   return (
-    <div className={`relative min-h-screen flex items-center overflow-hidden pt-20 transition-colors duration-700 font-mono ${
+    <div className={`relative min-h-screen flex items-center overflow-hidden pt-20 transition-colors duration-700 ${
       dayMode
         ? 'bg-gradient-to-br from-violet-50 via-indigo-50 to-slate-100'
         : 'bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950'
@@ -171,21 +171,6 @@ const HeroSectionV5: React.FC<HeroSectionV5Props> = ({ dayMode = false }) => {
 
           {/* ── Left column ─────────────────────────────────────────────── */}
           <div className="flex-1 flex flex-col justify-center text-center lg:text-left">
-
-            {/* Terminal window chrome */}
-            <div className={`inline-block rounded-lg border overflow-hidden shadow-2xl mb-6 ${
-              dayMode ? 'bg-white border-slate-300' : 'bg-[#0d1117] border-slate-700'
-            }`}>
-              <div className={`flex items-center gap-2 px-4 py-2.5 border-b ${dayMode ? 'bg-slate-100 border-slate-300' : 'bg-[#161b22] border-slate-700'}`}>
-                <span className="w-3 h-3 rounded-full bg-red-500" />
-                <span className="w-3 h-3 rounded-full bg-yellow-500" />
-                <span className="w-3 h-3 rounded-full bg-green-500" />
-                <span className={`ml-3 text-xs ${dayMode ? 'text-slate-500' : 'text-slate-400'}`}>user@stararc:~$ ./wizard --steps</span>
-              </div>
-              <p className={`px-4 pt-3 text-sm ${dayMode ? 'text-violet-700' : 'text-violet-400'}`}>
-                <span className={dayMode ? 'text-slate-500' : 'text-slate-500'}>$</span> ./wizard --init
-              </p>
-            </div>
 
             {/* Title */}
             <h1 className="text-5xl sm:text-6xl lg:text-6xl xl:text-7xl font-black uppercase leading-tight tracking-tight">

@@ -2294,8 +2294,9 @@
     "version": "Version 1.0 — March 2026"
   },
   "hero2": {
-    "titleLine1": "Your Financial Planning",
-    "titleLine2": "with Zero Knowledge Privacy",
+    "titleLine1": "Your financial planning assistant",
+    "titleLine2": "with strong privacy encryption",
+    "titleSubline": "with strong privacy encryption",
     "titleLine3": "with Zero Knowledge Privacy",
     "subtitle": "With Stararc you independently create a detailed scenario of your financial future — without a bank or advisor, with Zero-Knowledge Privacy.",
     "subtitleLine1": "Your Assets stay where they are.",

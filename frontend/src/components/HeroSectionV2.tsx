@@ -114,7 +114,7 @@ const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8 sm:py-10 lg:py-12">
 
         {/* Swiss badge — full width, right-aligned (centered on mobile) */}
-        <div className="flex justify-center lg:justify-end mb-4">
+        <div className="flex justify-center lg:justify-end mb-8 lg:mb-12">
           <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest ${
             dayMode ? 'text-slate-500' : 'text-slate-500'
           }`}>
@@ -137,101 +137,16 @@ const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
         <div className="flex flex-col lg:flex-row items-center gap-6 lg:gap-4">
 
           {/* ── Left column: Title ─────────────────────────────────────── */}
-          <div className="flex-1 flex flex-col justify-center text-center lg:text-left pt-4 sm:pt-4 lg:pt-0">
+          <div className="w-full flex-1 flex flex-col justify-center text-center lg:text-left pt-4 sm:pt-4 lg:pt-0">
             <h1 className="text-5xl sm:text-5xl lg:text-6xl xl:text-7xl font-black uppercase leading-tight tracking-tight pb-2">
               <span className={dayMode ? 'text-slate-900' : 'text-white'}>{t('hero2.titleLine1')}</span>
               <br />
-              <span className={`block mt-3 sm:mt-6 pb-2 ${dayMode ? 'text-sky-600' : 'text-sky-400'}`}>
-                {t('hero2.titleLine2')}
+              <span className={`block mt-3 sm:mt-6 pb-2 ${dayMode ? 'text-blue-600' : 'text-blue-400'}`}>
+                {t('hero2.titleSubline')}
               </span>
             </h1>
 
           </div>
-
-          {/* ── Right column: Layered mountain sunrise ───────────────── */}
-          <div className="flex-1 flex items-end justify-center w-full pb-8 lg:pb-0 lg:items-center">
-            <div className="relative w-full">
-              <svg
-                viewBox="0 0 560 280"
-                className="w-full"
-                aria-hidden="true"
-              >
-                {/*
-                  Sunrise physics:
-                  - Sun centre sits BELOW the mountain ridges (cy=235, r=72 → top at y=163)
-                  - Mountain fills are painted on top, each covering more of the sun
-                  - Only the glowing top arc peeks above the farthest range
-                  - Each closer layer has its ridges at HIGHER y-values (lower peaks on screen)
-                    but is more opaque → progressively occludes the sun
-                  - Peak x-positions are completely independent per layer
-                */}
-
-                {/* Subtle halo behind sun */}
-                <circle
-                  cx="280" cy="215" r="105"
-                  fill={dayMode ? '#fef9c3' : '#d1fae5'}
-                  opacity={dayMode ? 0.22 : 0.12}
-                />
-
-                {/* Sun disc */}
-                <circle
-                  cx="280" cy="215" r="72"
-                  fill={dayMode ? '#fde047' : '#a7f3d0'}
-                  opacity={dayMode ? 0.92 : 0.75}
-                />
-
-                {/* ── Layer 2 ── */}
-                <path
-                  d="M 0 280 L 0 232
-                     C 28 226 45 220 58 208
-                     C 72 196 98 206 128 216
-                     C 154 224 176 210 200 200
-                     C 218 193 240 205 266 216
-                     C 286 223 312 218 336 216
-                     C 358 214 380 210 400 205
-                     C 414 202 428 204 444 208
-                     C 466 214 492 224 522 229
-                     C 542 232 554 232 560 230
-                     L 560 280 Z"
-                  fill={dayMode ? '#a5f3fc' : '#083344'}
-                />
-
-                {/* ── Layer 3 ── */}
-                <path
-                  d="M 0 280 L 0 248
-                     C 30 243 58 238 84 240
-                     C 108 242 126 232 145 218
-                     C 162 207 180 215 205 226
-                     C 225 234 248 229 272 228
-                     C 295 228 318 222 340 218
-                     C 356 215 375 218 396 226
-                     C 416 233 440 238 462 236
-                     C 480 234 496 224 508 222
-                     C 524 220 544 226 560 228
-                     L 560 280 Z"
-                  fill={dayMode ? '#0891b2' : '#052130'}
-                />
-
-                {/* ── Layer 4 — foreground, darkest ── */}
-                <path
-                  d="M 0 280 L 0 262
-                     C 28 258 54 252 74 248
-                     C 88 245 100 239 110 238
-                     C 128 236 148 244 172 252
-                     C 192 258 215 256 240 252
-                     C 252 250 260 242 268 234
-                     C 278 227 296 236 318 246
-                     C 336 254 356 256 378 254
-                     C 398 252 420 244 440 238
-                     C 452 234 466 238 480 244
-                     C 500 252 526 260 560 262
-                     L 560 280 Z"
-                  fill={dayMode ? '#0e7490' : '#020d14'}
-                />
-
-              </svg>
-            </div>
-          </div>{/* end right column */}
         </div>{/* end flex row */}
 
         {/* ── Full-width subtitle ─────────────────────────────────── */}
