@@ -138,7 +138,7 @@ const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
 
           {/* ── Left column: Title ─────────────────────────────────────── */}
           <div className="w-full flex-1 flex flex-col justify-center text-center lg:text-left pt-4 sm:pt-4 lg:pt-0">
-            <h1 className="text-5xl sm:text-5xl lg:text-6xl xl:text-7xl font-black uppercase leading-tight tracking-tight pb-2">
+            <h1 className="text-6xl sm:text-7xl lg:text-8xl xl:text-9xl font-black uppercase leading-tight tracking-tight pb-2">
               <span className={dayMode ? 'text-slate-900' : 'text-white'}>{t('hero2.titleLine1')}</span>
               <br />
               <span className={`block mt-3 sm:mt-6 pb-2 ${dayMode ? 'text-blue-600' : 'text-blue-400'}`}>
@@ -149,14 +149,11 @@ const HeroSectionV2: React.FC<HeroSectionV2Props> = ({ dayMode = false }) => {
           </div>
         </div>{/* end flex row */}
 
-        {/* ── Full-width subtitle ─────────────────────────────────── */}
-        <div className="w-full mt-10 text-center">
-          <p className={`text-xl sm:text-2xl max-w-5xl mx-auto ${dayMode ? 'text-slate-700' : 'text-white'}`}>
-            {t('hero2.subtitle')}
-          </p>
+        {/* ── Full-width CTA ─────────────────────────────────── */}
+        <div className="w-full mt-14 text-center">
           <a
             href="/register"
-            className={`mt-8 inline-block text-sm font-semibold uppercase tracking-widest ${dayMode ? 'text-emerald-600' : 'text-emerald-400'}`}
+            className={`inline-block text-sm font-semibold uppercase tracking-widest ${dayMode ? 'text-emerald-600' : 'text-emerald-400'}`}
           >
             {t('hero2.freeAccess')}
           </a>
