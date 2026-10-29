@@ -7,6 +7,9 @@ import { UserEncryptionService } from '../services/userEncryptionService';
 import { pool } from '../database/connection';
 import { authMiddleware } from '../middleware/auth';
 import * as crypto from 'crypto';
+import { InvitationError } from '../services/invitationService';
+import { verifyTurnstileToken } from '../utils/turnstile';
+import { requireInvitationAdmin } from '../middleware/invitationAdmin';
 
 const router = Router();
 const authService = new AuthService(pool);
@@ -14,28 +17,6 @@ const emailService = new EmailService();
 
 // Rate limiting for auth endpoints (environment-based)
 const isDevelopment = process.env.NODE_ENV === 'development';
-
-// ── Cloudflare Turnstile verification ────────────────────────────────────────
-async function verifyTurnstileToken(token: string, ip?: string): Promise<boolean> {
-  const secret = process.env.TURNSTILE_SECRET_KEY;
-  if (!secret) {
-    // No secret configured → skip in development
-    console.warn('⚠️  TURNSTILE_SECRET_KEY not set – skipping Turnstile verification');
-    return true;
-  }
-  try {
-    const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ secret, response: token, remoteip: ip }),
-    });
-    const data = await res.json() as { success: boolean };
-    return data.success === true;
-  } catch (err) {
-    console.error('Turnstile verification error:', err);
-    return false;
-  }
-}
 
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -53,6 +34,8 @@ const registerLimiter = rateLimit({
 
 // Validation rules
 const registerValidation = [
+  body('invitationCode').isString().trim().isLength({ min: 1, max: 100 })
+    .withMessage('A valid invitation is required'),
   body('email')
     .isEmail()
     .normalizeEmail()
@@ -139,7 +122,7 @@ router.post('/register', registerLimiter, registerValidation, async (req: Reques
       dek,           // Raw DEK (used once to create wrapped_dek_server, then discarded)
       wrapped_dek,   // DEK wrapped with user's password-derived KEK
       dek_salt       // Salt for password key derivation
-    });
+    }, req.body.invitationCode);
 
     // Send email verification
     try {
@@ -189,6 +172,9 @@ router.post('/register', registerLimiter, registerValidation, async (req: Reques
       });
     }
   } catch (error: any) {
+    if (error instanceof InvitationError) {
+      return res.status(403).json({ error: 'Einladung ungültig, abgelaufen oder gesperrt. Bitte prüfe Code und E-Mail-Adresse.', code: 'INVITATION_INVALID' });
+    }
     console.error('Registration error:', error);
     console.error('Error details:', {
       message: error.message,
@@ -1465,7 +1451,8 @@ async function createSpaceshipUser({ authKey, subscriptionPlan, parentUserId, la
 // ================================================================
 
 // Create a new ApexChild (managed client) for Apex subscription users
-router.post('/create-apex-client', authMiddleware, [
+// During invitation-only access, ordinary Apex users cannot create additional accounts.
+router.post('/create-apex-client', authMiddleware, requireInvitationAdmin, [
   body('clientName')
     .trim()
     .isLength({ min: 2, max: 100 })

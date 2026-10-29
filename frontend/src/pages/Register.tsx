@@ -18,6 +18,7 @@ import { useDayMode } from '../contexts/DayModeContext';
 import { setupDEKForRegistration } from '../utils/clientCrypto';
 
 interface RegisterFormData {
+  invitationCode: string;
   email: string;
   password: string;
   confirmPassword: string;
@@ -40,7 +41,8 @@ const Register: React.FC = () => {
     }, 50);
   }, [location.pathname, location.key]);
   const [formData, setFormData] = useState<RegisterFormData>({
-    email: '',
+    invitationCode: new URLSearchParams(location.hash.slice(1)).get('invite') || '',
+    email: new URLSearchParams(location.hash.slice(1)).get('email') || '',
     password: '',
     confirmPassword: '',
     termsAccepted: false,
@@ -53,7 +55,14 @@ const Register: React.FC = () => {
   const [showSuccessScreen, setShowSuccessScreen] = useState(false);
   const [devPreviewUrl, setDevPreviewUrl] = useState<string | null>(null);
 
-  // Registrierung vorübergehend deaktiviert
+  // Remove invitation credentials from the address bar after reading them.
+  useEffect(() => {
+    if (new URLSearchParams(location.hash.slice(1)).has('invite')) {
+      window.history.replaceState(window.history.state, '', location.pathname + location.search);
+    }
+  }, []);
+
+  const invitationFromLink = formData.invitationCode.length === 64;
   const isRegistrationEnabled = true;
 
   // Cloudflare Turnstile
@@ -107,6 +116,7 @@ const Register: React.FC = () => {
 
   const validateForm = (): boolean => {
     const newErrors: { [key: string]: string } = {};
+    if (!formData.invitationCode.trim()) newErrors.invitationCode = t('invite.codeRequired');
 
 
 
@@ -162,6 +172,7 @@ const Register: React.FC = () => {
         },
         body: JSON.stringify({
           email: formData.email,
+          invitationCode: formData.invitationCode,
           password: formData.password,
           termsAccepted: formData.termsAccepted,
           languageCode: currentLanguage,
@@ -193,10 +204,12 @@ const Register: React.FC = () => {
           setSuccessMessage(t('auth.registerSuccess'));
         }
       } else {
-        if (data.errors && Array.isArray(data.errors)) {
+        if (data.code === 'INVITATION_INVALID') {
+          setErrors({ general: t('invite.invalid') });
+        } else if ((data.errors || data.details) && Array.isArray(data.errors || data.details)) {
           // Handle validation errors from backend
           const backendErrors: { [key: string]: string } = {};
-          data.errors.forEach((error: any) => {
+          (data.errors || data.details).forEach((error: any) => {
             backendErrors[error.path] = error.msg;
           });
           setErrors(backendErrors);
@@ -386,6 +399,21 @@ const Register: React.FC = () => {
           )}
 
           {/* Language Switcher */}
+          <div className={`rounded-lg border p-4 text-sm ${dayMode ? 'bg-blue-50 border-blue-200 text-slate-700' : 'bg-blue-500/10 border-blue-500/30 text-gray-200'}`}>
+            <p>{t('invite.onlyInvited')}</p>
+            <Link to="/request-access" className="mt-2 inline-block text-blue-400 underline">{t('invite.requestAccess')}</Link>
+          </div>
+          <div>
+            <label htmlFor="invitationCode" className={`block text-sm mb-2 ${dayMode ? 'text-slate-700' : 'text-gray-200'}`}>{t(invitationFromLink ? 'invite.linkReady' : 'invite.code')}</label>
+            {invitationFromLink ? (
+              <button type="button" className="text-sm text-blue-400 underline" onClick={() => setFormData(prev => ({ ...prev, invitationCode: '' }))}>{t('invite.enterCode')}</button>
+            ) : (
+              <input id="invitationCode" name="invitationCode" required maxLength={30} autoComplete="off" placeholder="NOVA-4827"
+                value={formData.invitationCode} onChange={handleInputChange}
+                className={`w-full rounded-lg border px-3 py-3 ${dayMode ? 'bg-white border-slate-300 text-slate-900' : 'bg-gray-800/50 border-gray-600 text-white'}`} />
+            )}
+            {errors.invitationCode && <p role="alert" className="mt-1 text-sm text-red-400">{errors.invitationCode}</p>}
+          </div>
           <div className="flex justify-center">
             <div className={`flex space-x-1 rounded-lg p-1 border ${dayMode ? 'bg-slate-100 border-slate-200' : 'bg-white/10 backdrop-blur-sm border-white/20'}`}>
               <button

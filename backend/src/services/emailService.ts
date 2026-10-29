@@ -75,6 +75,32 @@ export class EmailService {
   }
 
   // Send admin notification for important user events
+  async sendAccessRequestNotification(email: string, name: string, message: string): Promise<void> {
+    await this.ensureReady();
+    try {
+      await this.transporter.sendMail({
+        from: this.fromEmail,
+        to: process.env.INVITATION_ADMIN_EMAIL || process.env.ADMIN_EMAIL || 'info@stararc.one',
+        subject: 'Stararc – Neue Zugangsanfrage',
+        text: `Neue Zugangsanfrage\n\nName: ${name}\nE-Mail: ${email}\nNachricht: ${message || '–'}\n\nFreigeben oder ablehnen:\n${process.env.FRONTEND_URL || 'http://localhost:3003'}/admin/invitations`
+      });
+    } catch {
+      console.error('Access request saved, but admin notification could not be sent.');
+    }
+  }
+
+  async sendInvitation(email: string, code: string, link: string, language: string): Promise<void> {
+    await this.ensureReady();
+    const english = language === 'en';
+    await this.transporter.sendMail({
+      from: this.fromEmail, to: email,
+      subject: english ? 'Stararc – Your invitation' : 'Stararc – Deine Einladung',
+      text: english
+        ? `Your access has been approved. Create your account:\n${link}\n\nOr enter this code on the registration page: ${code}\n\nUse this email address: ${email}\nThe invitation is valid for 14 days and can be used once.`
+        : `Dein Zugang wurde freigegeben. Erstelle jetzt dein Konto:\n${link}\n\nAlternativ gib diesen Code auf der Registrierungsseite ein: ${code}\n\nVerwende diese E-Mail-Adresse: ${email}\nDie Einladung ist 14 Tage gültig und einmal verwendbar.`
+    });
+  }
+
   async sendAdminNotification(subject: string, details: Record<string, any>): Promise<void> {
     await this.ensureReady();
     const adminEmail = 'info@stararc.one';

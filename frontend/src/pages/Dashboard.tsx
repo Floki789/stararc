@@ -11,6 +11,7 @@ import ZKRecoveryModal from '../components/ZKRecoveryModal';
 import ZKRevealRecoveryPhraseModal from '../components/ZKRevealRecoveryPhraseModal';
 import ServerSecurityOverview from '../components/ServerSecurityOverview';
 import ArchitectureInfo from '../components/ArchitectureInfo';
+import InvitationAdminLink from '../components/InvitationAdminLink';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useDayMode } from '../contexts/DayModeContext';
 
@@ -555,6 +556,7 @@ const Dashboard: React.FC = () => {
 
 
         {/* Security Overview: ZK users get two-column layout, standard users get just 2FA */}
+        <InvitationAdminLink />
         {isZKUser ? (
           <ServerSecurityOverview
             onOpenZKRecovery={() => setShowZKRecoveryModal(true)}

@@ -102,10 +102,10 @@ const Header: React.FC = () => {
                   {t('nav.login')}
                 </Link>
                 <Link
-                  to="/register"
+                  to="/request-access"
                   className="px-6 py-3 bg-emerald-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl hover:bg-emerald-700 transform hover:scale-105 transition-all duration-200"
                 >
-                  {t('nav.register')}
+                  {t('invite.requestAccess')}
                 </Link>
               </>
             )}
@@ -248,11 +248,11 @@ const Header: React.FC = () => {
                     {t('nav.login')}
                   </Link>
                   <Link
-                    to="/register"
+                    to="/request-access"
                     className="btn-primary inline-block text-center"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    {t('nav.register')}
+                    {t('invite.requestAccess')}
                   </Link>
                 </>
               )}
