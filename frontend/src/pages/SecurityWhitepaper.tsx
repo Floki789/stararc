@@ -57,7 +57,7 @@ const SecurityWhitepaper: React.FC = () => {
   );
 
   return (
-    <div className={`min-h-screen py-20 transition-colors duration-700 font-mono ${dayMode ? 'bg-slate-100' : 'bg-gray-900'}`}>
+    <div className={`min-h-screen py-20 transition-colors duration-700 ${dayMode ? 'bg-slate-100' : 'bg-gray-900'}`}>
       <div className="max-w-4xl mx-auto px-6">
         {/* Header */}
         <div className="text-center mb-12 pt-8">

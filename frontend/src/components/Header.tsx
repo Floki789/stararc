@@ -34,7 +34,7 @@ const Header: React.FC = () => {
             <span className={`text-3xl font-bold ${
               dayMode ? 'text-sky-600' : 'text-sky-400'
             }`}>
-              hyprwealth
+              Stararc
             </span>
           </Link>
 
